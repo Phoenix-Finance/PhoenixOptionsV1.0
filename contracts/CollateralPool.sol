@@ -84,4 +84,17 @@ contract CollateralPool is OptionslPool,ReentrancyGuard,SharedCoin {
             _transferPayback(msg.sender,whiteList[i],_payBack);
         } 
     }
+    function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
+        require(isEligibleAddress(settlement) , "settlement is unsupported token");
+        uint256 colAmount = 0;
+        if (settlement == address(0)){
+            colAmount = msg.value;
+        }else if (settlementAmount > 0){
+            IERC20 oToken = IERC20(settlement);
+            oToken.transferFrom(msg.sender, address(this), settlementAmount);
+            colAmount = settlementAmount;
+        }
+        return colAmount;
+    }
+    
 }

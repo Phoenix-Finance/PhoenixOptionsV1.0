@@ -10,10 +10,10 @@ library Fraction {
         int256 numerator;
         int256 denominator;
     }
-    function IsNeg(fractionNumber memory a)  internal pure returns (bool) {
+    function isNeg(fractionNumber memory a)  internal pure returns (bool) {
 	    return a.numerator*a.denominator < 0;
     }
-    function IntAbs(int256 a)internal pure returns (int256){
+    function intAbs(int256 a)internal pure returns (int256){
         return (a<0) ? -a:a;
     }
     function abs(fractionNumber memory a) internal pure returns (fractionNumber){
@@ -33,31 +33,31 @@ library Fraction {
         return fractionNumber(int256(sqrt(uint256(a.numerator))),int256(sqrt(uint256(a.denominator))));
     }
     function fractionAddInt(fractionNumber memory a,int64 b) internal pure returns (fractionNumber) {
-        a = SafeFractionNumber(a);
+        a = safeFractionNumber(a);
         return fractionNumber(a.numerator+a.denominator*b,a.denominator);
     }
-    function SafeFractionDiv(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
-        return fractionDiv(SafeFractionNumber(a), SafeFractionNumber(b));
+    function safeFractionDiv(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+        return fractionDiv(safeFractionNumber(a), safeFractionNumber(b));
     }
-    function SafeFractionMul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
-        return fractionMul(SafeFractionNumber(a), SafeFractionNumber(b));
+    function safeFractionMul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+        return fractionMul(safeFractionNumber(a), safeFractionNumber(b));
     }
-    function SafeFractionAdd(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
-        return fractionAdd(SafeFractionNumber(a), SafeFractionNumber(b));
+    function safeFractionAdd(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
+        return fractionAdd(safeFractionNumber(a), safeFractionNumber(b));
     }
-    function SafeFractionSub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
-        return fractionSub(SafeFractionNumber(a), SafeFractionNumber(b));
+    function safeFractionSub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
+        return fractionSub(safeFractionNumber(a), safeFractionNumber(b));
     }
 
     function fractionNumberZoomOut(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
         return fractionNumber(a.numerator/rate,a.denominator/rate);
     }
     function fractionNumberZoomin(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
-        return SafeFractionNumber(fractionNumber(a.numerator*rate,a.denominator*rate));
+        return safeFractionNumber(fractionNumber(a.numerator*rate,a.denominator*rate));
     }
-    function SafeFractionNumber(fractionNumber memory a) internal pure returns (fractionNumber) {
-        int256 num = IntAbs(a.numerator);
-        int256 deno = IntAbs(a.denominator);
+    function safeFractionNumber(fractionNumber memory a) internal pure returns (fractionNumber) {
+        int256 num = intAbs(a.numerator);
+        int256 deno = intAbs(a.denominator);
         if(deno>num){
             if (deno>sqrtNum) {
                 int256 rate = deno/sqrtNum;
@@ -84,9 +84,9 @@ library Fraction {
         return fractionNumber(a.numerator*b.denominator-b.numerator*a.denominator,a.denominator*b.denominator);
     }
 
-    function NORMSDIST(fractionNumber memory xNum) internal pure returns (fractionNumber) {
-        bool isNeg = IsNeg(xNum);
-        if (isNeg) {
+    function normsDist(fractionNumber memory xNum) internal pure returns (fractionNumber) {
+        bool _isNeg = isNeg(xNum);
+        if (_isNeg) {
             xNum = abs(xNum);
         }
         fractionNumber memory p = fractionNumber(2316419, 1e7);
@@ -96,35 +96,35 @@ library Fraction {
             fractionNumber(1781477937,1e9),
             fractionNumber(-1821255978,1e9),
             fractionNumber(1330274429,1e9)];
-        fractionNumber memory t = SafeFractionMul(xNum, p);
-        t = SafeFractionAdd(t, fractionNumber(1,1));
+        fractionNumber memory t = safeFractionMul(xNum, p);
+        t = safeFractionAdd(t, fractionNumber(1,1));
         t = invert(t);
         fractionNumber memory sqrtPiInv = fractionNumber(39894228040143267793,1e20);
-        fractionNumber memory expValue = SafeFractionMul(xNum, xNum);
-        expValue = SafeFractionMul(expValue,fractionNumber(-1,2));
+        fractionNumber memory expValue = safeFractionMul(xNum, xNum);
+        expValue = safeFractionMul(expValue,fractionNumber(-1,2));
 
         expValue = fractionExp(expValue);
-        expValue = SafeFractionMul(sqrtPiInv, expValue);
+        expValue = safeFractionMul(sqrtPiInv, expValue);
         fractionNumber memory secondArg = fractionNumber(0,1);
         fractionNumber memory tt = t;
         for (uint256 i = 0; i < b.length; i++) {
-            secondArg = SafeFractionAdd(secondArg, SafeFractionMul(b[i], tt));
-            tt = SafeFractionMul(tt, t);
+            secondArg = safeFractionAdd(secondArg, safeFractionMul(b[i], tt));
+            tt = safeFractionMul(tt, t);
         }
-        expValue = SafeFractionMul(expValue, secondArg);
-        if (!isNeg) {
-            expValue = SafeFractionSub(fractionNumber(1,1), expValue);
+        expValue = safeFractionMul(expValue, secondArg);
+        if (!_isNeg) {
+            expValue = safeFractionSub(fractionNumber(1,1), expValue);
         }
         return expValue;
     }
     function fractionExp(fractionNumber memory _x) internal pure returns (fractionNumber){
-        bool isNeg = IsNeg(_x);
-        if (isNeg) {
+        bool _isNeg = isNeg(_x);
+        if (_isNeg) {
             _x = abs(_x);
         }
         _x.numerator = _x.numerator << PRECISION;
         fractionNumber memory result = fractionNumber(int256(fixedExp(uint256(_x.numerator/_x.denominator))),int256(FIXED_ONE));
-        if (isNeg) {
+        if (_isNeg) {
             result = invert(result);
         }
         return result;
