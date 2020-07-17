@@ -12,96 +12,113 @@ contract TransactionFee is AddressWhiteList {
     }
 
     using SafeMath for uint256;
-    /* represents floting point numbers, where number = value * 10 ** exponent
-    i.e 0.1 = 10 * 10 ** -2 */
-    struct Number {
-        uint256 value;
-        int32 exponent;
+    struct fraction{
+        uint256 numerator;
+        uint256 denominator;
     }
-    event TransferPayback(address indexed recieptor,address indexed collateral,uint256 payback);
+    event FeePayback(address indexed recieptor,address indexed settlement,uint256 payback);
+    event AddFee(address indexed settlement,uint256 payback);
+    event TransferPayback(address indexed recieptor,address indexed settlement,uint256 payback);
     // The total fees accumulated in the contract
-    mapping (address => uint256) 	public managerFee;
-    // Number(3,-3) = 0.3%
-    Number public transactionFee = Number(3, -3);
+    mapping (address => uint256) 	public feeBalances;
+    fraction[] public FeeRates;
      /**
      * @dev Returns the rate of trasaction fee.
      */   
-    function getTransactionFee()public view returns (uint256,int32){
-        return (transactionFee.value,transactionFee.exponent);
+    constructor() internal{
+        FeeRates.push(fraction(3, 1000));
+        FeeRates.push(fraction(3, 1000));
+        FeeRates.push(fraction(3, 1000));
+        FeeRates.push(fraction(3, 1000));
+        FeeRates.push(fraction(3, 1000));
+    }
+    function getFeeRate(uint256 feeType)public view returns (uint256,uint256){
+        fraction storage feeRate = _getFeeRate(feeType);
+        return (feeRate.numerator,feeRate.denominator);
     }
     /**
      * @dev set the rate of trasaction fee.
-     * @param value the significant figures of transaction fee .
-     * @param exponent the exponent figures of transaction fee.
-     * transaction fee = Number(value,exponent);
+     * @param feeType the transaction fee type
+     * @param numerator the numerator of transaction fee .
+     * @param denominator thedenominator of transaction fee.
+     * transaction fee = numerator/denominator;
      */   
-    function setTransactionFee(uint256 value,int32 exponent)public onlyOwner{
-        transactionFee.value = value;
-        transactionFee.exponent = exponent;
+    function setTransactionFee(uint256 feeType,uint256 numerator,uint256 denominator)public onlyOwner{
+        fraction storage rate = _getFeeRate(feeType);
+        rate.numerator = numerator;
+        rate.denominator = denominator;
     }
+
     function getFeeBalance(address settlement)public view returns(uint256){
-        return managerFee[settlement];
+        return feeBalances[settlement];
     }
     function getAllFeeBalances()public view returns(address[],uint256[]){
         uint256[] memory balances = new uint256[](whiteList.length);
         for (uint256 i=0;i<whiteList.length;i++){
-            balances[i] = managerFee[whiteList[i]];
+            balances[i] = feeBalances[whiteList[i]];
         }
         return (whiteList,balances);
     }
     function redeem(address currency)public onlyOwner{
-        uint256 fee = managerFee[currency];
+        uint256 fee = feeBalances[currency];
         require (fee > 0, "It's empty balance");
-        managerFee[currency] = 0;
+        feeBalances[currency] = 0;
          if (currency == address(0)){
             msg.sender.transfer(fee);
         }else{
-        IERC20 currencyToken = IERC20(currency);
+            IERC20 currencyToken = IERC20(currency);
            currencyToken.transfer(msg.sender,fee);
         }
+        emit FeePayback(msg.sender,currency,fee);
     }
     function redeemAll()public onlyOwner{
         for (uint256 i=0;i<whiteList.length;i++){
-            uint256 fee = managerFee[whiteList[i]];
-            if (fee > 0){
-                managerFee[whiteList[i]] = 0;
-                IERC20 collateralToken = IERC20(whiteList[i]);
-                if (whiteList[i] == address(0)){
-                    msg.sender.transfer(fee);
-                }else{
-                    collateralToken.transfer(msg.sender,fee);
-                }
-            }
+            redeem(whiteList[i]);
         }
     }
-        /**
-      * @dev  transfer collateral payback amount;
+    function _addTransactionFee(address settleMent,uint256 amount) internal {
+        feeBalances[settleMent] = feeBalances[settleMent].add(amount);
+        emit AddFee(settleMent,amount);
+    }
+    function calculateFee(uint256 feeType,uint256 amount)public view returns (uint256){
+        fraction storage feeRate = _getFeeRate(feeType);
+        uint256 result = feeRate.numerator.mul(amount);
+        return result.div(feeRate.denominator);
+    }
+    function _getFeeRate(uint256 feeType)internal view returns(fraction storage){
+        require(feeType<FeeRates.length,"fee type is valid!");
+        return FeeRates[feeType];
+    }
+    /**
+      * @dev  transfer settleMent payback amount;
       * @param recieptor payback recieptor
-      * @param collateral collateral address
-      * @param payback amount of collateral will payback 
+      * @param settleMent settleMent address
+      * @param payback amount of settleMent will payback 
       */
-    function _transferPayback(address recieptor,address collateral,uint256 payback)internal{
+    function _transferPaybackAndFee(address recieptor,address settleMent,uint256 payback,uint256 feeType)internal{
         if (payback == 0){
             return;
         }
-        if (collateral == address(0)){
+        uint256 fee = calculateFee(feeType,payback);
+        _transferPayback(recieptor,settleMent,payback.sub(fee));
+        _addTransactionFee(settleMent,fee);
+    }
+    /**
+      * @dev  transfer settleMent payback amount;
+      * @param recieptor payback recieptor
+      * @param settleMent settleMent address
+      * @param payback amount of settleMent will payback 
+      */
+    function _transferPayback(address recieptor,address settleMent,uint256 payback)internal{
+        if (payback == 0){
+            return;
+        }
+        if (settleMent == address(0)){
             recieptor.transfer(payback);
         }else{
-            IERC20 collateralToken = IERC20(collateral);
+            IERC20 collateralToken = IERC20(settleMent);
             collateralToken.transfer(recieptor,payback);
         }
-        emit TransferPayback(recieptor,collateral,payback);
-    }
-    function _addTransactionFee(address settleMent,uint256 amount) internal {
-        managerFee[settleMent] = managerFee[settleMent].add(amount);
-    }
-    function _calNumberMulUint(Number number,uint256 value) internal pure returns (uint256){
-        uint256 result = number.value.mul(value);
-        if (number.exponent > 0) {
-            result = result.mul(10**uint256(number.exponent));
-        } else {
-            result = result.div(10**uint256(-1*number.exponent));
-        }
-        return result;
+        emit TransferPayback(recieptor,settleMent,payback);
     }
 }

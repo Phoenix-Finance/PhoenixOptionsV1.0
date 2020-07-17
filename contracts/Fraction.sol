@@ -1,6 +1,6 @@
 pragma solidity ^0.4.26;
 library Fraction {
-    int256 constant sqrtNum = 0x1fffffffffffffffffffffffffffffff;
+    int256 constant sqrtNum = 0x8fffffffffffffffffffffffff;
     uint8 constant PRECISION   = 32;  // fractional bits
     uint256 constant FIXED_ONE = uint256(1) << PRECISION; // 0x100000000
     uint256 constant FIXED_TWO = uint256(2) << PRECISION; // 0x200000000
@@ -11,7 +11,7 @@ library Fraction {
         int256 denominator;
     }
     function isNeg(fractionNumber memory a)  internal pure returns (bool) {
-	    return a.numerator*a.denominator < 0;
+	    return a.numerator<0 != a.denominator < 0;
     }
     function intAbs(int256 a)internal pure returns (int256){
         return (a<0) ? -a:a;

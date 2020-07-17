@@ -4,9 +4,9 @@ import "./Ownable.sol";
 import "./Fraction.sol";
 
 contract OptionsPrice is Ownable{
-    uint256 private Year = 365 days;
-    Fraction.fractionNumber private rate = Fraction.fractionNumber(5,1000);
-    Fraction.fractionNumber private iv = Fraction.fractionNumber(50,100);
+    uint256 internal Year = 365 days;
+    Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
+    Fraction.fractionNumber internal iv = Fraction.fractionNumber(50,100);
     function setIV(int256 ivNumerator,int256 ivDenominator)public onlyOwner{
         iv.numerator = ivNumerator;
         iv.denominator = ivDenominator;
@@ -52,16 +52,16 @@ contract OptionsPrice is Ownable{
             Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
                 internal view returns (uint256) {
        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice, strikePrice, expiration, r, derta);
-        Fraction.fractionNumber memory nd1 = Fraction.normsDist(d1);
-        Fraction.fractionNumber memory nd2 = Fraction.normsDist(d2);
-        nd1 = Fraction.safeFractionSub(Fraction.fractionNumber(1,1), nd1);
-        nd2 = Fraction.safeFractionSub(Fraction.fractionNumber(1,1), nd2);
-        nd1 = Fraction.safeFractionMul(nd1, Fraction.fractionNumber(int256(currentPrice),1));
-        nd2 = Fraction.safeFractionMul(nd2, Fraction.fractionNumber(int256(strikePrice),1));
+        d1 = Fraction.normsDist(d1);
+        d2 = Fraction.normsDist(d2);
+        d1 = Fraction.safeFractionSub(Fraction.fractionNumber(1,1), d1);
+        d2 = Fraction.safeFractionSub(Fraction.fractionNumber(1,1), d2);
+        d1 = Fraction.safeFractionMul(d1, Fraction.fractionNumber(int256(currentPrice),1));
+        d2 = Fraction.safeFractionMul(d2, Fraction.fractionNumber(int256(strikePrice),1));
         Fraction.fractionNumber memory rt = Fraction.safeFractionMul(r,Fraction.fractionNumber(int256(expiration),int256(Year)));
         rt = Fraction.invert(Fraction.fractionExp(rt));
-        Fraction.fractionNumber memory price = Fraction.safeFractionMul(nd2, rt);
-        price = Fraction.safeFractionSub(price, nd1);
+        Fraction.fractionNumber memory price = Fraction.safeFractionMul(d2, rt);
+        price = Fraction.safeFractionSub(price, d1);
         return uint256(price.numerator/price.denominator);
     }
 
@@ -75,14 +75,14 @@ contract OptionsPrice is Ownable{
             Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
                 internal view returns (uint256) {
        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice, strikePrice, expiration, r, derta);
-        Fraction.fractionNumber memory nd1 = Fraction.normsDist(d1);
-        Fraction.fractionNumber memory nd2 = Fraction.normsDist(d2);
-        nd1 = Fraction.safeFractionMul(nd1, Fraction.fractionNumber(int256(currentPrice),1));
-        nd2 = Fraction.safeFractionMul(nd2, Fraction.fractionNumber(int256(strikePrice),1));
+        d1 = Fraction.normsDist(d1);
+        d2 = Fraction.normsDist(d2);
+        d1 = Fraction.safeFractionMul(d1, Fraction.fractionNumber(int256(currentPrice),1));
+        d2 = Fraction.safeFractionMul(d2, Fraction.fractionNumber(int256(strikePrice),1));
         Fraction.fractionNumber memory rt = Fraction.safeFractionMul(r,Fraction.fractionNumber(int256(expiration),int256(Year)));
         rt = Fraction.invert(Fraction.fractionExp(rt));
-        Fraction.fractionNumber memory price = Fraction.safeFractionMul(nd2, rt);
-        price = Fraction.safeFractionSub(nd1, price);
+        Fraction.fractionNumber memory price = Fraction.safeFractionMul(d2, rt);
+        price = Fraction.safeFractionSub(d1, price);
         return uint256(price.numerator/price.denominator);
     }
 }

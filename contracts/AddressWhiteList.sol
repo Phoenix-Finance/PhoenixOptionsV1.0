@@ -1,5 +1,6 @@
 pragma solidity ^0.4.26;
 import "./Halt.sol";
+import "./whiteList.sol";
     /**
      * @dev Implementation of a whitelist filters a eligible address.
      */
@@ -12,23 +13,14 @@ contract AddressWhiteList is Halt {
      * @param addAddress new eligible address.
      */
     function addWhiteList(address addAddress)public onlyOwner{
-        uint256 index = _getEligibleAddressIndex(addAddress);
-        if (index==whiteList.length){
-            whiteList.push(addAddress);
-        }
+        whiteListAddress.addWhiteListAddress(whiteList,addAddress);
     }
     /**
      * @dev Implementation of revoke an invalid address from the whitelist.
      * @param removeAddress revoked address.
      */
-    function removeWhiteList(address removeAddress)public onlyOwner{
-        uint256 index = _getEligibleAddressIndex(removeAddress);
-        if (index<whiteList.length){
-            if (index!=whiteList.length-1) {
-                whiteList[index] = whiteList[whiteList.length-1];
-            }
-            whiteList.length--;
-        }
+    function removeWhiteList(address removeAddress)public onlyOwner returns (bool){
+        return whiteListAddress.removeWhiteListAddress(whiteList,removeAddress);
     }
     /**
      * @dev Implementation of getting the eligible whitelist.
@@ -41,14 +33,9 @@ contract AddressWhiteList is Halt {
      * @param tmpAddress input address for testing.
      */    
     function isEligibleAddress(address tmpAddress) public view returns (bool){
-        uint256 index = _getEligibleAddressIndex(tmpAddress);
-        return index<whiteList.length;
+        return whiteListAddress.isEligibleAddress(whiteList,tmpAddress);
     }
-    function _getEligibleAddressIndex(address tmpAddress) internal view returns (uint256){
-        for (uint256 i=0;i<whiteList.length;i++){
-            if (whiteList[i] == tmpAddress)
-                break;
-        }
-        return i;
+    function checkEligibleAddress(address tmpAddress) public view{
+        whiteListAddress.checkEligibleAddress(whiteList,tmpAddress);
     }
 }

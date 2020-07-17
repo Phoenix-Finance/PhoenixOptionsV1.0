@@ -3,20 +3,23 @@ import "./SafeMath.sol";
 import "./TransactionFee.sol";
 import "./CompoundOracleInterface.sol";
 import "./underlyingAssets.sol";
-contract OptionslPool is UnderlyingAssets,TransactionFee {
+contract OptionsPool is UnderlyingAssets,TransactionFee {
     using SafeMath for uint256;
     struct OptionsInfo {
+        uint256     optionID;
+        address     owner;
         uint8   	optType;    //0 for call, 1 for put
         uint32		underlying;
         uint256		expiration;
         uint256     strikePrice;
         uint256     amount;
-        uint256     volatility;
+        int256     ivNumerator;
+        int256     ivDenominator;
     }
 
-    Number public collateralRate;
     //each block burn options
     mapping(uint256=>uint256[2][]) public burnBlockOptions;
+    mapping(address=>uint256[]) public optionsBalances;
     ICompoundOracle internal _oracle;
     uint256 private _calDecimal = 10000000000;
 
@@ -28,7 +31,12 @@ contract OptionslPool is UnderlyingAssets,TransactionFee {
     uint256 public lastCalBlock;
 
     uint256[] private OptionsPhases;
-
+    function getOracleAddress() public view returns(address){
+        return address(_oracle);
+    }
+    function setOracleAddress(address oracle)public onlyOwner{
+        _oracle = ICompoundOracle(oracle);
+    }
     function calculatePhaseOccupiedCollateral(uint256 index) public onlyOwner {
         uint256 beginOption = index.mul(optionPhase);
         if (beginOption>=allOptions.length){
@@ -56,8 +64,11 @@ contract OptionslPool is UnderlyingAssets,TransactionFee {
             lastCalBlock = block.number;
         }
     }
-    function createOptions(uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,uint256 amount) internal {
-        allOptions.push(OptionsInfo(optType,underlying,expiration,strikePrice,amount,0));
+    function createOptions(uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,
+        uint256 amount,int256 ivNumerator,int256 ivDenominator) internal {
+        uint256 optionID = allOptions.length;
+        allOptions.push(OptionsInfo(optionID,msg.sender,optType,underlying,expiration,strikePrice,amount,ivNumerator,ivDenominator));
+        optionsBalances[msg.sender].push(optionID);
     }
     function getTotalOccupiedCollateral() public view returns (uint256) {
         uint256 totalOccupied = sumOptionPhases();
@@ -93,7 +104,7 @@ contract OptionslPool is UnderlyingAssets,TransactionFee {
         } else {
             totalOccupied = underlyingPrice.mul(option.amount);
         }
-        return _calNumberMulUint(collateralRate,totalOccupied);
+        return totalOccupied;
     }
     function calBurnedOptionsCollateral(OptionsInfo storage option,uint256 burned,uint256 underlyingPrice)internal view returns(uint256){
         uint256 totalOccupied = 0;
@@ -102,11 +113,48 @@ contract OptionslPool is UnderlyingAssets,TransactionFee {
         } else {
             totalOccupied = underlyingPrice.mul(burned);
         }
-        return _calNumberMulUint(collateralRate,totalOccupied);
+        return totalOccupied;
     }
-    function burnOptions(uint256 optionIndex,uint256 amount)internal{
-        require (optionIndex<allOptions.length,"option index is out of range!");
-        allOptions[optionIndex].amount = allOptions[optionIndex].amount.sub(amount);
-        burnBlockOptions[block.number].push([optionIndex,amount]);
+    function burnOptions(uint256 id,uint256 amount)internal{
+        OptionsInfo storage info = getOptionsById(id);
+        checkEligible(info);
+        checkOwner(info,msg.sender);
+        checkSufficient(info,amount);
+        info.amount = info.amount.sub(amount);
+        burnBlockOptions[block.number].push([id-1,amount]);
     }
+    function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){
+        OptionsInfo storage info = getOptionsById(optionsId);
+        checkEligible(info);
+        checkSufficient(info,amount);
+        uint256 underlyingPrice = _oracle.getUnderlyingPrice(info.underlying);
+        uint256 tokenPayback = 0;
+        if (info.optType == 0){
+            if (underlyingPrice > info.strikePrice){
+                tokenPayback -= info.strikePrice;
+            }
+        }else{
+            if ( underlyingPrice < info.strikePrice){
+                tokenPayback = info.strikePrice-underlyingPrice;
+            }
+        }
+        if (tokenPayback == 0 ){
+            return 0;
+        } 
+        return tokenPayback.mul(amount);
+    }
+    function getOptionsById(uint256 id)internal view returns(OptionsInfo storage){
+        require(id>0 && id <= allOptions.length,"option id is not exist");
+        return allOptions[id];
+    }
+    function checkEligible(OptionsInfo storage info)internal view{
+        require(info.expiration>now,"option is expired");
+    }
+    function checkOwner(OptionsInfo storage info,address owner)internal view{
+        require(info.owner == owner,"caller is not the options owner");
+    }
+    function checkSufficient(OptionsInfo storage info,uint256 amount) internal view{
+        require(info.amount >= amount,"option amount is insufficient");
+    }
+
 }
