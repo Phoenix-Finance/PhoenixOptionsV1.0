@@ -1,20 +1,20 @@
 pragma solidity ^0.4.26;
-    /**
-     * @dev Implementation of a whiteList filters a eligible uint32.
-     */
 library whiteListUint32 {
     // add whiteList
     function addWhiteListUint32(uint32[] storage whiteList,uint32 temp) internal{
-        uint256 index = _getEligibleIndexUint32(whiteList,temp);
-        if (index==whiteList.length){
+        if (!isEligibleUint32(whiteList,temp)){
             whiteList.push(temp);
         }
     }
     function removeWhiteListUint32(uint32[] storage whiteList,uint32 temp)internal returns (bool) {
-        uint256 index = _getEligibleIndexUint32(whiteList,temp);
-        if (index<whiteList.length){
-            if (index!=whiteList.length-1) {
-                whiteList[index] = whiteList[whiteList.length-1];
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
+            if (whiteList[i] == temp)
+                break;
+        }
+        if (i<len){
+            if (i!=len-1) {
+                whiteList[i] = whiteList[len-1];
             }
             whiteList.length--;
             return true;
@@ -22,15 +22,19 @@ library whiteListUint32 {
         return false;
     }
     function checkEligibleUint32(uint32[] storage whiteList,uint32 temp) internal view{
-        uint256 index = _getEligibleIndexUint32(whiteList,temp);
-        require(index<whiteList.length,"whiteList: using invalid value");
+        require(isEligibleUint32(whiteList,temp),"whiteList: using invalid uint32");
     }
     function isEligibleUint32(uint32[] storage whiteList,uint32 temp) internal view returns (bool){
-        uint256 index = _getEligibleIndexUint32(whiteList,temp);
-        return index<whiteList.length;
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
+            if (whiteList[i] == temp)
+                return true;
+        }
+        return false;
     }
     function _getEligibleIndexUint32(uint32[] storage whiteList,uint32 temp) internal view returns (uint256){
-        for (uint256 i=0;i<whiteList.length;i++){
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }
@@ -40,16 +44,19 @@ library whiteListUint32 {
 library whiteListUint256 {
     // add whiteList
     function addWhiteListUint256(uint256[] storage whiteList,uint256 temp) internal{
-        uint256 index = _getEligibleIndexUint256(whiteList,temp);
-        if (index==whiteList.length){
+        if (!isEligibleUint256(whiteList,temp)){
             whiteList.push(temp);
         }
     }
     function removeWhiteListUint256(uint256[] storage whiteList,uint256 temp)internal returns (bool) {
-        uint256 index = _getEligibleIndexUint256(whiteList,temp);
-        if (index<whiteList.length){
-            if (index!=whiteList.length-1) {
-                whiteList[index] = whiteList[whiteList.length-1];
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
+            if (whiteList[i] == temp)
+                break;
+        }
+        if (i<len){
+            if (i!=len-1) {
+                whiteList[i] = whiteList[len-1];
             }
             whiteList.length--;
             return true;
@@ -57,15 +64,19 @@ library whiteListUint256 {
         return false;
     }
     function checkEligibleUint256(uint256[] storage whiteList,uint256 temp) internal view{
-        uint256 index = _getEligibleIndexUint256(whiteList,temp);
-        require(index<whiteList.length,"whiteList: using invalid value");
+        require(isEligibleUint256(whiteList,temp),"whiteList: using invalid uint256");
     }
     function isEligibleUint256(uint256[] storage whiteList,uint256 temp) internal view returns (bool){
-        uint256 index = _getEligibleIndexUint256(whiteList,temp);
-        return index<whiteList.length;
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
+            if (whiteList[i] == temp)
+                return true;
+        }
+        return false;
     }
     function _getEligibleIndexUint256(uint256[] storage whiteList,uint256 temp) internal view returns (uint256){
-        for (uint256 i=0;i<whiteList.length;i++){
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }
@@ -75,16 +86,19 @@ library whiteListUint256 {
 library whiteListAddress {
     // add whiteList
     function addWhiteListAddress(address[] storage whiteList,address temp) internal{
-        uint256 index = _getEligibleIndexAddress(whiteList,temp);
-        if (index==whiteList.length){
+        if (!isEligibleAddress(whiteList,temp)){
             whiteList.push(temp);
         }
     }
     function removeWhiteListAddress(address[] storage whiteList,address temp)internal returns (bool) {
-        uint256 index = _getEligibleIndexAddress(whiteList,temp);
-        if (index<whiteList.length){
-            if (index!=whiteList.length-1) {
-                whiteList[index] = whiteList[whiteList.length-1];
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
+            if (whiteList[i] == temp)
+                break;
+        }
+        if (i<len){
+            if (i!=len-1) {
+                whiteList[i] = whiteList[len-1];
             }
             whiteList.length--;
             return true;
@@ -92,15 +106,19 @@ library whiteListAddress {
         return false;
     }
     function checkEligibleAddress(address[] storage whiteList,address temp) internal view{
-        uint256 index = _getEligibleIndexAddress(whiteList,temp);
-        require(index<whiteList.length,"whiteList: using invalid address");
+        require(isEligibleAddress(whiteList,temp),"whiteList: using invalid address");
     }
     function isEligibleAddress(address[] storage whiteList,address temp) internal view returns (bool){
-        uint256 index = _getEligibleIndexAddress(whiteList,temp);
-        return index<whiteList.length;
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
+            if (whiteList[i] == temp)
+                return true;
+        }
+        return false;
     }
     function _getEligibleIndexAddress(address[] storage whiteList,address temp) internal view returns (uint256){
-        for (uint256 i=0;i<whiteList.length;i++){
+        uint256 len = whiteList.length;
+        for (uint256 i=0;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }

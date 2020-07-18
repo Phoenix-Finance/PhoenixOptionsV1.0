@@ -8,7 +8,7 @@ import "./underlyingAssets.sol";
 contract CollateralPool is OptionsPool,ReentrancyGuard,SharedCoin {
     using SafeMath for uint256;
     uint256 private _calDecimal = 10000000000;
-    fraction public collateralRate;
+    fraction public collateralRate = fraction(3, 1);
     enum eBalance{
         collateral,
         premium
@@ -22,6 +22,7 @@ contract CollateralPool is OptionsPool,ReentrancyGuard,SharedCoin {
     mapping (address => uint256) public userCollateralPaying;
     //account -> collateral -> amount
     mapping (address => mapping (address => uint256)) public userInputCollateral;
+    event DebugEvent(uint256 indexed value1,uint256 indexed value2,uint256 indexed value3);
 
     function addCollateral(address collateral,uint256 amount)public payable {
         amount = getPayableAmount(collateral,amount);
@@ -51,7 +52,8 @@ contract CollateralPool is OptionsPool,ReentrancyGuard,SharedCoin {
             uint256 worth = tokenAmount.mul(tokenNetWorth);
             uint256 redeemColFee = 4;
             worth = _redeemCollateral(worth,collateral,redeemColFee);
-            for (uint256 i=0;worth>0 && i<whiteList.length;i++){
+            uint whiteLen = whiteList.length;
+            for (uint256 i=0;worth>0 && i<whiteLen;i++){
                 worth = _redeemCollateral(worth,whiteList[i],redeemColFee);    
             } 
             _paybackWorth(worth,redeemColFee);
@@ -76,6 +78,23 @@ contract CollateralPool is OptionsPool,ReentrancyGuard,SharedCoin {
         }
         return 0;
     }
+    function getOccupiedCollateral() public view returns(uint256){
+        uint256 totalOccupied = getTotalOccupiedCollateral();
+        return calculateCollateral(totalOccupied);
+    }
+    function getLeftCollateral()public view returns(uint256){
+        return getTotalCollateral() - getOccupiedCollateral();
+    }
+    function getTotalCollateral()public view returns(uint256){
+        uint256 totalNum = 0;
+        uint whiteListLen = whiteList.length;
+        for (uint256 i=0;i<whiteListLen;i++){
+            address addr = whiteList[i];
+            uint256 price = _oracle.getPrice(addr);
+            totalNum = totalNum.add(price.mul(collateralBalances[addr].add(premiumBalances[addr])));
+        }
+        return totalNum;
+    }
     function _paybackWorth(uint256 worth,uint256 feeType) internal {
         _paybackWorth_sub(eBalance.premium,worth,feeType);
     }
@@ -84,29 +103,29 @@ contract CollateralPool is OptionsPool,ReentrancyGuard,SharedCoin {
             return;
         }
         mapping (address => uint256) balances = _balance == eBalance.collateral ? collateralBalances : premiumBalances;
-        uint256 totalNum = 0;
         uint256 totalPrice = 0;
-        for (uint256 i=0;i<whiteList.length;i++){
-            totalNum = totalNum.add(balances[whiteList[i]]);
-            uint256 price = _oracle.getPrice(whiteList[i]);
-            totalPrice.add(price.mul(balances[whiteList[i]]));
+        uint whiteLen = whiteList.length;
+        for (uint256 i=0;i<whiteLen;i++){
+            address addr = whiteList[i];
+            uint256 price = _oracle.getPrice(addr);
+            totalPrice.add(price.mul(balances[addr]));
         }
         if (totalPrice == 0){
             return worth;
         }
-        uint256 totalCal = worth;
+        uint256 cal = worth;
         if (worth > totalPrice){
             worth = worth - totalPrice;
-            totalCal = totalPrice;
+            cal = totalPrice;
         }else{
             worth = 0;
         }
-        totalCal = totalCal.mul(_calDecimal);
-        uint256 rate = totalCal.mul(totalNum).div(totalPrice);
-        for (i=0;i<whiteList.length;i++){
-            uint256 _payBack = balances[whiteList[i]].mul(rate).div(totalNum).div(_calDecimal);
-            balances[whiteList[i]] = balances[whiteList[i]].sub(_payBack);
-            _transferPaybackAndFee(msg.sender,whiteList[i],_payBack,feeType);
+//        cal = cal.mul(totalNum).div(totalPrice);
+        for (i=0;i<whiteLen;i++){
+            addr = whiteList[i];
+            uint256 _payBack = balances[addr].mul(cal).div(totalPrice);
+            balances[addr] = balances[addr].sub(_payBack);
+            _transferPaybackAndFee(msg.sender,addr,_payBack,feeType);
         } 
         return worth;
     }

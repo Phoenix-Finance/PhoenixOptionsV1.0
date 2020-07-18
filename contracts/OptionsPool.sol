@@ -4,6 +4,7 @@ import "./TransactionFee.sol";
 import "./CompoundOracleInterface.sol";
 import "./underlyingAssets.sol";
 contract OptionsPool is UnderlyingAssets,TransactionFee {
+    
     using SafeMath for uint256;
     struct OptionsInfo {
         uint256     optionID;
@@ -31,6 +32,12 @@ contract OptionsPool is UnderlyingAssets,TransactionFee {
     uint256 public lastCalBlock;
 
     uint256[] private OptionsPhases;
+    constructor () public{
+    }
+    function getOptionsById(uint256 optionsId)public view returns(uint256,address,uint8,uint32,uint256,uint256,uint256){
+        OptionsInfo storage info = _getOptionsById(optionsId);
+        return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);
+    }
     function getOracleAddress() public view returns(address){
         return address(_oracle);
     }
@@ -39,18 +46,20 @@ contract OptionsPool is UnderlyingAssets,TransactionFee {
     }
     function calculatePhaseOccupiedCollateral(uint256 index) public onlyOwner {
         uint256 beginOption = index.mul(optionPhase);
-        if (beginOption>=allOptions.length){
+        uint256 allLen = allOptions.length;
+        if (beginOption>=allLen){
             return;
         }
         if(OptionsPhases.length<index+1){
             OptionsPhases.length = index+1;
         }
         uint256 lastOption = beginOption.add(optionPhase);
-        if (lastOption>allOptions.length) {
-            lastOption = allOptions.length;
+        if (lastOption>allLen) {
+            lastOption = allLen;
         }
-        uint256[] memory prices = new uint256[](underlyingAssets.length);
-        for (uint256 i = 0;i<underlyingAssets.length;i++){
+        uint256 underlyingLen = underlyingAssets.length;
+        uint256[] memory prices = new uint256[](underlyingLen);
+        for (uint256 i = 0;i<underlyingLen;i++){
             prices[i] = _oracle.getUnderlyingPrice(underlyingAssets[i]);
         }
         uint256 totalOccupied = 0;
@@ -64,27 +73,39 @@ contract OptionsPool is UnderlyingAssets,TransactionFee {
             lastCalBlock = block.number;
         }
     }
-    function createOptions(uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,
-        uint256 amount,int256 ivNumerator,int256 ivDenominator) internal {
+    function _createOptions(uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,
+        uint256 amount,int256 ivNumerator,int256 ivDenominator) internal returns (OptionsInfo storage) {
         uint256 optionID = allOptions.length;
-        allOptions.push(OptionsInfo(optionID,msg.sender,optType,underlying,expiration,strikePrice,amount,ivNumerator,ivDenominator));
+        allOptions.push(OptionsInfo(optionID+1,msg.sender,optType,underlying,expiration,strikePrice,amount,ivNumerator,ivDenominator));
         optionsBalances[msg.sender].push(optionID);
+        if (optionID == 0){
+            lastCalBlock = block.number;
+        }
+        return allOptions[optionID];
     }
-    function getTotalOccupiedCollateral() public view returns (uint256) {
+    function getTotalOccupiedCollateral() internal view returns (uint256) {
         uint256 totalOccupied = sumOptionPhases();
-        uint256[] memory prices = new uint256[](underlyingAssets.length);
-        for (uint256 i = 0;i<underlyingAssets.length;i++){
+        uint underlyingLen = underlyingAssets.length;
+        uint256[] memory prices = new uint256[](underlyingLen);
+        for (uint256 i = 0;i<underlyingLen;i++){
             prices[i] = _oracle.getUnderlyingPrice(underlyingAssets[i]);
         }
-        for (uint256 beginOption = lastCallOption+1; beginOption < allOptions.length;beginOption++){
+        uint optionsLen = allOptions.length;
+        for (uint256 beginOption = lastCallOption+1; beginOption < optionsLen;beginOption++){
             uint256 index = _getEligibleUnderlyingIndex(allOptions[beginOption].underlying);
             totalOccupied = totalOccupied.add(calOptionsCollateral(allOptions[beginOption],prices[index]));
         }
-        for (uint256 beginBlock = lastCalBlock+1; beginBlock <= block.number;beginBlock++){
+        uint256 beginBlock = lastCalBlock+1;
+        if (beginBlock == 1){
+            return totalOccupied;
+        }
+        for (; beginBlock <= block.number;beginBlock++){
             uint256[2][] storage burnedTokens = burnBlockOptions[beginBlock];
-            for (i = 0;i<burnedTokens.length;i++){
-                index = _getEligibleUnderlyingIndex(allOptions[burnedTokens[i][0]].underlying);
-                totalOccupied = totalOccupied.sub(calBurnedOptionsCollateral(allOptions[burnedTokens[i][0]],
+            uint burnedLen = burnedTokens.length;
+            for (i = 0;i<burnedLen;i++){
+                uint optionId = burnedTokens[i][0];
+                index = _getEligibleUnderlyingIndex(allOptions[optionId].underlying);
+                totalOccupied = totalOccupied.sub(calBurnedOptionsCollateral(allOptions[optionId],
                     burnedTokens[i][1],prices[index]));
             }
         }
@@ -92,7 +113,8 @@ contract OptionsPool is UnderlyingAssets,TransactionFee {
     }
     function sumOptionPhases()internal view returns(uint256){
         uint256 totalOccupied = 0;
-        for (uint256 i=0;i<OptionsPhases.length;i++){
+        uint phaseLen = OptionsPhases.length;
+        for (uint256 i=0;i<phaseLen;i++){
             totalOccupied = totalOccupied.add(OptionsPhases[i]);
         }
         return totalOccupied;
@@ -116,7 +138,7 @@ contract OptionsPool is UnderlyingAssets,TransactionFee {
         return totalOccupied;
     }
     function burnOptions(uint256 id,uint256 amount)internal{
-        OptionsInfo storage info = getOptionsById(id);
+        OptionsInfo storage info = _getOptionsById(id);
         checkEligible(info);
         checkOwner(info,msg.sender);
         checkSufficient(info,amount);
@@ -124,14 +146,14 @@ contract OptionsPool is UnderlyingAssets,TransactionFee {
         burnBlockOptions[block.number].push([id-1,amount]);
     }
     function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){
-        OptionsInfo storage info = getOptionsById(optionsId);
+        OptionsInfo storage info = _getOptionsById(optionsId);
         checkEligible(info);
         checkSufficient(info,amount);
         uint256 underlyingPrice = _oracle.getUnderlyingPrice(info.underlying);
         uint256 tokenPayback = 0;
         if (info.optType == 0){
             if (underlyingPrice > info.strikePrice){
-                tokenPayback -= info.strikePrice;
+                tokenPayback = underlyingPrice - info.strikePrice;
             }
         }else{
             if ( underlyingPrice < info.strikePrice){
@@ -143,9 +165,9 @@ contract OptionsPool is UnderlyingAssets,TransactionFee {
         } 
         return tokenPayback.mul(amount);
     }
-    function getOptionsById(uint256 id)internal view returns(OptionsInfo storage){
+    function _getOptionsById(uint256 id)internal view returns(OptionsInfo storage){
         require(id>0 && id <= allOptions.length,"option id is not exist");
-        return allOptions[id];
+        return allOptions[id-1];
     }
     function checkEligible(OptionsInfo storage info)internal view{
         require(info.expiration>now,"option is expired");

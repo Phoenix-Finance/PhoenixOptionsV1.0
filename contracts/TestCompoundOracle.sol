@@ -13,14 +13,14 @@ contract TestCompoundOracle is CompoundOracle {
         if (price != 0) {
             return price;
         }
-        return 50;
+        return 50*1e8;
     }
     function getUnderlyingPrice(uint256 cToken) public view returns (uint){
         (uint256 price,) = CompoundOracle.getUnderlyingPriceDetail(cToken);
         if (price != 0) {
             return price;
         }
-        return 200;
+        return 200*1e8;
     }
 
     function getSellOptionsPrice(address oToken) public view returns (uint){
@@ -28,14 +28,14 @@ contract TestCompoundOracle is CompoundOracle {
         if (price != 0) {
             return price;
         }
-        return 90;
+        return 90*1e8;
     }
     function getBuyOptionsPrice(address oToken) public view returns (uint){
         (uint256 price,) = CompoundOracle.getBuyOptionsPriceDetail(oToken);
         if (price != 0) {
             return price;
         }
-        return 110;
+        return 110*1e8;
     }
     function getEthBalance(address account) public view returns (uint) {
         return account.balance;
