@@ -3,13 +3,12 @@ pragma solidity ^0.4.26;
 import "./modules/Ownable.sol";
 import "./modules/Fraction.sol";
 import "./interfaces/IVolatility.sol";
-contract OptionsPrice is Ownable{
+contract OptionsPrice is ImportVolatility{
     uint256 internal Year = 365 days;
-    IVolatility internal volatility;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
 
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint8 optType)public view returns (uint256){
-        (uint256 ivNumerator,uint256 ivDenominator) = volatility.calculateIv(expiration,strikePrice);
+        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(expiration,strikePrice);
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);

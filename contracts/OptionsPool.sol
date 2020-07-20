@@ -1,11 +1,11 @@
 pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
 import "./modules/Managerable.sol";
-import "./interfaces/CompoundOracleInterface.sol";
+import "./interfaces/ICompoundOracle.sol";
 import "./modules/underlyingAssets.sol";
 import "./interfaces/IOptionsPrice.sol";
 import "./interfaces/IVolatility.sol";
-contract OptionsPool is UnderlyingAssets,Managerable {
+contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsPrice,ImportVolatility {
     
     using SafeMath for uint256;
     struct OptionsInfo {
@@ -29,7 +29,6 @@ contract OptionsPool is UnderlyingAssets,Managerable {
     //each block burn options
     mapping(uint256=>uint256[2][]) public burnBlockOptions;
     mapping(address=>uint256[]) public optionsBalances;
-    ICompoundOracle internal _oracle;
     uint256 constant _calDecimal = 10000000000;
     uint32 public optionPhase = 500;
 
@@ -50,17 +49,8 @@ contract OptionsPool is UnderlyingAssets,Managerable {
 
     uint256[] public expirationList;
     
-    IOptionsPrice internal optionsPrice;
-    IVolatility internal volatility;
     constructor () public{
     }
-    function getOptionsPriceAddress() public view returns(address){
-        return address(optionsPrice);
-    }
-    function setOptionsPriceAddress(address options)public onlyOwner{
-        optionsPrice = IOptionsPrice(options);
-    }
-
     function getOptionBalances(address user)public view returns(uint256[]){
         return optionsBalances[user];
     }
@@ -108,12 +98,7 @@ contract OptionsPool is UnderlyingAssets,Managerable {
         OptionsInfo storage info = _getOptionsById(optionsId);
         return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);
     }
-    function getOracleAddress() public view returns(address){
-        return address(_oracle);
-    }
-    function setOracleAddress(address oracle)public onlyOwner{
-        _oracle = ICompoundOracle(oracle);
-    }
+
     function setPhaseOccupiedCollateral(uint256 index) public onlyOwner {
         (uint256 totalOccupied,uint256 beginOption,uint256 lastOption) = calculatePhaseOccupiedCollateral(index);
         setCollateralPhase(index,totalOccupied,beginOption,lastOption,block.number);
@@ -229,7 +214,7 @@ contract OptionsPool is UnderlyingAssets,Managerable {
                     continue;
                 }
                 OptionsInfoEx storage optionEx = optionExtraMap[burnedTokens[i][0]];
-                uint256 nowValue = optionsPrice.getOptionsPrice_iv(info.strikePrice,info.strikePrice,expiration-now,optionEx.ivNumerator,
+                uint256 nowValue = _optionsPrice.getOptionsPrice_iv(info.strikePrice,info.strikePrice,expiration-now,optionEx.ivNumerator,
                     optionEx.ivDenominator,info.optType);
                 nowValue = optionEx.tokenTimePrice.mul(nowValue).mul(burnedTokens[i][1]).div(optionEx.fullPrice);
                 uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
@@ -240,9 +225,9 @@ contract OptionsPool is UnderlyingAssets,Managerable {
     function _calculateTimePrice(uint256 preTime,uint256 createdTime,uint256 expiration,
             uint256 strikePrice,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256,uint256){
         uint256 preExpiration = preTime>createdTime ? expiration - preTime : expiration - createdTime;
-        uint256 preValue = optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,preExpiration,ivNumerator,
+        uint256 preValue = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,preExpiration,ivNumerator,
             ivDenominator,optType);
-        uint256 nowValue = optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-now,ivNumerator,
+        uint256 nowValue = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-now,ivNumerator,
             ivDenominator,optType);
         return (preValue,nowValue);
     }
@@ -262,9 +247,9 @@ contract OptionsPool is UnderlyingAssets,Managerable {
     function setOptionsExtra(OptionsInfo storage info,address settlement) onlyManager internal{
         uint256 strikePrice = info.strikePrice;
         uint256 expiration = info.expiration - now;
-        (uint256 ivNumerator,uint256 ivDenominator) = volatility.calculateIv(strikePrice,expiration);
+        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(strikePrice,expiration);
         uint256 settlePrice = _oracle.getPrice(settlement);
-        uint256 fullPrice = optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration,ivNumerator,ivDenominator,info.optType);
+        uint256 fullPrice = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration,ivNumerator,ivDenominator,info.optType);
         uint256 tokenTimePrice = fullPrice.div(settlePrice);
         optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,fullPrice,ivNumerator,ivDenominator);
     }

@@ -1,5 +1,5 @@
 pragma solidity ^0.4.26;
-import "./interfaces/CompoundOracleInterface.sol";
+import "./interfaces/ICompoundOracle.sol";
 import "./modules/Ownable.sol";
 import "./modules/SafeMath.sol";
 contract CompoundOracle is ICompoundOracle,Ownable {

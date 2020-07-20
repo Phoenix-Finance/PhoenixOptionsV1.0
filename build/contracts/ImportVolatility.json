@@ -1,39 +1,108 @@
 {
-  "contractName": "IVolatility",
+  "contractName": "ImportVolatility",
   "abi": [
     {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "constant": true,
-      "inputs": [
-        {
-          "name": "expiration",
-          "type": "uint256"
-        },
-        {
-          "name": "price",
-          "type": "uint256"
-        }
-      ],
-      "name": "calculateIv",
+      "inputs": [],
+      "name": "owner",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
-        },
-        {
-          "name": "",
-          "type": "uint256"
+          "type": "address"
         }
       ],
       "payable": false,
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getVolatilityAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "volatility",
+          "type": "address"
+        }
+      ],
+      "name": "setVolatilityAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
-  "metadata": "",
-  "bytecode": "0x",
-  "deployedBytecode": "0x",
-  "sourceMap": "",
-  "deployedSourceMap": "",
+  "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"volatility\",\"type\":\"address\"}],\"name\":\"setVolatilityAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getVolatilityAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol\":\"ImportVolatility\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol\":{\"keccak256\":\"0x02ac2ecac00d8ed49b12a021f21de48fd4da4fd1bf41b9fdff85d7592e62ae3e\",\"urls\":[\"bzzr://e09348aab742a1d52335031b2ccca2c1d5c2082d646c08672c3a1b98183e043d\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x32e86cf1f96e3e879768e0d0440f35011232004420d3c4f84492f23664cba015\",\"urls\":[\"bzzr://5725cb4758935a4e7ebc5f963b0a46da11e6c81ac5dcedd214e425546e8b83a7\"]}},\"version\":1}",
+  "bytecode": "0x6080604081905260008054600160a060020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610439806100576000396000f3006080604052600436106100775763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632967eafe811461007c57806342e5479d1461009f578063715018a6146100d05780638da5cb5b146100e55780638f32d59b146100fa578063f2fde38b14610123575b600080fd5b34801561008857600080fd5b5061009d600160a060020a0360043516610144565b005b3480156100ab57600080fd5b506100b46101d1565b60408051600160a060020a039092168252519081900360200190f35b3480156100dc57600080fd5b5061009d6101e0565b3480156100f157600080fd5b506100b4610295565b34801561010657600080fd5b5061010f6102a4565b604080519115158252519081900360200190f35b34801561012f57600080fd5b5061009d600160a060020a03600435166102b5565b61014c6102a4565b15156101a2576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b6101e86102a4565b151561023e576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b6102bd6102a4565b1515610313576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61031c8161031f565b50565b600160a060020a03811615156103a5576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820c1cec22a83ba802742a93e1957522ab13d79c2d9ac6e834c754ce1cbff1321440029",
+  "deployedBytecode": "0x6080604052600436106100775763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632967eafe811461007c57806342e5479d1461009f578063715018a6146100d05780638da5cb5b146100e55780638f32d59b146100fa578063f2fde38b14610123575b600080fd5b34801561008857600080fd5b5061009d600160a060020a0360043516610144565b005b3480156100ab57600080fd5b506100b46101d1565b60408051600160a060020a039092168252519081900360200190f35b3480156100dc57600080fd5b5061009d6101e0565b3480156100f157600080fd5b506100b4610295565b34801561010657600080fd5b5061010f6102a4565b604080519115158252519081900360200190f35b34801561012f57600080fd5b5061009d600160a060020a03600435166102b5565b61014c6102a4565b15156101a2576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b6101e86102a4565b151561023e576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b6102bd6102a4565b1515610313576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61031c8161031f565b50565b600160a060020a03811615156103a5576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820c1cec22a83ba802742a93e1957522ab13d79c2d9ac6e834c754ce1cbff1321440029",
+  "sourceMap": "188:318:13:-;;;;;659:6:18;:19;;-1:-1:-1;;;;;;659:19:18;668:10;659:19;;;;-1:-1:-1;;;;;726:6:18;;693:40;;659:6;;693:40;188:318:13;;;;;;",
+  "deployedSourceMap": "188:318:13:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;382:121;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;382:121:13;-1:-1:-1;;;;;382:121:13;;;;;;;270:106;;8:9:-1;5:2;;;30:1;27;20:12;5:2;270:106:13;;;;;;;;-1:-1:-1;;;;;270:106:13;;;;;;;;;;;;;;1599:137:18;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1599:137:18;;;;816:77;;8:9:-1;5:2;;;30:1;27;20:12;5:2;816:77:18;;;;1167:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1167:90:18;;;;;;;;;;;;;;;;;;;;;;1885:107;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1885:107:18;-1:-1:-1;;;;;1885:107:18;;;;;382:121:13;1020:9:18;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;458:11:13;:37;;-1:-1:-1;;458:37:13;-1:-1:-1;;;;;458:37:13;;;;;;;;;;382:121::o;270:106::-;356:11;;-1:-1:-1;;;;;356:11:13;270:106;:::o;1599:137:18:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:18;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:18;;;1599:137::o;816:77::-;854:7;880:6;-1:-1:-1;;;;;880:6:18;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:18;1230:10;:20;;1167:90::o;1885:107::-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;:::-;1885:107;:::o;2093:225::-;-1:-1:-1;;;;;2166:22:18;;;;2158:73;;;;;-1:-1:-1;;;;;2158:73:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:18;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:18;-1:-1:-1;;;;;2294:17:18;;;;;;;;;;2093:225::o",
   "source": "pragma solidity ^0.4.26;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IVolatility {\r\n    function calculateIv(uint256 expiration,uint256 price)external view returns (uint256,uint256);\r\n}\r\ncontract ImportVolatility is Ownable{\r\n    IVolatility internal _volatility;\r\n    function getVolatilityAddress() public view returns(address){\r\n        return address(_volatility);\r\n    }\r\n    function setVolatilityAddress(address volatility)public onlyOwner{\r\n        _volatility = IVolatility(volatility);\r\n    }\r\n}",
   "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\interfaces\\IVolatility.sol",
   "ast": {
@@ -1124,7 +1193,20 @@
   "schemaVersion": "3.1.0",
   "updatedAt": "2020-07-20T14:10:02.149Z",
   "devdoc": {
-    "methods": {}
+    "methods": {
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    }
   },
   "userdoc": {
     "methods": {}

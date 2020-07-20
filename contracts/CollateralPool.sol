@@ -1,13 +1,12 @@
 pragma solidity ^0.4.26;
-import "./OptionsPool.sol";
 import "./modules/SafeMath.sol";
 import "./modules/ReentrancyGuard.sol";
 import "./SharedCoin.sol";
 import "./modules/underlyingAssets.sol";
 import "./modules/TransactionFee.sol";
 import "./interfaces/IOptionsPool.sol";
-import "./interfaces/CompoundOracleInterface.sol";
-contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin {
+import "./interfaces/ICompoundOracle.sol";
+contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracle,ImportOptionsPool {
     using SafeMath for uint256;
     uint256 constant _calDecimal = 10000000000;
     fraction public collateralRate = fraction(3, 1);
@@ -26,16 +25,14 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin {
     //account -> collateral -> amount
     mapping (address => mapping (address => uint256)) public userInputCollateral;
 
-    IOptionsPool internal optionsPool;
-    ICompoundOracle internal _oracle;
     event DebugEvent(uint256 indexed value1,uint256 indexed value2,uint256 indexed value3);
 
     function setPhaseSharedPayment(uint256 index) public onlyOwner {
-        (uint256[] memory sharedBalances,uint256 blockNumber) = optionsPool.calculatePhaseSharedPayment(index);
+        (uint256[] memory sharedBalances,uint256 blockNumber) = _optionsPool.calculatePhaseSharedPayment(index);
         setSharedPayment(index,sharedBalances,blockNumber,now);
     }
     function setSharedPayment(uint256 index,uint256[] sharedBalances,uint256 lastBlock,uint256 calTime) public onlyOwner{
-        optionsPool.setSharedState(index,lastBlock,calTime);
+        _optionsPool.setSharedState(index,lastBlock,calTime);
         for (uint i=0;i<sharedBalances.length;i++){
             address addr = whiteList[i];
             netWorthBalances[addr] = netWorthBalances[addr].add(sharedBalances[i]);
@@ -69,7 +66,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin {
         if (tokenAmount == 0){
             return;
         }
-        uint256 totalOccupied = optionsPool.getTotalOccupiedCollateral();
+        uint256 totalOccupied = _optionsPool.getTotalOccupiedCollateral();
         uint256 totalWorth = getTotalCollateral();
         uint256 tokenNetWorth = totalWorth.div(_totalSupply);
         uint256 redeemWorth = tokenAmount.mul(tokenNetWorth);
@@ -172,7 +169,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin {
 
     }
     function getOccupiedCollateral() public view returns(uint256){
-        uint256 totalOccupied = optionsPool.getTotalOccupiedCollateral();
+        uint256 totalOccupied = _optionsPool.getTotalOccupiedCollateral();
         return calculateCollateral(totalOccupied);
     }
     function getLeftCollateral()public view returns(uint256){

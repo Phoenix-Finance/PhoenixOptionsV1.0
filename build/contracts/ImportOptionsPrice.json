@@ -1,31 +1,23 @@
 {
-  "contractName": "IOptionsPrice",
+  "contractName": "ImportOptionsPrice",
   "abi": [
     {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "constant": true,
-      "inputs": [
-        {
-          "name": "currentPrice",
-          "type": "uint256"
-        },
-        {
-          "name": "strikePrice",
-          "type": "uint256"
-        },
-        {
-          "name": "expiration",
-          "type": "uint256"
-        },
-        {
-          "name": "optType",
-          "type": "uint8"
-        }
-      ],
-      "name": "getOptionsPrice",
+      "inputs": [],
+      "name": "owner",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
+          "type": "address"
         }
       ],
       "payable": false,
@@ -34,49 +26,83 @@
     },
     {
       "constant": true,
-      "inputs": [
-        {
-          "name": "currentPrice",
-          "type": "uint256"
-        },
-        {
-          "name": "strikePrice",
-          "type": "uint256"
-        },
-        {
-          "name": "expiration",
-          "type": "uint256"
-        },
-        {
-          "name": "ivNumerator",
-          "type": "uint256"
-        },
-        {
-          "name": "ivDenominator",
-          "type": "uint256"
-        },
-        {
-          "name": "optType",
-          "type": "uint8"
-        }
-      ],
-      "name": "getOptionsPrice_iv",
+      "inputs": [],
+      "name": "isOwner",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
+          "type": "bool"
         }
       ],
       "payable": false,
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getOptionsPriceAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "optionsPrice",
+          "type": "address"
+        }
+      ],
+      "name": "setOptionsPriceAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
-  "metadata": "",
-  "bytecode": "0x",
-  "deployedBytecode": "0x",
-  "sourceMap": "",
-  "deployedSourceMap": "",
+  "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"getOptionsPriceAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"optionsPrice\",\"type\":\"address\"}],\"name\":\"setOptionsPriceAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IOptionsPrice.sol\":\"ImportOptionsPrice\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IOptionsPrice.sol\":{\"keccak256\":\"0x92f3b1045a68e74423381724fb7b484b68fd90b6faa6fd1983464837a98bc84c\",\"urls\":[\"bzzr://d8bf2dc88ad3c433a20791864da765374f3feeb7618ac3dcf3e16d87ccb8033c\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x32e86cf1f96e3e879768e0d0440f35011232004420d3c4f84492f23664cba015\",\"urls\":[\"bzzr://5725cb4758935a4e7ebc5f963b0a46da11e6c81ac5dcedd214e425546e8b83a7\"]}},\"version\":1}",
+  "bytecode": "0x6080604081905260008054600160a060020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610439806100576000396000f3006080604052600436106100775763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416635ca4b73b811461007c578063715018a6146100ad5780638da5cb5b146100c45780638f32d59b146100d9578063a093e2d014610102578063f2fde38b14610123575b600080fd5b34801561008857600080fd5b50610091610144565b60408051600160a060020a039092168252519081900360200190f35b3480156100b957600080fd5b506100c2610153565b005b3480156100d057600080fd5b50610091610208565b3480156100e557600080fd5b506100ee610217565b604080519115158252519081900360200190f35b34801561010e57600080fd5b506100c2600160a060020a0360043516610228565b34801561012f57600080fd5b506100c2600160a060020a03600435166102b5565b600154600160a060020a031690565b61015b610217565b15156101b1576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b610230610217565b1515610286576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b6102bd610217565b1515610313576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61031c8161031f565b50565b600160a060020a03811615156103a5576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820a64faf579ebcfb2997ac758442630eec76d8c79d14457169308eead63268c02a0029",
+  "deployedBytecode": "0x6080604052600436106100775763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416635ca4b73b811461007c578063715018a6146100ad5780638da5cb5b146100c45780638f32d59b146100d9578063a093e2d014610102578063f2fde38b14610123575b600080fd5b34801561008857600080fd5b50610091610144565b60408051600160a060020a039092168252519081900360200190f35b3480156100b957600080fd5b506100c2610153565b005b3480156100d057600080fd5b50610091610208565b3480156100e557600080fd5b506100ee610217565b604080519115158252519081900360200190f35b34801561010e57600080fd5b506100c2600160a060020a0360043516610228565b34801561012f57600080fd5b506100c2600160a060020a03600435166102b5565b600154600160a060020a031690565b61015b610217565b15156101b1576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b610230610217565b1515610286576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b6102bd610217565b1515610313576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61031c8161031f565b50565b600160a060020a03811615156103a5576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820a64faf579ebcfb2997ac758442630eec76d8c79d14457169308eead63268c02a0029",
+  "sourceMap": "431:338:12:-;;;;;659:6:18;:19;;-1:-1:-1;;;;;;659:19:18;668:10;659:19;;;;-1:-1:-1;;;;;726:6:18;;693:40;;659:6;;693:40;431:338:12;;;;;;",
+  "deployedSourceMap": "431:338:12:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;519:110;;8:9:-1;5:2;;;30:1;27;20:12;5:2;519:110:12;;;;;;;;-1:-1:-1;;;;;519:110:12;;;;;;;;;;;;;;1599:137:18;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1599:137:18;;;;;;816:77;;8:9:-1;5:2;;;30:1;27;20:12;5:2;816:77:18;;;;1167:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1167:90:18;;;;;;;;;;;;;;;;;;;;;;635:131:12;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;635:131:12;-1:-1:-1;;;;;635:131:12;;;;;1885:107:18;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1885:107:18;-1:-1:-1;;;;;1885:107:18;;;;;519:110:12;607:13;;-1:-1:-1;;;;;607:13:12;519:110;:::o;1599:137:18:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:18;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:18;;;1599:137::o;816:77::-;854:7;880:6;-1:-1:-1;;;;;880:6:18;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:18;1230:10;:20;;1167:90::o;635:131:12:-;1020:9:18;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;715:13:12;:43;;-1:-1:-1;;715:43:12;-1:-1:-1;;;;;715:43:12;;;;;;;;;;635:131::o;1885:107:18:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;:::-;1885:107;:::o;2093:225::-;-1:-1:-1;;;;;2166:22:18;;;;2158:73;;;;;-1:-1:-1;;;;;2158:73:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:18;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:18;-1:-1:-1;;;;;2294:17:18;;;;;;;;;;2093:225::o",
   "source": "pragma solidity ^0.4.26;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IOptionsPrice {\r\n    function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint8 optType)external view returns (uint256);\r\n    function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,\r\n                uint256 ivNumerator,uint256 ivDenominator,uint8 optType)external view returns (uint256);\r\n}\r\ncontract ImportOptionsPrice is Ownable{\r\n    IOptionsPrice internal _optionsPrice;\r\n    function getOptionsPriceAddress() public view returns(address){\r\n        return address(_optionsPrice);\r\n    }\r\n    function setOptionsPriceAddress(address optionsPrice)public onlyOwner{\r\n        _optionsPrice = IOptionsPrice(optionsPrice);\r\n    }\r\n}",
   "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\interfaces\\IOptionsPrice.sol",
   "ast": {
@@ -1643,9 +1669,22 @@
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-07-20T14:10:02.147Z",
+  "updatedAt": "2020-07-20T14:10:02.148Z",
   "devdoc": {
-    "methods": {}
+    "methods": {
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    }
   },
   "userdoc": {
     "methods": {}

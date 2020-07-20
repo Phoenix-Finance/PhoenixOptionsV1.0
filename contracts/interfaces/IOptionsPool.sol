@@ -1,4 +1,5 @@
 pragma solidity ^0.4.26;
+import "../modules/Ownable.sol";
 interface IOptionsPool {
     function getOptionBalances(address user) external view returns(uint256[]);
 
@@ -12,4 +13,13 @@ interface IOptionsPool {
     function burnOptions(uint256 id,uint256 amount)external;
     function getOptionsById(uint256 optionsId)external view returns(uint256,address,uint8,uint32,uint256,uint256,uint256);
     function getExerciseWorth(uint256 optionsId,uint256 amount)external view returns(uint256);
+}
+contract ImportOptionsPool is Ownable{
+    IOptionsPool internal _optionsPool;
+    function getOptionsPoolAddress() public view returns(address){
+        return address(_optionsPool);
+    }
+    function setOptionsPoolAddress(address optionsPool)public onlyOwner{
+        _optionsPool = IOptionsPool(optionsPool);
+    }
 }
