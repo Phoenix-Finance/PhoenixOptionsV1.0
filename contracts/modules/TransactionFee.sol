@@ -1,7 +1,7 @@
 pragma solidity ^0.4.26;
 import "./AddressWhiteList.sol";
 import "./SafeMath.sol";
-import "./IERC20.sol";
+import "../interfaces/IERC20.sol";
     /**
      * @dev Implementation of a transaction fee manager.
      */
@@ -25,6 +25,11 @@ contract TransactionFee is AddressWhiteList {
      /**
      * @dev Returns the rate of trasaction fee.
      */   
+    uint256 constant buyFee = 0;
+    uint256 constant sellFee = 1;
+    uint256 constant exerciseFee = 2;
+    uint256 constant addColFee = 3;
+    uint256 constant redeemColFee = 4;
     constructor() internal{
         FeeRates.push(fraction(3, 1000));
         FeeRates.push(fraction(3, 1000));

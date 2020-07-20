@@ -17,7 +17,10 @@ contract('OptionsMangerV2', function (accounts){
         await fnx.approve(OptionsManger.address,10000000000000);
         await OptionsManger.addCollateral(fnx.address,10000000000000);
         await OptionsManger.addExpiration(month);
-        await OptionsManger.addUnderlyingAsset(1);
+        for (var i=1;i<=500;i++){
+        tx = await OptionsManger.addUnderlyingAsset(i);
+        }
+        console.log(tx);
         tx = await OptionsManger.buyOption(collateral0,10000000000,20000000000,1,month,10000000000,0,{value : 10000000000});
 //        console.log(tx);
         tx = await OptionsManger.buyOption(collateral0,10000000000,20000000000,1,month,10000000000,0,{value : 10000000000});

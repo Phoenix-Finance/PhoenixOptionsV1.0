@@ -1,24 +1,20 @@
 pragma solidity ^0.4.26;
 
-import "./Ownable.sol";
-import "./Fraction.sol";
-
+import "./modules/Ownable.sol";
+import "./modules/Fraction.sol";
+import "./interfaces/IVolatility.sol";
 contract OptionsPrice is Ownable{
     uint256 internal Year = 365 days;
+    IVolatility internal volatility;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
-    Fraction.fractionNumber internal iv = Fraction.fractionNumber(50,100);
-    function setIV(int256 ivNumerator,int256 ivDenominator)public onlyOwner{
-        iv.numerator = ivNumerator;
-        iv.denominator = ivDenominator;
-    }
-    function getIV()public view returns (int256,int256){
-        return (iv.numerator,iv.denominator);
-    }
+
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint8 optType)public view returns (uint256){
+        (uint256 ivNumerator,uint256 ivDenominator) = volatility.calculateIv(expiration,strikePrice);
+        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
         if (optType == 0) {
-            return callOptionsPrice(currentPrice,strikePrice,expiration,rate,iv);
+            return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
         }else{
-            return putOptionsPrice(currentPrice,strikePrice,expiration,rate,iv);
+            return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
         }
     }
     function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
@@ -33,9 +29,12 @@ contract OptionsPrice is Ownable{
     function calculateD1D2(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
          Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
             internal view returns (Fraction.fractionNumber, Fraction.fractionNumber) {
-        Fraction.fractionNumber memory lns = Fraction.fractionLn(currentPrice);
-        Fraction.fractionNumber memory lnl = Fraction.fractionLn(strikePrice);
-        Fraction.fractionNumber memory d1 = Fraction.safeFractionSub(lns, lnl);
+        Fraction.fractionNumber memory d1 = Fraction.fractionNumber(0,1);
+        if (currentPrice != strikePrice){
+            Fraction.fractionNumber memory lns = Fraction.fractionLn(currentPrice);
+            Fraction.fractionNumber memory lnl = Fraction.fractionLn(strikePrice);
+            d1 = Fraction.safeFractionSub(lns, lnl);
+        }
         Fraction.fractionNumber memory derta2 = Fraction.safeFractionMul(derta, derta);
         derta2 = Fraction.safeFractionMul(derta2, Fraction.fractionNumber(1,2));
         derta2 = Fraction.safeFractionAdd(derta2, r);

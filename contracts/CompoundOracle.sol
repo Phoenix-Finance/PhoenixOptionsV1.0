@@ -1,7 +1,7 @@
 pragma solidity ^0.4.26;
-import "./CompoundOracleInterface.sol";
-import "./Ownable.sol";
-import "./SafeMath.sol";
+import "./interfaces/CompoundOracleInterface.sol";
+import "./modules/Ownable.sol";
+import "./modules/SafeMath.sol";
 contract CompoundOracle is ICompoundOracle,Ownable {
     using SafeMath for uint256;
     uint256 public ValidUntil = 600;

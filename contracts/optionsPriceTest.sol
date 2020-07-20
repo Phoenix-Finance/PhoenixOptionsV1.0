@@ -4,7 +4,9 @@ import "./optionsPrice.sol";
 contract OptionsPriceTest is OptionsPrice{
     function testCalculateD1D2(uint256 currentPrice, uint256 strikePrice, uint256 expiration)
         public view returns(int256,int256,int256,int256){
-        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice,strikePrice,expiration,rate,iv);
+        (uint256 ivNumerator,uint256 ivDenominator) = volatility.calculateIv(expiration,strikePrice);
+        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
+        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice,strikePrice,expiration,rate,_iv);
         return (d1.numerator,d1.denominator,d2.numerator,d2.denominator);
     }
     function testCalculateND(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint256 ivNumerator,uint256 ivDenominator)
