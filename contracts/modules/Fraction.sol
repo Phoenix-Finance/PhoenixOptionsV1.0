@@ -29,7 +29,7 @@ library Fraction {
         return fractionNumber(a.denominator,a.numerator);
     }
     function fractionSqrt(fractionNumber memory a) internal pure returns (fractionNumber) {
-        assert(a.numerator>=0 && a.denominator>=0);
+        require(a.numerator>=0 && a.denominator>=0,"Sqrt must input a positive value");
         return fractionNumber(int256(sqrt(uint256(a.numerator))),int256(sqrt(uint256(a.denominator))));
     }
     function fractionAddInt(fractionNumber memory a,int64 b) internal pure returns (fractionNumber) {
@@ -89,6 +89,10 @@ library Fraction {
         if (_isNeg) {
             xNum = abs(xNum);
         }
+        int256 value = xNum.numerator/xNum.denominator;
+        if (value > 10){
+            return _isNeg ? fractionNumber(0,1) : fractionNumber(1,1);
+        } 
         fractionNumber memory p = fractionNumber(2316419, 1e7);
         fractionNumber[5] memory b = [
             fractionNumber(31938153,1e8),
@@ -102,7 +106,6 @@ library Fraction {
         fractionNumber memory sqrtPiInv = fractionNumber(39894228040143267793,1e20);
         fractionNumber memory expValue = safeFractionMul(xNum, xNum);
         expValue = safeFractionMul(expValue,fractionNumber(-1,2));
-
         expValue = fractionExp(expValue);
         expValue = safeFractionMul(sqrtPiInv, expValue);
         fractionNumber memory secondArg = fractionNumber(0,1);
@@ -122,12 +125,25 @@ library Fraction {
         if (_isNeg) {
             _x = abs(_x);
         }
+        _x = safeFractionNumber(_x);
         _x.numerator = _x.numerator << PRECISION;
-        fractionNumber memory result = fractionNumber(int256(fixedExp(uint256(_x.numerator/_x.denominator))),int256(FIXED_ONE));
+        fractionNumber memory result =  fractionExp_sub(_x);
         if (_isNeg) {
             result = invert(result);
         }
         return result;
+    }
+    function fractionExp_sub(fractionNumber memory _x) internal pure returns (fractionNumber){
+        uint256 intValue = uint256(_x.numerator/_x.denominator);
+        if (intValue > 0x386bfdba29){
+            fractionNumber memory _x1 = fractionNumber(_x.numerator/2,_x.denominator);
+            fractionNumber memory _x2 = fractionNumber(_x.numerator-_x1.numerator,_x.denominator);
+            _x1 = fractionExp_sub(_x1);
+            _x2 = fractionExp_sub(_x2);
+            return safeFractionMul(_x1,_x2);
+        }else{
+            return fractionNumber(int256(fixedExp(intValue)),int256(FIXED_ONE));
+        }
     }
     //This is where all your gas goes, sorry
     //Not sorry, you probably only paid 1 gwei
@@ -163,7 +179,7 @@ library Fraction {
         
         */
         //Cannot represent negative numbers (below 1)
-        assert(_x >= FIXED_ONE);
+        require(_x >= FIXED_ONE,"loge function input is too small");
 
         uint256 _log2 = fixedLog2(_x);
         logE = (_log2 * 0xb17217f7d1cf78) >> 56;
@@ -187,7 +203,7 @@ library Fraction {
     */
     function fixedLog2(uint256 _x) internal pure returns (uint256) {
         // Numbers below 1 are negative. 
-        assert( _x >= FIXED_ONE);
+        require( _x >= FIXED_ONE,"Log2 input is too small");
 
         uint256 hi = 0;
         while (_x >= FIXED_TWO) {
@@ -211,7 +227,7 @@ library Fraction {
         asserts instead of overflows
     */
     function fixedExp(uint256 _x) internal pure returns (uint256) {
-        assert(_x <= 0x386bfdba29);
+        require(_x <= 0x386bfdba29,"exp function input is overflow");
         return fixedExpUnsafe(_x);
     }
        /**

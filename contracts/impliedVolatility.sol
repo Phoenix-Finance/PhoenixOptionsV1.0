@@ -8,7 +8,7 @@ contract ImpliedVolatility is Ownable {
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }
-    function setIvMatrix(uint32[]expirationAry,uint32[] childlen,uint32[] priceAry,uint64[] ivAry) public onlyOwner{
+    function setIvMatrix(uint32[]expirationAry,uint32[] childlen,uint64[] priceAry,uint64[] ivAry) public onlyOwner{
         require(priceAry.length == ivAry.length,"intput arrays must be same length");
         require(expirationAry.length == childlen.length,"intput arrays must be same length");
         ivMatrix.length = 0;
@@ -39,7 +39,7 @@ contract ImpliedVolatility is Ownable {
         uint256 mxLen = ivMatrix.length;
         require(mxLen>=2,"price iv list is less than 2");
         for (uint256 i=0;i<mxLen;i++){
-            if (expiration<=uint256(getTime([i][0]))){
+            if (expiration<=uint256(getTime(ivMatrix[i][0]))){
                 break;
             }
         }
@@ -62,16 +62,18 @@ contract ImpliedVolatility is Ownable {
         uint256 mxLen = _matrix.length;
         require(mxLen>=2,"price iv list is less than 2");
         uint256 index = binarySearch(_matrix,int256(price));
-        int256 highPrice = getPrice(_matrix[index]);
-        if (uint256(highPrice) == price) {
-            return uint256(getIv(_matrix[index]));
-        }
         if (index >= mxLen){
-            index = mxLen;
-        }else if(index == 0){
+            index = mxLen-1;
+        }else{
+            int256 highPrice = getPrice(_matrix[index]);
+            if (uint256(highPrice) == price) {
+                return uint256(getIv(_matrix[index]));
+            }            
+        }
+        if(index == 0){
             index = 1;
         }
-        int iv = insertValue(getPrice(_matrix[index-1]),highPrice,
+        int iv = insertValue(getPrice(_matrix[index-1]),getPrice(_matrix[index]),
             getIv(_matrix[index-1]),getIv(_matrix[index]),int256(price));
         if (iv<=0){
             return 1;

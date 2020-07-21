@@ -7,7 +7,7 @@ contract OptionsPrice is ImportVolatility{
     constructor (address ivContract) public{
         setVolatilityAddress(ivContract);
     }
-    uint256 internal Year = 365 days;
+    uint256 constant Year = 365 days;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
     function getRate()public view returns(int256,int256){
         return (rate.numerator,rate.denominator);
@@ -36,7 +36,7 @@ contract OptionsPrice is ImportVolatility{
     }
     function calculateD1D2(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
          Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
-            internal view returns (Fraction.fractionNumber, Fraction.fractionNumber) {
+            internal pure returns (Fraction.fractionNumber, Fraction.fractionNumber) {
         Fraction.fractionNumber memory d1 = Fraction.fractionNumber(0,1);
         if (currentPrice != strikePrice){
             Fraction.fractionNumber memory lns = Fraction.fractionLn(currentPrice);
@@ -57,7 +57,7 @@ contract OptionsPrice is ImportVolatility{
     //L*pow(e,-rT)*(1-N(d2)) - S*(1-N(d1))
     function putOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
             Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
-                internal view returns (uint256) {
+                internal pure returns (uint256) {
        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice, strikePrice, expiration, r, derta);
         d1 = Fraction.normsDist(d1);
         d2 = Fraction.normsDist(d2);
@@ -80,7 +80,7 @@ contract OptionsPrice is ImportVolatility{
     //S*N(d1)-L*pow(e,-rT)*N(d2)
     function callOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
             Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
-                internal view returns (uint256) {
+                internal pure returns (uint256) {
        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice, strikePrice, expiration, r, derta);
         d1 = Fraction.normsDist(d1);
         d2 = Fraction.normsDist(d2);

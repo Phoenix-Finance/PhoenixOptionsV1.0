@@ -10,19 +10,22 @@ contract OptionsMangerV2 is CollateralPool,ImportOptionsPrice {
         setOptionsPoolAddress(optionsPoolAddr);
     }
     using SafeMath for uint256;
-    event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 settlementAmount,uint256 optionAmount);
+    event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);
     event SellOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
     event ExerciseOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
         uint256 expiration,uint256 amount,uint8 optType)public payable{
         _optionsPool.buyOptionCheck(expiration,underlying);
-        uint256 temp = amount.mul(_optionsPrice.getOptionsPrice(_oracle.getUnderlyingPrice(underlying),strikePrice,expiration,optType));
-        buyOption_sub(settlement,settlementAmount,temp);
-        temp = _optionsPool.createOptions(msg.sender,optType,underlying,now+expiration,strikePrice,amount,settlement);
-        temp = calculateCollateral(temp);
-        require(getLeftCollateral()>=temp,"collateral is insufficient!");
+        uint256 CollateralNeed = _optionsPool.createOptions(msg.sender,optType,underlying,now+expiration,strikePrice,amount,settlement);
+        CollateralNeed = calculateCollateral(CollateralNeed);
+        require(getLeftCollateral()>=CollateralNeed,"collateral is insufficient!");
+        buyOption_sub(settlement,settlementAmount,strikePrice,underlying,expiration,amount,optType);
     }
-    function buyOption_sub(address settlement,uint256 settlementAmount,uint256 allPay)internal{
+    function buyOption_sub(address settlement,uint256 settlementAmount, uint256 strikePrice,
+            uint32 underlying,uint256 expiration,uint256 amount,uint8 optType)internal{
+        uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
+        uint256 optionPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,optType);
+        uint256 allPay = amount.mul(optionPrice);
         settlementAmount = getPayableAmount(settlement,settlementAmount);
         require(settlementAmount>0 , "settlement amount is zero!");
         uint256 fee = calculateFee(buyFee,allPay);
@@ -35,14 +38,14 @@ contract OptionsMangerV2 is CollateralPool,ImportOptionsPrice {
         if (settlementAmount > 0){
             _transferPayback(msg.sender,settlement,settlementAmount);
         }
-        (uint256 id,,,,,,uint256 amount)=_optionsPool.getLatestOption();
-        emit BuyOption(msg.sender,settlement,id,allPay,amount); 
+        (uint256 id,,,,,,)=_optionsPool.getLatestOption();
+        emit BuyOption(msg.sender,settlement,id,optionPrice,allPay,amount); 
     }
     function sellOption(uint256 optionsId,uint256 amount)public{
         require(amount>0 , "sell amount is zero!");
         _optionsPool.burnOptions(msg.sender,optionsId,amount);
         (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
-        expiration = optType-now;
+        expiration = expiration.sub(now);
         uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);
         uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,optType);
         uint256 allPay = optPrice.mul(amount);

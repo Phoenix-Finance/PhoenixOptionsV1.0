@@ -53,6 +53,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
 
     event CreateOption(address indexed owner,uint256 indexed optionID,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,uint256 amount);
     event BurnOption(address indexed owner,uint256 indexed optionID,uint amount);
+    event DebugEvent(uint256 value1,uint256 value2,uint256 value3);
     constructor (address oracleAddr,address optionsPriceAddr,address ivAddress) public{
         setOracleAddress(oracleAddr);
         setOptionsPriceAddress(optionsPriceAddr);
@@ -60,6 +61,9 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     }
     function getOptionBalances(address user)public view returns(uint256[]){
         return optionsBalances[user];
+    }
+    function getOptionInfoLength()public view returns (uint256){
+        return allOptions.length;
     }
     function getOptionInfoList(uint256 from,uint256 size)public view 
                 returns(address[],uint256[],uint256[],uint256[],uint256[]){
@@ -140,7 +144,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
             return;
         }
         (uint256 totalOccupied,uint256 newFirstOption) = _calculateOccupiedCollateral(beginOption,lastOption);
-        uint256 last = lastCallOption<lastOption-1 ? lastOption-1 : lastCallOption;
+        uint256 last = lastCallOption<lastOption ? lastOption : lastCallOption;
         return (totalOccupied,newFirstOption,last,block.number);
     }
     function _calculateOccupiedCollateral(uint256 begin,uint256 end)internal view returns(uint256,uint256){
@@ -212,13 +216,12 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
                 bfirstPhase = false;
             }
             OptionsInfoEx storage optionEx = optionExtraMap[begin];
-            (uint256 preValue,uint256 nowValue) = _calculateTimePrice(preTime,optionEx.createdTime,tempValue,info.strikePrice,
+            uint256 timeValue = _calculateTimePrice(preTime,optionEx.createdTime,tempValue,info.strikePrice,
                     optionEx.ivNumerator,optionEx.ivDenominator,info.optType);
-            if (preValue > nowValue){
-                preValue = preValue - nowValue;
+            if (timeValue>0){
                 tempValue = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                nowValue = optionEx.tokenTimePrice.mul((preValue)).mul(info.amount).div(optionEx.fullPrice);
-                totalSharedPayment[tempValue] = totalSharedPayment[tempValue].add(nowValue);
+                timeValue = optionEx.tokenTimePrice.mul((timeValue)).mul(info.amount).div(optionEx.fullPrice);
+                totalSharedPayment[tempValue] = totalSharedPayment[tempValue].add(timeValue);
             }
         }
         //all options in this phase are empty;
@@ -257,13 +260,13 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         return totalSharedPayment;
     }
     function _calculateTimePrice(uint256 preTime,uint256 createdTime,uint256 expiration,
-            uint256 strikePrice,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256,uint256){
+            uint256 strikePrice,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
         uint256 preExpiration = preTime>createdTime ? expiration - preTime : expiration - createdTime;
         uint256 preValue = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,preExpiration,ivNumerator,
             ivDenominator,optType);
         uint256 nowValue = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-now,ivNumerator,
             ivDenominator,optType);
-        return (preValue,nowValue);
+        return (preValue>nowValue)? preValue-nowValue : 0;
     }
     function createOptions(address from,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,
         uint256 amount,address settlement) onlyManager public returns (uint256) {
@@ -283,8 +286,10 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     function setOptionsExtra(OptionsInfo memory info,address settlement) internal{
         uint256 strikePrice = info.strikePrice;
         uint256 expiration = info.expiration - now;
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(strikePrice,expiration);
+        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(expiration,strikePrice);
         uint256 settlePrice = _oracle.getPrice(settlement);
+        emit DebugEvent(settlePrice,strikePrice,expiration);
+        emit DebugEvent(22222,ivNumerator,ivDenominator);
         uint256 fullPrice = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration,ivNumerator,ivDenominator,info.optType);
         uint256 tokenTimePrice = fullPrice.div(settlePrice);
         optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,fullPrice,ivNumerator,ivDenominator);
@@ -297,7 +302,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
             prices[i] = _oracle.getUnderlyingPrice(underlyingAssets[i]);
         }
         uint optionsLen = allOptions.length;
-        for (uint256 beginOption = lastCallOption+1; beginOption < optionsLen;beginOption++){
+        for (uint256 beginOption = lastCallOption; beginOption < optionsLen;beginOption++){
             uint256 index = _getEligibleUnderlyingIndex(allOptions[beginOption].underlying);
             totalOccupied = totalOccupied.add(calOptionsCollateral(allOptions[beginOption],prices[index]));
         }
@@ -319,8 +324,8 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     }
     function sumOptionPhases()internal view returns(uint256){
         uint256 totalOccupied = 0;
-        uint256 i = firstOption%optionPhase;
-        uint256 phaseLen = allOptions.length%optionPhase+1;
+        uint256 i = firstOption/optionPhase;
+        uint256 phaseLen = allOptions.length/optionPhase+1;
         for (;i<phaseLen;i++){
             totalOccupied = totalOccupied.add(OptionsPhases[i]);
         }
