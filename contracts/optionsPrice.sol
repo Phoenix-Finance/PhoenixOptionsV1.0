@@ -16,8 +16,8 @@ contract OptionsPrice is ImportVolatility{
         rate.numerator = numerator;
         rate.denominator = denominator;
     }
-    function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint8 optType)public view returns (uint256){
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(expiration,strikePrice);
+    function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint32 underlying,uint8 optType)public view returns (uint256){
+        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(underlying,optType,expiration,strikePrice);
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);

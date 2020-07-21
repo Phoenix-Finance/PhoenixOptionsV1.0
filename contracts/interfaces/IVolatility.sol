@@ -1,7 +1,7 @@
 pragma solidity ^0.4.26;
 import "../modules/Ownable.sol";
 interface IVolatility {
-    function calculateIv(uint256 expiration,uint256 price)external view returns (uint256,uint256);
+    function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 price)external view returns (uint256,uint256);
 }
 contract ImportVolatility is Ownable{
     IVolatility internal _volatility;

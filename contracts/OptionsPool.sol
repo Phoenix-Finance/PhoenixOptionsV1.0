@@ -286,7 +286,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     function setOptionsExtra(OptionsInfo memory info,address settlement) internal{
         uint256 strikePrice = info.strikePrice;
         uint256 expiration = info.expiration - now;
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(expiration,strikePrice);
+        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,strikePrice);
         uint256 settlePrice = _oracle.getPrice(settlement);
         emit DebugEvent(settlePrice,strikePrice,expiration);
         emit DebugEvent(22222,ivNumerator,ivDenominator);

@@ -4,17 +4,20 @@ contract ImpliedVolatility is Ownable {
     uint256 public ValidUntil = 1200;
     uint256 constant _calDecimal = 1e8;
     uint256 public inptutTime;
-    uint256[][] public ivMatrix;
+    mapping(uint256=>uint256[][]) public ivMatrixMap;
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }
-    function setIvMatrix(uint32[]expirationAry,uint32[] childlen,uint64[] priceAry,uint64[] ivAry) public onlyOwner{
+    //ivType == underlying << 16 + optType
+    function setIvMatrix(uint32 underlying,uint8 optType,uint32[]expirationAry,uint32[] childlen,uint64[] priceAry,uint64[] ivAry) public onlyOwner{
+        uint256 ivType = uint256(underlying);
+        ivType = ivType<<16 + uint256(optType);
         require(priceAry.length == ivAry.length,"intput arrays must be same length");
         require(expirationAry.length == childlen.length,"intput arrays must be same length");
+        uint256[][] storage ivMatrix = ivMatrixMap[ivType];
         ivMatrix.length = 0;
         uint index = 0;
-        uint len = expirationAry.length;
-        for (uint i=0;i<len;i++){
+        for (uint i=0;i<expirationAry.length;i++){
             uint256 expiration = uint256(expirationAry[i]);
             uint len1 = childlen[i];
             uint256[] memory childAry = new uint256[](len1);
@@ -35,7 +38,9 @@ contract ImpliedVolatility is Ownable {
   * @param price the option underlying strikePrice which has been created in option manger contract
   * @return uint mantissa of asset implied volatility (scaled by 1e18) or zero if unset or contract paused
   */
-    function calculateIv(uint256 expiration,uint256 price)public view returns (uint256,uint256){
+    function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 price)public view returns (uint256,uint256){
+        uint256 ivType = (uint256(underlying) << 16)+ uint256(optType);
+        uint256[][] storage ivMatrix = ivMatrixMap[ivType];
         uint256 mxLen = ivMatrix.length;
         require(mxLen>=2,"price iv list is less than 2");
         for (uint256 i=0;i<mxLen;i++){
