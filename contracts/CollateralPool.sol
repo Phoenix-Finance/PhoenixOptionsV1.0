@@ -8,7 +8,6 @@ import "./interfaces/IOptionsPool.sol";
 import "./interfaces/ICompoundOracle.sol";
 contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracle,ImportOptionsPool {
     using SafeMath for uint256;
-    uint256 constant _calDecimal = 10000000000;
     fraction public collateralRate = fraction(3, 1);
     //token net worth
     mapping (address => uint256) public netWorthBalances;
@@ -19,8 +18,24 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
     //account -> collateral -> amount
     mapping (address => mapping (address => uint256)) public userInputCollateral;
 
+    event AddCollateral(address indexed from,address indexed collateral,uint256 amount,uint256 tokenAmount);
+    event RedeemCollateral(address indexed from,uint256 tokenAmount);
+
     event DebugEvent(uint256 indexed value1,uint256 indexed value2,uint256 indexed value3);
 
+    function setCollateralRate(uint256 numerator,uint256 denominator) public onlyOwner {
+        collateralRate.numerator = numerator;
+        collateralRate.denominator = denominator;
+    }
+    function getCollateralRate()public view returns (uint256,uint256) {
+        return (collateralRate.numerator,collateralRate.denominator);
+    }
+    function getUserPayingUsd(address user)public view returns (uint256){
+        return userCollateralPaying[user];
+    }
+    function userInputCollateral(address user,address collateral)public view returns (uint256){
+        return userInputCollateral[user][collateral];
+    }
     function setPhaseSharedPayment(uint256 index) public onlyOwner {
         (uint256[] memory sharedBalances,uint256 firstOption,uint256 blockNumber) = _optionsPool.calculatePhaseSharedPayment(index,whiteList);
         setSharedPayment(index,sharedBalances,firstOption,blockNumber,now);
@@ -51,6 +66,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
         collateralBalances[collateral] = collateralBalances[collateral].add(amount);
         userInputCollateral[msg.sender][collateral] = userInputCollateral[msg.sender][collateral].add(amount);
         netWorthBalances[collateral] = netWorthBalances[collateral].add(amount);
+        emit AddCollateral(msg.sender,collateral,amount,mintAmount);
         _mint(msg.sender,mintAmount);
     }
     //calculate token
@@ -66,6 +82,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
         uint256 redeemWorth = tokenAmount.mul(tokenNetWorth);
         if (totalOccupied.add(redeemWorth)<=totalWorth) {
             _redeemCollateral(tokenAmount,collateral,redeemWorth,tokenNetWorth);
+            emit RedeemCollateral(msg.sender,tokenAmount);
         }
     }
     function _redeemCollateral(uint256 tokenAmount,address collateral,uint256 redeemWorth,uint256 tokenNetWorth) internal {
@@ -130,31 +147,6 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
             return (worth.sub(transferAmount.mul(price)),transferAmount);
         }
         return (0,transferAmount);
-    }
-    function _payBackCollateral(uint256 worth,address collateral,uint256 feeType)internal returns (uint256){
-        uint256 amount = userInputCollateral[msg.sender][collateral];
-        if (amount == 0){
-            return worth;
-        }
-        amount = collateralBalances[collateral].mul(amount).div(netWorthBalances[collateral]);
-        if (amount == 0){
-            return worth;
-        }
-        uint256 price = _oracle.getPrice(collateral);
-        uint256 redeemAmount = worth.div(price);
-        if (redeemAmount == 0){
-            return 0;
-        }
-        uint256 transferAmount = (redeemAmount>amount) ? amount : redeemAmount;
-        userInputCollateral[msg.sender][collateral] = userInputCollateral[msg.sender][collateral].sub(transferAmount);
-        netWorthBalances[collateral] = netWorthBalances[collateral].sub(transferAmount);
-        collateralBalances[collateral] = collateralBalances[collateral].sub(transferAmount);
-        _transferPaybackAndFee(msg.sender,collateral,transferAmount,feeType);
-        if (redeemAmount>amount){
-            return worth.sub(transferAmount.mul(price));
-        }
-        return 0;        
-
     }
     function getOccupiedCollateral() public view returns(uint256){
         uint256 totalOccupied = _optionsPool.getTotalOccupiedCollateral();

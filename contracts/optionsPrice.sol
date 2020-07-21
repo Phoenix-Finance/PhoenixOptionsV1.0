@@ -4,6 +4,9 @@ import "./modules/Ownable.sol";
 import "./modules/Fraction.sol";
 import "./interfaces/IVolatility.sol";
 contract OptionsPrice is ImportVolatility{
+    constructor (address ivContract) public{
+        setVolatilityAddress(ivContract);
+    }
     uint256 internal Year = 365 days;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
     function getRate()public view returns(int256,int256){

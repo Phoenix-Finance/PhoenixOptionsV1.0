@@ -53,7 +53,10 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
 
     event CreateOption(address indexed owner,uint256 indexed optionID,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,uint256 amount);
     event BurnOption(address indexed owner,uint256 indexed optionID,uint amount);
-    constructor () public{
+    constructor (address oracleAddr,address optionsPriceAddr,address ivAddress) public{
+        setOracleAddress(oracleAddr);
+        setOptionsPriceAddress(optionsPriceAddr);
+        setVolatilityAddress(ivAddress);
     }
     function getOptionBalances(address user)public view returns(uint256[]){
         return optionsBalances[user];
@@ -98,6 +101,13 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         }
         return (ownerArr,typeAndUnderArr,expArr,priceArr,amountArr);
     }
+    function getLatestOption()public view returns(uint256,address,uint8,uint32,uint256,uint256,uint256){
+        uint256 len = allOptions.length;
+        require(len>0,"options list is empty");
+        OptionsInfo storage info = allOptions[len-1];
+        return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);
+    }
+
     function getOptionsById(uint256 optionsId)public view returns(uint256,address,uint8,uint32,uint256,uint256,uint256){
         OptionsInfo storage info = _getOptionsById(optionsId);
         return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);
@@ -255,19 +265,19 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
             ivDenominator,optType);
         return (preValue,nowValue);
     }
-    function createOptions(uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,
+    function createOptions(address from,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,
         uint256 amount,address settlement) onlyManager public returns (uint256) {
         uint256 optionID = allOptions.length;
         uint256 underlyingPrice =  _oracle.getUnderlyingPrice(underlying);
-        allOptions.push(OptionsInfo(optionID+1,tx.origin,optType,underlying,expiration,strikePrice,amount));
-        optionsBalances[tx.origin].push(optionID+1);
+        allOptions.push(OptionsInfo(optionID+1,from,optType,underlying,expiration,strikePrice,amount));
+        optionsBalances[from].push(optionID+1);
         if (optionID == 0){
             lastCalBlock = block.number;
             lastCalBlock_share = block.number;
         }
         OptionsInfo memory info = allOptions[optionID];
         setOptionsExtra(info,settlement);
-        emit CreateOption(tx.origin,optionID+1,optType,underlying,expiration,strikePrice,amount);
+        emit CreateOption(from,optionID+1,optType,underlying,expiration,strikePrice,amount);
         return calOptionsCollateral(info,underlyingPrice);
     }
     function setOptionsExtra(OptionsInfo memory info,address settlement) internal{
@@ -337,14 +347,14 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         }
         return totalOccupied;
     }
-    function burnOptions(uint256 id,uint256 amount)public onlyManager{
+    function burnOptions(address from,uint256 id,uint256 amount)public onlyManager{
         OptionsInfo memory info = _getOptionsById(id);
         checkEligible(info);
-        checkOwner(info,tx.origin);
+        checkOwner(info,from);
         checkSufficient(info,amount);
         info.amount = info.amount.sub(amount);
         burnBlockOptions[block.number].push([id-1,amount]);
-        emit BurnOption(tx.origin,id,amount);
+        emit BurnOption(from,id,amount);
     }
     function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){
         OptionsInfo memory info = _getOptionsById(optionsId);
