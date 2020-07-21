@@ -14,12 +14,6 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
     mapping (address => uint256) public netWorthBalances;
     //address collaterel
     mapping (address => uint256) public collateralBalances;
-//    mapping (address => uint256) public premiumBalances;
-
-
-
-
-//    uint256 public tokenNetWorth = 1e8;
     //user paying for collateral usd;
     mapping (address => uint256) public userCollateralPaying;
     //account -> collateral -> amount
@@ -28,11 +22,11 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
     event DebugEvent(uint256 indexed value1,uint256 indexed value2,uint256 indexed value3);
 
     function setPhaseSharedPayment(uint256 index) public onlyOwner {
-        (uint256[] memory sharedBalances,uint256 blockNumber) = _optionsPool.calculatePhaseSharedPayment(index);
-        setSharedPayment(index,sharedBalances,blockNumber,now);
+        (uint256[] memory sharedBalances,uint256 firstOption,uint256 blockNumber) = _optionsPool.calculatePhaseSharedPayment(index,whiteList);
+        setSharedPayment(index,sharedBalances,firstOption,blockNumber,now);
     }
-    function setSharedPayment(uint256 index,uint256[] sharedBalances,uint256 lastBlock,uint256 calTime) public onlyOwner{
-        _optionsPool.setSharedState(index,lastBlock,calTime);
+    function setSharedPayment(uint256 index,uint256[] sharedBalances,uint256 firstOption,uint256 lastBlock,uint256 calTime) public onlyOwner{
+        _optionsPool.setSharedState(index,firstOption,lastBlock,calTime);
         for (uint i=0;i<sharedBalances.length;i++){
             address addr = whiteList[i];
             netWorthBalances[addr] = netWorthBalances[addr].add(sharedBalances[i]);
@@ -79,45 +73,39 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
         userCollateralPaying[msg.sender] = userCollateralPaying[msg.sender].sub(redeemPaying);
         _burn(msg.sender, tokenAmount);
         uint whiteLen = whiteList.length;
-        uint256[] memory paybackBal = new uint256[](whiteLen);
+        uint256[] memory paybackcal = new uint256[](whiteLen);
         uint256 payBack;
         (redeemWorth,payBack) = _calPayBackCollateral(redeemWorth,collateral,tokenNetWorth);
         uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,collateral);
-        paybackBal[index] = payBack;
+        paybackcal[index] = payBack;
         for (uint256 i=0;redeemWorth>0 && i<whiteLen;i++){
             (redeemWorth,payBack) = _calPayBackCollateral(redeemWorth,whiteList[i],tokenNetWorth);  
-            paybackBal[i] += payBack;
+            paybackcal[i] += payBack;
         } 
         if (redeemWorth > 0){
-            uint256[] memory premiumPayback = _calPremiumPayback(redeemWorth,whiteLen,tokenNetWorth);
-            for (i=0;i<whiteLen;i++){
-                paybackBal[i] = paybackBal[i].add(premiumPayback[i]);
-            } 
+            paybackcal = _calPremiumPayback(redeemWorth,whiteLen,paybackcal);
         }
         for (i=0;i<whiteLen;i++){
-            _transferPaybackAndFee(msg.sender,whiteList[i],paybackBal[i],redeemColFee);
+            _transferPaybackAndFee(msg.sender,whiteList[i],paybackcal[i],redeemColFee);
         } 
     }
-    function _calPremiumPayback(uint256 worth,uint256 whiteLen,uint256 tokenNetWorth)internal view returns(uint256[] memory){
+    function _calPremiumPayback(uint256 worth,uint256 whiteLen,uint256[] memory paybackcal)internal view returns(uint256[] memory){
         uint256 totalPrice = 0;
         uint256[] memory PremiumBalances = new uint256[](whiteLen);
         for (uint256 i=0; i<whiteLen;i++){
             address addr = whiteList[i];
-            uint netAmount = tokenNetWorth.mul(collateralBalances[addr]);
-            if (netWorthBalances[addr] > netAmount){
-                PremiumBalances[i] = netWorthBalances[addr] - netAmount;
-                uint256 price = _oracle.getPrice(addr);
-                totalPrice.add(price.mul(PremiumBalances[i]));
-            }
+            PremiumBalances[i] = netWorthBalances[addr].sub(paybackcal[i]);
+            uint256 price = _oracle.getPrice(addr);
+            totalPrice.add(price.mul(PremiumBalances[i]));
         } 
                 
         if (totalPrice == 0){
             return;
         }
         for (i=0;i<whiteLen;i++){
-            PremiumBalances[i] = PremiumBalances[i].mul(worth).div(totalPrice);
+            paybackcal[i] = paybackcal[i].add(PremiumBalances[i].mul(worth).div(totalPrice));
         } 
-        return PremiumBalances;
+        return paybackcal;
     }
     function _calPayBackCollateral(uint256 worth,address collateral,uint256 tokenNetWorth)internal view returns (uint256,uint256){
         uint256 amount = userInputCollateral[msg.sender][collateral];

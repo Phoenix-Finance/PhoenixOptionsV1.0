@@ -3,15 +3,30 @@ import "./modules/Ownable.sol";
 contract ImpliedVolatility is Ownable {
     uint256 public ValidUntil = 1200;
     uint256 constant _calDecimal = 1e8;
-    uint256 constant ivIndex = 2;
-    uint256 constant priceIndex = 1;
-    uint256 constant timeIndex = 0;
     uint256 public inptutTime;
-    uint256[3][][] public ivMatrix;
+    uint256[][] public ivMatrix;
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }
-
+    function setIvMatrix(uint32[]expirationAry,uint32[] childlen,uint32[] priceAry,uint64[] ivAry) public onlyOwner{
+        require(priceAry.length == ivAry.length,"intput arrays must be same length");
+        require(expirationAry.length == childlen.length,"intput arrays must be same length");
+        ivMatrix.length = 0;
+        uint index = 0;
+        uint len = expirationAry.length;
+        for (uint i=0;i<len;i++){
+            uint256 expiration = uint256(expirationAry[i]);
+            uint len1 = childlen[i];
+            uint256[] memory childAry = new uint256[](len1);
+            for (uint j=0;j<len1;j++){
+                uint256 price = uint256(priceAry[index]);
+                uint256 iv = uint256(ivAry[index]);
+                childAry[j] = expiration+(price<<64)+(iv<<128);
+                index++;
+            }
+            ivMatrix.push(childAry);
+        }
+    }
     /**
     /**
   * @notice retrieves implied volatility of an asset
@@ -24,7 +39,7 @@ contract ImpliedVolatility is Ownable {
         uint256 mxLen = ivMatrix.length;
         require(mxLen>=2,"price iv list is less than 2");
         for (uint256 i=0;i<mxLen;i++){
-            if (expiration<=ivMatrix[timeIndex][0][i]){
+            if (expiration<=uint256(getTime([i][0]))){
                 break;
             }
         }
@@ -35,7 +50,7 @@ contract ImpliedVolatility is Ownable {
         }
         uint256 ivLow = calculateTimeIv(ivMatrix[i-1],price);
         uint256 ivHigh = calculateTimeIv(ivMatrix[i],price);
-        int iv = insertValue(int256(ivMatrix[timeIndex][0][i-1]),int256(ivMatrix[timeIndex][0][i]),
+        int iv = insertValue(getTime(ivMatrix[i-1][0]),getTime(ivMatrix[i][0]),
             int256(ivLow),int256(ivHigh),int256(expiration));
         if (iv<=0){
             return (1,_calDecimal);
@@ -43,20 +58,21 @@ contract ImpliedVolatility is Ownable {
             return (uint256(iv),_calDecimal);
         }
     }
-    function calculateTimeIv(uint256 [3][] storage _matrix,uint256 price)internal view returns (uint256){
+    function calculateTimeIv(uint256[] memory _matrix,uint256 price)internal pure returns (uint256){
         uint256 mxLen = _matrix.length;
         require(mxLen>=2,"price iv list is less than 2");
-        uint256 index = binarySearch(_matrix,price);
-        if (_matrix[priceIndex][index] == price) {
-            return _matrix[ivIndex][index];
+        uint256 index = binarySearch(_matrix,int256(price));
+        int256 highPrice = getPrice(_matrix[index]);
+        if (uint256(highPrice) == price) {
+            return uint256(getIv(_matrix[index]));
         }
         if (index >= mxLen){
             index = mxLen;
         }else if(index == 0){
             index = 1;
         }
-        int iv = insertValue(int256(_matrix[priceIndex][index-1]),int256(_matrix[priceIndex][index]),
-            int256( _matrix[ivIndex][index-1]),int256(_matrix[ivIndex][index]),int256(price));
+        int iv = insertValue(getPrice(_matrix[index-1]),highPrice,
+            getIv(_matrix[index-1]),getIv(_matrix[index]),int256(price));
         if (iv<=0){
             return 1;
         }else{
@@ -67,12 +83,21 @@ contract ImpliedVolatility is Ownable {
         require(x1 != x0,"input values are duplicated!");
         return y0 + (y1-y0)*(x-x0)/(x1-x0);
     }
-    function binarySearch(uint256 [3][] storage _matrix,uint256 price)internal view returns (uint256) {
+    function getTime(uint256 value)internal pure returns (int256) {
+        return int256(uint64(value));
+    }
+    function getPrice(uint256 value)internal pure returns (int256) {
+        return int256(uint64(value>>64));
+    }
+    function getIv(uint256 value)internal pure returns (int256) {
+        return int256(value>>128);
+    }
+    function binarySearch(uint256[] memory _matrix,int256 price)internal pure returns (uint256) {
         uint256 low = 0;
         uint256 high = _matrix.length - 1;
         while (low <= high) {
             uint256 mid = (high + low) / 2;
-            uint256 midPrice = _matrix[priceIndex][mid];
+            int256 midPrice = getPrice(_matrix[mid]);
             if (midPrice == price){
                 return mid;
             }else if (midPrice < price){

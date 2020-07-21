@@ -8,7 +8,7 @@ contract SharedCoin is IERC20  {
     uint8 public constant decimals = 18;
     
 
-    mapping (address => uint256) balances;
+    mapping (address => uint256) public balances;
     mapping (address => mapping (address => uint256)) private _allowances;
 
     uint256 internal _totalSupply = 0;

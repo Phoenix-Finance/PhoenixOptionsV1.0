@@ -6,7 +6,13 @@ import "./interfaces/IVolatility.sol";
 contract OptionsPrice is ImportVolatility{
     uint256 internal Year = 365 days;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
-
+    function getRate()public view returns(int256,int256){
+        return (rate.numerator,rate.denominator);
+    }
+    function setRate(int256 numerator,int256 denominator)public onlyOwner{
+        rate.numerator = numerator;
+        rate.denominator = denominator;
+    }
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint8 optType)public view returns (uint256){
         (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(expiration,strikePrice);
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
