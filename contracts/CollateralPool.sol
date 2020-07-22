@@ -38,13 +38,21 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
     }
     function setPhaseSharedPayment(uint256 index) public onlyOwner {
         (uint256[] memory sharedBalances,uint256 firstOption,uint256 blockNumber) = _optionsPool.calculatePhaseSharedPayment(index,whiteList);
-        setSharedPayment(index,sharedBalances,firstOption,blockNumber,now);
+        (int256[] memory fallBalance,uint256[] memory prices) = _optionsPool.calculatePhaseOptionsFall(index,whiteList);
+        for (uint256 i= 0;i<fallBalance.length;i++){
+            fallBalance[i] += int256(sharedBalances[i]);
+        }
+        setSharedPayment(index,fallBalance,prices,firstOption,blockNumber,now);
     }
-    function setSharedPayment(uint256 index,uint256[] sharedBalances,uint256 firstOption,uint256 lastBlock,uint256 calTime) public onlyOwner{
-        _optionsPool.setSharedState(index,firstOption,lastBlock,calTime);
+    function setSharedPayment(uint256 index,int256[] sharedBalances,uint256[] prices,uint256 firstOption,uint256 lastBlock,uint256 calTime) public onlyOwner{
+        _optionsPool.setSharedState(index,firstOption,prices,lastBlock,calTime);
         for (uint i=0;i<sharedBalances.length;i++){
             address addr = whiteList[i];
-            netWorthBalances[addr] = netWorthBalances[addr].add(sharedBalances[i]);
+            if(sharedBalances[i]>=0){
+                netWorthBalances[addr] = netWorthBalances[addr].add(uint256(sharedBalances[i]));
+            }else{
+                netWorthBalances[addr] = netWorthBalances[addr].sub(uint256(-sharedBalances[i]));
+            }
         }
     }
     function getTokenNetworth() public view returns (uint256){
@@ -153,7 +161,16 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
         return calculateCollateral(totalOccupied);
     }
     function getLeftCollateral()public view returns(uint256){
-        return getTotalCollateral() - getOccupiedCollateral();
+        return getTotalCollateral().sub(getOccupiedCollateral());
+    }
+    function calOptionsOccupied(uint256 strikePrice,uint256 underlyingPrice,uint256 amount,uint8 optType)public view returns(uint256){
+        uint256 totalOccupied = 0;
+        if ((optType == 0) == (strikePrice>underlyingPrice)){ // call
+            totalOccupied = strikePrice.mul(amount);
+        } else {
+            totalOccupied = underlyingPrice.mul(amount);
+        }
+        return calculateCollateral(totalOccupied);
     }
     function getTotalCollateral()public view returns(uint256){
         uint256 totalNum = 0;

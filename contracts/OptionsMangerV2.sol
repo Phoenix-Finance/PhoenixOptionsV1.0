@@ -4,26 +4,27 @@ import "./CollateralPool.sol";
 import "./modules/whiteList.sol";
 import "./interfaces/IOptionsPrice.sol";
 contract OptionsMangerV2 is CollateralPool,ImportOptionsPrice {
+    using SafeMath for uint256;
     constructor (address oracleAddr,address optionsPriceAddr,address optionsPoolAddr) public{
         setOracleAddress(oracleAddr);
         setOptionsPriceAddress(optionsPriceAddr);
         setOptionsPoolAddress(optionsPoolAddr);
     }
-    using SafeMath for uint256;
+
     event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);
     event SellOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
     event ExerciseOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
         uint256 expiration,uint256 amount,uint8 optType)public payable{
         _optionsPool.buyOptionCheck(expiration,underlying);
-        uint256 CollateralNeed = _optionsPool.createOptions(msg.sender,optType,underlying,now+expiration,strikePrice,amount,settlement);
-        CollateralNeed = calculateCollateral(CollateralNeed);
-        require(getLeftCollateral()>=CollateralNeed,"collateral is insufficient!");
-        buyOption_sub(settlement,settlementAmount,strikePrice,underlying,expiration,amount,optType);
+        uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
+        require(getLeftCollateral()>=calOptionsOccupied(strikePrice,underlyingPrice,amount,optType),"collateral is insufficient!");
+        _optionsPool.createOptions(msg.sender,optType,underlying,now+expiration,strikePrice,amount,settlement);
+        buyOption_sub(settlement,settlementAmount,strikePrice,underlying,underlyingPrice,expiration,amount,optType);
     }
     function buyOption_sub(address settlement,uint256 settlementAmount, uint256 strikePrice,
-            uint32 underlying,uint256 expiration,uint256 amount,uint8 optType)internal{
-        uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
+            uint32 underlying,uint256 underlyingPrice,uint256 expiration,uint256 amount,uint8 optType)internal{
+        
         uint256 optionPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType);
         uint256 allPay = amount.mul(optionPrice);
         settlementAmount = getPayableAmount(settlement,settlementAmount);

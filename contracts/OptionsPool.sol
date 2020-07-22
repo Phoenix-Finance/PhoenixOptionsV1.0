@@ -37,18 +37,18 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     uint256[] public expirationList;
 
     //calculate options Collateral occupied phases
-    uint32 public optionPhase = 500;
+    uint32 public optionPhase = 400;
     uint256 internal firstOption = 0;
     uint256 public lastCallOption;
     uint256 public lastCalBlock;
     mapping(uint256=>uint256) internal OptionsPhases;
 
     //calculate Options time shared value phasea
-    uint32 public sharedPhase = 500;
+    uint32 public sharedPhase = 400;
     uint256 public firstOption_share;
     uint256 public lastCalBlock_share;
-    mapping (uint256 =>mapping (address => uint256)) internal OptionsPhaseBalances;
     mapping (uint256 =>uint256) internal OptionsPhaseTimes;
+    mapping (uint256 =>uint256[]) internal OptionsPhasePrices;
 
 
     event CreateOption(address indexed owner,uint256 indexed optionID,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,uint256 amount);
@@ -153,11 +153,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         if (bfirstPhase) {
             begin = newFirstOption;
         }
-        uint256 underlyingLen = underlyingAssets.length;
-        uint256[] memory prices = new uint256[](underlyingLen);
-        for (uint256 i = 0;i<underlyingLen;i++){
-            prices[i] = _oracle.getUnderlyingPrice(underlyingAssets[i]);
-        }
+        uint256[] memory prices = getUnderlyingPrices();
         uint256 totalOccupied = 0;
         for (;begin<end;begin++){
             uint256 index = _getEligibleUnderlyingIndex(allOptions[begin].underlying);
@@ -174,7 +170,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         }
         return (totalOccupied,newFirstOption);
     }
-    function setSharedState(uint256 index,uint256 _firstOption,uint256 lastBlock,uint256 calTime) public onlyManager{
+    function setSharedState(uint256 index,uint256 _firstOption,uint256[] prices,uint256 lastBlock,uint256 calTime) public onlyManager{
         if (_firstOption > firstOption_share){
             firstOption_share = _firstOption;
         }
@@ -182,23 +178,24 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
             lastCalBlock_share = lastBlock;
         }
         OptionsPhaseTimes[index] = calTime;
+        OptionsPhasePrices[index] = prices;
     }
-    function calculatePhaseSharedPayment(uint256 index,address[] whiteList) public view returns(uint256[],uint256,uint256){
+    function calculatePhaseSharedPayment(uint256 index,address[] memory whiteList) public view returns(uint256[],uint256,uint256){
         uint256 beginOption = index.mul(sharedPhase);
+        return calRangeSharedPayment(index,beginOption,beginOption.add(sharedPhase),whiteList);
+    }
+    function calRangeSharedPayment(uint256 index,uint256 beginOption,uint256 lastOption,address[] memory whiteList) public view returns(uint256[],uint256,uint256){
         uint256 allLen = allOptions.length;
-        if (beginOption>=allLen){
+        if (beginOption>=allLen || lastOption < firstOption_share){
             return;
         }
-        uint256 lastOption = beginOption.add(sharedPhase);
         if (lastOption>allLen) {
             lastOption = allLen;
-        }else if(lastOption < firstOption_share){
-            return;
         }
         (uint256[] memory sharedBalances,uint256 _firstOption) = _calculateSharedPayment(beginOption,lastOption,OptionsPhaseTimes[index],whiteList);
         return (sharedBalances,_firstOption,block.number);
     }
-    function _calculateSharedPayment(uint256 begin,uint256 end,uint256 preTime,address[] whiteList)internal view returns(uint256[],uint256){
+    function _calculateSharedPayment(uint256 begin,uint256 end,uint256 preTime,address[] memory whiteList)internal view returns(uint256[],uint256){
         uint256 newFirstOption = firstOption_share;
         bool bfirstPhase = begin <= newFirstOption;
         if (bfirstPhase) {
@@ -232,7 +229,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         //burned
         return (_calBurnedSharePrice(begin,end,preTime,whiteList,totalSharedPayment),newFirstOption);
     }
-    function _calBurnedSharePrice(uint256 beginIndex,uint256 endIndex,uint256 preTime,address[] whiteList,uint256[] memory totalSharedPayment)public view returns(uint256[]){
+    function _calBurnedSharePrice(uint256 beginIndex,uint256 endIndex,uint256 preTime,address[] memory whiteList,uint256[] memory totalSharedPayment)public view returns(uint256[]){
         uint256 beginBlock = lastCalBlock_share+1;
         if (beginBlock == 1){
             return totalSharedPayment;
@@ -268,10 +265,56 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
             ivDenominator,optType);
         return (preValue>nowValue)? preValue-nowValue : 0;
     }
+    function calculatePhaseOptionsFall(uint256 index,address[] memory whiteList) public view returns(int256[],uint256[]){
+        uint256 begin = index.mul(sharedPhase);
+        uint256 lastOption = begin.add(sharedPhase);
+        uint256 allLen = allOptions.length;
+        if (begin>=allLen || lastOption < firstOption_share){
+            return;
+        }
+        if (lastOption>allLen) {
+            lastOption = allLen;
+        }
+        if (begin <= firstOption_share) {
+            begin = firstOption_share;
+        }
+        uint256[] memory prices = getUnderlyingPrices();
+        int256[] memory OptionsFallBalances = _calRangeOptionsFall(begin,lastOption,index,whiteList,prices);
+        uint256 whiteListLen = whiteList.length;
+        for (index = 0;index<whiteListLen;index++){
+            OptionsFallBalances[index] = OptionsFallBalances[index]/(int256(_oracle.getPrice(whiteList[index])));
+        }
+        return (OptionsFallBalances,prices);
+    }
+    function _calRangeOptionsFall(uint256 begin,uint256 lastOption,uint256 index,address[] memory whiteList,uint256[] memory prices)
+                 internal view returns(int256[] memory){
+        uint256[] memory lastPrice = OptionsPhasePrices[index];
+        int256[] memory OptionsFallBalances = new int256[](whiteList.length);
+
+        for (;begin<lastOption;begin++){
+            index = _getEligibleUnderlyingIndex(allOptions[begin].underlying);
+            uint256 curValue = calOptionsCollateral(allOptions[begin],prices[index]);
+            uint256 preValue = calOptionsCollateral(allOptions[begin],lastPrice[index]);
+            if (preValue != curValue){
+                OptionsInfoEx storage optionEx = optionExtraMap[begin];
+                index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
+                OptionsFallBalances[index] += int256(curValue) - int256(preValue);
+            }
+        }
+        return OptionsFallBalances;
+    }
+    function getUnderlyingPrices()internal view returns(uint256[] memory){
+        uint256 underlyingLen = underlyingAssets.length;
+        uint256[] memory prices = new uint256[](underlyingLen);
+        for (uint256 i = 0;i<underlyingLen;i++){
+            prices[i] = _oracle.getUnderlyingPrice(underlyingAssets[i]);
+        }
+        return prices;
+    }
+
     function createOptions(address from,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,
-        uint256 amount,address settlement) onlyManager public returns (uint256) {
+        uint256 amount,address settlement) onlyManager public {
         uint256 optionID = allOptions.length;
-        uint256 underlyingPrice =  _oracle.getUnderlyingPrice(underlying);
         allOptions.push(OptionsInfo(optionID+1,from,optType,underlying,expiration,strikePrice,amount));
         optionsBalances[from].push(optionID+1);
         if (optionID == 0){
@@ -281,7 +324,6 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         OptionsInfo memory info = allOptions[optionID];
         setOptionsExtra(info,settlement);
         emit CreateOption(from,optionID+1,optType,underlying,expiration,strikePrice,amount);
-        return calOptionsCollateral(info,underlyingPrice);
     }
     function setOptionsExtra(OptionsInfo memory info,address settlement) internal{
         uint256 strikePrice = info.strikePrice;
@@ -296,11 +338,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     }
     function getTotalOccupiedCollateral() public view returns (uint256) {
         uint256 totalOccupied = sumOptionPhases();
-        uint underlyingLen = underlyingAssets.length;
-        uint256[] memory prices = new uint256[](underlyingLen);
-        for (uint256 i = 0;i<underlyingLen;i++){
-            prices[i] = _oracle.getUnderlyingPrice(underlyingAssets[i]);
-        }
+        uint256[] memory prices = getUnderlyingPrices();
         uint optionsLen = allOptions.length;
         for (uint256 beginOption = lastCallOption; beginOption < optionsLen;beginOption++){
             uint256 index = _getEligibleUnderlyingIndex(allOptions[beginOption].underlying);
@@ -313,7 +351,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         for (; beginBlock <= block.number;beginBlock++){
             uint256[2][] storage burnedTokens = burnBlockOptions[beginBlock];
             uint burnedLen = burnedTokens.length;
-            for (i = 0;i<burnedLen;i++){
+            for (uint256 i = 0;i<burnedLen;i++){
                 uint optionId = burnedTokens[i][0];
                 index = _getEligibleUnderlyingIndex(allOptions[optionId].underlying);
                 totalOccupied = totalOccupied.sub(calBurnedOptionsCollateral(allOptions[optionId],

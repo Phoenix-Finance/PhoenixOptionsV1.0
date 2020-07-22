@@ -10,13 +10,12 @@ contract ImpliedVolatility is Ownable {
     }
     //ivType == underlying << 16 + optType
     function setIvMatrix(uint32 underlying,uint8 optType,uint32[]expirationAry,uint32[] childlen,uint64[] priceAry,uint64[] ivAry) public onlyOwner{
-        uint256 ivType = uint256(underlying);
-        ivType = ivType<<16 + uint256(optType);
+        uint index = getKey(underlying,optType);
         require(priceAry.length == ivAry.length,"intput arrays must be same length");
         require(expirationAry.length == childlen.length,"intput arrays must be same length");
-        uint256[][] storage ivMatrix = ivMatrixMap[ivType];
+        uint256[][] storage ivMatrix = ivMatrixMap[index];
         ivMatrix.length = 0;
-        uint index = 0;
+        index = 0;
         for (uint i=0;i<expirationAry.length;i++){
             uint256 expiration = uint256(expirationAry[i]);
             uint len1 = childlen[i];
@@ -30,6 +29,9 @@ contract ImpliedVolatility is Ownable {
             ivMatrix.push(childAry);
         }
     }
+    function getKey(uint32 underlying,uint8 optType) internal pure returns(uint256){
+        return (uint256(underlying) << 16)+ uint256(optType);
+    }
     /**
     /**
   * @notice retrieves implied volatility of an asset
@@ -39,7 +41,7 @@ contract ImpliedVolatility is Ownable {
   * @return uint mantissa of asset implied volatility (scaled by 1e18) or zero if unset or contract paused
   */
     function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 price)public view returns (uint256,uint256){
-        uint256 ivType = (uint256(underlying) << 16)+ uint256(optType);
+        uint256 ivType = getKey(underlying,optType);
         uint256[][] storage ivMatrix = ivMatrixMap[ivType];
         uint256 mxLen = ivMatrix.length;
         require(mxLen>=2,"price iv list is less than 2");
