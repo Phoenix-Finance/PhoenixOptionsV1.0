@@ -59,7 +59,7 @@ contract OptionsPool is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         setOptionsPriceAddress(optionsPriceAddr);
         setVolatilityAddress(ivAddress);
     }
-    function getOptionBalances(address user)public view returns(uint256[]){
+    function getUserOptionsID(address user)public view returns(uint256[]){
         return optionsBalances[user];
     }
     function getOptionInfoLength()public view returns (uint256){
