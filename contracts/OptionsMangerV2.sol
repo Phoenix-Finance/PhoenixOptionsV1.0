@@ -3,6 +3,7 @@ import "./modules/SafeMath.sol";
 import "./CollateralPool.sol";
 import "./modules/whiteList.sol";
 import "./interfaces/IOptionsPrice.sol";
+import "./modules/tuple.sol";
 contract OptionsMangerV2 is CollateralPool,ImportOptionsPrice {
     using SafeMath for uint256;
     constructor (address oracleAddr,address optionsPriceAddr,address optionsPoolAddr) public{
@@ -14,18 +15,20 @@ contract OptionsMangerV2 is CollateralPool,ImportOptionsPrice {
     event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);
     event SellOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
     event ExerciseOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
+    event DebugEvent(uint256 value0,uint256 value1,uint256 value2,uint256 value3);
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
-        uint256 expiration,uint256 amount,uint8 optType)public payable{
+                uint256 expiration,uint256 amount,uint8 optType)public payable{
         _optionsPool.buyOptionCheck(expiration,underlying);
+        uint256 ty_ly_exp = tuple64.getTuple(uint256(optType),uint256(underlying),uint256(expiration),0);
         uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
+        uint256 optionPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType); 
         require(getLeftCollateral()>=calOptionsOccupied(strikePrice,underlyingPrice,amount,optType),"collateral is insufficient!");
-        _optionsPool.createOptions(msg.sender,optType,underlying,now+expiration,strikePrice,amount,settlement);
-        buyOption_sub(settlement,settlementAmount,strikePrice,underlying,underlyingPrice,expiration,amount,optType);
+        _optionsPool.createOptions(msg.sender,settlement,ty_ly_exp,strikePrice,optionPrice,amount);
+        buyOption_sub(settlement,settlementAmount,optionPrice,amount);
     }
-    function buyOption_sub(address settlement,uint256 settlementAmount, uint256 strikePrice,
-            uint32 underlying,uint256 underlyingPrice,uint256 expiration,uint256 amount,uint8 optType)internal{
+    function buyOption_sub(address settlement,uint256 settlementAmount,
+            uint256 optionPrice,uint256 amount)internal{
         
-        uint256 optionPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType);
         uint256 allPay = amount.mul(optionPrice);
         settlementAmount = getPayableAmount(settlement,settlementAmount);
         require(settlementAmount>0 , "settlement amount is zero!");

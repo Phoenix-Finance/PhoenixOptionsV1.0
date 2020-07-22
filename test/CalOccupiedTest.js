@@ -5,6 +5,7 @@ const OptionsPrice = artifacts.require("OptionsPrice");
 let FNXCoin = artifacts.require("FNXCoin");
 let month = 30*60*60*24;
 let collateral0 = "0x0000000000000000000000000000000000000000";
+const BN = require("bn.js");
 
 contract('OptionsMangerV2', function (accounts){
     it('OptionsMangerV2 add collateral', async function (){
@@ -34,15 +35,20 @@ contract('OptionsMangerV2', function (accounts){
         //        console.log(tx);
             }
             optionsLen = await options.getOptionInfoLength()
-            for (j=0;j<Math.floor(optionsLen/500)+1;j++){
+            for (j=0;j<Math.floor(optionsLen/400)+1;j++){
+                let bn = new BN(j);
+                let bn1 = new BN(optionsLen);
+                bn1 = bn1.ushln(64);
+                bn = bn.add(bn1);
+                console.log(bn.toString(16));
                 let result =  await options.calculatePhaseOccupiedCollateral(j);
-                console.log(result[0].toString(10),result[1].toString(10),result[2].toString(10),result[3].toString(10));
-                let tx = await options.setPhaseOccupiedCollateral(j);
+                console.log(result[0].toString(10),result[1].toString(10));
+                let tx = await options.setPhaseOccupiedCollateral(bn);
                 console.log(tx);
                 let whiteList = [collateral0,fnx.address];
-                result =  await options.calRangeSharedPayment(0,0,15,whiteList);
-                console.log(result[1].toString(10),result[2].toString(10));
-                return;
+//                result =  await options.calRangeSharedPayment(0,0,20,whiteList);
+//                console.log(result[1].toString(10),result[2].toString(10));
+//                return;
                 //tx = await OptionsManger.setPhaseSharedPayment(j);
                 //console.log(tx);
             }  

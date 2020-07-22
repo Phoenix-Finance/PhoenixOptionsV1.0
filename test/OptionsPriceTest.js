@@ -8,6 +8,7 @@ contract('OptionsPrice', function (accounts){
         let ivInstance = await ImpliedVolatility.at(ivAddress);
         let result = await ivInstance.ivMatrixMap[0x10000];
         console.log(result);
+        let price = await priceInstance.getOptionsPrice(931703000000, 951703000000, month,1,0);
         for (var i=5000;i<13000;i+=2000){
             for (j=5000;j<13000;j+=2000){
                 let price = await priceInstance.getOptionsPrice(i*1e8, j*1e8, month,1,0);

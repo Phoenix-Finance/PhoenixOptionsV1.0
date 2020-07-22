@@ -58,6 +58,7 @@ module.exports = {
        network_id: 3,   // This network is yours, in the cloud.
 //       production: true    // Treats this network as if it was a public net. (default: false)
         timeoutBlocks: 300,  // # of blocks before a deployment times out  (minimum/default: 50)
+        gasPrice: 1000000000,
        skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     }
     // Another network with more advanced options...

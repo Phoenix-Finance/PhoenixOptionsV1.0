@@ -36,16 +36,19 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
     function userInputCollateral(address user,address collateral)public view returns (uint256){
         return userInputCollateral[user][collateral];
     }
-    function setPhaseSharedPayment(uint256 index) public onlyOwner {
-        (uint256[] memory sharedBalances,uint256 firstOption,uint256 blockNumber) = _optionsPool.calculatePhaseSharedPayment(index,whiteList);
-        (int256[] memory fallBalance,uint256[] memory prices) = _optionsPool.calculatePhaseOptionsFall(index,whiteList);
-        for (uint256 i= 0;i<fallBalance.length;i++){
-            fallBalance[i] += int256(sharedBalances[i]);
+    function setPhaseSharedPayment(uint256 calInfo) public onlyOwner {
+        (uint256[] memory sharedBalances,uint256 firstOption,bool success) =
+             _optionsPool.calculatePhaseSharedPayment(calInfo,whiteList);
+        if (success){
+            (int256[] memory fallBalance,uint256[] memory prices) = _optionsPool.calculatePhaseOptionsFall(calInfo,whiteList);
+            for (uint256 i= 0;i<fallBalance.length;i++){
+                fallBalance[i] += int256(sharedBalances[i]);
+            }
+            setSharedPayment(calInfo,fallBalance,prices,firstOption,now);
         }
-        setSharedPayment(index,fallBalance,prices,firstOption,blockNumber,now);
     }
-    function setSharedPayment(uint256 index,int256[] sharedBalances,uint256[] prices,uint256 firstOption,uint256 lastBlock,uint256 calTime) public onlyOwner{
-        _optionsPool.setSharedState(index,firstOption,prices,lastBlock,calTime);
+    function setSharedPayment(uint256 calInfo,int256[] sharedBalances,uint256[] prices,uint256 firstOption,uint256 calTime) public onlyOwner{
+        _optionsPool.setSharedState(calInfo,firstOption,prices,calTime);
         for (uint i=0;i<sharedBalances.length;i++){
             address addr = whiteList[i];
             if(sharedBalances[i]>=0){
