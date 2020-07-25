@@ -1,5 +1,5 @@
 pragma solidity ^0.4.26;
-import "./optionsPrice.sol";
+import "../optionsPrice.sol";
 contract OptionsPriceTest is OptionsPrice{
     constructor (address ivContract) OptionsPrice(ivContract) public{
     }

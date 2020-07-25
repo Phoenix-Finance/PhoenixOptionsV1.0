@@ -3,7 +3,7 @@ import "../modules/Ownable.sol";
 interface IOptionsPool {
     function getOptionBalances(address user) external view returns(uint256[]);
 
-    function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 optionPrice,
+    function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 underlyingPrice,
                 uint256 amount)  external;
     function calculatePhaseSharedPayment(uint256 calInfo,address[] whiteList)
         external view returns(uint256[],uint256,bool);

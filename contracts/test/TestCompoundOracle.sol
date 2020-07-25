@@ -1,5 +1,5 @@
 pragma solidity ^0.4.26;
-import "./CompoundOracle.sol";
+import "../CompoundOracle.sol";
 
 contract TestCompoundOracle is CompoundOracle {
     /**

@@ -11,12 +11,6 @@ contract('OptionsMangerV2', function (accounts){
 
         let OptionsManger = await OptionsMangerV2.deployed();
         let options = await OptionsPool.deployed();
-        let ivInstance = await ImpliedVolatility.at("0x54E8BB9dEC82B695C0Fa977070e74a06BE68001d");
-        let iv = await ivInstance.calculateIv(month,10000000000);
-        console.log(iv[0].toString(10),iv[1].toString(10))
-        let optionPrice = await OptionsPrice.deployed();
-        let temp = await optionPrice.getOptionsPrice_iv(20000000000,20000000000,month,iv[0],iv[1],0);
-        console.log(temp.toString(10))
         let fnx = await FNXCoin.deployed();
         let tx = await OptionsManger.addWhiteList(collateral0);
 //        console.log(tx);
@@ -29,12 +23,15 @@ contract('OptionsMangerV2', function (accounts){
         await fnx.approve(OptionsManger.address,10000000000000);
         await OptionsManger.addCollateral(fnx.address,10000000000000);
         await options.addExpiration(month);
-        
+        fnx.approve(OptionsManger.address,1000000000000000);
+        tx = await OptionsManger.buyOption(fnx.address,1000000000000000,20000000000,1,month,10000000000,0);
+        console.log(tx)
+       
         tx = await OptionsManger.buyOption(collateral0,1000000000000000,20000000000,1,month,10000000000,0,{value : 1000000000000000});
 //        console.log(tx);
         tx = await OptionsManger.buyOption(collateral0,1000000000000000,20000000000,1,month,10000000000,0,{value : 1000000000000000});
 //        console.log(tx);
-        tx = await OptionsManger.buyOption(collateral0,200000000000000,10000000000,1,month,10000000000,0,{value : 200000000000000});
+//        tx = await OptionsManger.buyOption(collateral0,200000000000000,10000000000,1,month,10000000000,0,{value : 200000000000000});
 //        console.log(tx);
         let result = await options.getOptionsById(1);
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));

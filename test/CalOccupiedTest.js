@@ -24,9 +24,14 @@ contract('OptionsMangerV2', function (accounts){
         await options.addUnderlyingAsset(1);
         await OptionsManger.addWhiteList(fnx.address); 
         await options.addExpiration(month);      
-        for (var i=0;i<20;i++){
+        for (var i=0;i<10;i++){
             for (var j=0;j<10;j++){
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
+                OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
 
                 OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
                 OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
@@ -37,20 +42,21 @@ contract('OptionsMangerV2', function (accounts){
             optionsLen = await options.getOptionInfoLength()
             for (j=0;j<Math.floor(optionsLen/400)+1;j++){
                 let bn = new BN(j);
-                let bn1 = new BN(optionsLen);
+                let bn1 = new BN(20);
                 bn1 = bn1.ushln(64);
                 bn = bn.add(bn1);
                 console.log(bn.toString(16));
-                let result =  await options.calculatePhaseOccupiedCollateral(j);
+                let result =  await options.calculatePhaseOccupiedCollateral(bn);
                 console.log(result[0].toString(10),result[1].toString(10));
                 let tx = await options.setPhaseOccupiedCollateral(bn);
                 console.log(tx);
                 let whiteList = [collateral0,fnx.address];
-//                result =  await options.calRangeSharedPayment(0,0,20,whiteList);
+                result =  await options.calRangeSharedPayment(0,0,20,whiteList);
 //                console.log(result[1].toString(10),result[2].toString(10));
 //                return;
-                //tx = await OptionsManger.setPhaseSharedPayment(j);
-                //console.log(tx);
+                tx = await OptionsManger.setPhaseSharedPayment(bn);
+                console.log(tx);
+                return;
             }  
         }
      });

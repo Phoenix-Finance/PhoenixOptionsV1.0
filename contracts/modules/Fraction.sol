@@ -1,6 +1,7 @@
 pragma solidity ^0.4.26;
 library Fraction {
-    int256 constant sqrtNum = 0x8fffffffffffffffffffffffff;
+    int256 constant sqrtNum = 1<<120;
+    int256 constant shl = 80;
     uint8 constant PRECISION   = 32;  // fractional bits
     uint256 constant FIXED_ONE = uint256(1) << PRECISION; // 0x100000000
     uint256 constant FIXED_TWO = uint256(2) << PRECISION; // 0x200000000
@@ -50,6 +51,7 @@ library Fraction {
     }
 
     function fractionNumberZoomOut(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
+        require(a.denominator>rate,"fraction number is overflow");
         return fractionNumber(a.numerator/rate,a.denominator/rate);
     }
     function fractionNumberZoomin(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
@@ -60,12 +62,12 @@ library Fraction {
         int256 deno = intAbs(a.denominator);
         if(deno>num){
             if (deno>sqrtNum) {
-                int256 rate = deno/sqrtNum;
+                int256 rate = deno>>shl;
                 return fractionNumberZoomOut(a, rate);
             }
         } else {
             if (num>sqrtNum) {
-                rate = num/sqrtNum;
+                rate = num>>shl;
                 return fractionNumberZoomOut(a, rate);
             }
         }

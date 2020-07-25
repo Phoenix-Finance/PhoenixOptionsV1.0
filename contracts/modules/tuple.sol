@@ -16,4 +16,10 @@ library tuple64 {
     function getTuple(uint256 input0,uint256 input1,uint256 input2,uint256 input3) internal pure returns (uint256){
         return input0+(input1<<64)+(input2<<128)+(input3<<192);
     }
+    function getTuple3(uint256 input0,uint256 input1,uint256 input2) internal pure returns (uint256){
+        return input0+(input1<<64)+(input2<<128);
+    }
+    function getTuple2(uint256 input0,uint256 input1) internal pure returns (uint256){
+        return input0+(input1<<64);
+    }
 }

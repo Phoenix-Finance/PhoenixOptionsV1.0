@@ -113,9 +113,8 @@ contract OptionsPool is OptionsBase {
     }
     function _calculateSharedPayment(uint256 begin,uint256 end,uint256 preTime,uint256 lastburn,address[] memory whiteList)
             internal view returns(uint256[],uint256){
-        
         uint256 newFirstOption;
-        (begin,newFirstOption) = getSharedFirstOption(begin,end,preTime);
+        (begin,newFirstOption) = getSharedFirstOption(begin,end,preTime);       
         uint256[] memory totalSharedPayment = new uint256[](whiteList.length);
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
@@ -124,8 +123,14 @@ contract OptionsPool is OptionsBase {
                 continue;
             }
             OptionsInfoEx storage optionEx = optionExtraMap[begin];
-            uint256 timeValue = _calculateTimePrice(preTime,optionEx.createdTime,tempValue,info.strikePrice,
+            uint256 timeValue;
+            if (begin>=optionPhaseInfo_Share[1] || preTime<optionEx.createdTime){
+                timeValue = _calculateFirstTimePrice(optionEx.fullPrice,tempValue,info.strikePrice,
                     optionEx.ivNumerator,optionEx.ivDenominator,info.optType);
+            }else{
+                timeValue = _calculateTimePrice(preTime,tempValue,info.strikePrice,
+                    optionEx.ivNumerator,optionEx.ivDenominator,info.optType);
+            }
             if (timeValue>0){
                 tempValue = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
                 timeValue = optionEx.tokenTimePrice.mul((timeValue)).mul(info.amount).div(optionEx.fullPrice);
@@ -170,14 +175,26 @@ contract OptionsPool is OptionsBase {
         }     
         return totalSharedPayment;
     }
-    function _calculateTimePrice(uint256 preTime,uint256 createdTime,uint256 expiration,
+    function _calculateFirstTimePrice(uint256 fullPrice,uint256 expiration,
             uint256 strikePrice,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
-        uint256 preExpiration = preTime>createdTime ? expiration - preTime : expiration - createdTime;
-        uint256 preValue = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,preExpiration,ivNumerator,
+        uint256 nowValue = _calculateCurrentPrice(expiration,strikePrice,ivNumerator,
             ivDenominator,optType);
-        uint256 nowValue = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-now,ivNumerator,
+        return (fullPrice>nowValue)? fullPrice-nowValue : 0;
+    }
+    function _calculateTimePrice(uint256 preTime,uint256 expiration,
+            uint256 strikePrice,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
+        uint256 preValue = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-preTime,ivNumerator,
+            ivDenominator,optType);
+        uint256 nowValue = _calculateCurrentPrice(expiration,strikePrice,ivNumerator,
             ivDenominator,optType);
         return (preValue>nowValue)? preValue-nowValue : 0;
+    }
+    function _calculateCurrentPrice(uint256 expiration,uint256 strikePrice,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
+        if (expiration > now){
+        return _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-now,ivNumerator,
+            ivDenominator,optType);
+        }
+        return 0;
     }
     function calculatePhaseOptionsFall(uint256 calInfo,address[] memory whiteList) public view returns(int256[],uint256[]){
         uint256 begin = tuple64.getValue0(calInfo).mul(sharedPhase);
@@ -207,7 +224,7 @@ contract OptionsPool is OptionsBase {
         for (;begin<lastOption;begin++){
             index = _getEligibleUnderlyingIndex(allOptions[begin].underlying);
             uint256 curValue = calOptionsCollateral(allOptions[begin],prices[index]);
-            uint256 prePrice = begin < optionPhaseInfo_Share[1] ? lastPrice[index] : optionExtraMap[begin].optionPrice;
+            uint256 prePrice = begin < optionPhaseInfo_Share[1] ? lastPrice[index] : optionExtraMap[begin].underlyingPrice;
             uint256 preValue = calOptionsCollateral(allOptions[begin],prePrice);
             if (preValue != curValue){
                 OptionsInfoEx storage optionEx = optionExtraMap[begin];

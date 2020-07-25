@@ -1,6 +1,6 @@
 pragma solidity ^0.4.26;
-import "./interfaces/IERC20.sol";
-import "./modules/SafeMath.sol";
+import "../interfaces/IERC20.sol";
+import "../modules/SafeMath.sol";
 
 contract FNXCoin is IERC20  {
     using SafeMath for uint256;
