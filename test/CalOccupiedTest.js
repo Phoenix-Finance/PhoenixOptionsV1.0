@@ -6,10 +6,12 @@ let FNXCoin = artifacts.require("FNXCoin");
 let month = 30*60*60*24;
 let collateral0 = "0x0000000000000000000000000000000000000000";
 const BN = require("bn.js");
-
+const imVolatility32 = artifacts.require("imVolatility32");
+let testFunc = require("./testFunction.js")
 contract('OptionsMangerV2', function (accounts){
     it('OptionsMangerV2 add collateral', async function (){
-
+        let volInstance = await imVolatility32.deployed();
+        await testFunc.AddImpliedVolatility(volInstance,false);
         let OptionsManger = await OptionsMangerV2.deployed();
         let options = await OptionsPool.deployed();
 //        let ivInstance = await ImpliedVolatility.at("0x54E8BB9dEC82B695C0Fa977070e74a06BE68001d");

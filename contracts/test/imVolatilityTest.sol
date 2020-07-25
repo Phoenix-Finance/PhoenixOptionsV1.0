@@ -15,7 +15,7 @@ contract imVolatilityTest is imVolatility32 {
         uint256[] memory buffer = ArraySave32.readAllBuffer(timeSaveMap,saveKey);
         return buffer;
     }
-    function getValueFromBuffer(uint256[] buffer,uint256 index)public view returns(uint256){
+    function getValueFromBuffer(uint256[] buffer,uint256 index)public pure returns(uint256){
         return ArraySave32.getValueFromBuffer(buffer,index);
     }
     function getTimeRangeIndex(uint32 underlying,uint8 optType,uint256 expiration)public view returns(uint256){

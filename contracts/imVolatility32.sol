@@ -11,7 +11,7 @@ contract imVolatility32 is Ownable {
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }
-    function setIvMatrix(uint32 underlying,uint8 optType,uint256[] timeArray,uint256[] ivAry) public{
+    function setIvMatrix(uint32 underlying,uint8 optType,uint256[] timeArray,uint256[] ivAry) public onlyOwner{
         uint256 saveKey = getKey(underlying,optType);
         uint nLen0 = timeArray.length;
         for (uint i=0;i<nLen0;i++){
@@ -52,6 +52,7 @@ contract imVolatility32 is Ownable {
     }
     function getTimeRange(uint256[] memory buffer,uint256 expiration) internal pure returns(uint256){
         uint256 Len = ArraySave32.getArrayLenFromBuffer(buffer)/2;
+        require (Len>=2,"iv matrix time length is less than 2");
         for (uint256 i=0;i<Len;i++){
             uint256 curTime = ArraySave32.getValueFromBuffer(buffer,i*2);
             if (expiration<=curTime){
@@ -68,6 +69,7 @@ contract imVolatility32 is Ownable {
             i = ArraySave32.getValueFromBuffer(buffer,index*2-1);
         }
         uint256 end = ArraySave32.getValueFromBuffer(buffer,index*2+1);
+        require (end-i>=2,"iv matrix price length is less than 2");
         for (;i<end;i++){
             uint256 ivPrice = ArraySave32.getValue(IvMap,saveKey,i*2);
             if (price<=ivPrice){

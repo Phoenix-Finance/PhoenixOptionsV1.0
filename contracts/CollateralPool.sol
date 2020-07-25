@@ -6,7 +6,8 @@ import "./modules/underlyingAssets.sol";
 import "./modules/TransactionFee.sol";
 import "./interfaces/IOptionsPool.sol";
 import "./interfaces/ICompoundOracle.sol";
-contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracle,ImportOptionsPool {
+import "./modules/Operator.sol";
+contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracle,ImportOptionsPool,Operator {
     using SafeMath for uint256;
     fraction public collateralRate = fraction(3, 1);
     //token net worth
@@ -36,7 +37,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
     function userInputCollateral(address user,address collateral)public view returns (uint256){
         return userInputCollateral[user][collateral];
     }
-    function setPhaseSharedPayment(uint256 calInfo) public onlyOwner {
+    function setPhaseSharedPayment(uint256 calInfo) public onlyOperator {
         (uint256[] memory sharedBalances,uint256 firstOption,bool success) =
              _optionsPool.calculatePhaseSharedPayment(calInfo,whiteList);
         if (success){
@@ -47,7 +48,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
             setSharedPayment(calInfo,fallBalance,prices,firstOption,now);
         }
     }
-    function setSharedPayment(uint256 calInfo,int256[] sharedBalances,uint256[] prices,uint256 firstOption,uint256 calTime) public onlyOwner{
+    function setSharedPayment(uint256 calInfo,int256[] sharedBalances,uint256[] prices,uint256 firstOption,uint256 calTime) public onlyOperator{
         _optionsPool.setSharedState(calInfo,firstOption,prices,calTime);
         for (uint i=0;i<sharedBalances.length;i++){
             address addr = whiteList[i];

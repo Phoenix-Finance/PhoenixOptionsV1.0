@@ -9,14 +9,14 @@ contract TestCompoundOracle is CompoundOracle {
   * @return uint mantissa of asset price (scaled by 1e18) or zero if unset or contract paused
   */
     function getPrice(address asset) public view returns (uint){
-        (uint256 price,) = CompoundOracle.getPriceDetail(asset);
+        uint256 price = CompoundOracle.getPrice(asset);
         if (price != 0) {
             return price;
         }
         return 50*1e8;
     }
     function getUnderlyingPrice(uint256 cToken) public view returns (uint){
-        (uint256 price,) = CompoundOracle.getUnderlyingPriceDetail(cToken);
+        uint256 price = CompoundOracle.getUnderlyingPrice(cToken);
         if (price != 0) {
             return price;
         }
@@ -24,14 +24,14 @@ contract TestCompoundOracle is CompoundOracle {
     }
 
     function getSellOptionsPrice(address oToken) public view returns (uint){
-        (uint256 price,) = CompoundOracle.getSellOptionsPriceDetail(oToken);
+        uint256 price = CompoundOracle.getSellOptionsPrice(oToken);
         if (price != 0) {
             return price;
         }
         return 90*1e8;
     }
     function getBuyOptionsPrice(address oToken) public view returns (uint){
-        (uint256 price,) = CompoundOracle.getBuyOptionsPriceDetail(oToken);
+        uint256 price = CompoundOracle.getBuyOptionsPrice(oToken);
         if (price != 0) {
             return price;
         }

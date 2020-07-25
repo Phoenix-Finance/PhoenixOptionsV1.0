@@ -5,11 +5,7 @@ import "./modules/SafeMath.sol";
 contract CompoundOracle is ICompoundOracle,Ownable {
     using SafeMath for uint256;
     uint256 public ValidUntil = 600;
-    struct priceInfo {
-        uint256 inptutTime;
-        uint256 price;
-    }
-    mapping(uint256 => priceInfo) private priceMap;
+    mapping(uint256 => uint256) private priceMap;
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }
@@ -20,8 +16,8 @@ contract CompoundOracle is ICompoundOracle,Ownable {
       * @param price the Asset's price
       */    
     function setPrice(address asset,uint256 price) public onlyOwner {
-        priceMap[uint256(asset)].price = price;
-        priceMap[uint256(asset)].inptutTime = now;
+        priceMap[uint256(asset)] = price;
+
     }
     /**
       * @notice set price of an underlying
@@ -31,8 +27,7 @@ contract CompoundOracle is ICompoundOracle,Ownable {
       */  
     function setUnderlyingPrice(uint256 underlying,uint256 price) public onlyOwner {
         require(underlying>0 , "underlying cannot be zero");
-        priceMap[underlying].price = price;
-        priceMap[underlying].inptutTime = now;
+        priceMap[underlying] = price;
     }
     /**
     * @notice set a group of prices for assets and a group of prices for underlying
@@ -46,12 +41,10 @@ contract CompoundOracle is ICompoundOracle,Ownable {
         require(assets.length == assetPrices.length,"assets and assetPrices are not of the same length");
         require(underlyings.length == ulPrices.length,"underlyings and ulPrices are not of the same length");
         for (uint i = 0;i<assets.length;i++) {
-            priceMap[uint256(assets[i])].price = assetPrices[i];
-            priceMap[uint256(assets[i])].inptutTime = now;
+            priceMap[uint256(assets[i])] = assetPrices[i];
         }
         for (i = 0;i<underlyings.length;i++) {
-            priceMap[underlyings[i]].price = ulPrices[i];
-            priceMap[underlyings[i]].inptutTime = now;
+            priceMap[underlyings[i]] = ulPrices[i];
         }
     }
     /**
@@ -62,8 +55,7 @@ contract CompoundOracle is ICompoundOracle,Ownable {
       */     
     function setSellOptionsPrice(address optoken,uint256 price) public onlyOwner {
         uint256 key = uint256(optoken)*10+1;
-        priceMap[key].price = price;
-        priceMap[key].inptutTime = now;
+        priceMap[key] = price;
     }
     /**
       * @notice set price of an options token buy price
@@ -73,8 +65,7 @@ contract CompoundOracle is ICompoundOracle,Ownable {
       */      
     function setBuyOptionsPrice(address optoken,uint256 price) public onlyOwner {
         uint256 key = uint256(optoken)*10+2;
-        priceMap[key].price = price;
-        priceMap[key].inptutTime = now;
+        priceMap[key] = price;
     }
     /**
       * @notice set price of a group of option tokens buy and sell prices
@@ -88,13 +79,11 @@ contract CompoundOracle is ICompoundOracle,Ownable {
         require(optokens.length == SellPrices.length,"optokens and SellPrices are not of the same length");
         for (uint i=0; i<optokens.length; i++) {
             uint256 sellkey = uint256(optokens[i])*10+1;
-            priceMap[sellkey].price = SellPrices[i];
-            priceMap[sellkey].inptutTime = now;
+            priceMap[sellkey] = SellPrices[i];
         }
         for (i=0; i<optokens.length; i++) {
             uint256 buykey = uint256(optokens[i])*10+2;
-            priceMap[buykey].price = buyPrices[i];
-            priceMap[buykey].inptutTime = now;
+            priceMap[buykey] = buyPrices[i];
         }
     }
     /**
@@ -120,11 +109,10 @@ contract CompoundOracle is ICompoundOracle,Ownable {
         return _getPriceInfo(key);
     }
     function _getPriceInfo(uint256 key) internal view returns (uint256) {
-        require(ValidUntil.add(priceMap[key].inptutTime)>now,"Price validity is expired");
-        return priceMap[key].price;
+        return priceMap[key];
     }
 
-
+/*
     function getPriceDetail(address asset) public view returns (uint256,uint256) {
         return _getPriceDetail(uint256(asset));
     }
@@ -144,4 +132,5 @@ contract CompoundOracle is ICompoundOracle,Ownable {
     function _getPriceDetail(uint256 key) internal view returns (uint256,uint256) {
         return (priceMap[key].price,priceMap[key].inptutTime);
     }
+    */
 }

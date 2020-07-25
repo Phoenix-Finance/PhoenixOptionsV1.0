@@ -1,7 +1,8 @@
 pragma solidity ^0.4.26;
 import "./OptionsBase.sol";
 import "./modules/tuple.sol";
-contract OptionsPool is OptionsBase {
+import "./modules/Operator.sol";
+contract OptionsPool is OptionsBase,Operator {
 
     //calculate options Collateral occupied phases
     uint32 public optionPhase = 400;
@@ -30,13 +31,13 @@ contract OptionsPool is OptionsBase {
         return (OptionsPhaseTimes[index],OptionsPhasePrices[index]);
     }
     //index,lastOption,lastBurned
-    function setPhaseOccupiedCollateral(uint256 calInfo) public onlyOwner {
+    function setPhaseOccupiedCollateral(uint256 calInfo) public onlyOperator {
         (uint256 totalOccupied,uint256 beginOption,bool success) = calculatePhaseOccupiedCollateral(calInfo);
         if (success){
             setCollateralPhase(calInfo,totalOccupied,beginOption);
         }
     }
-    function setCollateralPhase(uint256 calInfo,uint256 totalOccupied,uint256 beginOption) public onlyOwner{
+    function setCollateralPhase(uint256 calInfo,uint256 totalOccupied,uint256 beginOption) public onlyOperator{
         if (beginOption > optionPhaseInfo[0]){
             optionPhaseInfo[0] = beginOption;
         }
@@ -155,7 +156,8 @@ contract OptionsPool is OptionsBase {
         }
         return (begin,begin);
     }
-    function _calBurnedSharePrice(uint256 beginIndex,uint256 endIndex,uint256 preTime,uint256 lastburn,address[] memory whiteList,uint256[] memory totalSharedPayment)public view returns(uint256[]){
+    function _calBurnedSharePrice(uint256 beginIndex,uint256 endIndex,uint256 preTime,uint256 lastburn,
+            address[] memory whiteList,uint256[] memory totalSharedPayment)internal view returns(uint256[]){
         for (uint256 i = optionPhaseInfo_Share[2];i<lastburn;i++){
             uint256[2] memory burnInfo = burnedOptions[i];
             if(burnInfo[0]<beginIndex || burnInfo[0] >=endIndex){

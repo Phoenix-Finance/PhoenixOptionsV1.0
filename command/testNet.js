@@ -1,11 +1,16 @@
 let Web3 = require("Web3")
 let web3 = new Web3(new Web3.providers.HttpProvider("https://demodex.wandevs.org:48545"));
 let optionsManager = require("../build/contracts/OptionsMangerV2.json");
+let CompoundOracle = require("../build/contracts/CompoundOracle.json");
 let marketTrading = require("../build/contracts/OptionsPool.json");
 let FNXCoin = require("../build/contracts/FNXCoin.json");
 let erc20 = require("../build/contracts/IERC20.json");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 async function wanMainNet(){
+    let oracle = await new web3.eth.Contract(CompoundOracle.abi,"0x9590e4DA7D7Cdb8745e79E4C05668A36574100D4");
+    let owner = await oracle.methods.owner().call();
+    console.log(owner);
+    return;
     let manager = await new web3.eth.Contract(optionsManager.abi,"0xea6ca106373842a09c83459A4a977136E278e9F9");
     let whiteList = await manager.methods.getWhiteList().call();
     console.log(whiteList);
