@@ -1,4 +1,4 @@
-const OptionsMangerV2 = artifacts.require("OptionsMangerV2");
+const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
 const OptionsPool = artifacts.require("OptionsPool");
 const imVolatility32 = artifacts.require("imVolatility32");
 const OptionsPrice = artifacts.require("OptionsPrice");
@@ -6,11 +6,11 @@ let FNXCoin = artifacts.require("FNXCoin");
 let month = 30*60*60*24;
 let collateral0 = "0x0000000000000000000000000000000000000000";
 let testFunc = require("./testFunction.js")
-contract('OptionsMangerV2', function (accounts){
-    it('OptionsMangerV2 add collateral', async function (){
+contract('OptionsManagerV2', function (accounts){
+    it('OptionsManagerV2 add collateral', async function (){
         let volInstance = await imVolatility32.deployed();
         await testFunc.AddImpliedVolatility(volInstance,false);
-        let OptionsManger = await OptionsMangerV2.deployed();
+        let OptionsManger = await OptionsManagerV2.deployed();
         let options = await OptionsPool.deployed();
         let fnx = await FNXCoin.deployed();
         let tx = await OptionsManger.addWhiteList(collateral0);

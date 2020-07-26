@@ -1,4 +1,4 @@
-const OptionsMangerV2 = artifacts.require("OptionsMangerV2");
+const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
 const OptionsPool = artifacts.require("OptionsPool");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 const OptionsPrice = artifacts.require("OptionsPrice");
@@ -8,11 +8,11 @@ let collateral0 = "0x0000000000000000000000000000000000000000";
 const BN = require("bn.js");
 const imVolatility32 = artifacts.require("imVolatility32");
 let testFunc = require("./testFunction.js")
-contract('OptionsMangerV2', function (accounts){
-    it('OptionsMangerV2 add collateral', async function (){
+contract('OptionsManagerV2', function (accounts){
+    it('OptionsManagerV2 add collateral', async function (){
         let volInstance = await imVolatility32.deployed();
         await testFunc.AddImpliedVolatility(volInstance,false);
-        let OptionsManger = await OptionsMangerV2.deployed();
+        let OptionsManger = await OptionsManagerV2.deployed();
         let options = await OptionsPool.deployed();
 //        let ivInstance = await ImpliedVolatility.at("0x54E8BB9dEC82B695C0Fa977070e74a06BE68001d");
 //        let iv = await ivInstance.calculateIv(month,10000000000);

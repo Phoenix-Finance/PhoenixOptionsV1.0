@@ -1,6 +1,6 @@
 let Web3 = require("Web3")
 let web3 = new Web3(new Web3.providers.HttpProvider("https://demodex.wandevs.org:48545"));
-let optionsManager = require("../build/contracts/OptionsMangerV2.json");
+let optionsManager = require("../build/contracts/OptionsManagerV2.json");
 let CompoundOracle = require("../build/contracts/CompoundOracle.json");
 let marketTrading = require("../build/contracts/OptionsPool.json");
 let FNXCoin = require("../build/contracts/FNXCoin.json");

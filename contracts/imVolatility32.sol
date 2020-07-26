@@ -11,6 +11,11 @@ contract imVolatility32 is Ownable {
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }
+    function setIvMatrixAll(uint32 underlying,uint256[] put_timeArray,uint256[] put_ivAry,
+        uint256[] call_timeArray,uint256[] call_ivAry) public onlyOwner{
+        setIvMatrix(underlying,1,put_timeArray,put_ivAry);
+        setIvMatrix(underlying,0,call_timeArray,call_ivAry);
+    }
     function setIvMatrix(uint32 underlying,uint8 optType,uint256[] timeArray,uint256[] ivAry) public onlyOwner{
         uint256 saveKey = getKey(underlying,optType);
         uint nLen0 = timeArray.length;

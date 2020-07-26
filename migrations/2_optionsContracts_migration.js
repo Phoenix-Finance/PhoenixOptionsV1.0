@@ -2,7 +2,7 @@
 const imVolatility32 = artifacts.require("imVolatility32");
 const OptionsPrice = artifacts.require("OptionsPrice");
 const OptionsPool = artifacts.require("OptionsPool");
-const OptionsMangerV2 = artifacts.require("OptionsMangerV2");
+const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
 let FNXCoin = artifacts.require("FNXCoin");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 module.exports = async function(deployer, network,accounts) {
@@ -19,15 +19,15 @@ module.exports = async function(deployer, network,accounts) {
             await deployer.deploy(CompoundOracle);
             await deployer.deploy(OptionsPrice,ivAddress);
             let optionsPool  = await deployer.deploy(OptionsPool,CompoundOracle.address,OptionsPrice.address,ivAddress);
-            let manager = await deployer.deploy(OptionsMangerV2,CompoundOracle.address,OptionsPrice.address,optionsPool.address);
+            let manager = await deployer.deploy(OptionsManagerV2,CompoundOracle.address,OptionsPrice.address,optionsPool.address);
         
-            await optionsPool.setManager(OptionsMangerV2.address);
+            await optionsPool.setManager(OptionsManagerV2.address);
             console.log("fnx:",FNXCoin.address)
             console.log("Oracle:",CompoundOracle.address);
             console.log("iv:",ivAddress);
             console.log("OptionsPrice:",OptionsPrice.address);
             console.log("optionsPool:",OptionsPool.address);
-            console.log("OptionsMangerV2:",OptionsMangerV2.address);
+            console.log("OptionsManagerV2:",OptionsManagerV2.address);
     }else{
         const CompoundOracle = artifacts.require("CompoundOracle");
 //        let ivAddress = "0xEdac2C1764aF7887A896402254E9Ee5Fb1312E8F";
@@ -44,8 +44,8 @@ module.exports = async function(deployer, network,accounts) {
 //            await deployer.deploy(CompoundOracle);
             await deployer.deploy(OptionsPrice,ivAddress);
             let optionsPool  = await deployer.deploy(OptionsPool,oracleAddr,OptionsPrice.address,ivAddress);
-            let manager = await deployer.deploy(OptionsMangerV2,oracleAddr,OptionsPrice.address,optionsPool.address);
-            await optionsPool.setManager(OptionsMangerV2.address);
+            let manager = await deployer.deploy(OptionsManagerV2,oracleAddr,OptionsPrice.address,optionsPool.address);
+            await optionsPool.setManager(OptionsManagerV2.address);
             await optionsPool.setOperator("0xc5f5f51D7509A42F0476E74878BdA887ce9791bD");
             await manager.setOperator("0xc5f5f51D7509A42F0476E74878BdA887ce9791bD");
             await manager.addWhiteList(collateral0);
@@ -55,6 +55,6 @@ module.exports = async function(deployer, network,accounts) {
             console.log("iv:",ivAddress);
             console.log("OptionsPrice:",OptionsPrice.address);
             console.log("optionsPool:",OptionsPool.address);
-            console.log("OptionsMangerV2:",OptionsMangerV2.address);
+            console.log("OptionsManagerV2:",OptionsManagerV2.address);
     }
 };

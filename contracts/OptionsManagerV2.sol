@@ -4,7 +4,7 @@ import "./CollateralPool.sol";
 import "./modules/whiteList.sol";
 import "./interfaces/IOptionsPrice.sol";
 import "./modules/tuple.sol";
-contract OptionsMangerV2 is CollateralPool,ImportOptionsPrice {
+contract OptionsManagerV2 is CollateralPool,ImportOptionsPrice {
     using SafeMath for uint256;
     constructor (address oracleAddr,address optionsPriceAddr,address optionsPoolAddr) public{
         setOracleAddress(oracleAddr);
