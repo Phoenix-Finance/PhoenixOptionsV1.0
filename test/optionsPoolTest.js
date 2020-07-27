@@ -11,7 +11,7 @@ contract('OptionsPoolTest', function (accounts){
                 assert.equal(worth,expect,"call option : value are not equal")
                 worth = await optionsInstance.getOptionsPayback(0,i,j);
                 let payback = expect - i;
-                assert.equal(worth,expect,"call option : value are not equal")
+                assert.equal(worth,payback,"call option : value are not equal")
             }
         }
         console.log("pull option : value = min(strike price,underlying price)");
@@ -23,7 +23,7 @@ contract('OptionsPoolTest', function (accounts){
                 assert.equal(worth,expect,"pull option : value are not equal")
                 worth = await optionsInstance.getOptionsPayback(1,i,j);
                 let payback = i - expect;
-                assert.equal(worth,expect,"pull option : value are not equal")
+                assert.equal(worth,payback,"pull option : value are not equal")
             }
         }
     })
