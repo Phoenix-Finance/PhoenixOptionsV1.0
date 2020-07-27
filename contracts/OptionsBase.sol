@@ -133,8 +133,6 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         uint256 tokenTimePrice = fullPrice.div(_oracle.getPrice(settlement));
         optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,fullPrice,underlyingPrice,ivNumerator,ivDenominator);
     }
-
-
     function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){
         OptionsInfo memory info = _getOptionsById(optionsId);
         checkEligible(info);

@@ -20,7 +20,9 @@ contract OptionsPool is OptionsBase,Operator {
 
     constructor (address oracleAddr,address optionsPriceAddr,address ivAddress) OptionsBase(oracleAddr,optionsPriceAddr,ivAddress) public{
     }
-
+    function getOptionCalRangeAll()public view returns(uint256,uint256,uint256,uint256,uint256,uint256){
+        return (optionPhaseInfo[0],optionPhaseInfo[0],allOptions.length,burnedLength,block.number,now);
+    }
     function getOptionPhaseCalRange()public view returns(uint256,uint256,uint256){
         return (optionPhaseInfo[0],allOptions.length,burnedLength);
     }
@@ -193,8 +195,8 @@ contract OptionsPool is OptionsBase,Operator {
     }
     function _calculateCurrentPrice(uint256 expiration,uint256 strikePrice,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
         if (expiration > now){
-        return _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-now,ivNumerator,
-            ivDenominator,optType);
+            return _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-now,ivNumerator,
+                ivDenominator,optType);
         }
         return 0;
     }
@@ -248,13 +250,18 @@ contract OptionsPool is OptionsBase,Operator {
         for (uint256 i = optionPhaseInfo[2];i<burnedLen;i++){
             uint256[2] memory burnInfo = burnedOptions[i];
             uint optionId = burnInfo[0];
-            index = _getEligibleUnderlyingIndex(allOptions[optionId].underlying);
-            totalOccupied = totalOccupied.sub(calBurnedOptionsCollateral(allOptions[optionId],
-                burnInfo[1],prices[index]));
+            if (optionId<optionPhaseInfo[1]){
+                index = _getEligibleUnderlyingIndex(allOptions[optionId].underlying);
+                totalOccupied = totalOccupied.sub(calBurnedOptionsCollateral(allOptions[optionId],
+                    burnInfo[1],prices[index]));
+            }
         }
         return totalOccupied;
     }
-    function calBurnedOptionsCollateral(OptionsInfo memory option,uint256 burned,uint256 underlyingPrice)internal pure returns(uint256){
+    function calBurnedOptionsCollateral(OptionsInfo memory option,uint256 burned,uint256 underlyingPrice)internal view returns(uint256){
+        if (option.expiration<=now){
+            return 0;
+        }        
         return _getOptionsWorth(option.optType,option.strikePrice,underlyingPrice).mul(burned);
     }
     function sumOptionPhases()internal view returns(uint256){
@@ -274,7 +281,7 @@ contract OptionsPool is OptionsBase,Operator {
         return totalOccupied;
     }
     function burnOptions(address from,uint256 id,uint256 amount)public onlyManager{
-        OptionsInfo memory info = _getOptionsById(id);
+        OptionsInfo storage info = _getOptionsById(id);
         checkEligible(info);
         checkOwner(info,from);
         checkSufficient(info,amount);

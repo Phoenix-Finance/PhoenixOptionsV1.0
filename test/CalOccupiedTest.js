@@ -1,5 +1,5 @@
 const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
-const OptionsPool = artifacts.require("OptionsPool");
+const OptionsPool = artifacts.require("OptionsPoolTest");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 const OptionsPrice = artifacts.require("OptionsPrice");
 let FNXCoin = artifacts.require("FNXCoin");
@@ -35,16 +35,16 @@ contract('OptionsManagerV2', function (accounts){
                 OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
                 OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
 
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9050*1e8,1,month,10000000000,1,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9050*1e8,1,month,10000000000,1,{value : 1000000000000000});
         //        console.log(tx);
-                await OptionsManger.buyOption(collateral0,200000000000000,9250*1e8,1,month,10000000000,0,{value : 200000000000000});
+                await OptionsManger.buyOption(collateral0,200000000000000,9250*1e8,1,month,10000000000,1,{value : 200000000000000});
         //        console.log(tx);
             }
             optionsLen = await options.getOptionInfoLength()
             for (j=0;j<Math.floor(optionsLen/400)+1;j++){
                 let bn = new BN(j);
-                let bn1 = new BN(20);
+                let bn1 = new BN(40);
                 bn1 = bn1.ushln(64);
                 bn = bn.add(bn1);
                 console.log(bn.toString(16));
@@ -54,7 +54,7 @@ contract('OptionsManagerV2', function (accounts){
                 console.log(tx);
                 let whiteList = [collateral0,fnx.address];
                 result =  await options.calRangeSharedPayment(0,0,20,whiteList);
-//                console.log(result[1].toString(10),result[2].toString(10));
+                console.log(result[1].toString(10),result[2].toString(10));
 //                return;
                 tx = await OptionsManger.setPhaseSharedPayment(bn);
                 console.log(tx);

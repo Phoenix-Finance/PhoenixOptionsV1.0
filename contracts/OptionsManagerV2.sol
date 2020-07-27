@@ -22,7 +22,7 @@ contract OptionsManagerV2 is CollateralPool,ImportOptionsPrice {
         uint256 ty_ly_exp = tuple64.getTuple(uint256(optType),uint256(underlying),uint256(expiration),0);
         uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
         uint256 optionPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType); 
-        require(getLeftCollateral()>=calOptionsOccupied(strikePrice,underlyingPrice,amount,optType),"collateral is insufficient!");
+        require(getAvailableCollateral()>=calOptionsOccupied(strikePrice,underlyingPrice,amount,optType),"collateral is insufficient!");
         _optionsPool.createOptions(msg.sender,settlement,ty_ly_exp,strikePrice,underlyingPrice,amount);
         buyOption_sub(settlement,settlementAmount,optionPrice,amount);
     }

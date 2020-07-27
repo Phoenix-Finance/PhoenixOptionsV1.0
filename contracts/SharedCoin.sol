@@ -9,10 +9,14 @@ contract SharedCoin is IERC20  {
     
 
     mapping (address => uint256) public balances;
+    mapping (address => uint256) public lockedbalances;
     mapping (address => mapping (address => uint256)) private _allowances;
 
     uint256 internal _totalSupply = 0;
+    uint256 internal _totalLocked = 0;
 
+    event AddLocked(address indexed owner, uint256 value);
+    event RemoveLocked(address indexed owner, uint256 value);
     constructor () public{
     }
     /**
@@ -200,12 +204,34 @@ contract SharedCoin is IERC20  {
     */
     function _burn(address account, uint256 amount) internal {
         require(account != address(0), "ERC20: burn from the zero address");
-
-        _subBalance(account,amount);
+        if(lockedbalances[account]>=amount){
+            _subLockBalance(account,amount);
+            lockedbalances[account] -= amount;
+        }else{
+            uint256 left = amount - lockedbalances[account];
+            _subLockBalance(account,lockedbalances[account]);
+            _subBalance(account,left);
+        }
         _totalSupply = _totalSupply.sub(amount);
         emit Transfer(account, address(0), amount);
     }
-
+    function lockBalance(address account, uint256 amount)internal {
+        if(lockedbalances[account]<amount){
+            amount = amount - lockedbalances[account];
+            _subBalance(account,amount);
+            _addLockBalance(account,amount);
+        }
+    }
+    function _addLockBalance(address account, uint256 amount)internal {
+        lockedbalances[account]+= amount;
+        _totalLocked = _totalLocked.add(amount);
+        emit AddLocked(account, amount);
+    }
+    function _subLockBalance(address account, uint256 amount)internal {
+        lockedbalances[account] =  lockedbalances[account].sub(amount);
+        _totalLocked = _totalLocked.sub(amount);
+        emit RemoveLocked(account, amount);
+    }
     /**
      * @dev Sets `amount` as the allowance of `spender` over the `owner`s tokens.
      *

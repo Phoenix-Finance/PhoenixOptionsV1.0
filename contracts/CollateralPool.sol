@@ -88,14 +88,20 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
         if (tokenAmount == 0){
             return;
         }
-        uint256 totalOccupied = _optionsPool.getTotalOccupiedCollateral();
-        uint256 totalWorth = getTotalCollateral();
-        uint256 tokenNetWorth = totalWorth.div(_totalSupply);
+        uint256 leftColateral = getLeftCollateral();
+        uint256 tokenNetWorth = getTokenNetworth();
         uint256 redeemWorth = tokenAmount.mul(tokenNetWorth);
-        if (totalOccupied.add(redeemWorth)<=totalWorth) {
-            _redeemCollateral(tokenAmount,collateral,redeemWorth,tokenNetWorth);
-            emit RedeemCollateral(msg.sender,tokenAmount);
+        uint256 locked = redeemWorth > leftColateral ? redeemWorth - leftColateral : 0;
+        emit DebugEvent(1111,leftColateral,tokenNetWorth);
+        emit DebugEvent(1111,redeemWorth,locked);
+        return;
+        if (locked > 0){
+            locked = tokenAmount.sub(leftColateral.div(tokenNetWorth));
+            tokenAmount = tokenAmount.sub(locked);
+            redeemWorth = tokenAmount.mul(tokenNetWorth);
         }
+        _redeemCollateral(tokenAmount,collateral,redeemWorth,tokenNetWorth);
+        lockBalance(msg.sender,locked);
     }
     function _redeemCollateral(uint256 tokenAmount,address collateral,uint256 redeemWorth,uint256 tokenNetWorth) internal {
         uint256 redeemPaying = userCollateralPaying[msg.sender].mul(tokenAmount).div(balances[msg.sender]);
@@ -117,6 +123,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
         for (i=0;i<whiteLen;i++){
             _transferPaybackAndFee(msg.sender,whiteList[i],paybackcal[i],redeemColFee);
         } 
+        emit RedeemCollateral(msg.sender,tokenAmount);
     }
     function _calPremiumPayback(uint256 worth,uint256 whiteLen,uint256[] memory paybackcal)internal view returns(uint256[] memory){
         uint256 totalPrice = 0;
@@ -164,6 +171,9 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
         uint256 totalOccupied = _optionsPool.getTotalOccupiedCollateral();
         return calculateCollateral(totalOccupied);
     }
+    function getAvailableCollateral()public view returns(uint256){
+        return getUnlockedCollateral().sub(getOccupiedCollateral());
+    }
     function getLeftCollateral()public view returns(uint256){
         return getTotalCollateral().sub(getOccupiedCollateral());
     }
@@ -175,6 +185,9 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracl
             totalOccupied = underlyingPrice.mul(amount);
         }
         return calculateCollateral(totalOccupied);
+    }
+    function getUnlockedCollateral()public view returns(uint256){
+        return (_totalSupply.sub(_totalLocked)).mul(getTotalCollateral()).div(_totalSupply);
     }
     function getTotalCollateral()public view returns(uint256){
         uint256 totalNum = 0;
