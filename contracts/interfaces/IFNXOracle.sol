@@ -1,6 +1,6 @@
 pragma solidity ^0.4.26;
 import "../modules/Ownable.sol";
-interface ICompoundOracle {
+interface IFNXOracle {
     /**
   * @notice retrieves price of an asset
   * @dev function to get price for an asset
@@ -13,11 +13,11 @@ interface ICompoundOracle {
     function getBuyOptionsPrice(address oToken) external view returns (uint256);
 }
 contract ImportOracle is Ownable{
-    ICompoundOracle internal _oracle;
+    IFNXOracle internal _oracle;
     function getOracleAddress() public view returns(address){
         return address(_oracle);
     }
     function setOracleAddress(address oracle)public onlyOwner{
-        _oracle = ICompoundOracle(oracle);
+        _oracle = IFNXOracle(oracle);
     }
 }

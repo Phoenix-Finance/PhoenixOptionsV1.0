@@ -1,7 +1,7 @@
 pragma solidity ^0.4.26;
-import "../CompoundOracle.sol";
+import "../FNXOracle.sol";
 
-contract TestCompoundOracle is CompoundOracle {
+contract TestFNXOracle is FNXOracle {
     /**
   * @notice retrieves price of an asset
   * @dev function to get price for an asset
@@ -9,14 +9,14 @@ contract TestCompoundOracle is CompoundOracle {
   * @return uint mantissa of asset price (scaled by 1e18) or zero if unset or contract paused
   */
     function getPrice(address asset) public view returns (uint){
-        uint256 price = CompoundOracle.getPrice(asset);
+        uint256 price = FNXOracle.getPrice(asset);
         if (price != 0) {
             return price;
         }
         return 50*1e8;
     }
     function getUnderlyingPrice(uint256 cToken) public view returns (uint){
-        uint256 price = CompoundOracle.getUnderlyingPrice(cToken);
+        uint256 price = FNXOracle.getUnderlyingPrice(cToken);
         if (price != 0) {
             return price;
         }
@@ -24,14 +24,14 @@ contract TestCompoundOracle is CompoundOracle {
     }
 
     function getSellOptionsPrice(address oToken) public view returns (uint){
-        uint256 price = CompoundOracle.getSellOptionsPrice(oToken);
+        uint256 price = FNXOracle.getSellOptionsPrice(oToken);
         if (price != 0) {
             return price;
         }
         return 90*1e8;
     }
     function getBuyOptionsPrice(address oToken) public view returns (uint){
-        uint256 price = CompoundOracle.getBuyOptionsPrice(oToken);
+        uint256 price = FNXOracle.getBuyOptionsPrice(oToken);
         if (price != 0) {
             return price;
         }

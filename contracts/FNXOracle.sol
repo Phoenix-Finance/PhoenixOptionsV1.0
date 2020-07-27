@@ -1,8 +1,8 @@
 pragma solidity ^0.4.26;
-import "./interfaces/ICompoundOracle.sol";
+import "./interfaces/IFNXOracle.sol";
 import "./modules/Ownable.sol";
 import "./modules/SafeMath.sol";
-contract CompoundOracle is ICompoundOracle,Ownable {
+contract FNXOracle is IFNXOracle,Ownable {
     using SafeMath for uint256;
     uint256 public ValidUntil = 600;
     mapping(uint256 => uint256) private priceMap;

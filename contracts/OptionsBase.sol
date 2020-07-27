@@ -1,7 +1,7 @@
 pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
 import "./modules/Managerable.sol";
-import "./interfaces/ICompoundOracle.sol";
+import "./interfaces/IFNXOracle.sol";
 import "./modules/underlyingAssets.sol";
 import "./interfaces/IOptionsPrice.sol";
 import "./interfaces/IVolatility.sol";

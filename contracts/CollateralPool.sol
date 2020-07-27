@@ -5,7 +5,7 @@ import "./SharedCoin.sol";
 import "./modules/underlyingAssets.sol";
 import "./modules/TransactionFee.sol";
 import "./interfaces/IOptionsPool.sol";
-import "./interfaces/ICompoundOracle.sol";
+import "./interfaces/IFNXOracle.sol";
 import "./modules/Operator.sol";
 contract CollateralPool is ReentrancyGuard,TransactionFee,SharedCoin,ImportOracle,ImportOptionsPool,Operator {
     using SafeMath for uint256;
