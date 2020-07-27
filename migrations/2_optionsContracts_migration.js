@@ -1,13 +1,14 @@
 
 const imVolatility32 = artifacts.require("imVolatility32");
 const OptionsPrice = artifacts.require("OptionsPrice");
-const OptionsPool = artifacts.require("OptionsPool");
+
 const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
 let FNXCoin = artifacts.require("FNXCoin");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 module.exports = async function(deployer, network,accounts) {
     if (network != "wanTest"){
         const CompoundOracle = artifacts.require("TestCompoundOracle");
+        const OptionsPool = artifacts.require("OptionsPoolTest");
 //        let ivAddress = "0x97b95c36FB7adE536527d4dBe41544a65E8391a7";
             await deployer.deploy(imVolatility32);
             let ivAddress = imVolatility32.address;
@@ -30,6 +31,7 @@ module.exports = async function(deployer, network,accounts) {
             console.log("OptionsManagerV2:",OptionsManagerV2.address);
     }else{
         const CompoundOracle = artifacts.require("CompoundOracle");
+        const OptionsPool = artifacts.require("OptionsPoolTest");
 //        let ivAddress = "0xEdac2C1764aF7887A896402254E9Ee5Fb1312E8F";
             await deployer.deploy(imVolatility32);
             let ivAddress = imVolatility32.address;

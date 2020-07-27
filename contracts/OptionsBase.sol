@@ -45,7 +45,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         setOptionsPriceAddress(optionsPriceAddr);
         setVolatilityAddress(ivAddress);
         expirationList =  [1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
-        underlyingAssets = [1];
+        underlyingAssets = [1,2];
     }
     function getUserOptionsID(address user)public view returns(uint256[]){
         return optionsBalances[user];
@@ -140,20 +140,25 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         checkEligible(info);
         checkSufficient(info,amount);
         uint256 underlyingPrice = _oracle.getUnderlyingPrice(info.underlying);
-        uint256 tokenPayback = 0;
-        if (info.optType == 0){
-            if (underlyingPrice > info.strikePrice){
-                tokenPayback = underlyingPrice - info.strikePrice;
-            }
-        }else{
-            if ( underlyingPrice < info.strikePrice){
-                tokenPayback = info.strikePrice-underlyingPrice;
-            }
-        }
+        uint256 tokenPayback = _getOptionsPayback(info.optType,info.strikePrice,underlyingPrice);
         if (tokenPayback == 0 ){
             return 0;
         } 
         return tokenPayback.mul(amount);
+    }
+    function _getOptionsWorth(uint8 optType,uint256 strikePrice,uint256 underlyingPrice)internal pure returns(uint256){
+        if ((optType == 0) == (strikePrice>underlyingPrice)){ // call
+            return strikePrice;
+        } else {
+            return underlyingPrice;
+        }
+    }
+    function _getOptionsPayback(uint8 optType,uint256 strikePrice,uint256 underlyingPrice)internal pure returns(uint256){
+        if ((optType == 0) == (strikePrice>underlyingPrice)){ // call
+            return 0;
+        } else {
+            return (optType == 0) ? underlyingPrice - strikePrice : strikePrice - underlyingPrice;
+        }
     }
     function _getOptionsById(uint256 id)internal view returns(OptionsInfo storage){
         require(id>0 && id <= allOptions.length,"option id is not exist");

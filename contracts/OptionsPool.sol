@@ -255,13 +255,7 @@ contract OptionsPool is OptionsBase,Operator {
         return totalOccupied;
     }
     function calBurnedOptionsCollateral(OptionsInfo memory option,uint256 burned,uint256 underlyingPrice)internal pure returns(uint256){
-        uint256 totalOccupied = 0;
-        if ((option.optType == 0) == (option.strikePrice>underlyingPrice)){ // call
-            totalOccupied = option.strikePrice.mul(burned);
-        } else {
-            totalOccupied = underlyingPrice.mul(burned);
-        }
-        return totalOccupied;
+        return _getOptionsWorth(option.optType,option.strikePrice,underlyingPrice).mul(burned);
     }
     function sumOptionPhases()internal view returns(uint256){
         uint256 totalOccupied = 0;
@@ -276,12 +270,7 @@ contract OptionsPool is OptionsBase,Operator {
         if (option.expiration<=now || option.amount == 0){
             return 0;
         }
-        uint256 totalOccupied = 0;
-        if ((option.optType == 0) == (option.strikePrice>underlyingPrice)){ // call
-            totalOccupied = option.strikePrice.mul(option.amount);
-        } else {
-            totalOccupied = underlyingPrice.mul(option.amount);
-        }
+        uint256 totalOccupied = _getOptionsWorth(option.optType,option.strikePrice,underlyingPrice).mul(option.amount);
         return totalOccupied;
     }
     function burnOptions(address from,uint256 id,uint256 amount)public onlyManager{
