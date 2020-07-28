@@ -24,7 +24,9 @@ contract('OptionsManagerV2', function (accounts){
         await fnx.approve(OptionsManger.address,10000000000000);
         await OptionsManger.addCollateral(fnx.address,10000000000000);
         await options.addExpiration(month);
-        fnx.approve(OptionsManger.address,1000000000000000);
+        let result = await OptionsManger.getTokenNetworth();
+        console.log("-----------------------------------",result.toString(10));
+//        fnx.approve(OptionsManger.address,1000000000000000);
 //        tx = await OptionsManger.buyOption(fnx.address,1000000000000000,20000000000,1,month,10000000000,0);
 //        console.log(tx)
        
@@ -34,7 +36,9 @@ contract('OptionsManagerV2', function (accounts){
 //        console.log(tx);
         tx = await OptionsManger.buyOption(collateral0,200000000000000,10000000000,1,month,10000000000,0,{value : 200000000000000});
 //        console.log(tx);
-        let result = await options.getOptionsById(1);
+        result = await OptionsManger.getTokenNetworth();
+        console.log("-----------------------------------",result.toString(10));
+        result = await options.getOptionsById(1);
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
         result = await options.getOptionsById(2);
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
@@ -59,6 +63,8 @@ contract('OptionsManagerV2', function (accounts){
         console.log(result.toString(10));
         result = await OptionsManger.getLeftCollateral();
         console.log(result.toString(10));
+        result = await OptionsManger.getTokenNetworth();
+        console.log("-----------------------------------",result.toString(10));
         await OptionsManger.redeemCollateral(100000000,collateral0);
         await OptionsManger.redeemCollateral(100000000,fnx.address);
     });

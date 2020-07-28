@@ -4,14 +4,14 @@ const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
 const OptionsPoolTest = artifacts.require("OptionsPoolTest");
 const imVolatility32 = artifacts.require("imVolatility32");
 const OptionsPrice = artifacts.require("OptionsPrice");
-const CompoundOracle = artifacts.require("TestCompoundOracle");
+const FNXOracle = artifacts.require("TestFNXOracle");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 contract('OptionsPoolTest', function (accounts){
     it('OptionsPoolTest add collateral', async function (){
         let optionsInstance = await OptionsPoolTest.deployed();
         let volInstance = await imVolatility32.deployed();
         let priceInstance = await OptionsPrice.deployed();
-        let oracle = await CompoundOracle.deployed();
+        let oracle = await FNXOracle.deployed();
         await testFunc.AddImpliedVolatility(volInstance,false);
         let OptionsManger = await OptionsManagerV2.deployed();
         await OptionsManger.addWhiteList(collateral0);
@@ -25,7 +25,7 @@ contract('OptionsPoolTest', function (accounts){
         await OptionsManger.addCollateral(collateral0,deposit,{value : deposit});
         let amount = 1000000000;
         let optionInfos = [];
-        for (var i=0;i<10;i++){
+        for (var i=0;i<1;i++){
             info1 = {
                 strikePrice : (9000+i*100)*1e8,
                 expiration : 24*3600,
@@ -48,12 +48,16 @@ contract('OptionsPoolTest', function (accounts){
             optionInfos.push(info1);
         }
         await setPhaseCollateral(optionsInstance);
+        
         for (var i=0;i<optionInfos.length;i++){
+            
             info1 = optionInfos[i];
             let sellAmount = info1.amount/100*info1.optionId;
-            OptionsManger.sellOption(info1.optionId,sellAmount);
+            console.log("sellOption :",info1.optionId,sellAmount)
+            await OptionsManger.sellOption(info1.optionId,sellAmount);
             info1.amount -= sellAmount;
         }
+        return;
         let totalCollateral = new BN(0);
         for (var i=0;i<optionInfos.length;i++){
             info1 = optionInfos[i];

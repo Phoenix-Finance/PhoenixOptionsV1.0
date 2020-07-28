@@ -2,6 +2,7 @@ pragma solidity ^0.4.26;
 import "./OptionsBase.sol";
 import "./modules/tuple.sol";
 import "./modules/Operator.sol";
+
 contract OptionsPool is OptionsBase,Operator {
 
     //calculate options Collateral occupied phases

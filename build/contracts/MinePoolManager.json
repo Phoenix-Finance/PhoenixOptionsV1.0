@@ -1,0 +1,4252 @@
+{
+  "contractName": "MinePoolManager",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getOptionsPriceAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "fnxMinePool",
+          "type": "address"
+        }
+      ],
+      "name": "setOptionsPriceAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "collateral",
+          "type": "address"
+        },
+        {
+          "name": "thousandths",
+          "type": "uint256"
+        }
+      ],
+      "name": "setCollateralMinerRate",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "settlement",
+          "type": "address"
+        },
+        {
+          "name": "thousandths",
+          "type": "uint256"
+        }
+      ],
+      "name": "setBuyerMinerRate",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "collateral",
+          "type": "address"
+        }
+      ],
+      "name": "getCollateralMinerRate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "settlement",
+          "type": "address"
+        }
+      ],
+      "name": "getBuyerMinerRate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"name\":\"collateral\",\"type\":\"address\"}],\"name\":\"getCollateralMinerRate\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"collateral\",\"type\":\"address\"},{\"name\":\"thousandths\",\"type\":\"uint256\"}],\"name\":\"setCollateralMinerRate\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getOptionsPriceAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"fnxMinePool\",\"type\":\"address\"}],\"name\":\"setOptionsPriceAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"settlement\",\"type\":\"address\"},{\"name\":\"thousandths\",\"type\":\"uint256\"}],\"name\":\"setBuyerMinerRate\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"settlement\",\"type\":\"address\"}],\"name\":\"getBuyerMinerRate\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/MinePoolManager.sol\":\"MinePoolManager\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/MinePoolManager.sol\":{\"keccak256\":\"0x8f374ee5e802f74401dfeba2e27eb8bf7f0c206a0a66bf502157a3904a797c5a\",\"urls\":[\"bzzr://b12bd82f29743a3dc190d3c0e6274cb5abf8f5fab5a71020c25cb1778b35fcc7\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFNXMinePool.sol\":{\"keccak256\":\"0xa7de143457f25de4190a4736f026e4e283ca018a01d9607b6c639b3e939bdfa6\",\"urls\":[\"bzzr://27b1a677dbad4ca43583e4562eebf85f29c50a97e16c182ed2d8200d42ac39b5\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x32e86cf1f96e3e879768e0d0440f35011232004420d3c4f84492f23664cba015\",\"urls\":[\"bzzr://5725cb4758935a4e7ebc5f963b0a46da11e6c81ac5dcedd214e425546e8b83a7\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/SafeMath.sol\":{\"keccak256\":\"0x44f8df48df2f75b64370eda34bb9c92382c212628e636334bab4826b0e5b79ee\",\"urls\":[\"bzzr://6313d900871e032efd69637e5c92278dac7db5505bab2f78075dbbfa048213a3\"]}},\"version\":1}",
+  "bytecode": "0x6080604081905260008054600160a060020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610529806100576000396000f3006080604052600436106100a35763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632c79414f81146100a8578063328ed62b146100db5780635ca4b73b14610101578063715018a6146101325780638da5cb5b146101475780638f32d59b1461015c578063a093e2d014610185578063a46e5d97146100db578063b2a30298146100a8578063f2fde38b146101a6575b600080fd5b3480156100b457600080fd5b506100c9600160a060020a03600435166101c7565b60408051918252519081900360200190f35b3480156100e757600080fd5b506100ff600160a060020a03600435166024356101e2565b005b34801561010d57600080fd5b5061011661024a565b60408051600160a060020a039092168252519081900360200190f35b34801561013e57600080fd5b506100ff610259565b34801561015357600080fd5b506101166102fc565b34801561016857600080fd5b5061017161030b565b604080519115158252519081900360200190f35b34801561019157600080fd5b506100ff600160a060020a036004351661031c565b3480156101b257600080fd5b506100ff600160a060020a0360043516610397565b600160a060020a031660009081526002602052604090205490565b6101ea61030b565b151561022e576040805160e560020a62461bcd02815260206004820181905260248201526000805160206104de833981519152604482015290519081900360640190fd5b600160a060020a03909116600090815260026020526040902055565b600154600160a060020a031690565b61026161030b565b15156102a5576040805160e560020a62461bcd02815260206004820181905260248201526000805160206104de833981519152604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b61032461030b565b1515610368576040805160e560020a62461bcd02815260206004820181905260248201526000805160206104de833981519152604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b61039f61030b565b15156103e3576040805160e560020a62461bcd02815260206004820181905260248201526000805160206104de833981519152604482015290519081900360640190fd5b6103ec816103ef565b50565b600160a060020a0381161515610475576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905556004f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a165627a7a72305820d0f98c375e330dd8c9bc2f85508fb8e2c66c27ab4d340152012f788b635210b20029",
+  "deployedBytecode": "0x6080604052600436106100a35763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632c79414f81146100a8578063328ed62b146100db5780635ca4b73b14610101578063715018a6146101325780638da5cb5b146101475780638f32d59b1461015c578063a093e2d014610185578063a46e5d97146100db578063b2a30298146100a8578063f2fde38b146101a6575b600080fd5b3480156100b457600080fd5b506100c9600160a060020a03600435166101c7565b60408051918252519081900360200190f35b3480156100e757600080fd5b506100ff600160a060020a03600435166024356101e2565b005b34801561010d57600080fd5b5061011661024a565b60408051600160a060020a039092168252519081900360200190f35b34801561013e57600080fd5b506100ff610259565b34801561015357600080fd5b506101166102fc565b34801561016857600080fd5b5061017161030b565b604080519115158252519081900360200190f35b34801561019157600080fd5b506100ff600160a060020a036004351661031c565b3480156101b257600080fd5b506100ff600160a060020a0360043516610397565b600160a060020a031660009081526002602052604090205490565b6101ea61030b565b151561022e576040805160e560020a62461bcd02815260206004820181905260248201526000805160206104de833981519152604482015290519081900360640190fd5b600160a060020a03909116600090815260026020526040902055565b600154600160a060020a031690565b61026161030b565b15156102a5576040805160e560020a62461bcd02815260206004820181905260248201526000805160206104de833981519152604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b61032461030b565b1515610368576040805160e560020a62461bcd02815260206004820181905260248201526000805160206104de833981519152604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b61039f61030b565b15156103e3576040805160e560020a62461bcd02815260206004820181905260248201526000805160206104de833981519152604482015290519081900360640190fd5b6103ec816103ef565b50565b600160a060020a0381161515610475576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905556004f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a165627a7a72305820d0f98c375e330dd8c9bc2f85508fb8e2c66c27ab4d340152012f788b635210b20029",
+  "sourceMap": "101:1558:5:-;;;;;659:6:26;:19;;-1:-1:-1;;;;;;659:19:26;668:10;659:19;;;;-1:-1:-1;;;;;726:6:26;;693:40;;659:6;;693:40;101:1558:5;;;;;;",
+  "deployedSourceMap": "101:1558:5:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;638:137;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;638:137:5;-1:-1:-1;;;;;638:137:5;;;;;;;;;;;;;;;;;;;;;327:152;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;327:152:5;-1:-1:-1;;;;;327:152:5;;;;;;;;;386:109:15;;8:9:-1;5:2;;;30:1;27;20:12;5:2;386:109:15;;;;;;;;-1:-1:-1;;;;;386:109:15;;;;;;;;;;;;;;1599:137:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1599:137:26;;;;816:77;;8:9:-1;5:2;;;30:1;27;20:12;5:2;816:77:26;;;;1167:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1167:90:26;;;;;;;;;;;;;;;;;;;;;;501:127:15;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;501:127:15;-1:-1:-1;;;;;501:127:15;;;;;1885:107:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1885:107:26;-1:-1:-1;;;;;1885:107:26;;;;;638:137:5;-1:-1:-1;;;;;736:31:5;710:7;736:31;;;:19;:31;;;;;;;638:137::o;327:152::-;1020:9:26;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:26;;;;;;;;;;;;;;;-1:-1:-1;;;;;426:31:5;;;;;;;:19;:31;;;;;:45;327:152::o;386:109:15:-;474:12;;-1:-1:-1;;;;;474:12:15;386:109;:::o;1599:137:26:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:26;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:26;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:26;;;1599:137::o;816:77::-;854:7;880:6;-1:-1:-1;;;;;880:6:26;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:26;1230:10;:20;;1167:90::o;501:127:15:-;1020:9:26;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:26;;;;;;;;;;;;;;;580:12:15;:40;;-1:-1:-1;;580:40:15;-1:-1:-1;;;;;580:40:15;;;;;;;;;;501:127::o;1885:107:26:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:26;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:26;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;:::-;1885:107;:::o;2093:225::-;-1:-1:-1;;;;;2166:22:26;;;;2158:73;;;;;-1:-1:-1;;;;;2158:73:26;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:26;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:26;-1:-1:-1;;;;;2294:17:26;;;;;;;;;;2093:225::o",
+  "source": "pragma solidity ^0.4.26;\r\nimport \"./interfaces/IFNXMinePool.sol\";\r\nimport \"./modules/SafeMath.sol\";\r\ncontract MinePoolManager is ImportFNXMinePool{\r\n    using SafeMath for uint256;\r\n    mapping(address=>uint256) collateralMinerRate;\r\n    mapping(address=>uint256) buyerMinerRate;\r\n    uint256 constant _calDecimal = 1000;\r\n    function setCollateralMinerRate(address collateral,uint256 thousandths) public onlyOwner{\r\n        collateralMinerRate[collateral] = thousandths;\r\n    }\r\n    function setBuyerMinerRate(address settlement,uint256 thousandths) public onlyOwner{\r\n        collateralMinerRate[settlement] = thousandths;\r\n    }\r\n    function getCollateralMinerRate(address collateral) public view returns(uint256){\r\n        return collateralMinerRate[collateral];\r\n    }\r\n    function getBuyerMinerRate(address settlement) public view returns(uint256){\r\n        return collateralMinerRate[settlement];\r\n    }\r\n    function addCollateralMiner(address acount,address collateral,uint256 amount) internal {\r\n        uint256 mineAmount = amount.mul(collateralMinerRate[collateral]).div(_calDecimal);\r\n        _FnxMinePool.mintMinerCoin(acount,mineAmount);\r\n    }\r\n    function burnCollateralMiner(address acount,address collateral,uint256 amount) internal {\r\n        uint256 mineAmount = amount.mul(collateralMinerRate[collateral]).div(_calDecimal);\r\n        _FnxMinePool.burnMinerCoin(acount,mineAmount);\r\n    }\r\n    function AddBuyerMineCoin(address acount,address settlement,uint256 amount) internal {\r\n        uint256 mineAmount = amount.mul(buyerMinerRate[settlement]).div(_calDecimal);\r\n        _FnxMinePool.addMinerBalance(acount,mineAmount);\r\n    }\r\n}",
+  "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\MinePoolManager.sol",
+  "ast": {
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/MinePoolManager.sol",
+    "exportedSymbols": {
+      "MinePoolManager": [
+        3237
+      ]
+    },
+    "id": 3238,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3075,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".26"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:5"
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFNXMinePool.sol",
+        "file": "./interfaces/IFNXMinePool.sol",
+        "id": 3076,
+        "nodeType": "ImportDirective",
+        "scope": 3238,
+        "sourceUnit": 9339,
+        "src": "26:39:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/SafeMath.sol",
+        "file": "./modules/SafeMath.sol",
+        "id": 3077,
+        "nodeType": "ImportDirective",
+        "scope": 3238,
+        "sourceUnit": 12173,
+        "src": "67:32:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3078,
+              "name": "ImportFNXMinePool",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 9338,
+              "src": "129:17:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportFNXMinePool_$9338",
+                "typeString": "contract ImportFNXMinePool"
+              }
+            },
+            "id": 3079,
+            "nodeType": "InheritanceSpecifier",
+            "src": "129:17:5"
+          }
+        ],
+        "contractDependencies": [
+          9338,
+          11962
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 3237,
+        "linearizedBaseContracts": [
+          3237,
+          9338,
+          11962
+        ],
+        "name": "MinePoolManager",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 3082,
+            "libraryName": {
+              "contractScope": null,
+              "id": 3080,
+              "name": "SafeMath",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 12172,
+              "src": "159:8:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_SafeMath_$12172",
+                "typeString": "library SafeMath"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "153:27:5",
+            "typeName": {
+              "id": 3081,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "172:7:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "constant": false,
+            "id": 3086,
+            "name": "collateralMinerRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 3237,
+            "src": "186:45:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 3085,
+              "keyType": {
+                "id": 3083,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "194:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "186:25:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 3084,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "203:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 3090,
+            "name": "buyerMinerRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 3237,
+            "src": "238:40:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 3089,
+              "keyType": {
+                "id": 3087,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "246:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "238:25:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 3088,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "255:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 3093,
+            "name": "_calDecimal",
+            "nodeType": "VariableDeclaration",
+            "scope": 3237,
+            "src": "285:35:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 3091,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "285:7:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31303030",
+              "id": 3092,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "316:4:5",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1000_by_1",
+                "typeString": "int_const 1000"
+              },
+              "value": "1000"
+            },
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3108,
+              "nodeType": "Block",
+              "src": "415:64:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 3106,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 3102,
+                        "name": "collateralMinerRate",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3086,
+                        "src": "426:19:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                          "typeString": "mapping(address => uint256)"
+                        }
+                      },
+                      "id": 3104,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "id": 3103,
+                        "name": "collateral",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3095,
+                        "src": "446:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "426:31:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 3105,
+                      "name": "thousandths",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3097,
+                      "src": "460:11:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "426:45:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 3107,
+                  "nodeType": "ExpressionStatement",
+                  "src": "426:45:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3109,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 3100,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 3099,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 11895,
+                  "src": "406:9:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "406:9:5"
+              }
+            ],
+            "name": "setCollateralMinerRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3098,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3095,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3109,
+                  "src": "359:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3094,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "359:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3097,
+                  "name": "thousandths",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3109,
+                  "src": "378:19:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3096,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "378:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "358:40:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3101,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "415:0:5"
+            },
+            "scope": 3237,
+            "src": "327:152:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3124,
+              "nodeType": "Block",
+              "src": "568:64:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 3122,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 3118,
+                        "name": "collateralMinerRate",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3086,
+                        "src": "579:19:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                          "typeString": "mapping(address => uint256)"
+                        }
+                      },
+                      "id": 3120,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "id": 3119,
+                        "name": "settlement",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3111,
+                        "src": "599:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "579:31:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 3121,
+                      "name": "thousandths",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3113,
+                      "src": "613:11:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "579:45:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 3123,
+                  "nodeType": "ExpressionStatement",
+                  "src": "579:45:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3125,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 3116,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 3115,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 11895,
+                  "src": "559:9:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "559:9:5"
+              }
+            ],
+            "name": "setBuyerMinerRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3114,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3111,
+                  "name": "settlement",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3125,
+                  "src": "512:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3110,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "512:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3113,
+                  "name": "thousandths",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3125,
+                  "src": "531:19:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3112,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "531:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "511:40:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3117,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "568:0:5"
+            },
+            "scope": 3237,
+            "src": "485:147:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3136,
+              "nodeType": "Block",
+              "src": "718:57:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "baseExpression": {
+                      "argumentTypes": null,
+                      "id": 3132,
+                      "name": "collateralMinerRate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3086,
+                      "src": "736:19:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                        "typeString": "mapping(address => uint256)"
+                      }
+                    },
+                    "id": 3134,
+                    "indexExpression": {
+                      "argumentTypes": null,
+                      "id": 3133,
+                      "name": "collateral",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3127,
+                      "src": "756:10:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "IndexAccess",
+                    "src": "736:31:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 3131,
+                  "id": 3135,
+                  "nodeType": "Return",
+                  "src": "729:38:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3137,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCollateralMinerRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3128,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3127,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3137,
+                  "src": "670:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3126,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "670:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "669:20:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3131,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3130,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3137,
+                  "src": "710:7:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3129,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "710:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "709:9:5"
+            },
+            "scope": 3237,
+            "src": "638:137:5",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3148,
+              "nodeType": "Block",
+              "src": "856:57:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "baseExpression": {
+                      "argumentTypes": null,
+                      "id": 3144,
+                      "name": "collateralMinerRate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3086,
+                      "src": "874:19:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                        "typeString": "mapping(address => uint256)"
+                      }
+                    },
+                    "id": 3146,
+                    "indexExpression": {
+                      "argumentTypes": null,
+                      "id": 3145,
+                      "name": "settlement",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3139,
+                      "src": "894:10:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "IndexAccess",
+                    "src": "874:31:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 3143,
+                  "id": 3147,
+                  "nodeType": "Return",
+                  "src": "867:38:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3149,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getBuyerMinerRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3140,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3139,
+                  "name": "settlement",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3149,
+                  "src": "808:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3138,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "808:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "807:20:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3143,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3142,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3149,
+                  "src": "848:7:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3141,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "848:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "847:9:5"
+            },
+            "scope": 3237,
+            "src": "781:132:5",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3177,
+              "nodeType": "Block",
+              "src": "1006:156:5",
+              "statements": [
+                {
+                  "assignments": [
+                    3159
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3159,
+                      "name": "mineAmount",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 3178,
+                      "src": "1017:18:5",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 3158,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1017:7:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3169,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3167,
+                        "name": "_calDecimal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3093,
+                        "src": "1086:11:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 3162,
+                              "name": "collateralMinerRate",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3086,
+                              "src": "1049:19:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                                "typeString": "mapping(address => uint256)"
+                              }
+                            },
+                            "id": 3164,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 3163,
+                              "name": "collateral",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3153,
+                              "src": "1069:10:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "1049:31:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 3160,
+                            "name": "amount",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3155,
+                            "src": "1038:6:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 3161,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "mul",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 12089,
+                          "src": "1038:10:5",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                            "typeString": "function (uint256,uint256) pure returns (uint256)"
+                          }
+                        },
+                        "id": 3165,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1038:43:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "id": 3166,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "div",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 12105,
+                      "src": "1038:47:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                        "typeString": "function (uint256,uint256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 3168,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1038:60:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1017:81:5"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3173,
+                        "name": "acount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3151,
+                        "src": "1136:6:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 3174,
+                        "name": "mineAmount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3159,
+                        "src": "1143:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3170,
+                        "name": "_FnxMinePool",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9313,
+                        "src": "1109:12:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$9309",
+                          "typeString": "contract IFNXMinePool"
+                        }
+                      },
+                      "id": 3172,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "mintMinerCoin",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 9294,
+                      "src": "1109:26:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint256) external"
+                      }
+                    },
+                    "id": 3175,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1109:45:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 3176,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1109:45:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3178,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addCollateralMiner",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3156,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3151,
+                  "name": "acount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3178,
+                  "src": "947:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3150,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "947:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3153,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3178,
+                  "src": "962:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3152,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "962:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3155,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3178,
+                  "src": "981:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3154,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "981:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "946:50:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3157,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1006:0:5"
+            },
+            "scope": 3237,
+            "src": "919:243:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3206,
+              "nodeType": "Block",
+              "src": "1256:156:5",
+              "statements": [
+                {
+                  "assignments": [
+                    3188
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3188,
+                      "name": "mineAmount",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 3207,
+                      "src": "1267:18:5",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 3187,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1267:7:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3198,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3196,
+                        "name": "_calDecimal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3093,
+                        "src": "1336:11:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 3191,
+                              "name": "collateralMinerRate",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3086,
+                              "src": "1299:19:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                                "typeString": "mapping(address => uint256)"
+                              }
+                            },
+                            "id": 3193,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 3192,
+                              "name": "collateral",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3182,
+                              "src": "1319:10:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "1299:31:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 3189,
+                            "name": "amount",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3184,
+                            "src": "1288:6:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 3190,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "mul",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 12089,
+                          "src": "1288:10:5",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                            "typeString": "function (uint256,uint256) pure returns (uint256)"
+                          }
+                        },
+                        "id": 3194,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1288:43:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "id": 3195,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "div",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 12105,
+                      "src": "1288:47:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                        "typeString": "function (uint256,uint256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 3197,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1288:60:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1267:81:5"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3202,
+                        "name": "acount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3180,
+                        "src": "1386:6:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 3203,
+                        "name": "mineAmount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3188,
+                        "src": "1393:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3199,
+                        "name": "_FnxMinePool",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9313,
+                        "src": "1359:12:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$9309",
+                          "typeString": "contract IFNXMinePool"
+                        }
+                      },
+                      "id": 3201,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "burnMinerCoin",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 9301,
+                      "src": "1359:26:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint256) external"
+                      }
+                    },
+                    "id": 3204,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1359:45:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 3205,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1359:45:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3207,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "burnCollateralMiner",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3185,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3180,
+                  "name": "acount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3207,
+                  "src": "1197:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3179,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1197:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3182,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3207,
+                  "src": "1212:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3181,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1212:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3184,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3207,
+                  "src": "1231:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3183,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1231:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1196:50:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3186,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1256:0:5"
+            },
+            "scope": 3237,
+            "src": "1168:244:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3235,
+              "nodeType": "Block",
+              "src": "1503:153:5",
+              "statements": [
+                {
+                  "assignments": [
+                    3217
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3217,
+                      "name": "mineAmount",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 3236,
+                      "src": "1514:18:5",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 3216,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1514:7:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3227,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3225,
+                        "name": "_calDecimal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3093,
+                        "src": "1578:11:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 3220,
+                              "name": "buyerMinerRate",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3090,
+                              "src": "1546:14:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                                "typeString": "mapping(address => uint256)"
+                              }
+                            },
+                            "id": 3222,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 3221,
+                              "name": "settlement",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3211,
+                              "src": "1561:10:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "1546:26:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 3218,
+                            "name": "amount",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3213,
+                            "src": "1535:6:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 3219,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "mul",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 12089,
+                          "src": "1535:10:5",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                            "typeString": "function (uint256,uint256) pure returns (uint256)"
+                          }
+                        },
+                        "id": 3223,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1535:38:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "id": 3224,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "div",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 12105,
+                      "src": "1535:42:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                        "typeString": "function (uint256,uint256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 3226,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1535:55:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1514:76:5"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3231,
+                        "name": "acount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3209,
+                        "src": "1630:6:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 3232,
+                        "name": "mineAmount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3217,
+                        "src": "1637:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3228,
+                        "name": "_FnxMinePool",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9313,
+                        "src": "1601:12:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$9309",
+                          "typeString": "contract IFNXMinePool"
+                        }
+                      },
+                      "id": 3230,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "addMinerBalance",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 9308,
+                      "src": "1601:28:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint256) external"
+                      }
+                    },
+                    "id": 3233,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1601:47:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 3234,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1601:47:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3236,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "AddBuyerMineCoin",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3214,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3209,
+                  "name": "acount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3236,
+                  "src": "1444:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3208,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1444:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3211,
+                  "name": "settlement",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3236,
+                  "src": "1459:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3210,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1459:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3213,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3236,
+                  "src": "1478:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3212,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1478:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1443:50:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3215,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1503:0:5"
+            },
+            "scope": 3237,
+            "src": "1418:238:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 3238,
+        "src": "101:1558:5"
+      }
+    ],
+    "src": "0:1659:5"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/MinePoolManager.sol",
+    "exportedSymbols": {
+      "MinePoolManager": [
+        3237
+      ]
+    },
+    "id": 3238,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3075,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".26"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:5"
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFNXMinePool.sol",
+        "file": "./interfaces/IFNXMinePool.sol",
+        "id": 3076,
+        "nodeType": "ImportDirective",
+        "scope": 3238,
+        "sourceUnit": 9339,
+        "src": "26:39:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/SafeMath.sol",
+        "file": "./modules/SafeMath.sol",
+        "id": 3077,
+        "nodeType": "ImportDirective",
+        "scope": 3238,
+        "sourceUnit": 12173,
+        "src": "67:32:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3078,
+              "name": "ImportFNXMinePool",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 9338,
+              "src": "129:17:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportFNXMinePool_$9338",
+                "typeString": "contract ImportFNXMinePool"
+              }
+            },
+            "id": 3079,
+            "nodeType": "InheritanceSpecifier",
+            "src": "129:17:5"
+          }
+        ],
+        "contractDependencies": [
+          9338,
+          11962
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 3237,
+        "linearizedBaseContracts": [
+          3237,
+          9338,
+          11962
+        ],
+        "name": "MinePoolManager",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 3082,
+            "libraryName": {
+              "contractScope": null,
+              "id": 3080,
+              "name": "SafeMath",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 12172,
+              "src": "159:8:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_SafeMath_$12172",
+                "typeString": "library SafeMath"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "153:27:5",
+            "typeName": {
+              "id": 3081,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "172:7:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "constant": false,
+            "id": 3086,
+            "name": "collateralMinerRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 3237,
+            "src": "186:45:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 3085,
+              "keyType": {
+                "id": 3083,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "194:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "186:25:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 3084,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "203:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 3090,
+            "name": "buyerMinerRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 3237,
+            "src": "238:40:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 3089,
+              "keyType": {
+                "id": 3087,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "246:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "238:25:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 3088,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "255:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": true,
+            "id": 3093,
+            "name": "_calDecimal",
+            "nodeType": "VariableDeclaration",
+            "scope": 3237,
+            "src": "285:35:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 3091,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "285:7:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31303030",
+              "id": 3092,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "316:4:5",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1000_by_1",
+                "typeString": "int_const 1000"
+              },
+              "value": "1000"
+            },
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3108,
+              "nodeType": "Block",
+              "src": "415:64:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 3106,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 3102,
+                        "name": "collateralMinerRate",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3086,
+                        "src": "426:19:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                          "typeString": "mapping(address => uint256)"
+                        }
+                      },
+                      "id": 3104,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "id": 3103,
+                        "name": "collateral",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3095,
+                        "src": "446:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "426:31:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 3105,
+                      "name": "thousandths",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3097,
+                      "src": "460:11:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "426:45:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 3107,
+                  "nodeType": "ExpressionStatement",
+                  "src": "426:45:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3109,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 3100,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 3099,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 11895,
+                  "src": "406:9:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "406:9:5"
+              }
+            ],
+            "name": "setCollateralMinerRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3098,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3095,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3109,
+                  "src": "359:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3094,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "359:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3097,
+                  "name": "thousandths",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3109,
+                  "src": "378:19:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3096,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "378:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "358:40:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3101,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "415:0:5"
+            },
+            "scope": 3237,
+            "src": "327:152:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3124,
+              "nodeType": "Block",
+              "src": "568:64:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 3122,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "baseExpression": {
+                        "argumentTypes": null,
+                        "id": 3118,
+                        "name": "collateralMinerRate",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3086,
+                        "src": "579:19:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                          "typeString": "mapping(address => uint256)"
+                        }
+                      },
+                      "id": 3120,
+                      "indexExpression": {
+                        "argumentTypes": null,
+                        "id": 3119,
+                        "name": "settlement",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3111,
+                        "src": "599:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "nodeType": "IndexAccess",
+                      "src": "579:31:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 3121,
+                      "name": "thousandths",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3113,
+                      "src": "613:11:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "579:45:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 3123,
+                  "nodeType": "ExpressionStatement",
+                  "src": "579:45:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3125,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 3116,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 3115,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 11895,
+                  "src": "559:9:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "559:9:5"
+              }
+            ],
+            "name": "setBuyerMinerRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3114,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3111,
+                  "name": "settlement",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3125,
+                  "src": "512:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3110,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "512:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3113,
+                  "name": "thousandths",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3125,
+                  "src": "531:19:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3112,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "531:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "511:40:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3117,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "568:0:5"
+            },
+            "scope": 3237,
+            "src": "485:147:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3136,
+              "nodeType": "Block",
+              "src": "718:57:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "baseExpression": {
+                      "argumentTypes": null,
+                      "id": 3132,
+                      "name": "collateralMinerRate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3086,
+                      "src": "736:19:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                        "typeString": "mapping(address => uint256)"
+                      }
+                    },
+                    "id": 3134,
+                    "indexExpression": {
+                      "argumentTypes": null,
+                      "id": 3133,
+                      "name": "collateral",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3127,
+                      "src": "756:10:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "IndexAccess",
+                    "src": "736:31:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 3131,
+                  "id": 3135,
+                  "nodeType": "Return",
+                  "src": "729:38:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3137,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getCollateralMinerRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3128,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3127,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3137,
+                  "src": "670:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3126,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "670:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "669:20:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3131,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3130,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3137,
+                  "src": "710:7:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3129,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "710:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "709:9:5"
+            },
+            "scope": 3237,
+            "src": "638:137:5",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3148,
+              "nodeType": "Block",
+              "src": "856:57:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "baseExpression": {
+                      "argumentTypes": null,
+                      "id": 3144,
+                      "name": "collateralMinerRate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3086,
+                      "src": "874:19:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                        "typeString": "mapping(address => uint256)"
+                      }
+                    },
+                    "id": 3146,
+                    "indexExpression": {
+                      "argumentTypes": null,
+                      "id": 3145,
+                      "name": "settlement",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3139,
+                      "src": "894:10:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "IndexAccess",
+                    "src": "874:31:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 3143,
+                  "id": 3147,
+                  "nodeType": "Return",
+                  "src": "867:38:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3149,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getBuyerMinerRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3140,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3139,
+                  "name": "settlement",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3149,
+                  "src": "808:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3138,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "808:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "807:20:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3143,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3142,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3149,
+                  "src": "848:7:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3141,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "848:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "847:9:5"
+            },
+            "scope": 3237,
+            "src": "781:132:5",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3177,
+              "nodeType": "Block",
+              "src": "1006:156:5",
+              "statements": [
+                {
+                  "assignments": [
+                    3159
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3159,
+                      "name": "mineAmount",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 3178,
+                      "src": "1017:18:5",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 3158,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1017:7:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3169,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3167,
+                        "name": "_calDecimal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3093,
+                        "src": "1086:11:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 3162,
+                              "name": "collateralMinerRate",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3086,
+                              "src": "1049:19:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                                "typeString": "mapping(address => uint256)"
+                              }
+                            },
+                            "id": 3164,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 3163,
+                              "name": "collateral",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3153,
+                              "src": "1069:10:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "1049:31:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 3160,
+                            "name": "amount",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3155,
+                            "src": "1038:6:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 3161,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "mul",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 12089,
+                          "src": "1038:10:5",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                            "typeString": "function (uint256,uint256) pure returns (uint256)"
+                          }
+                        },
+                        "id": 3165,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1038:43:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "id": 3166,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "div",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 12105,
+                      "src": "1038:47:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                        "typeString": "function (uint256,uint256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 3168,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1038:60:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1017:81:5"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3173,
+                        "name": "acount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3151,
+                        "src": "1136:6:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 3174,
+                        "name": "mineAmount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3159,
+                        "src": "1143:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3170,
+                        "name": "_FnxMinePool",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9313,
+                        "src": "1109:12:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$9309",
+                          "typeString": "contract IFNXMinePool"
+                        }
+                      },
+                      "id": 3172,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "mintMinerCoin",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 9294,
+                      "src": "1109:26:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint256) external"
+                      }
+                    },
+                    "id": 3175,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1109:45:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 3176,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1109:45:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3178,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addCollateralMiner",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3156,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3151,
+                  "name": "acount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3178,
+                  "src": "947:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3150,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "947:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3153,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3178,
+                  "src": "962:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3152,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "962:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3155,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3178,
+                  "src": "981:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3154,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "981:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "946:50:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3157,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1006:0:5"
+            },
+            "scope": 3237,
+            "src": "919:243:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3206,
+              "nodeType": "Block",
+              "src": "1256:156:5",
+              "statements": [
+                {
+                  "assignments": [
+                    3188
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3188,
+                      "name": "mineAmount",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 3207,
+                      "src": "1267:18:5",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 3187,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1267:7:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3198,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3196,
+                        "name": "_calDecimal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3093,
+                        "src": "1336:11:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 3191,
+                              "name": "collateralMinerRate",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3086,
+                              "src": "1299:19:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                                "typeString": "mapping(address => uint256)"
+                              }
+                            },
+                            "id": 3193,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 3192,
+                              "name": "collateral",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3182,
+                              "src": "1319:10:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "1299:31:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 3189,
+                            "name": "amount",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3184,
+                            "src": "1288:6:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 3190,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "mul",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 12089,
+                          "src": "1288:10:5",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                            "typeString": "function (uint256,uint256) pure returns (uint256)"
+                          }
+                        },
+                        "id": 3194,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1288:43:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "id": 3195,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "div",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 12105,
+                      "src": "1288:47:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                        "typeString": "function (uint256,uint256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 3197,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1288:60:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1267:81:5"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3202,
+                        "name": "acount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3180,
+                        "src": "1386:6:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 3203,
+                        "name": "mineAmount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3188,
+                        "src": "1393:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3199,
+                        "name": "_FnxMinePool",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9313,
+                        "src": "1359:12:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$9309",
+                          "typeString": "contract IFNXMinePool"
+                        }
+                      },
+                      "id": 3201,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "burnMinerCoin",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 9301,
+                      "src": "1359:26:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint256) external"
+                      }
+                    },
+                    "id": 3204,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1359:45:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 3205,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1359:45:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3207,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "burnCollateralMiner",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3185,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3180,
+                  "name": "acount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3207,
+                  "src": "1197:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3179,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1197:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3182,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3207,
+                  "src": "1212:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3181,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1212:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3184,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3207,
+                  "src": "1231:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3183,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1231:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1196:50:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3186,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1256:0:5"
+            },
+            "scope": 3237,
+            "src": "1168:244:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3235,
+              "nodeType": "Block",
+              "src": "1503:153:5",
+              "statements": [
+                {
+                  "assignments": [
+                    3217
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3217,
+                      "name": "mineAmount",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 3236,
+                      "src": "1514:18:5",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 3216,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1514:7:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3227,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3225,
+                        "name": "_calDecimal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3093,
+                        "src": "1578:11:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "baseExpression": {
+                              "argumentTypes": null,
+                              "id": 3220,
+                              "name": "buyerMinerRate",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3090,
+                              "src": "1546:14:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                                "typeString": "mapping(address => uint256)"
+                              }
+                            },
+                            "id": 3222,
+                            "indexExpression": {
+                              "argumentTypes": null,
+                              "id": 3221,
+                              "name": "settlement",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 3211,
+                              "src": "1561:10:5",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            },
+                            "isConstant": false,
+                            "isLValue": true,
+                            "isPure": false,
+                            "lValueRequested": false,
+                            "nodeType": "IndexAccess",
+                            "src": "1546:26:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 3218,
+                            "name": "amount",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3213,
+                            "src": "1535:6:5",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 3219,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "mul",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 12089,
+                          "src": "1535:10:5",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                            "typeString": "function (uint256,uint256) pure returns (uint256)"
+                          }
+                        },
+                        "id": 3223,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1535:38:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "id": 3224,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "div",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 12105,
+                      "src": "1535:42:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                        "typeString": "function (uint256,uint256) pure returns (uint256)"
+                      }
+                    },
+                    "id": 3226,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1535:55:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1514:76:5"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 3231,
+                        "name": "acount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3209,
+                        "src": "1630:6:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 3232,
+                        "name": "mineAmount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3217,
+                        "src": "1637:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 3228,
+                        "name": "_FnxMinePool",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 9313,
+                        "src": "1601:12:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$9309",
+                          "typeString": "contract IFNXMinePool"
+                        }
+                      },
+                      "id": 3230,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "addMinerBalance",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 9308,
+                      "src": "1601:28:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,uint256) external"
+                      }
+                    },
+                    "id": 3233,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1601:47:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 3234,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1601:47:5"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3236,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "AddBuyerMineCoin",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3214,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3209,
+                  "name": "acount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3236,
+                  "src": "1444:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3208,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1444:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3211,
+                  "name": "settlement",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3236,
+                  "src": "1459:18:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3210,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1459:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3213,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3236,
+                  "src": "1478:14:5",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3212,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1478:7:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1443:50:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3215,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1503:0:5"
+            },
+            "scope": 3237,
+            "src": "1418:238:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 3238,
+        "src": "101:1558:5"
+      }
+    ],
+    "src": "0:1659:5"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.26+commit.4563c3fc.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.1.0",
+  "updatedAt": "2020-07-28T14:35:12.754Z",
+  "devdoc": {
+    "methods": {
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    }
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
