@@ -1,6 +1,7 @@
 pragma solidity ^0.4.26;
 import "./interfaces/IERC20.sol";
 import "./modules/SafeMath.sol";
+
 contract SharedCoin is IERC20  {
     using SafeMath for uint256;
     uint8 public constant decimals = 18;
@@ -221,14 +222,4 @@ contract SharedCoin is IERC20  {
         emit Approval(owner, spender, amount);
     }
 
-    /**
-     * @dev Destroys `amount` tokens from `account`.`amount` is then deducted
-     * from the caller's allowance.
-     *
-     * See {_burn} and {_approve}.
-     */
-    function _burnFrom(address account, uint256 amount) internal {
-        _burn(account, amount);
-        _approve(account, msg.sender, _allowances[account][msg.sender].sub(amount, "ERC20: burn amount exceeds allowance"));
-    }
 }

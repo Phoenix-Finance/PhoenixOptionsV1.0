@@ -8,8 +8,8 @@ import "./modules/TransactionFee.sol";
 import "./interfaces/IOptionsPool.sol";
 import "./interfaces/IFNXOracle.sol";
 import "./modules/Operator.sol";
-import "./MinePoolManager.sol";
-contract CollateralPool is ReentrancyGuard,TransactionFee,FPOCoin,MinePoolManager,ImportOracle,ImportOptionsPool,Operator {
+
+contract CollateralPool is ReentrancyGuard,TransactionFee,FPOCoin,ImportOracle,ImportOptionsPool,Operator {
     using SafeMath for uint256;
     fraction public collateralRate = fraction(3, 1);
     //token net worth
@@ -88,7 +88,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,FPOCoin,MinePoolManage
     }
     //calculate token
     function redeemCollateral(uint256 tokenAmount,address collateral)public {
-        require(isEligibleAddress(collateral) , "settlement is unsupported token");
+        require(checkAddressRedeemOut(collateral) , "settlement is unsupported token");
         require(balances[msg.sender]+lockedBalances[msg.sender]>=tokenAmount,"SCoin balance is insufficient!");
         if (tokenAmount == 0){
             return;
@@ -398,7 +398,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,FPOCoin,MinePoolManage
         } 
     }
     function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
-        require(isEligibleAddress(settlement) , "settlement is unsupported token");
+        require(checkAddressPayIn(settlement) , "settlement is unsupported token");
         uint256 colAmount = 0;
         if (settlement == address(0)){
             colAmount = msg.value;

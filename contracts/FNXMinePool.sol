@@ -1,160 +1,174 @@
 pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
 import "./modules/Managerable.sol";
+import "./modules/AddressWhiteList.sol";
 import "./interfaces/IERC20.sol";
-contract FNXMinePool is Managerable {
+contract FNXMinePool is Managerable,AddressWhiteList {
     using SafeMath for uint256;
-    mapping(address=>uint256) public minerBalances;
-    mapping(address=>uint256) internal minerOrigins;
+    uint256 constant calDecimals = 1e18;
+    mapping(address=>mapping(address=>uint256)) internal minerBalances;
+    mapping(address=>mapping(address=>uint256)) internal minerOrigins;
+    mapping(address=>uint256) internal totalMinedWorth;
+    mapping(address=>uint256) internal totalMinedCoin;
+    mapping(address=>uint256) internal latestSettleTime;
+    mapping(address=>uint256) internal mineAmount;
+    mapping(address=>uint256) internal mineInterval;
 
-    mapping (address => uint256) public balances;
-    uint256 internal _totalSupply = 0;
-    uint256 internal calDecimals = 1e18;
-
-    IERC20 internal minerCoin;
-    uint256 internal totalMinedWorth;
-    uint256 internal totalMinedCoin;
-    uint256 internal latestSettleTime;
-    uint256 internal mineAmount;
-    uint256 internal mineInterval;
-
-    constructor (address _minerCoin) public{
-        minerCoin = IERC20(_minerCoin);
+    uint256 constant opBurnCoin = 1;
+    uint256 constant opMintCoin = 2;
+    uint256 constant opTransferCoin = 3;
+    constructor () public{
     }
+    function()public payable{
 
+    }
+    event RedeemMineCoin(address indexed from, address indexed to, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
-    function getTotalMined()public view returns(uint256){
-        return totalMinedCoin;
+    function getTotalMined(address mineCoin)public view returns(uint256){
+        return totalMinedCoin[mineCoin];
     }
-    function getMineInfo()public view returns(uint256,uint256){
-        return (mineAmount,mineInterval);
+    function getMineInfo(address mineCoin)public view returns(uint256,uint256){
+        return (mineAmount[mineCoin],mineInterval[mineCoin]);
     }
-    function getMinerTokenBalance(address account)public view returns(uint256){
-        return balances[account];
-    }
-    function getMinerCoinAddress()public view returns(address){
-        return address(minerCoin);
-    }
-    function setMinerCoinAddress(address _minerCoin)public onlyOwner{
-        minerCoin = IERC20(_minerCoin);
-    }
-    function getMinerTokenTotalSuply()public view returns(uint256){
-        return _totalSupply;
-    }
-    function getMinerBalance(address account)public view returns(uint256){
-        uint256 totalBalance = minerBalances[account];
-        if (_totalSupply > 0 && balances[account]>0){
-            uint256 tokenNetWorth = _getTokenNetWorth();
-            totalBalance= totalBalance.add(_settlement(account,balances[account],tokenNetWorth));
+
+    function getMinerBalance(address account,address mineCoin)public view returns(uint256){
+        uint256 totalBalance = minerBalances[mineCoin][account];
+        uint256 _totalSupply = totalSupply();
+        uint256 balance = balanceOf(account);
+        if (_totalSupply > 0 && balance>0){
+            uint256 tokenNetWorth = _getTokenNetWorth(mineCoin);
+            totalBalance= totalBalance.add(_settlement(mineCoin,account,balance,tokenNetWorth));
         }
         return totalBalance;
     }
+    function setMineCoinInfo(address mineCoin,uint256 _mineAmount,uint256 _mineInterval)public onlyOwner {
+        _mineSettlement(mineCoin);
+        mineAmount[mineCoin] = _mineAmount;
+        mineInterval[mineCoin] = _mineInterval;
+        addWhiteList(mineCoin);
+    }
+    function transferMinerCoin(address account,address recieptor,uint256 amount) public onlyManager {
+        _mineSettlementAll();
+        _transferMinerCoin(account,recieptor,amount);
+    }
     function mintMinerCoin(address account,uint256 amount) public onlyManager {
-        _mineSettlement();
+        _mineSettlementAll();
         _mintMinerCoin(account,amount);
     }
     function burnMinerCoin(address account,uint256 amount) public onlyManager {
-        _mineSettlement();
+        _mineSettlementAll();
         _burnMinerCoin(account,amount);
     }
-    function addMinerBalance(address account,uint256 amount) public onlyManager {
-        minerBalances[account] = minerBalances[account].add(amount);
-        totalMinedCoin = totalMinedCoin.add(amount);
+    function addMinerBalance(address mineCoin,address account,uint256 amount) public onlyManager {
+        minerBalances[mineCoin][account] = minerBalances[mineCoin][account].add(amount);
+        totalMinedCoin[mineCoin] = totalMinedCoin[mineCoin].add(amount);
     }
-    function setMineAmount(uint256 _mineAmount)public onlyOwner {
-        _mineSettlement();
-        mineAmount = _mineAmount;
+    function setMineAmount(address mineCoin,uint256 _mineAmount)public onlyOwner {
+        _mineSettlement(mineCoin);
+        mineAmount[mineCoin] = _mineAmount;
     }
-    function setMineInterval(uint256 _mineInterval)public onlyOwner {
-        _mineSettlement();
-        mineInterval = _mineInterval;
+    function setMineInterval(address mineCoin,uint256 _mineInterval)public onlyOwner {
+        _mineSettlement(mineCoin);
+        mineInterval[mineCoin] = _mineInterval;
     }
-    function redeemMinerCoin(address account,uint256 amount)public {
-        _mineSettlement();
-        _settlementAllCoin(account);
-        require(minerBalances[account]>=amount,"miner balance is insufficient");
-        minerBalances[account] = minerBalances[account].sub(amount);
-        minerCoin.transfer(account,amount);
+    function redeemMinerCoin(address mineCoin,uint256 amount)public {
+        _mineSettlement(mineCoin);
+        _settlementAllCoin(mineCoin,msg.sender);
+        uint256 minerAmount = minerBalances[mineCoin][msg.sender];
+        require(minerAmount>=amount,"miner balance is insufficient");
+        minerBalances[mineCoin][msg.sender] = minerAmount.sub(amount);
+        _redeemMineCoin(mineCoin,msg.sender,amount);
     }
-    function _mineSettlement()internal{
-        if (_totalSupply > 0){
-            uint256 latestMined = mineAmount.mul(now-latestSettleTime).div(mineInterval);
-            totalMinedWorth = totalMinedWorth.add(latestMined*calDecimals);
-            totalMinedCoin = totalMinedCoin.add(latestMined);
+    function _redeemMineCoin(address mineCoin,address recieptor,uint256 amount)internal {
+        if (amount == 0){
+            return;
         }
-        latestSettleTime = now.div(mineInterval)*mineInterval;
+        if (mineCoin == address(0)){
+            recieptor.transfer(amount);
+        }else{
+            IERC20 minerToken = IERC20(mineCoin);
+            minerToken.transfer(recieptor,amount);
+        }
+        emit RedeemMineCoin(recieptor,mineCoin,amount);
+    }
+    function _mineSettlementAll()internal{
+        uint256 addrLen = whiteList.length;
+        for(uint256 i=0;i<addrLen;i++){
+            _mineSettlement(whiteList[i]);
+        }
+    }
+    function _mineSettlement(address mineCoin)internal{
+        uint256 _mineInterval = mineInterval[mineCoin];
+        uint256 _totalSupply = totalSupply();
+        if (_totalSupply > 0 && _mineInterval>0){
+            uint256 _mineAmount = mineAmount[mineCoin];
+            uint256 latestMined = _mineAmount.mul(now-latestSettleTime[mineCoin]).div(_mineInterval);
+            totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(latestMined*calDecimals);
+            totalMinedCoin[mineCoin] = totalMinedCoin[mineCoin].add(latestMined);
+        }
+        if (_mineInterval>0){
+            latestSettleTime[mineCoin] = now.div(_mineInterval)*_mineInterval;
+        }else{
+            latestSettleTime[mineCoin] = now;
+        }
+    }
+    function _transferMinerCoin(address account,address recipient,uint256 amount)internal{
+        uint256 addrLen = whiteList.length;
+        for(uint256 i=0;i<addrLen;i++){
+            settleMinerBalance(whiteList[i],account,recipient,amount,opTransferCoin);
+        }
     }
     function _mintMinerCoin(address account,uint256 amount)internal{
-        if (_totalSupply > 0){
-            uint256 tokenNetWorth = _getTokenNetWorth();
-            minerBalances[account] = minerBalances[account].add(_settlement(account,balances[account],tokenNetWorth));
-            totalMinedWorth = totalMinedWorth.add(tokenNetWorth.mul(amount));
-            minerOrigins[account] = tokenNetWorth;
+        uint256 addrLen = whiteList.length;
+        for(uint256 i=0;i<addrLen;i++){
+            settleMinerBalance(whiteList[i],account,address(0),amount,opMintCoin);
         }
-        _mint(account,amount);
     }
-    function _settlementAllCoin(address account)internal{
-        if (_totalSupply > 0 && balances[account]>0){
-            uint256 tokenNetWorth = _getTokenNetWorth();
-            minerBalances[account] = minerBalances[account].add(_settlement(account,balances[account],tokenNetWorth));
-            minerOrigins[account] = tokenNetWorth;
-        }
+    function _settlementAllCoin(address mineCoin,address account)internal{
+        settleMinerBalance(mineCoin,account,address(0),0,0);
     }
     function _burnMinerCoin(address account,uint256 amount)internal{
-        if (_totalSupply > 0){
-            uint256 tokenNetWorth = _getTokenNetWorth();
-            _burn(account,amount);
-            minerBalances[account] = minerBalances[account].add(_settlement(account,amount,tokenNetWorth));
-            totalMinedWorth = totalMinedWorth.sub(tokenNetWorth.mul(amount));
+        uint256 addrLen = whiteList.length;
+        for(uint256 i=0;i<addrLen;i++){
+            settleMinerBalance(whiteList[i],account,address(0),amount,opBurnCoin);
         }
     }
-    function _settlement(address account,uint256 amount,uint256 tokenNetWorth )internal view returns (uint256) {
-        uint256 origin = minerOrigins[account];
+    function settleMinerBalance(address mineCoin,address account,address recipient,uint256 amount,uint256 operators)internal{
+        uint256 _totalSupply = totalSupply();
+        if (_totalSupply > 0){
+            uint256 tokenNetWorth = _getTokenNetWorth(mineCoin);
+            if(amount>0){
+                minerBalances[mineCoin][account] = minerBalances[mineCoin][account].add(
+                        _settlement(mineCoin,account,balanceOf(account),tokenNetWorth));
+                if (operators == opBurnCoin){
+                    totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].sub(tokenNetWorth.mul(amount));
+                }else if (operators==opMintCoin){
+                    totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(tokenNetWorth.mul(amount));
+                }else if (operators==opTransferCoin){
+                    minerOrigins[mineCoin][recipient] = tokenNetWorth;
+                }
+            }
+            minerOrigins[mineCoin][account] = tokenNetWorth;
+        }
+    }
+    function _settlement(address mineCoin,address account,uint256 amount,uint256 tokenNetWorth)internal view returns (uint256) {
+        uint256 origin = minerOrigins[mineCoin][account];
         require(tokenNetWorth>=origin,"error: tokenNetWorth logic error!");
         return amount.mul(tokenNetWorth-origin).div(calDecimals);
     }
-    function _getTokenNetWorth()internal view returns (uint256) {
+    function _getTokenNetWorth(address mineCoin)internal view returns (uint256) {
+        uint256 _totalSupply = totalSupply();
         if (_totalSupply > 0){
-            totalMinedWorth.div(_totalSupply);
+            totalMinedWorth[mineCoin].div(_totalSupply);
         }
         return 0;
     }
-    function _mint(address account, uint256 amount) internal {
-        require(account != address(0), "mint to the zero address");
-        _totalSupply = _totalSupply.add(amount);
-        _addBalance(account,amount);
-        emit Transfer(address(0), account, amount);
+    function totalSupply()internal view returns(uint256){
+        IERC20 FPOCoin = IERC20(getManager());
+        return FPOCoin.totalSupply();
     }
-        /**
-    * @dev Destroys `amount` tokens from `account`, reducing the
-    * total supply.
-    *
-    * Emits a {Transfer} event with `to` set to the zero address.
-    *
-    * Requirements
-    *
-    * - `account` cannot be the zero address.
-    * - `account` must have at least `amount` tokens.
-    */
-    function _burn(address account, uint256 amount) internal {
-        require(account != address(0), "burn from the zero address");
-        _subBalance(account,amount);
-        _totalSupply = _totalSupply.sub(amount);
-        emit Transfer(account, address(0), amount);
-    }
-    /**
-     * @dev add `recipient`'s balance to iterable mapping balances.
-     */
-    function _addBalance(address recipient, uint256 amount) internal {
-        require(recipient != address(0), "transfer to the zero address");
-
-        balances[recipient] = balances[recipient].add(amount);
-    }
-        /**
-     * @dev add `recipient`'s balance to iterable mapping balances.
-     */
-    function _subBalance(address recipient, uint256 amount) internal {
-        require(recipient != address(0), "transfer to the zero address");
-        balances[recipient] = balances[recipient].sub(amount);
+    function balanceOf(address account)internal view returns(uint256){
+        IERC20 FPOCoin = IERC20(getManager());
+        return FPOCoin.balanceOf(account);
     }
 }
