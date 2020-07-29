@@ -34,13 +34,13 @@ contract OptionsPool is OptionsBase,Operator {
         return (OptionsPhaseTimes[index],OptionsPhasePrices[index]);
     }
     //index,lastOption,lastBurned
-    function setPhaseOccupiedCollateral(uint256 calInfo) public onlyOperator {
+    function setPhaseOccupiedCollateral(uint256 calInfo) public onlyOperatorIndex(0) {
         (uint256 totalOccupied,uint256 beginOption,bool success) = calculatePhaseOccupiedCollateral(calInfo);
         if (success){
             setCollateralPhase(calInfo,totalOccupied,beginOption);
         }
     }
-    function setCollateralPhase(uint256 calInfo,uint256 totalOccupied,uint256 beginOption) public onlyOperator{
+    function setCollateralPhase(uint256 calInfo,uint256 totalOccupied,uint256 beginOption) public onlyOperatorIndex(0){
         if (beginOption > optionPhaseInfo[0]){
             optionPhaseInfo[0] = beginOption;
         }
@@ -137,7 +137,7 @@ contract OptionsPool is OptionsBase,Operator {
             }
             if (timeValue>0){
                 tempValue = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                timeValue = optionEx.tokenTimePrice.mul((timeValue)).mul(info.amount).div(optionEx.fullPrice);
+                timeValue = optionEx.tokenTimePrice.mul(timeValue).mul(info.amount).div(optionEx.fullPrice);
                 totalSharedPayment[tempValue] = totalSharedPayment[tempValue].add(timeValue);
             }
         }
@@ -172,11 +172,11 @@ contract OptionsPool is OptionsBase,Operator {
                 continue;
             }
             OptionsInfoEx storage optionEx = optionExtraMap[burnInfo[0]];
-            uint256 nowValue = _optionsPrice.getOptionsPrice_iv(info.strikePrice,info.strikePrice,expiration-now,optionEx.ivNumerator,
+            uint256 preValue = _optionsPrice.getOptionsPrice_iv(info.strikePrice,info.strikePrice,expiration-preTime,optionEx.ivNumerator,
                 optionEx.ivDenominator,info.optType);
-            nowValue = optionEx.tokenTimePrice.mul(nowValue).mul(burnInfo[1]).div(optionEx.fullPrice);
+            preValue = optionEx.tokenTimePrice.mul(preValue).mul(burnInfo[1]).div(optionEx.fullPrice);
             uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-            totalSharedPayment[index] = totalSharedPayment[index].add(nowValue);
+            totalSharedPayment[index] = totalSharedPayment[index].add(preValue);
         }     
         return totalSharedPayment;
     }
@@ -214,30 +214,70 @@ contract OptionsPool is OptionsBase,Operator {
             begin = optionPhaseInfo_Share[0];
         }
         uint256[] memory prices = getUnderlyingPrices();
-        int256[] memory OptionsFallBalances = _calRangeOptionsFall(begin,end,tuple64.getValue0(calInfo),whiteList,prices);
+        int256[] memory OptionsFallBalances = _calRangeOptionsFall(begin,end,tuple64.getValue0(calInfo),tuple64.getValue2(calInfo),whiteList,prices);
         uint256 whiteListLen = whiteList.length;
         for (uint256 index = 0;index<whiteListLen;index++){
             OptionsFallBalances[index] = OptionsFallBalances[index]/(int256(_oracle.getPrice(whiteList[index])));
         }
         return (OptionsFallBalances,prices);
     }
-    function _calRangeOptionsFall(uint256 begin,uint256 lastOption,uint256 index,address[] memory whiteList,uint256[] memory prices)
+    function _calRangeOptionsFall(uint256 begin,uint256 lastOption,uint256 index,uint256 lastburn,address[] memory whiteList,uint256[] memory prices)
                  internal view returns(int256[] memory){
         uint256[] memory lastPrice = OptionsPhasePrices[index];
-        int256[] memory OptionsFallBalances = new int256[](whiteList.length);
+        uint256 preTime = OptionsPhaseTimes[index];
+        int256[] memory OptionsFallBalances = _calBurnedOptionsFall(begin,lastOption,lastburn,preTime,lastPrice,whiteList);
 
         for (;begin<lastOption;begin++){
-            index = _getEligibleUnderlyingIndex(allOptions[begin].underlying);
-            uint256 curValue = calOptionsCollateral(allOptions[begin],prices[index]);
-            uint256 prePrice = begin < optionPhaseInfo_Share[1] ? lastPrice[index] : optionExtraMap[begin].underlyingPrice;
-            uint256 preValue = calOptionsCollateral(allOptions[begin],prePrice);
+            OptionsInfo storage info = allOptions[begin];
+            if(info.expiration<preTime || info.amount == 0){
+                continue;
+            }
+            index = _getEligibleUnderlyingIndex(info.underlying);
+            uint256 preValue = _calPretimeCallateralFall(info,info.amount,lastPrice[index]);
+            uint256 curValue = _calCurtimeCallateralFall(info,info.amount,prices[index]);
             if (preValue != curValue){
                 OptionsInfoEx storage optionEx = optionExtraMap[begin];
                 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                OptionsFallBalances[index] += int256(curValue) - int256(preValue);
+                OptionsFallBalances[index] += SafeMath.toInt256(preValue) - SafeMath.toInt256(curValue);
             }
         }
         return OptionsFallBalances;
+    }
+    function _calBurnedOptionsFall(uint256 beginIndex,uint256 endIndex,uint256 lastburn,uint256 preTime,
+                uint256[] memory lastPrice,address[] memory whiteList)
+                internal view returns(int256[] memory){
+        int256[] memory OptionsFallBalances = new int256[](whiteList.length);
+        for (uint256 i = optionPhaseInfo_Share[2];i<lastburn;i++){
+            uint256[2] memory burnInfo = burnedOptions[i];
+            if(burnInfo[0]<beginIndex || burnInfo[0] >=endIndex){
+                continue;
+            }
+            OptionsInfo storage info = allOptions[burnInfo[0]];
+            if(info.expiration<preTime || burnInfo[1] == 0){
+                continue;
+            }
+            uint256 index = _getEligibleUnderlyingIndex(info.underlying);
+            uint256 preValue = _calPretimeCallateralFall(info,burnInfo[1],lastPrice[index]);
+            if (preValue != 0){
+                OptionsInfoEx storage optionEx = optionExtraMap[burnInfo[0]];
+                index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
+                OptionsFallBalances[index] += SafeMath.toInt256(preValue);
+            }
+        }     
+        return OptionsFallBalances;
+    }
+    function _calPretimeCallateralFall(OptionsInfo storage info,uint256 prePrice,uint256 amount) internal view returns(uint256){
+        if(info.optionID<=optionPhaseInfo_Share[1]){
+            return _getOptionsPayback(info.optType,info.strikePrice,prePrice).mul(amount);
+        }else{
+            return 0;
+        }
+    }
+    function _calCurtimeCallateralFall(OptionsInfo storage info,uint256 curPrice,uint256 amount) internal view returns(uint256){
+        if (info.expiration<=now || amount == 0){
+            return 0;
+        }
+        return _getOptionsPayback(info.optType,info.strikePrice,curPrice).mul(amount);
     }
     function getTotalOccupiedCollateral() public view returns (uint256) {
         uint256 totalOccupied = sumOptionPhases();
@@ -284,6 +324,7 @@ contract OptionsPool is OptionsBase,Operator {
     function burnOptions(address from,uint256 id,uint256 amount)public onlyManager{
         OptionsInfo storage info = _getOptionsById(id);
         checkEligible(info);
+        checkBurnable(info.optionID);
         checkOwner(info,from);
         checkSufficient(info,amount);
         info.amount = info.amount.sub(amount);

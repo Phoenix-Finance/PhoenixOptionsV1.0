@@ -24,7 +24,6 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         address      settlement;
         uint256      tokenTimePrice;
         uint256      fullPrice;
-        uint256      underlyingPrice;   //bug : underlying price
         uint256      ivNumerator;
         uint256      ivDenominator;
     }
@@ -36,6 +35,8 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     mapping(address=>uint256[]) public optionsBalances;
     //expiration whitelist
     uint256[] public expirationList;
+    uint256 public burnTimeLimit = 1 hours;
+
 
     event CreateOption(address indexed owner,uint256 indexed optionID,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,uint256 amount);
     event BurnOption(address indexed owner,uint256 indexed optionID,uint amount);
@@ -46,6 +47,12 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         setVolatilityAddress(ivAddress);
         expirationList =  [1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
         underlyingAssets = [1,2];
+    }
+    function getBurnTimeLimit()public view returns(uint256){
+        return burnTimeLimit;
+    }
+    function setBurnTimeLimit(uint256 timeLimit)public onlyOwner{
+        burnTimeLimit = timeLimit;
     }
     function getUserOptionsID(address user)public view returns(uint256[]){
         return optionsBalances[user];
@@ -114,7 +121,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         return prices;
     }
 
-    function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 underlyingPrice,
+    function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 optionPrice,
                 uint256 amount) onlyManager public {
         uint256 optionID = allOptions.length;
         uint8 optType = uint8(tuple64.getValue0(type_ly_exp));
@@ -122,16 +129,16 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         allOptions.push(OptionsInfo(uint64(optionID+1),from,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount));
         optionsBalances[from].push(optionID+1);
         OptionsInfo memory info = allOptions[optionID];
-        setOptionsExtra(info,settlement,underlyingPrice);
+        setOptionsExtra(info,settlement,optionPrice);
         emit CreateOption(from,optionID+1,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount);
     }
-    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 underlyingPrice) internal{
+    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice) internal{
         uint256 strikePrice = info.strikePrice;
         uint256 expiration = info.expiration - now;
         (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,strikePrice);
         uint256 fullPrice = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration,ivNumerator,ivDenominator,info.optType);
-        uint256 tokenTimePrice = fullPrice.div(_oracle.getPrice(settlement));
-        optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,fullPrice,underlyingPrice,ivNumerator,ivDenominator);
+        uint256 tokenTimePrice = optionPrice.div(_oracle.getPrice(settlement));
+        optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,fullPrice,ivNumerator,ivDenominator);
     }
     function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){
         OptionsInfo memory info = _getOptionsById(optionsId);
@@ -161,6 +168,9 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     function _getOptionsById(uint256 id)internal view returns(OptionsInfo storage){
         require(id>0 && id <= allOptions.length,"option id is not exist");
         return allOptions[id-1];
+    }
+    function checkBurnable(uint256 optionID)internal view{
+        require(optionExtraMap[optionID-1].createdTime+burnTimeLimit<now,"option lock limitation is not expired");
     }
     function checkEligible(OptionsInfo memory info)internal view{
         require(info.expiration>now,"option is expired");

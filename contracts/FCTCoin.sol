@@ -1,11 +1,12 @@
 pragma solidity ^0.4.26;
 import "./SharedCoin.sol";
 import "./modules/SafeMath.sol";
-import "./MinePoolManager.sol";
-contract FPOCoin is SharedCoin,MinePoolManager {
+import "./modules/Managerable.sol";
+import "./interfaces/IFNXMinePool.sol";
+contract FCTCoin is SharedCoin,ImportFNXMinePool,Managerable {
     using SafeMath for uint256;
-    string public name = "SharedCoin";
-    string public symbol = "SCoin";
+    string public name = "FCT coin";
+    string public symbol = "FCT";
     
     uint256 internal _totalLockedWorth = 0;
     mapping (address => uint256) public lockedBalances;
@@ -13,28 +14,30 @@ contract FPOCoin is SharedCoin,MinePoolManager {
 
     event AddLocked(address indexed owner, uint256 amount,uint256 worth);
     event BurnLocked(address indexed owner, uint256 amount,uint256 worth);
-    constructor () public{
+    constructor (address minePoolAddr) public{
+        setFNXMinePoolAddress(minePoolAddr);
     }
-
+    function getTotalLockedWorth() public view returns (uint256) {
+        return _totalLockedWorth;
+    }
+    function lockedBalanceOf(address account) public view returns (uint256) {
+        return lockedBalances[account];
+    }
+    function lockedWorthOf(address account) public view returns (uint256) {
+        return lockedTotalWorth[account];
+    }
     function getLockedBalance(address account) public view returns (uint256,uint256) {
         return (lockedBalances[account],lockedTotalWorth[account]);
     }
-    /**
-    * @dev Destroys `amount` tokens from `account`, reducing the
-    * total supply.
-    *
-    * Emits a {Transfer} event with `to` set to the zero address.
-    *
-    * Requirements
-    *
-    * - `account` cannot be the zero address.
-    * - `account` must have at least `amount` tokens.
-    */
-    function _burnLocked(address account, uint256 amount) internal{
+    function addMinerBalance(address account,uint256 amount) public onlyManager{
+        _FnxMinePool.addMinerBalance(account,amount);
+    }
+    function burnLocked(address account, uint256 amount) public onlyManager{
         uint256 lockedAmount = lockedBalances[account];
+        require(amount<=lockedAmount,"burnLocked: balance is insufficient");
         if(lockedAmount>0){
             uint256 lockedWorth = lockedTotalWorth[account];
-            if (amount >= lockedAmount){
+            if (amount == lockedAmount){
                 _subLockBalance(account,lockedAmount,lockedWorth);
             }else{
                 uint256 burnWorth = amount.mul(lockedWorth.div(lockedAmount));
@@ -42,7 +45,7 @@ contract FPOCoin is SharedCoin,MinePoolManager {
             }
         }
     }
-    function addlockBalance(address account, uint256 amount,uint256 lockedWorth)internal {
+    function addlockBalance(address account, uint256 amount,uint256 lockedWorth)public onlyManager {
         _FnxMinePool.burnMinerCoin(account,amount);
         _subBalance(account,amount);
         _addLockBalance(account,amount,lockedWorth);
@@ -57,26 +60,26 @@ contract FPOCoin is SharedCoin,MinePoolManager {
         _FnxMinePool.transferMinerCoin(sender,recipient,amount);
         return SharedCoin.transferFrom(sender,recipient,amount);
     }
-    function _burn(address account, uint256 amount) internal {
+    function burn(address account, uint256 amount) public onlyManager {
         require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
         _FnxMinePool.burnMinerCoin(account,amount);
         SharedCoin._burn(account,amount);
     }
-    function _mint(address account, uint256 amount) internal {
+    function mint(address account, uint256 amount) public onlyManager {
         require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
         _FnxMinePool.mintMinerCoin(account,amount);
         SharedCoin._mint(account,amount);
     }
     function _addLockBalance(address account, uint256 amount,uint256 lockedWorth)internal {
-        lockedBalances[account]+= amount;
-        lockedTotalWorth[account]+= lockedWorth;
-        _totalLockedWorth -= lockedWorth;
+        lockedBalances[account]= lockedBalances[account].add(amount);
+        lockedTotalWorth[account]= lockedTotalWorth[account].add(lockedWorth);
+        _totalLockedWorth = _totalLockedWorth.add(lockedWorth);
         emit AddLocked(account, amount,lockedWorth);
     }
     function _subLockBalance(address account,uint256 amount,uint256 lockedWorth)internal {
-        lockedBalances[account]-= amount;
-        lockedTotalWorth[account]-= lockedWorth;
-        _totalLockedWorth -= lockedWorth;
+        lockedBalances[account]= lockedBalances[account].sub(amount);
+        lockedTotalWorth[account]= lockedTotalWorth[account].sub(lockedWorth);
+        _totalLockedWorth = _totalLockedWorth.sub(lockedWorth);
         emit BurnLocked(account, amount,lockedWorth);
     }
 }

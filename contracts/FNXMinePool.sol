@@ -2,8 +2,9 @@ pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
 import "./modules/Managerable.sol";
 import "./modules/AddressWhiteList.sol";
+import "./modules/ReentrancyGuard.sol";
 import "./interfaces/IERC20.sol";
-contract FNXMinePool is Managerable,AddressWhiteList {
+contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     using SafeMath for uint256;
     uint256 constant calDecimals = 1e18;
     mapping(address=>mapping(address=>uint256)) internal minerBalances;
@@ -13,7 +14,11 @@ contract FNXMinePool is Managerable,AddressWhiteList {
     mapping(address=>uint256) internal latestSettleTime;
     mapping(address=>uint256) internal mineAmount;
     mapping(address=>uint256) internal mineInterval;
-
+    struct buyingMine {
+        address mineCoin;
+        uint256 mineAmount;
+    }
+    buyingMine[] internal buyingMineInfo;
     uint256 constant opBurnCoin = 1;
     uint256 constant opMintCoin = 2;
     uint256 constant opTransferCoin = 3;
@@ -23,8 +28,14 @@ contract FNXMinePool is Managerable,AddressWhiteList {
 
     }
     event RedeemMineCoin(address indexed from, address indexed to, uint256 value);
-    event Transfer(address indexed from, address indexed to, uint256 value);
     function getTotalMined(address mineCoin)public view returns(uint256){
+        uint256 _totalSupply = totalSupply();
+        uint256 _mineInterval = mineInterval[mineCoin];
+        if (_totalSupply > 0 && _mineInterval>0){
+            uint256 _mineAmount = mineAmount[mineCoin];
+            uint256 latestMined = _mineAmount.mul(now-latestSettleTime[mineCoin]).div(_mineInterval);
+            return totalMinedCoin[mineCoin] + latestMined;
+        }
         return totalMinedCoin[mineCoin];
     }
     function getMineInfo(address mineCoin)public view returns(uint256,uint256){
@@ -59,9 +70,14 @@ contract FNXMinePool is Managerable,AddressWhiteList {
         _mineSettlementAll();
         _burnMinerCoin(account,amount);
     }
-    function addMinerBalance(address mineCoin,address account,uint256 amount) public onlyManager {
-        minerBalances[mineCoin][account] = minerBalances[mineCoin][account].add(amount);
-        totalMinedCoin[mineCoin] = totalMinedCoin[mineCoin].add(amount);
+    function addMinerBalance(address account,uint256 amount) public onlyManager {
+        uint256 len = buyingMineInfo.length;
+        for (uint256 i=0;i<len;i++){
+            buyingMine memory info = buyingMineInfo[i];
+            uint256 _mineAmount = info.mineAmount.mul(amount).div(calDecimals);
+            minerBalances[info.mineCoin][account] = minerBalances[info.mineCoin][account].add(_mineAmount);
+            totalMinedCoin[info.mineCoin] = totalMinedCoin[info.mineCoin].add(_mineAmount);
+        }
     }
     function setMineAmount(address mineCoin,uint256 _mineAmount)public onlyOwner {
         _mineSettlement(mineCoin);
@@ -71,7 +87,7 @@ contract FNXMinePool is Managerable,AddressWhiteList {
         _mineSettlement(mineCoin);
         mineInterval[mineCoin] = _mineInterval;
     }
-    function redeemMinerCoin(address mineCoin,uint256 amount)public {
+    function redeemMinerCoin(address mineCoin,uint256 amount)public nonReentrant notHalted {
         _mineSettlement(mineCoin);
         _settlementAllCoin(mineCoin,msg.sender);
         uint256 minerAmount = minerBalances[mineCoin][msg.sender];
@@ -164,11 +180,11 @@ contract FNXMinePool is Managerable,AddressWhiteList {
         return 0;
     }
     function totalSupply()internal view returns(uint256){
-        IERC20 FPOCoin = IERC20(getManager());
-        return FPOCoin.totalSupply();
+        IERC20 _FCTCoin = IERC20(getManager());
+        return _FCTCoin.totalSupply();
     }
     function balanceOf(address account)internal view returns(uint256){
-        IERC20 FPOCoin = IERC20(getManager());
-        return FPOCoin.balanceOf(account);
+        IERC20 _FCTCoin = IERC20(getManager());
+        return _FCTCoin.balanceOf(account);
     }
 }
