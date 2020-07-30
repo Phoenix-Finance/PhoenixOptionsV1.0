@@ -14,11 +14,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     mapping(address=>uint256) internal latestSettleTime;
     mapping(address=>uint256) internal mineAmount;
     mapping(address=>uint256) internal mineInterval;
-    struct buyingMine {
-        address mineCoin;
-        uint256 mineAmount;
-    }
-    buyingMine[] internal buyingMineInfo;
+    mapping(address=>uint256) internal buyingMineMap;
     uint256 constant opBurnCoin = 1;
     uint256 constant opMintCoin = 2;
     uint256 constant opTransferCoin = 3;
@@ -62,6 +58,23 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         mineInterval[mineCoin] = _mineInterval;
         addWhiteList(mineCoin);
     }
+    function setBuyingMineInfo(address mineCoin,uint256 _mineAmount)public onlyOwner {
+        buyingMineMap[mineCoin] = _mineAmount;
+        addWhiteList(mineCoin);
+    }
+    function getBuyingMineInfo(address mineCoin)public view returns(uint256){
+        return buyingMineMap[mineCoin];
+    }
+    function getBuyingMineInfoAll()public view returns(address[],uint256[]){
+        uint256 len = whiteList.length;
+        address[] memory mineCoins = new address[](len);
+        uint256[] memory mineNums = new uint256[](len);
+        for (uint256 i=0;i<len;i++){
+            mineCoins[i] = whiteList[i];
+            mineNums[i] = buyingMineMap[mineCoins[i]];
+        }
+        return (mineCoins,mineNums);
+    }
     function transferMinerCoin(address account,address recieptor,uint256 amount) public onlyManager {
         _mineSettlementAll();
         _transferMinerCoin(account,recieptor,amount);
@@ -77,12 +90,13 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         emit BurnMiner(account,amount);
     }
     function addMinerBalance(address account,uint256 amount) public onlyManager {
-        uint256 len = buyingMineInfo.length;
+        uint256 len = whiteList.length;
         for (uint256 i=0;i<len;i++){
-            buyingMine memory info = buyingMineInfo[i];
-            uint256 _mineAmount = info.mineAmount.mul(amount).div(calDecimals);
-            minerBalances[info.mineCoin][account] = minerBalances[info.mineCoin][account].add(_mineAmount);
-            totalMinedCoin[info.mineCoin] = totalMinedCoin[info.mineCoin].add(_mineAmount);
+            address addr = whiteList[i];
+            uint256 mineNum = buyingMineMap[addr];
+            uint256 _mineAmount = mineNum.mul(amount).div(calDecimals);
+            minerBalances[addr][account] = minerBalances[addr][account].add(_mineAmount);
+            totalMinedCoin[addr] = totalMinedCoin[addr].add(_mineAmount);
         }
     }
     function setMineAmount(address mineCoin,uint256 _mineAmount)public onlyOwner {

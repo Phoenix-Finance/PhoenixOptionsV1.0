@@ -44,7 +44,8 @@ contract OptionsManagerV2 is CollateralPool,ImportOptionsPrice {
             _transferPayback(msg.sender,settlement,settlementAmount);
         }
         (uint256 id,,,,,,)=_optionsPool.getLatestOption();
-        emit BuyOption(msg.sender,settlement,id,optionPrice,allPay,amount); 
+        _FPTCoin.addMinerBalance(msg.sender,allPay/1e8);
+        emit BuyOption(msg.sender,settlement,id,optionPrice,allPay/1e8,amount); 
     }
     function sellOption(uint256 optionsId,uint256 amount) nonReentrant notHalted public{
         require(amount>0 , "sell amount is zero!");

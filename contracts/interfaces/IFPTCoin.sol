@@ -11,6 +11,7 @@ interface IFPTCoin {
     function burnLocked(address account, uint256 amount) external;
     function addlockBalance(address account, uint256 amount,uint256 lockedWorth)external; 
     function getTotalLockedWorth() external view returns (uint256);
+    function addMinerBalance(address account,uint256 amount) external;
 }
 contract ImportIFPTCoin is Ownable{
     IFPTCoin internal _FPTCoin;
