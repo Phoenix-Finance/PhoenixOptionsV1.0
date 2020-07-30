@@ -22,6 +22,10 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     uint256 constant opBurnCoin = 1;
     uint256 constant opMintCoin = 2;
     uint256 constant opTransferCoin = 3;
+    event DebugEvent(uint256 value0,uint256 value1,uint256 value2,uint256 value3);
+    event MintMiner(address indexed account,uint256 amount);
+    event BurnMiner(address indexed account,uint256 amount);
+    event TranserMiner(address indexed from, address indexed to, uint256 amount);
     constructor () public{
     }
     function()public payable{
@@ -47,7 +51,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         uint256 _totalSupply = totalSupply();
         uint256 balance = balanceOf(account);
         if (_totalSupply > 0 && balance>0){
-            uint256 tokenNetWorth = _getTokenNetWorth(mineCoin);
+            uint256 tokenNetWorth = _getCurrentTokenNetWorth(mineCoin);
             totalBalance= totalBalance.add(_settlement(mineCoin,account,balance,tokenNetWorth));
         }
         return totalBalance;
@@ -65,10 +69,12 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     function mintMinerCoin(address account,uint256 amount) public onlyManager {
         _mineSettlementAll();
         _mintMinerCoin(account,amount);
+        emit MintMiner(account,amount);
     }
     function burnMinerCoin(address account,uint256 amount) public onlyManager {
         _mineSettlementAll();
         _burnMinerCoin(account,amount);
+        emit BurnMiner(account,amount);
     }
     function addMinerBalance(address account,uint256 amount) public onlyManager {
         uint256 len = buyingMineInfo.length;
@@ -118,7 +124,8 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         uint256 _totalSupply = totalSupply();
         if (_totalSupply > 0 && _mineInterval>0){
             uint256 _mineAmount = mineAmount[mineCoin];
-            uint256 latestMined = _mineAmount.mul(now-latestSettleTime[mineCoin]).div(_mineInterval);
+            uint256 mintTime = (now-latestSettleTime[mineCoin]).div(_mineInterval);
+            uint256 latestMined = _mineAmount.mul(mintTime);
             totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(latestMined*calDecimals);
             totalMinedCoin[mineCoin] = totalMinedCoin[mineCoin].add(latestMined);
         }
@@ -133,6 +140,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         for(uint256 i=0;i<addrLen;i++){
             settleMinerBalance(whiteList[i],account,recipient,amount,opTransferCoin);
         }
+        emit TranserMiner(account,recipient,amount);
     }
     function _mintMinerCoin(address account,uint256 amount)internal{
         uint256 addrLen = whiteList.length;
@@ -172,19 +180,30 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         require(tokenNetWorth>=origin,"error: tokenNetWorth logic error!");
         return amount.mul(tokenNetWorth-origin).div(calDecimals);
     }
+    function _getCurrentTokenNetWorth(address mineCoin)internal view returns (uint256) {
+        uint256 _mineInterval = mineInterval[mineCoin];
+        uint256 _totalSupply = totalSupply();
+        if (_totalSupply > 0 && _mineInterval>0){
+            uint256 _mineAmount = mineAmount[mineCoin];
+            uint256 mintTime = (now-latestSettleTime[mineCoin]).div(_mineInterval);
+            uint256 latestMined = _mineAmount.mul(mintTime);
+            return (totalMinedWorth[mineCoin].add(latestMined*calDecimals)).div(_totalSupply);
+        }
+        return 0;
+    }
     function _getTokenNetWorth(address mineCoin)internal view returns (uint256) {
         uint256 _totalSupply = totalSupply();
         if (_totalSupply > 0){
-            totalMinedWorth[mineCoin].div(_totalSupply);
+            return totalMinedWorth[mineCoin].div(_totalSupply);
         }
         return 0;
     }
     function totalSupply()internal view returns(uint256){
-        IERC20 _FCTCoin = IERC20(getManager());
-        return _FCTCoin.totalSupply();
+        IERC20 _FPTCoin = IERC20(getManager());
+        return _FPTCoin.totalSupply();
     }
     function balanceOf(address account)internal view returns(uint256){
-        IERC20 _FCTCoin = IERC20(getManager());
-        return _FCTCoin.balanceOf(account);
+        IERC20 _FPTCoin = IERC20(getManager());
+        return _FPTCoin.balanceOf(account);
     }
 }

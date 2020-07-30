@@ -3,6 +3,7 @@ const OptionsPool = artifacts.require("OptionsPoolTest");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 const OptionsPrice = artifacts.require("OptionsPrice");
 let FNXCoin = artifacts.require("FNXCoin");
+let FNXMinePool = artifacts.require("FNXMinePool");
 let month = 30*60*60*24;
 let collateral0 = "0x0000000000000000000000000000000000000000";
 const BN = require("bn.js");
@@ -26,6 +27,12 @@ contract('OptionsManagerV2', function (accounts){
         await options.addUnderlyingAsset(1);
         await OptionsManger.addWhiteList(fnx.address); 
         await options.addExpiration(month);      
+        let minePool = await FNXMinePool.deployed();
+        let mineInfo = await minePool.getMineInfo(collateral0);
+        console.log (mineInfo);
+        mineInfo = await minePool.getMineInfo(fnx.address);
+        console.log (mineInfo);
+        return;
         for (var i=0;i<10;i++){
             for (var j=0;j<10;j++){
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});

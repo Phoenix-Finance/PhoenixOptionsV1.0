@@ -106,7 +106,9 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         OptionsInfo storage info = allOptions[len-1];
         return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);
     }
-
+    function getOptionsLimitTimeById(uint256 optionsId)public view returns(uint256){
+        return optionExtraMap[optionsId-1].createdTime + burnTimeLimit;
+    }
     function getOptionsById(uint256 optionsId)public view returns(uint256,address,uint8,uint32,uint256,uint256,uint256){
         OptionsInfo storage info = _getOptionsById(optionsId);
         return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);

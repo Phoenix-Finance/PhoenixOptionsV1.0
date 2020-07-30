@@ -6,11 +6,11 @@ import "./interfaces/IOptionsPrice.sol";
 import "./modules/tuple.sol";
 contract OptionsManagerV2 is CollateralPool,ImportOptionsPrice {
     using SafeMath for uint256;
-    constructor (address oracleAddr,address optionsPriceAddr,address optionsPoolAddr,address FCTCoinAddr) public{
+    constructor (address oracleAddr,address optionsPriceAddr,address optionsPoolAddr,address FPTCoinAddr) public{
         setOracleAddress(oracleAddr);
         setOptionsPriceAddress(optionsPriceAddr);
         setOptionsPoolAddress(optionsPoolAddr);
-        setFCTCoinAddress(FCTCoinAddr);
+        setFPTCoinAddress(FPTCoinAddr);
     }
 
     event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);

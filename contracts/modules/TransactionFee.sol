@@ -31,11 +31,11 @@ contract TransactionFee is AddressWhiteList {
     uint256 constant addColFee = 3;
     uint256 constant redeemColFee = 4;
     constructor() internal{
-        FeeRates.push(fraction(3, 1000));
-        FeeRates.push(fraction(3, 1000));
-        FeeRates.push(fraction(3, 1000));
-        FeeRates.push(fraction(3, 1000));
-        FeeRates.push(fraction(3, 1000));
+        FeeRates.push(fraction(0, 1000));
+        FeeRates.push(fraction(50, 1000));
+        FeeRates.push(fraction(0, 1000));
+        FeeRates.push(fraction(0, 1000));
+        FeeRates.push(fraction(0, 1000));
     }
     function getFeeRate(uint256 feeType)public view returns (uint256,uint256){
         fraction storage feeRate = _getFeeRate(feeType);
@@ -82,8 +82,10 @@ contract TransactionFee is AddressWhiteList {
         }
     }
     function _addTransactionFee(address settleMent,uint256 amount) internal {
-        feeBalances[settleMent] = feeBalances[settleMent].add(amount);
-        emit AddFee(settleMent,amount);
+        if (amount > 0){
+            feeBalances[settleMent] = feeBalances[settleMent].add(amount);
+            emit AddFee(settleMent,amount);
+        }
     }
     function calculateFee(uint256 feeType,uint256 amount)public view returns (uint256){
         fraction storage feeRate = _getFeeRate(feeType);

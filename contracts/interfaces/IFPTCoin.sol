@@ -1,6 +1,6 @@
 pragma solidity ^0.4.26;
 import "../modules/Ownable.sol";
-interface IFCTCoin {
+interface IFPTCoin {
     function lockedBalanceOf(address account) external view returns (uint256);
     function lockedWorthOf(address account) external view returns (uint256);
     function getLockedBalance(address account) external view returns (uint256,uint256);
@@ -12,12 +12,12 @@ interface IFCTCoin {
     function addlockBalance(address account, uint256 amount,uint256 lockedWorth)external; 
     function getTotalLockedWorth() external view returns (uint256);
 }
-contract ImportIFCTCoin is Ownable{
-    IFCTCoin internal _FCTCoin;
-    function getFCTCoinAddress() public view returns(address){
-        return address(_FCTCoin);
+contract ImportIFPTCoin is Ownable{
+    IFPTCoin internal _FPTCoin;
+    function getFPTCoinAddress() public view returns(address){
+        return address(_FPTCoin);
     }
-    function setFCTCoinAddress(address FctCoinAddr)public onlyOwner{
-        _FCTCoin = IFCTCoin(FctCoinAddr);
+    function setFPTCoinAddress(address FPTCoinAddr)public onlyOwner{
+        _FPTCoin = IFPTCoin(FPTCoinAddr);
     }
 }

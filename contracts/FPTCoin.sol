@@ -3,10 +3,10 @@ import "./SharedCoin.sol";
 import "./modules/SafeMath.sol";
 import "./modules/Managerable.sol";
 import "./interfaces/IFNXMinePool.sol";
-contract FCTCoin is SharedCoin,ImportFNXMinePool,Managerable {
+contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
     using SafeMath for uint256;
-    string public name = "FCT coin";
-    string public symbol = "FCT";
+    string public name = "finnexus pool token";
+    string public symbol = "FPT";
     
     uint256 internal _totalLockedWorth = 0;
     mapping (address => uint256) public lockedBalances;

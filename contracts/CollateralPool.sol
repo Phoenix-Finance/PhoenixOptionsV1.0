@@ -6,10 +6,10 @@ import "./modules/underlyingAssets.sol";
 import "./modules/TransactionFee.sol";
 import "./interfaces/IOptionsPool.sol";
 import "./interfaces/IFNXOracle.sol";
-import "./interfaces/IFCTCoin.sol";
+import "./interfaces/IFPTCoin.sol";
 import "./modules/Operator.sol";
 
-contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportOracle,ImportOptionsPool,Operator {
+contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOracle,ImportOptionsPool,Operator {
     using SafeMath for uint256;
     fraction public collateralRate = fraction(5, 1);
     //token net worth
@@ -65,10 +65,10 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportO
         }
     }
     function getUserTotalWorth(address account)public view returns (uint256){
-        return getTokenNetworth().mul(_FCTCoin.balanceOf(account)).add(_FCTCoin.lockedWorthOf(account));
+        return getTokenNetworth().mul(_FPTCoin.balanceOf(account)).add(_FPTCoin.lockedWorthOf(account));
     }
     function getTokenNetworth() public view returns (uint256){
-        uint256 _totalSupply = _FCTCoin.totalSupply();
+        uint256 _totalSupply = _FPTCoin.totalSupply();
         if (_totalSupply == 0){
             return 1e8;
         }
@@ -88,13 +88,13 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportO
         userInputCollateral[msg.sender][collateral] = userInputCollateral[msg.sender][collateral].add(amount);
         netWorthBalances[collateral] = netWorthBalances[collateral].add(amount);
         emit AddCollateral(msg.sender,collateral,amount,mintAmount);
-        _FCTCoin.mint(msg.sender,mintAmount);
+        _FPTCoin.mint(msg.sender,mintAmount);
     }
     //calculate token
     function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted public {
         require(checkAddressRedeemOut(collateral) , "settlement is unsupported token");
-        uint256 lockedAmount = _FCTCoin.lockedBalanceOf(msg.sender);
-        require(_FCTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");
+        uint256 lockedAmount = _FPTCoin.lockedBalanceOf(msg.sender);
+        require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");
         if (tokenAmount == 0){
             return;
         }
@@ -109,7 +109,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportO
             }
             (uint256 newRedeem,uint256 newWorth) = _redeemCollateral(tokenAmount,leftColateral);
             if(newRedeem>0){
-                _FCTCoin.burn(msg.sender, newRedeem);
+                _FPTCoin.burn(msg.sender, newRedeem);
                 burnAmount += newRedeem;
                 redeemWorth += newWorth;
             }
@@ -120,7 +120,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportO
         if (leftColateral == 0){
             return;
         }
-        (uint256 lockedAmount,uint256 lockedWorth) = _FCTCoin.getLockedBalance(msg.sender);
+        (uint256 lockedAmount,uint256 lockedWorth) = _FPTCoin.getLockedBalance(msg.sender);
         if (lockedAmount == 0){
             return (0,0);
         }
@@ -139,7 +139,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportO
             redeemWorth = lockedBurn.mul(lockedPrice);
         }
         if (lockedBurn > 0){
-            _FCTCoin.burnLocked(msg.sender,lockedBurn);
+            _FPTCoin.burnLocked(msg.sender,lockedBurn);
             return (lockedBurn,redeemWorth);
         }
         return (0,0);
@@ -151,7 +151,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportO
             uint256 newRedeem = leftColateral.div(tokenNetWorth);
             uint256 newWorth = newRedeem.mul(tokenNetWorth);
             uint256 locked = leftAmount - newRedeem;
-            _FCTCoin.addlockBalance(msg.sender,locked,locked.mul(tokenNetWorth));
+            _FPTCoin.addlockBalance(msg.sender,locked,locked.mul(tokenNetWorth));
             return (newRedeem,newWorth);
         }
         return (leftAmount,leftWorth);
@@ -272,7 +272,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportO
         return calculateCollateral(totalOccupied);
     }
     function getUnlockedCollateral()public view returns(uint256){
-        return getTotalCollateral().sub(_FCTCoin.getTotalLockedWorth());
+        return getTotalCollateral().sub(_FPTCoin.getTotalLockedWorth());
     }
     function getTotalCollateral()public view returns(uint256){
         uint256 totalNum = 0;
@@ -300,6 +300,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFCTCoin,ImportO
         }
         for (i=0;i<whiteLen;i++){
             uint256 _payBack = balances[i].mul(worth).div(totalPrice);
+            addr = whiteList[i];
             netWorthBalances[addr] = balances[i].sub(_payBack);
             _transferPaybackAndFee(msg.sender,addr,_payBack,feeType);
         } 
