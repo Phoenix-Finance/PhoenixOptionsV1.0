@@ -65,25 +65,14 @@ contract OptionsPool is OptionsBase,Operator {
         return (totalOccupied,newFirstOption,true);
     }
     function _calculateOccupiedCollateral(uint256 begin,uint256 end)internal view returns(uint256,uint256){
-        uint256 newFirstOption = optionPhaseInfo[0];
-        bool bfirstPhase = begin <= newFirstOption;
-        if (bfirstPhase) {
-            begin = newFirstOption;
-        }
+        uint256 newFirstOption;
+        (begin,newFirstOption) = _getFirstOption(begin,optionPhaseInfo[0],end,now);
         uint256[] memory prices = getUnderlyingPrices();
         uint256 totalOccupied = 0;
         for (;begin<end;begin++){
             uint256 index = _getEligibleUnderlyingIndex(allOptions[begin].underlying);
             uint256 value = calOptionsCollateral(allOptions[begin],prices[index]);
-            if (bfirstPhase && value > 0){
-                newFirstOption = begin;
-                bfirstPhase = false;
-            }
             totalOccupied = totalOccupied.add(value);
-        }
-        //all options in this phase are empty;
-        if (bfirstPhase){
-            newFirstOption = begin;
         }
         return (totalOccupied,newFirstOption);
     }
@@ -91,7 +80,7 @@ contract OptionsPool is OptionsBase,Operator {
         if (firstOption > optionPhaseInfo_Share[0]){
             optionPhaseInfo_Share[0] = firstOption;
         }
-        if (tuple64.getValue0(calInfo)*sharedPhase+sharedPhase > tuple64.getValue1(calInfo)){
+        if (tuple64.getValue0(calInfo)*sharedPhase+sharedPhase >= tuple64.getValue1(calInfo)){
             optionPhaseInfo_Share[1] = tuple64.getValue1(calInfo);
             optionPhaseInfo_Share[2] = tuple64.getValue2(calInfo);
         }
@@ -117,9 +106,9 @@ contract OptionsPool is OptionsBase,Operator {
     }
     function _calculateSharedPayment(uint256 begin,uint256 end,uint256 preTime,uint256 lastburn,address[] memory whiteList)
             internal view returns(uint256[],uint256){
-        uint256 newFirstOption;
         uint256[] memory totalSharedPayment = _calBurnedSharePrice(begin,end,preTime,lastburn,whiteList);
-        (begin,newFirstOption) = getSharedFirstOption(begin,end,preTime); 
+        uint256 newFirstOption;
+        (begin,newFirstOption) = _getFirstOption(begin,optionPhaseInfo_Share[0],end,preTime); 
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
             uint256 tempValue = info.expiration;
@@ -138,19 +127,21 @@ contract OptionsPool is OptionsBase,Operator {
         //burned
         return (totalSharedPayment,newFirstOption);
     }
-    function getSharedFirstOption(uint256 begin,uint256 end,uint256 preTime) internal view returns(uint256,uint256){
-        uint256 newFirstOption = optionPhaseInfo_Share[0];
+    function _getFirstOption(uint256 begin,uint256 latestBegin,uint256 end,uint256 testTime) internal view returns(uint256,uint256){
+        uint256 newFirstOption = latestBegin;
         if (begin > newFirstOption){
+            //if in other phase, begin != new begin
             return (begin,newFirstOption);
         }
         begin = newFirstOption;
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
-            if(info.expiration<preTime || info.amount == 0){
+            if(info.expiration<testTime || info.amount == 0){
                 continue;
             }
             break;
         }
+        //if in first phase, begin = new begin
         return (begin,begin);
     }
     function _calBurnedSharePrice(uint256 beginIndex,uint256 endIndex,uint256 preTime,uint256 lastburn,
@@ -188,6 +179,8 @@ contract OptionsPool is OptionsBase,Operator {
             uint256 fullPrice,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
         if (index>=optionPhaseInfo_Share[1] || preTime<createdTime){
             return fullPrice;
+        }else if(preTime>=expiration){
+            return 0;
         }else{
             return _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration-preTime,ivNumerator,
                 ivDenominator,optType);

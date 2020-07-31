@@ -9,6 +9,24 @@ let collateral0 = "0x0000000000000000000000000000000000000000";
 let testFunc = require("./testFunction.js")
 let FNXMinePool = artifacts.require("FNXMinePool");
 contract('OptionsManagerV2', function (accounts){
+    it('OptionsManagerV2 redeem collateral', async function (){
+        let volInstance = await imVolatility32.deployed();
+        await testFunc.AddImpliedVolatility(volInstance,false);
+        let OptionsManger = await OptionsManagerV2.deployed();
+        let options = await OptionsPool.deployed();
+        let fnx = await FNXCoin.deployed();
+        let tx = await OptionsManger.addWhiteList(collateral0);
+//        console.log(tx);
+        tx = await OptionsManger.addWhiteList(fnx.address);
+        await options.addUnderlyingAsset(1);
+        let minePool = await FNXMinePool.deployed();
+//        console.log(tx);
+//        return;
+        await OptionsManger.addWhiteList(fnx.address);
+        await fnx.approve(OptionsManger.address,10000000000000);
+        await OptionsManger.addCollateral(fnx.address,10000000000000);
+        await OptionsManger.redeemCollateral(498500000000000,collateral0);
+    });
     it('OptionsManagerV2 add collateral', async function (){
         let volInstance = await imVolatility32.deployed();
         await testFunc.AddImpliedVolatility(volInstance,false);
@@ -87,9 +105,9 @@ contract('OptionsManagerV2', function (accounts){
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
         result = await options.getOptionsById(3);
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
-        tx = await OptionsManger.sellOption(1,10000000000);
+//        tx = await OptionsManger.sellOption(1,10000000000);
 //        console.log(tx);
-        tx = await OptionsManger.exerciseOption(3,10000000000);
+//        tx = await OptionsManger.exerciseOption(3,10000000000);
         result = await options.getOptionsById(1);
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
         result = await options.getOptionsById(2);
@@ -142,5 +160,17 @@ contract('OptionsManagerV2', function (accounts){
         result = await OptionsManger.getTokenNetworth();
         console.log("5-----------------------------------",result.toString(10));
         await OptionsManger.redeemCollateral(498500000000000,fnx.address);
+        result = await options.getTotalOccupiedCollateral();
+        console.log(result.toString(10));
+        result = await OptionsManger.getTotalCollateral();
+        console.log(result.toString(10));
+        result = await OptionsManger.getOccupiedCollateral();
+        console.log(result.toString(10));
+        result = await OptionsManger.getLeftCollateral();
+        console.log(result.toString(10));
+        result = await OptionsManger.getAvailableCollateral();
+        console.log(result.toString(10));
+        result = await OptionsManger.getTokenNetworth();
+        console.log("5-----------------------------------",result.toString(10));
     });
 });

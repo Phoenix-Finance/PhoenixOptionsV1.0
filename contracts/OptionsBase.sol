@@ -57,6 +57,16 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     function getUserOptionsID(address user)public view returns(uint256[]){
         return optionsBalances[user];
     }
+    function getUserOptionsID(address user,uint256 from,uint256 size)public view returns(uint256[]){
+        uint256[] memory userIdAry = new uint256[](size);
+        if (from+size>optionsBalances[user].length){
+            size = optionsBalances[user].length.sub(from);
+        }
+        for (uint256 i= 0;i<size;i++){
+            userIdAry[i] = optionsBalances[user][from+i];
+        }
+        return userIdAry;
+    }
     function getOptionInfoLength()public view returns (uint256){
         return allOptions.length;
     }
@@ -74,7 +84,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
             for (uint i=0;i<size;i++){
                 OptionsInfo storage info = allOptions[from+i];
                 ownerArr[i] = info.owner;
-                typeAndUnderArr[i] = info.underlying << 16 + info.optType;
+                typeAndUnderArr[i] = (info.underlying << 16) + info.optType;
                 expArr[i] = info.expiration;
                 priceArr[i] = info.strikePrice;
                 amountArr[i] = info.amount;
@@ -93,7 +103,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         for (uint i=0;i<size;i++){
             OptionsInfo storage info = _getOptionsById(ids[i]);
             ownerArr[i] = info.owner;
-            typeAndUnderArr[i] = info.underlying << 16 + info.optType;
+            typeAndUnderArr[i] = (info.underlying << 16) + info.optType;
             expArr[i] = info.expiration;
             priceArr[i] = info.strikePrice;
             amountArr[i] = info.amount;

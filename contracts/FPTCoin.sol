@@ -46,8 +46,7 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
         }
     }
     function addlockBalance(address account, uint256 amount,uint256 lockedWorth)public onlyManager {
-        _FnxMinePool.burnMinerCoin(account,amount);
-        _subBalance(account,amount);
+        burn(account,amount);
         _addLockBalance(account,amount,lockedWorth);
     }
     function transfer(address recipient, uint256 amount)public returns (bool){

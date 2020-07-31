@@ -32,7 +32,6 @@ contract('OptionsManagerV2', function (accounts){
         console.log (mineInfo);
         mineInfo = await minePool.getMineInfo(fnx.address);
         console.log (mineInfo);
-        return;
         for (var i=0;i<10;i++){
             for (var j=0;j<10;j++){
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});

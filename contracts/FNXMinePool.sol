@@ -22,6 +22,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     event MintMiner(address indexed account,uint256 amount);
     event BurnMiner(address indexed account,uint256 amount);
     event TranserMiner(address indexed from, address indexed to, uint256 amount);
+    event BuyingMiner(address indexed account,address indexed mineCoin,uint256 amount);
     constructor () public{
     }
     function()public payable{
@@ -94,9 +95,12 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         for (uint256 i=0;i<len;i++){
             address addr = whiteList[i];
             uint256 mineNum = buyingMineMap[addr];
-            uint256 _mineAmount = mineNum.mul(amount).div(calDecimals);
-            minerBalances[addr][account] = minerBalances[addr][account].add(_mineAmount);
-            totalMinedCoin[addr] = totalMinedCoin[addr].add(_mineAmount);
+            if (mineNum > 0){
+                uint256 _mineAmount = mineNum.mul(amount).div(calDecimals);
+                minerBalances[addr][account] = minerBalances[addr][account].add(_mineAmount);
+                totalMinedCoin[addr] = totalMinedCoin[addr].add(_mineAmount);
+                emit BuyingMiner(account,addr,_mineAmount);
+            }
         }
     }
     function setMineAmount(address mineCoin,uint256 _mineAmount)public onlyOwner {

@@ -36,6 +36,7 @@ contract OptionsManagerV2 is CollateralPool,ImportOptionsPrice {
         uint256 fee = calculateFee(buyFee,allPay);
         uint256 settlePrice = _oracle.getPrice(settlement);
         require(settlePrice.mul(settlementAmount)>=allPay.add(fee),"settlement asset is insufficient!");
+        uint256 allPayUSd = allPay.div(1e8);
         allPay = allPay.div(settlePrice);
         fee = fee.div(settlePrice);
         _addTransactionFee(settlement,fee);
@@ -43,9 +44,9 @@ contract OptionsManagerV2 is CollateralPool,ImportOptionsPrice {
         if (settlementAmount > 0){
             _transferPayback(msg.sender,settlement,settlementAmount);
         }
-        (uint256 id,,,,,,)=_optionsPool.getLatestOption();
-        _FPTCoin.addMinerBalance(msg.sender,allPay/1e8);
-        emit BuyOption(msg.sender,settlement,id,optionPrice,allPay/1e8,amount); 
+        uint256 id =_optionsPool.getOptionInfoLength();
+        _FPTCoin.addMinerBalance(msg.sender,allPayUSd);
+        emit BuyOption(msg.sender,settlement,id,optionPrice,allPay,amount); 
     }
     function sellOption(uint256 optionsId,uint256 amount) nonReentrant notHalted public{
         require(amount>0 , "sell amount is zero!");

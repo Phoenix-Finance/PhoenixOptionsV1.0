@@ -15,6 +15,7 @@ interface IOptionsPool {
     function getExerciseWorth(uint256 optionsId,uint256 amount)external view returns(uint256);
     function getLatestOption()external view returns(uint256,address,uint8,uint32,uint256,uint256,uint256);
     function calculatePhaseOptionsFall(uint256 calInfo,address[] whiteList) external view returns(int256[],uint256[]);
+    function getOptionInfoLength()external view returns (uint256);
 }
 contract ImportOptionsPool is Ownable{
     IOptionsPool internal _optionsPool;

@@ -248,8 +248,12 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportO
         return (colBalances,PremiumBalances,prices);
     } 
     function _calBalanceRate(uint256 collateralBalance,uint256 netWorthBalance,uint256 amount)internal pure returns(uint256,uint256){
-        uint256 curAmount = netWorthBalance.mul(amount).div(collateralBalance);
-        return (curAmount,netWorthBalance.sub(curAmount));
+        if (collateralBalance > 0){
+            uint256 curAmount = netWorthBalance.mul(amount).div(collateralBalance);
+            return (curAmount,netWorthBalance.sub(curAmount));
+        }else{
+            return (0,netWorthBalance);
+        }
     }
 
     function getOccupiedCollateral() public view returns(uint256){
@@ -257,10 +261,14 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportO
         return calculateCollateral(totalOccupied);
     }
     function getAvailableCollateral()public view returns(uint256){
-        return getUnlockedCollateral().sub(getOccupiedCollateral());
+        uint256 totalCollateral = getUnlockedCollateral();
+        uint256 totalOccupied = getOccupiedCollateral();
+        return totalCollateral > totalOccupied ? totalCollateral - totalOccupied : 0; 
     }
     function getLeftCollateral()public view returns(uint256){
-        return getTotalCollateral().sub(getOccupiedCollateral());
+        uint256 totalCollateral = getTotalCollateral();
+        uint256 totalOccupied = getOccupiedCollateral();
+        return totalCollateral > totalOccupied ? totalCollateral - totalOccupied : 0; 
     }
     function calOptionsOccupied(uint256 strikePrice,uint256 underlyingPrice,uint256 amount,uint8 optType)public view returns(uint256){
         uint256 totalOccupied = 0;
@@ -272,7 +280,9 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportO
         return calculateCollateral(totalOccupied);
     }
     function getUnlockedCollateral()public view returns(uint256){
-        return getTotalCollateral().sub(_FPTCoin.getTotalLockedWorth());
+        uint256 totalCollateral = getTotalCollateral();
+        uint256 totalLocked = _FPTCoin.getTotalLockedWorth();
+        return totalCollateral > totalLocked ? totalCollateral - totalLocked : 0;
     }
     function getTotalCollateral()public view returns(uint256){
         uint256 totalNum = 0;
