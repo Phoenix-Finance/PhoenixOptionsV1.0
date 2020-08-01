@@ -177,8 +177,8 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     }
     function settleMinerBalance(address mineCoin,address account,address recipient,uint256 amount,uint256 operators)internal{
         uint256 _totalSupply = totalSupply();
+        uint256 tokenNetWorth = _getTokenNetWorth(mineCoin);
         if (_totalSupply > 0){
-            uint256 tokenNetWorth = _getTokenNetWorth(mineCoin);
             if(amount>0){
                 minerBalances[mineCoin][account] = minerBalances[mineCoin][account].add(
                         _settlement(mineCoin,account,balanceOf(account),tokenNetWorth));
@@ -190,8 +190,8 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
                     minerOrigins[mineCoin][recipient] = tokenNetWorth;
                 }
             }
-            minerOrigins[mineCoin][account] = tokenNetWorth;
         }
+        minerOrigins[mineCoin][account] = tokenNetWorth;
     }
     function _settlement(address mineCoin,address account,uint256 amount,uint256 tokenNetWorth)internal view returns (uint256) {
         uint256 origin = minerOrigins[mineCoin][account];

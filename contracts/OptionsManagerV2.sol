@@ -1,16 +1,17 @@
 pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
-import "./CollateralPool.sol";
+import "./CollateralCal.sol";
 import "./modules/whiteList.sol";
 import "./interfaces/IOptionsPrice.sol";
 import "./modules/tuple.sol";
-contract OptionsManagerV2 is CollateralPool,ImportOptionsPrice {
+contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
     using SafeMath for uint256;
-    constructor (address oracleAddr,address optionsPriceAddr,address optionsPoolAddr,address FPTCoinAddr) public{
+    constructor (address oracleAddr,address optionsPriceAddr,address optionsPoolAddr,address collateralPoolAddr,address FPTCoinAddr) public{
         setOracleAddress(oracleAddr);
         setOptionsPriceAddress(optionsPriceAddr);
         setOptionsPoolAddress(optionsPoolAddr);
         setFPTCoinAddress(FPTCoinAddr);
+        setCollateralPoolAddress(collateralPoolAddr);
     }
 
     event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);
@@ -42,7 +43,7 @@ contract OptionsManagerV2 is CollateralPool,ImportOptionsPrice {
         _addTransactionFee(settlement,fee);
         settlementAmount = settlementAmount.sub(allPay).sub(fee);
         if (settlementAmount > 0){
-            _transferPayback(msg.sender,settlement,settlementAmount);
+            _collateralPool.transferPayback(msg.sender,settlement,settlementAmount);
         }
         uint256 id =_optionsPool.getOptionInfoLength();
         _FPTCoin.addMinerBalance(msg.sender,allPayUSd);
