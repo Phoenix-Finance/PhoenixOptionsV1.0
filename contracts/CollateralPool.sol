@@ -261,14 +261,16 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportO
         return calculateCollateral(totalOccupied);
     }
     function getAvailableCollateral()public view returns(uint256){
-        uint256 totalCollateral = getUnlockedCollateral();
-        uint256 totalOccupied = getOccupiedCollateral();
-        return totalCollateral > totalOccupied ? totalCollateral - totalOccupied : 0; 
+        return safeSubCollateral(getUnlockedCollateral(),getOccupiedCollateral());
     }
     function getLeftCollateral()public view returns(uint256){
-        uint256 totalCollateral = getTotalCollateral();
-        uint256 totalOccupied = getOccupiedCollateral();
-        return totalCollateral > totalOccupied ? totalCollateral - totalOccupied : 0; 
+        return safeSubCollateral(getTotalCollateral(),getOccupiedCollateral());
+    }
+    function getUnlockedCollateral()public view returns(uint256){
+        return safeSubCollateral(getTotalCollateral(),_FPTCoin.getTotalLockedWorth());
+    }
+    function safeSubCollateral(uint256 allCollateral,uint256 subCollateral)internal pure returns(uint256){
+        return allCollateral > subCollateral ? allCollateral - subCollateral : 0;
     }
     function calOptionsOccupied(uint256 strikePrice,uint256 underlyingPrice,uint256 amount,uint8 optType)public view returns(uint256){
         uint256 totalOccupied = 0;
@@ -279,11 +281,7 @@ contract CollateralPool is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportO
         }
         return calculateCollateral(totalOccupied);
     }
-    function getUnlockedCollateral()public view returns(uint256){
-        uint256 totalCollateral = getTotalCollateral();
-        uint256 totalLocked = _FPTCoin.getTotalLockedWorth();
-        return totalCollateral > totalLocked ? totalCollateral - totalLocked : 0;
-    }
+
     function getTotalCollateral()public view returns(uint256){
         uint256 totalNum = 0;
         uint whiteListLen = whiteList.length;

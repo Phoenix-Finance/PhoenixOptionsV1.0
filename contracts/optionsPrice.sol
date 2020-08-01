@@ -9,6 +9,7 @@ contract OptionsPrice is ImportVolatility{
     }
     uint256 constant Year = 365 days;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
+    //B_S formulas r
     function getRate()public view returns(int256,int256){
         return (rate.numerator,rate.denominator);
     }
