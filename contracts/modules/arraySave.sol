@@ -34,9 +34,9 @@ library ArraySave{
 }
 library ArraySave32 {
     // add whiteList
-    uint256 constant mark = 0xffffffff;
-    uint256 constant BinarayLen = 32;
-    uint256 constant saveNum = 8;
+    uint256 constant internal mark = 0xffffffff;
+    uint256 constant internal BinarayLen = 32;
+    uint256 constant internal saveNum = 8;
     function getValue(ArraySave.saveMap storage curMap,uint256 key,uint256 index) internal view returns (uint256){
         return ArraySave.getRawValue(curMap,key,index+1,saveNum,BinarayLen,mark);
     }
@@ -58,9 +58,9 @@ library ArraySave32 {
 }
 library ArraySave64 {
     // add whiteList
-    uint256 constant mark = 0xffffffffffffffff;
-    uint256 constant BinarayLen = 64;
-    uint256 constant saveNum = 4;
+    uint256 constant internal mark = 0xffffffffffffffff;
+    uint256 constant internal BinarayLen = 64;
+    uint256 constant internal saveNum = 4;
     function getValue(ArraySave.saveMap storage curMap,uint256 key,uint256 index) internal view returns (uint256){
         return ArraySave.getRawValue(curMap,key,index+1,saveNum,BinarayLen,mark);
     }

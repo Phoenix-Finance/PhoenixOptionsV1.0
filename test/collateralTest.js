@@ -65,6 +65,8 @@ contract('OptionsManagerV2', function (accounts){
         tx = await OptionsManger.addWhiteList(fnx.address);
         await options.addUnderlyingAsset(1);
         let minePool = await FNXMinePool.deployed();
+        await web3.eth.sendTransaction({from:accounts[0],to:minePool.address,value:9e18});
+        await fnx.transfer(minePool.address,new BN("100000000000000000000",10));
 //        console.log(tx);
 //        return;
         await OptionsManger.addWhiteList(fnx.address);
@@ -209,6 +211,22 @@ contract('OptionsManagerV2', function (accounts){
         console.log(result.toString(10));
         result = await OptionsManger.getTokenNetworth();
         console.log("5-----------------------------------",result.toString(10));
+        minebalance = await minePool.getMinerBalance(accounts[0],collateral0);
+        await minePool.redeemMinerCoin(collateral0,minebalance);
+        minebalance = await minePool.getMinerBalance(accounts[0],collateral0);
+        console.log(33333333333333,minebalance.toString(10));
+        minebalance = await minePool.getMinerBalance(accounts[0],fnx.address);
+        await minePool.redeemMinerCoin(fnx.address,minebalance);
+        minebalance = await minePool.getMinerBalance(accounts[0],fnx.address);
+        console.log(33333333333333,minebalance.toString(10));
+        minebalance = await minePool.getMinerBalance(accounts[1],collateral0);
+        await minePool.redeemMinerCoin(collateral0,minebalance,{from:accounts[1]});
+        minebalance = await minePool.getMinerBalance(accounts[1],collateral0);        
+        console.log(44444444444444,minebalance.toString(10));
+        minebalance = await minePool.getMinerBalance(accounts[1],fnx.address);
+        await minePool.redeemMinerCoin(fnx.address,minebalance,{from:accounts[1]});
+        minebalance = await minePool.getMinerBalance(accounts[1],fnx.address);    
+        console.log(44444444444444,minebalance.toString(10));
     });
 });
 async function logBalance(fnx,addr){

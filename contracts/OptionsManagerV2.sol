@@ -13,7 +13,17 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
         setFPTCoinAddress(FPTCoinAddr);
         setCollateralPoolAddress(collateralPoolAddr);
     }
-
+    /*
+    uint256 maxAmount = 1e30;
+    uint256 minAmount = 1e9;
+    function getInputAmountRange() public view returns(uint256,uint256) {
+        return (minAmount,maxAmount);
+    }
+    function setInputAmountRange(uint256 _minAmount,uint256 _maxAmount) public onlyOwner{
+        minAmount = _minAmount;
+        maxAmount = _maxAmount;
+    }
+    */
     event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);
     event SellOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
     event ExerciseOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);

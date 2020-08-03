@@ -1,9 +1,9 @@
 pragma solidity ^0.4.26;
 import "./modules/Ownable.sol";
 contract ImpliedVolatility is Ownable {
-    uint256 public ValidUntil = 1200;
-    uint256 constant _calDecimal = 1e8;
-    uint256 public inptutTime;
+    uint256 private ValidUntil = 1200;
+    uint256 constant private _calDecimal = 1e8;
+    uint256 private inptutTime;
     mapping(uint256=>uint256[][]) public ivMatrixMap;
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;

@@ -12,7 +12,7 @@ import "./modules/Operator.sol";
 
 contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator {
     using SafeMath for uint256;
-    fraction public collateralRate = fraction(5, 1);
+    fraction private collateralRate = fraction(5, 1);
  
     event AddCollateral(address indexed from,address indexed collateral,uint256 amount,uint256 tokenAmount);
     event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);
@@ -20,6 +20,7 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
     event DebugEvent(uint256 indexed value1,uint256 indexed value2,uint256 indexed value3);
 
     function addNetBalance(address settlement,uint256 amount) public payable onlyOperatorIndex(1) {
+        amount = getPayableAmount(settlement,amount);
         _collateralPool.addNetWorthBalance(settlement,amount);
 //        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
     }

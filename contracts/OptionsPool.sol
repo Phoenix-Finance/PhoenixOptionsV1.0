@@ -6,14 +6,14 @@ import "./modules/Operator.sol";
 contract OptionsPool is OptionsBase,Operator {
 
     //calculate options Collateral occupied phases
-    uint32 public optionPhase = 400;
+    uint32 internal optionPhase = 400;
     uint256[3] internal optionPhaseInfo;    //firstOption,lastOption,lastBurn
     mapping(uint256=>uint256) internal OptionsPhases;
     //each burn options
     mapping(uint256=>uint256[2]) internal burnedOptions;
     uint256 internal burnedLength;
     //calculate Options time shared value phases
-    uint32 public sharedPhase = 400;
+    uint32 internal sharedPhase = 400;
     uint256[3] internal optionPhaseInfo_Share;  //firstOption,lastOption,lastBurn
     mapping (uint256 =>uint256) internal OptionsPhaseTimes;
     mapping (uint256 =>uint256[]) internal OptionsPhasePrices;
@@ -32,6 +32,32 @@ contract OptionsPool is OptionsBase,Operator {
     }
     function getsharedPhaseCalInfo(uint256 index)public view returns(uint256,uint256[]){
         return (OptionsPhaseTimes[index],OptionsPhasePrices[index]);
+    }
+    function setOptionPhase(uint32 phase) public onlyOwner{
+        if (optionPhase<phase){
+            uint256 totalOccupied = 0;
+            uint256 last = optionPhaseInfo[1]/phase;
+            uint256 phaseLen = optionPhaseInfo[1]/optionPhase+1;
+            for (uint256 i = last;i<phaseLen;i++){
+                totalOccupied = totalOccupied.add(OptionsPhases[i]);
+            }
+            OptionsPhases[last] = totalOccupied;
+        }
+        optionPhase = phase;
+
+    }
+    function setSharedPhase(uint32 phase) public onlyOwner{
+        if (sharedPhase>phase){
+            uint256 last = optionPhaseInfo_Share[1]/sharedPhase;
+            uint256 phaseLen = optionPhaseInfo_Share[1]/phase+1;
+            uint256 lastTimes = OptionsPhaseTimes[last];
+            uint256[] memory lastPrice = OptionsPhasePrices[last];
+            for (uint256 i = last+1;i<phaseLen;i++){
+                OptionsPhaseTimes[i] = lastTimes;
+                OptionsPhasePrices[i] = lastPrice;
+            }
+        }
+        sharedPhase = phase;
     }
     //index,lastOption,lastBurned
     function setPhaseOccupiedCollateral(uint256 calInfo) public onlyOperatorIndex(0) {
@@ -120,7 +146,7 @@ contract OptionsPool is OptionsBase,Operator {
                     optionEx.fullPrice,optionEx.ivNumerator,optionEx.ivDenominator,info.optType);
             if (timeValue>0){
                 tempValue = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                timeValue = optionEx.tokenTimePrice.mul(timeValue).mul(info.amount).div(optionEx.fullPrice);
+                timeValue = optionEx.tokenTimePrice.mul(timeValue).mul(info.amount).div(optionEx.fullPrice).div(calDecimals);
                 totalSharedPayment[tempValue] = totalSharedPayment[tempValue].add(timeValue);
             }
         }
@@ -160,7 +186,7 @@ contract OptionsPool is OptionsBase,Operator {
             OptionsInfoEx storage optionEx = optionExtraMap[burnInfo[0]];
             uint256 preValue = _calculatePrePrice(burnInfo[0],preTime,optionEx.createdTime,expiration,
                     info.strikePrice,optionEx.fullPrice,optionEx.ivNumerator,optionEx.ivDenominator,info.optType);
-            preValue = optionEx.tokenTimePrice.mul(preValue).mul(burnInfo[1]).div(optionEx.fullPrice);
+            preValue = optionEx.tokenTimePrice.mul(preValue).mul(burnInfo[1]).div(optionEx.fullPrice).div(calDecimals);
             uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
             totalSharedPayment[index] = totalSharedPayment[index].add(preValue);
         }     
@@ -284,8 +310,12 @@ contract OptionsPool is OptionsBase,Operator {
             uint optionId = burnInfo[0];
             if (optionId<optionPhaseInfo[1]){
                 index = _getEligibleUnderlyingIndex(allOptions[optionId].underlying);
-                totalOccupied = totalOccupied.sub(calBurnedOptionsCollateral(allOptions[optionId],
-                    burnInfo[1],prices[index]));
+                uint256 burned = calBurnedOptionsCollateral(allOptions[optionId],
+                    burnInfo[1],prices[index]);
+                if (totalOccupied<burned){
+                    return 0;
+                }
+                totalOccupied = totalOccupied.sub(burned);
             }
         }
         return totalOccupied;

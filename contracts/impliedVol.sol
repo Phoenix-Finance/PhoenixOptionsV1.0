@@ -2,10 +2,10 @@ pragma solidity ^0.4.26;
 import "./modules/Ownable.sol";
 import "./modules/tuple.sol";
 contract ImpliedVol is Ownable {
-    uint256 public ValidUntil = 1200;
-    uint256 constant _calDecimal = 1e8;
-    uint256 public inptutTime;
-    mapping(uint256=>uint256)public ivMatrixMap;
+    uint256 internal ValidUntil = 1200;
+    uint256 constant internal _calDecimal = 1e8;
+    uint256 internal inptutTime;
+    mapping(uint256=>uint256)internal ivMatrixMap;
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }

@@ -6,11 +6,11 @@ import "./whiteList.sol";
      */
 contract AddressWhiteList is Halt {
 
-    uint256 constant allPermission = 0xffffffff;
-    uint256 constant allowPayIn = 0x0001;
-    uint256 constant allowRedeemOut = 0x0002;
+    uint256 constant private allPermission = 0xffffffff;
+    uint256 constant private allowPayIn = 0x0001;
+    uint256 constant private allowRedeemOut = 0x0002;
     // The eligible adress list
-    address[] public whiteList;
+    address[] internal whiteList;
     mapping(address => uint256) addressPermission;
     /**
      * @dev Implementation of add an eligible address into the whitelist.

@@ -28,14 +28,14 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         uint256      ivDenominator;
     }
     //options information
-    OptionsInfo[] public allOptions;
+    OptionsInfo[] internal allOptions;
     mapping(uint256=>OptionsInfoEx) internal optionExtraMap;
-
+    uint256 constant internal calDecimals = 1e18;
     //user options balances
-    mapping(address=>uint256[]) public optionsBalances;
+    mapping(address=>uint256[]) internal optionsBalances;
     //expiration whitelist
-    uint256[] public expirationList;
-    uint256 public burnTimeLimit = 1 hours;
+    uint256[] internal expirationList;
+    uint256 internal burnTimeLimit = 1 hours;
 
 
     event CreateOption(address indexed owner,uint256 indexed optionID,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,uint256 amount);
@@ -150,7 +150,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         uint256 expiration = info.expiration - now;
         (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,strikePrice);
         uint256 fullPrice = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration,ivNumerator,ivDenominator,info.optType);
-        uint256 tokenTimePrice = optionPrice.div(_oracle.getPrice(settlement));
+        uint256 tokenTimePrice = optionPrice.mul(calDecimals).div(_oracle.getPrice(settlement));
         optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,fullPrice,ivNumerator,ivDenominator);
     }
     function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){

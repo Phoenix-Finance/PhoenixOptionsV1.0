@@ -1,8 +1,8 @@
 pragma solidity ^0.4.26;
-import "./modules/Ownable.sol";
+import "./modules/Operator.sol";
 import "./modules/tuple.sol";
 import "./modules/ArraySave.sol";
-contract imVolatility64 is Ownable {
+contract imVolatility64 is Operator {
     uint256 public ValidUntil = 1200;
     uint256 constant _calDecimal = 1e8;
     uint256 public inptutTime;

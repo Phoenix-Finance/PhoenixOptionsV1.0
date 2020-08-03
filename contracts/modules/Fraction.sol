@@ -1,11 +1,11 @@
 pragma solidity ^0.4.26;
 library Fraction {
-    int256 constant sqrtNum = 1<<120;
-    int256 constant shl = 80;
-    uint8 constant PRECISION   = 32;  // fractional bits
-    uint256 constant FIXED_ONE = uint256(1) << PRECISION; // 0x100000000
-    uint256 constant FIXED_TWO = uint256(2) << PRECISION; // 0x200000000
-    uint256 constant MAX_VAL   = uint256(1) << (256 - PRECISION); // 0x0000000100000000000000000000000000000000000000000000000000000000
+    int256 constant private sqrtNum = 1<<120;
+    int256 constant private shl = 80;
+    uint8 constant private PRECISION   = 32;  // fractional bits
+    uint256 constant private FIXED_ONE = uint256(1) << PRECISION; // 0x100000000
+    uint256 constant private FIXED_TWO = uint256(2) << PRECISION; // 0x200000000
+    uint256 constant private MAX_VAL   = uint256(1) << (256 - PRECISION); // 0x0000000100000000000000000000000000000000000000000000000000000000
 
     struct fractionNumber{
         int256 numerator;

@@ -7,7 +7,7 @@ contract OptionsPrice is ImportVolatility{
     constructor (address ivContract) public{
         setVolatilityAddress(ivContract);
     }
-    uint256 constant Year = 365 days;
+    uint256 constant internal Year = 365 days;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
     //B_S formulas r
     function getRate()public view returns(int256,int256){

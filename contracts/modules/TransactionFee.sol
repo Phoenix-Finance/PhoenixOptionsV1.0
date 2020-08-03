@@ -20,16 +20,16 @@ contract TransactionFee is AddressWhiteList {
     event AddFee(address indexed settlement,uint256 payback);
     event TransferPayback(address indexed recieptor,address indexed settlement,uint256 payback);
     // The total fees accumulated in the contract
-    mapping (address => uint256) 	public feeBalances;
-    fraction[] public FeeRates;
+    mapping (address => uint256) 	private feeBalances;
+    fraction[] private FeeRates;
      /**
      * @dev Returns the rate of trasaction fee.
      */   
-    uint256 constant buyFee = 0;
-    uint256 constant sellFee = 1;
-    uint256 constant exerciseFee = 2;
-    uint256 constant addColFee = 3;
-    uint256 constant redeemColFee = 4;
+    uint256 constant internal buyFee = 0;
+    uint256 constant internal sellFee = 1;
+    uint256 constant internal exerciseFee = 2;
+    uint256 constant internal addColFee = 3;
+    uint256 constant internal redeemColFee = 4;
     constructor() internal{
         FeeRates.push(fraction(0, 1000));
         FeeRates.push(fraction(50, 1000));

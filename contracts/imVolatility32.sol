@@ -1,22 +1,22 @@
 pragma solidity ^0.4.26;
-import "./modules/Ownable.sol";
+import "./modules/Operator.sol";
 import "./modules/tuple.sol";
 import "./modules/ArraySave.sol";
-contract imVolatility32 is Ownable {
+contract imVolatility32 is Operator {
     uint256 public ValidUntil = 1200;
     uint256 constant _calDecimal = 1e8;
     uint256 public inptutTime;
     ArraySave.saveMap internal timeSaveMap;
     ArraySave.saveMap internal IvMap;
-    function setValidUntil(uint256 timeLimit) public onlyOwner {
+    function setValidUntil(uint256 timeLimit) public onlyOperatorIndex(0) {
         ValidUntil = timeLimit;
     }
     function setIvMatrixAll(uint32 underlying,uint256[] put_timeArray,uint256[] put_ivAry,
-        uint256[] call_timeArray,uint256[] call_ivAry) public onlyOwner{
+        uint256[] call_timeArray,uint256[] call_ivAry) public onlyOperatorIndex(0){
         setIvMatrix(underlying,1,put_timeArray,put_ivAry);
         setIvMatrix(underlying,0,call_timeArray,call_ivAry);
     }
-    function setIvMatrix(uint32 underlying,uint8 optType,uint256[] timeArray,uint256[] ivAry) public onlyOwner{
+    function setIvMatrix(uint32 underlying,uint8 optType,uint256[] timeArray,uint256[] ivAry) public onlyOperatorIndex(0){
         uint256 saveKey = getKey(underlying,optType);
         uint nLen0 = timeArray.length;
         for (uint i=0;i<nLen0;i++){
@@ -38,6 +38,7 @@ contract imVolatility32 is Ownable {
       * @return uint mantissa of asset implied volatility (scaled by 1e18) or zero if unset or contract paused
       */
     function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 price)public view returns (uint256,uint256){
+        expiration = expiration*7000;
         price = price/1e4;
         uint256 saveKey = getKey(underlying,optType);
         uint256[] memory buffer = ArraySave32.readAllBuffer(timeSaveMap,saveKey);

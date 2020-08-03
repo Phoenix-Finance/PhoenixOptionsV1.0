@@ -6,7 +6,7 @@ import "./whiteList.sol";
      */
 contract UnderlyingAssets is Ownable {
     // The eligible underlying list
-    uint32[] public underlyingAssets;
+    uint32[] internal underlyingAssets;
     /**
      * @dev Implementation of add an eligible underlying into the underlyingAssets.
      * @param underlying new eligible underlying.

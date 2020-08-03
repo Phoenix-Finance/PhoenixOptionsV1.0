@@ -1,12 +1,12 @@
 pragma solidity ^0.4.26;
 import "./interfaces/IFNXOracle.sol";
-import "./modules/Ownable.sol";
 import "./modules/SafeMath.sol";
-contract FNXOracle is IFNXOracle,Ownable {
+import "./modules/Operator.sol";
+contract FNXOracle is IFNXOracle,Operator {
     using SafeMath for uint256;
     uint256 public ValidUntil = 600;
     mapping(uint256 => uint256) private priceMap;
-    function setValidUntil(uint256 timeLimit) public onlyOwner {
+    function setValidUntil(uint256 timeLimit) public onlyOperatorIndex(0) {
         ValidUntil = timeLimit;
     }
     /**
@@ -15,7 +15,7 @@ contract FNXOracle is IFNXOracle,Ownable {
       * @param asset Asset for which to set the price
       * @param price the Asset's price
       */    
-    function setPrice(address asset,uint256 price) public onlyOwner {
+    function setPrice(address asset,uint256 price) public onlyOperatorIndex(0) {
         priceMap[uint256(asset)] = price;
 
     }
@@ -25,7 +25,7 @@ contract FNXOracle is IFNXOracle,Ownable {
       * @param underlying underlying for which to set the price
       * @param price the underlying's price
       */  
-    function setUnderlyingPrice(uint256 underlying,uint256 price) public onlyOwner {
+    function setUnderlyingPrice(uint256 underlying,uint256 price) public onlyOperatorIndex(0) {
         require(underlying>0 , "underlying cannot be zero");
         priceMap[underlying] = price;
     }
@@ -37,7 +37,7 @@ contract FNXOracle is IFNXOracle,Ownable {
     * @param underlyings a set of underlyings for which to set the price
     * @param ulPrices  a set of the underlyings's price
     */    
-    function setPriceAndUnderlyingPrice(address[] assets,uint256[] assetPrices,uint256[] underlyings,uint256[] ulPrices) public onlyOwner {
+    function setPriceAndUnderlyingPrice(address[] assets,uint256[] assetPrices,uint256[] underlyings,uint256[] ulPrices) public onlyOperatorIndex(0) {
         require(assets.length == assetPrices.length,"assets and assetPrices are not of the same length");
         require(underlyings.length == ulPrices.length,"underlyings and ulPrices are not of the same length");
         for (uint i = 0;i<assets.length;i++) {
@@ -53,7 +53,7 @@ contract FNXOracle is IFNXOracle,Ownable {
       * @param optoken options token for which to set the sell price
       * @param price the options token sell price
       */     
-    function setSellOptionsPrice(address optoken,uint256 price) public onlyOwner {
+    function setSellOptionsPrice(address optoken,uint256 price) public onlyOperatorIndex(0) {
         uint256 key = uint256(optoken)*10+1;
         priceMap[key] = price;
     }
@@ -63,7 +63,7 @@ contract FNXOracle is IFNXOracle,Ownable {
       * @param optoken options token for which to set the buy price
       * @param price the options token buy price
       */      
-    function setBuyOptionsPrice(address optoken,uint256 price) public onlyOwner {
+    function setBuyOptionsPrice(address optoken,uint256 price) public onlyOperatorIndex(0) {
         uint256 key = uint256(optoken)*10+2;
         priceMap[key] = price;
     }
@@ -74,7 +74,7 @@ contract FNXOracle is IFNXOracle,Ownable {
       * @param buyPrices a group of buy prices
       * @param SellPrices a group of sell prices
       */    
-    function setOptionsBuyAndSellPrice(address[] optokens,uint256[] buyPrices,uint256[] SellPrices) public onlyOwner {
+    function setOptionsBuyAndSellPrice(address[] optokens,uint256[] buyPrices,uint256[] SellPrices) public onlyOperatorIndex(0) {
         require(optokens.length == buyPrices.length,"optokens and buyPrices are not of the same length");
         require(optokens.length == SellPrices.length,"optokens and SellPrices are not of the same length");
         for (uint i=0; i<optokens.length; i++) {

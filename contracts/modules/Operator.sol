@@ -3,7 +3,7 @@ import './Ownable.sol';
 import "./whiteList.sol";
 contract Operator is Ownable {
 
-    address[] public _operatorList;
+    address[] private _operatorList;
     modifier onlyOperator() {
         require(whiteListAddress.isEligibleAddress(_operatorList,msg.sender),"Managerable: caller is not the Operator");
         _;

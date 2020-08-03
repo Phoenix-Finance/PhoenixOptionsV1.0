@@ -3,7 +3,7 @@ import './Ownable.sol';
 
 contract Halt is Ownable {
     
-    bool public halted = false; 
+    bool private halted = false; 
     
     modifier notHalted() {
         require(!halted,"This contract is halted");
