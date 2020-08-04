@@ -47,9 +47,9 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
         uint256 fee = calculateFee(buyFee,allPay);
         uint256 settlePrice = _oracle.getPrice(settlement);
         require(settlePrice.mul(settlementAmount)>=allPay.add(fee),"settlement asset is insufficient!");
-        uint256 allPayUSd = allPay.div(1e8);
-        allPay = allPay.div(settlePrice);
-        fee = fee.div(settlePrice);
+        uint256 allPayUSd = allPay/1e8;
+        allPay = allPay/settlePrice;
+        fee = fee/settlePrice;
         _addTransactionFee(settlement,fee);
         settlementAmount = settlementAmount.sub(allPay).sub(fee);
         if (settlementAmount > 0){
@@ -61,14 +61,16 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
     }
     function sellOption(uint256 optionsId,uint256 amount) nonReentrant notHalted public{
         require(amount>0 , "sell amount is zero!");
-        _optionsPool.burnOptions(msg.sender,optionsId,amount);
         (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
         expiration = expiration.sub(now);
         uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);
         uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
+        _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
         uint256 allPay = optPrice.mul(amount);
-        emit SellOption(msg.sender,optionsId,amount,allPay);
+        (address settlement,uint256 fullPay) = _optionsPool.getBurnedFullPay(optionsId,amount);
+        _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
         _paybackWorth(allPay,sellFee);
+        emit SellOption(msg.sender,optionsId,amount,allPay);
     }
     function exerciseOption(uint256 optionsId,uint256 amount) nonReentrant notHalted public{
         require(amount>0 , "exercise amount is zero!");
@@ -76,9 +78,14 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
         if (allPay == 0) {
             return;
         }
-        _optionsPool.burnOptions(msg.sender,optionsId,amount);
-        emit ExerciseOption(msg.sender,optionsId,amount,allPay);
+        (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
+        expiration = expiration.sub(now);
+        uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);
+        uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
+        _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
+        (address settlement,uint256 fullPay) = _optionsPool.getBurnedFullPay(optionsId,amount);
+        _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
         _paybackWorth(allPay,exerciseFee);
+        emit ExerciseOption(msg.sender,optionsId,amount,allPay);
     }
-
 }

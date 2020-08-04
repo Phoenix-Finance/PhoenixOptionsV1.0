@@ -3,10 +3,9 @@ import "./modules/SafeMath.sol";
 import "./modules/Managerable.sol";
 import "./interfaces/IFNXOracle.sol";
 import "./modules/underlyingAssets.sol";
-import "./interfaces/IOptionsPrice.sol";
 import "./interfaces/IVolatility.sol";
 import "./modules/tuple.sol";
-contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsPrice,ImportVolatility {
+contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatility {
     
     using SafeMath for uint256;
     struct OptionsInfo {
@@ -23,6 +22,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         uint256		 createdTime;
         address      settlement;
         uint256      tokenTimePrice;
+        uint256      underlyingPrice;
         uint256      fullPrice;
         uint256      ivNumerator;
         uint256      ivDenominator;
@@ -41,11 +41,9 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     event CreateOption(address indexed owner,uint256 indexed optionID,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,uint256 amount);
     event BurnOption(address indexed owner,uint256 indexed optionID,uint amount);
     event DebugEvent(uint256 value1,uint256 value2,uint256 value3);
-    constructor (address oracleAddr,address optionsPriceAddr,address ivAddress) public{
-        setOracleAddress(oracleAddr);
-        setOptionsPriceAddress(optionsPriceAddr);
-        setVolatilityAddress(ivAddress);
-        expirationList =  [1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
+    constructor () public{
+        //todo : debug 100
+        expirationList =  [100,1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
         underlyingAssets = [1,2];
     }
     function getBurnTimeLimit()public view returns(uint256){
@@ -124,7 +122,6 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         OptionsInfo storage info = _getOptionsById(optionsId);
         return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);
     }
-
     function getUnderlyingPrices()internal view returns(uint256[] memory){
         uint256 underlyingLen = underlyingAssets.length;
         uint256[] memory prices = new uint256[](underlyingLen);
@@ -134,24 +131,32 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
         return prices;
     }
 
-    function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 optionPrice,
-                uint256 amount) onlyManager public {
+    function _createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 optionPrice,
+                uint256 amount) internal {
         uint256 optionID = allOptions.length;
         uint8 optType = uint8(tuple64.getValue0(type_ly_exp));
         uint32 underlying = uint32(tuple64.getValue1(type_ly_exp));
         allOptions.push(OptionsInfo(uint64(optionID+1),from,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount));
         optionsBalances[from].push(optionID+1);
         OptionsInfo memory info = allOptions[optionID];
-        setOptionsExtra(info,settlement,optionPrice);
+        setOptionsExtra(info,settlement,optionPrice,strikePrice,underlying);
         emit CreateOption(from,optionID+1,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount);
     }
-    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice) internal{
-        uint256 strikePrice = info.strikePrice;
+    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice,uint256 strikePrice,uint256 underlying) internal{
+        uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
         uint256 expiration = info.expiration - now;
         (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,strikePrice);
-        uint256 fullPrice = _optionsPrice.getOptionsPrice_iv(strikePrice,strikePrice,expiration,ivNumerator,ivDenominator,info.optType);
-        uint256 tokenTimePrice = optionPrice.mul(calDecimals).div(_oracle.getPrice(settlement));
-        optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,fullPrice,ivNumerator,ivDenominator);
+        uint256 tokenTimePrice = calDecimals/_oracle.getPrice(settlement);
+        optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,underlyingPrice,optionPrice,ivNumerator,ivDenominator);
+    }
+    function _burnOptions(address from,uint256 id,uint256 amount)internal{
+        OptionsInfo storage info = _getOptionsById(id);
+        checkEligible(info);
+        checkBurnable(info.optionID);
+        checkOwner(info,from);
+        checkSufficient(info,amount);
+        info.amount = info.amount.sub(amount);
+        emit BurnOption(from,id,amount);
     }
     function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){
         OptionsInfo memory info = _getOptionsById(optionsId);
@@ -163,13 +168,6 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
             return 0;
         } 
         return tokenPayback.mul(amount);
-    }
-    function _getOptionsWorth(uint8 optType,uint256 strikePrice,uint256 underlyingPrice)internal pure returns(uint256){
-        if ((optType == 0) == (strikePrice>underlyingPrice)){ // call
-            return strikePrice;
-        } else {
-            return underlyingPrice;
-        }
     }
     function _getOptionsPayback(uint8 optType,uint256 strikePrice,uint256 underlyingPrice)internal pure returns(uint256){
         if ((optType == 0) == (strikePrice>underlyingPrice)){ // call
@@ -231,5 +229,39 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportOptionsP
     function _getEligibleExpirationIndex(uint256 expiration) internal view returns (uint256){
         return whiteListUint256._getEligibleIndexUint256(expirationList,expiration);
     }
-
+    function getFirstOption(uint256 begin,uint256 latestBegin,uint256 end) internal view returns(uint256,uint256){
+        uint256 newFirstOption = latestBegin;
+        if (begin > newFirstOption){
+            //if in other phase, begin != new begin
+            return (begin,newFirstOption);
+        }
+        begin = newFirstOption;
+        for (;begin<end;begin++){
+            OptionsInfo storage info = allOptions[begin];
+            if(info.expiration<now || info.amount == 0){
+                continue;
+            }
+            break;
+        }
+        //if in first phase, begin = new begin
+        return (begin,begin);
+    }
+    function calOptionsCollateral(OptionsInfo memory option,uint256 underlyingPrice)internal view returns(uint256){
+        if (option.expiration<=now || option.amount == 0){
+            return 0;
+        }
+        uint256 totalOccupied = _getOptionsWorth(option.optType,option.strikePrice,underlyingPrice).mul(option.amount);
+        return totalOccupied;
+    }
+    function _getOptionsWorth(uint8 optType,uint256 strikePrice,uint256 underlyingPrice)internal pure returns(uint256){
+        if ((optType == 0) == (strikePrice>underlyingPrice)){ // call
+            return strikePrice;
+        } else {
+            return underlyingPrice;
+        }
+    }
+    function getBurnedFullPay(uint256 optionID,uint256 amount) public view returns(address,uint256){
+        OptionsInfoEx storage optionEx = optionExtraMap[optionID-1];
+        return (optionEx.settlement,optionEx.fullPrice.mul(optionEx.tokenTimePrice).mul(amount)/calDecimals);
+    }
 }

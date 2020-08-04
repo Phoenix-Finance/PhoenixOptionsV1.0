@@ -3,9 +3,9 @@ import "./modules/Operator.sol";
 import "./modules/tuple.sol";
 import "./modules/ArraySave.sol";
 contract imVolatility32 is Operator {
-    uint256 public ValidUntil = 1200;
-    uint256 constant _calDecimal = 1e8;
-    uint256 public inptutTime;
+    uint256 private ValidUntil = 1200;
+    uint256 constant private _calDecimal = 1e8;
+    uint256 private inptutTime;
     ArraySave.saveMap internal timeSaveMap;
     ArraySave.saveMap internal IvMap;
     function setValidUntil(uint256 timeLimit) public onlyOperatorIndex(0) {

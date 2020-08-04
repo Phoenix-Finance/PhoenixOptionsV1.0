@@ -153,22 +153,22 @@
   "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"getUnderlyingAssets\",\"outputs\":[{\"name\":\"\",\"type\":\"uint32[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"underlying\",\"type\":\"uint32\"}],\"name\":\"addUnderlyingAsset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"removeUnderlying\",\"type\":\"uint32\"}],\"name\":\"removeUnderlyingAssets\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"underlying\",\"type\":\"uint32\"}],\"name\":\"isEligibleUnderlyingAsset\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"underlying\",\"type\":\"uint32\"}],\"name\":\"checkUnderlyingAsset\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"addUnderlyingAsset(uint32)\":{\"details\":\"Implementation of add an eligible underlying into the underlyingAssets.\\r\",\"params\":{\"underlying\":\"new eligible underlying.\\r\"}},\"getUnderlyingAssets()\":{\"details\":\"Implementation of getting the eligible underlyingAssets.\\r\"},\"isEligibleUnderlyingAsset(uint32)\":{\"details\":\"Implementation of testing whether the input underlying is eligible.\\r\",\"params\":{\"underlying\":\"input underlying for testing.\\r\"}},\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"removeUnderlyingAssets(uint32)\":{\"details\":\"Implementation of revoke an invalid underlying from the underlyingAssets.\\r\",\"params\":{\"removeUnderlying\":\"revoked underlying.\\r\"}},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/underlyingAssets.sol\":\"UnderlyingAssets\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x32e86cf1f96e3e879768e0d0440f35011232004420d3c4f84492f23664cba015\",\"urls\":[\"bzzr://5725cb4758935a4e7ebc5f963b0a46da11e6c81ac5dcedd214e425546e8b83a7\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/underlyingAssets.sol\":{\"keccak256\":\"0x8e404a7c1055280bfdef86d02d7aa9ffae6a8682eb064191deba7de622d43e11\",\"urls\":[\"bzzr://0db2629c0474f2c7b4bae61728f3f43f0896625a41bb90265bea9cdbc38b7109\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/whiteList.sol\":{\"keccak256\":\"0x06202d39edd752352a2a510483acea77e2813c196b8d572f812294f07417a531\",\"urls\":[\"bzzr://22c5fb4375de83188610e61f574c302ffdfbb1d6a694429604b65fbb4a0aa9cf\"]}},\"version\":1}",
   "bytecode": "0x6080604081905260008054600160a060020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610984806100576000396000f3006080604052600436106100985763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633582d789811461009d578063715018a6146101025780638da5cb5b146101195780638f32d59b1461014a578063afec82fc14610173578063d6d1401214610191578063db6ad2bd146101af578063ee29c94a146101cd578063f2fde38b146101eb575b600080fd5b3480156100a957600080fd5b506100b261020c565b60408051602080825283518183015283519192839290830191858101910280838360005b838110156100ee5781810151838201526020016100d6565b505050509050019250505060405180910390f35b34801561010e57600080fd5b50610117610291565b005b34801561012557600080fd5b5061012e610334565b60408051600160a060020a039092168252519081900360200190f35b34801561015657600080fd5b5061015f610343565b604080519115158252519081900360200190f35b34801561017f57600080fd5b5061011763ffffffff60043516610354565b34801561019d57600080fd5b5061015f63ffffffff600435166103ae565b3480156101bb57600080fd5b5061015f63ffffffff6004351661040d565b3480156101d957600080fd5b5061011763ffffffff60043516610495565b3480156101f757600080fd5b50610117600160a060020a036004351661051b565b6060600180548060200260200160405190810160405280929190818152602001828054801561028657602002820191906000526020600020906000905b82829054906101000a900463ffffffff1663ffffffff16815260200190600401906020826003010492830192600103820291508084116102495790505b505050505090505b90565b610299610343565b15156102dd576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610939833981519152604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b61035c610343565b15156103a0576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610939833981519152604482015290519081900360640190fd5b6103ab600182610570565b50565b60006103b8610343565b15156103fc576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610939833981519152604482015290519081900360640190fd5b61040760018361063a565b92915050565b6000610407600180548060200260200160405190810160405280929190818152602001828054801561048a57602002820191906000526020600020906000905b82829054906101000a900463ffffffff1663ffffffff168152602001906004019060208260030104928301926001038202915080841161044d5790505b505050505083610748565b6103ab600180548060200260200160405190810160405280929190818152602001828054801561051057602002820191906000526020600020906000905b82829054906101000a900463ffffffff1663ffffffff16815260200190600401906020826003010492830192600103820291508084116104d35790505b505050505082610793565b610523610343565b1515610567576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610939833981519152604482015290519081900360640190fd5b6103ab816107f3565b6105f5828054806020026020016040519081016040528092919081815260200182805480156105ea57602002820191906000526020600020906000905b82829054906101000a900463ffffffff1663ffffffff16815260200190600401906020826003010492830192600103820291508084116105ad5790505b505050505082610748565b15156106365781546001810183556000838152602090206008820401805460079092166004026101000a63ffffffff81810219909316928416029190911790555b5050565b8154600090815b81811015610695578363ffffffff16858281548110151561065e57fe5b6000918252602090912060088204015460079091166004026101000a900463ffffffff16141561068d57610695565b600101610641565b8181101561073b57600019820181146107215784600183038154811015156106b957fe5b90600052602060002090600891828204019190066004029054906101000a900463ffffffff1685828154811015156106ed57fe5b90600052602060002090600891828204019190066004026101000a81548163ffffffff021916908363ffffffff1602179055505b84546107318660001983016108e1565b5060019250610740565b600092505b505092915050565b8151600090815b8181101561073b578363ffffffff16858281518110151561076c57fe5b9060200190602002015163ffffffff16141561078b5760019250610740565b60010161074f565b61079d8282610748565b1515610636576040805160e560020a62461bcd02815260206004820152601f60248201527f77686974654c6973743a207573696e6720696e76616c69642075696e74333200604482015290519081900360640190fd5b600160a060020a0381161515610879576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b815481835581811115610915576007016008900481600701600890048360005260206000209182019101610915919061091a565b505050565b61028e91905b808211156109345760008155600101610920565b509056004f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a165627a7a72305820b9ec00c04ac70d5533762e0a11d2cc8302f73eb2cfd7d945b830bab903bfe9de0029",
   "deployedBytecode": "0x6080604052600436106100985763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633582d789811461009d578063715018a6146101025780638da5cb5b146101195780638f32d59b1461014a578063afec82fc14610173578063d6d1401214610191578063db6ad2bd146101af578063ee29c94a146101cd578063f2fde38b146101eb575b600080fd5b3480156100a957600080fd5b506100b261020c565b60408051602080825283518183015283519192839290830191858101910280838360005b838110156100ee5781810151838201526020016100d6565b505050509050019250505060405180910390f35b34801561010e57600080fd5b50610117610291565b005b34801561012557600080fd5b5061012e610334565b60408051600160a060020a039092168252519081900360200190f35b34801561015657600080fd5b5061015f610343565b604080519115158252519081900360200190f35b34801561017f57600080fd5b5061011763ffffffff60043516610354565b34801561019d57600080fd5b5061015f63ffffffff600435166103ae565b3480156101bb57600080fd5b5061015f63ffffffff6004351661040d565b3480156101d957600080fd5b5061011763ffffffff60043516610495565b3480156101f757600080fd5b50610117600160a060020a036004351661051b565b6060600180548060200260200160405190810160405280929190818152602001828054801561028657602002820191906000526020600020906000905b82829054906101000a900463ffffffff1663ffffffff16815260200190600401906020826003010492830192600103820291508084116102495790505b505050505090505b90565b610299610343565b15156102dd576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610939833981519152604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b61035c610343565b15156103a0576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610939833981519152604482015290519081900360640190fd5b6103ab600182610570565b50565b60006103b8610343565b15156103fc576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610939833981519152604482015290519081900360640190fd5b61040760018361063a565b92915050565b6000610407600180548060200260200160405190810160405280929190818152602001828054801561048a57602002820191906000526020600020906000905b82829054906101000a900463ffffffff1663ffffffff168152602001906004019060208260030104928301926001038202915080841161044d5790505b505050505083610748565b6103ab600180548060200260200160405190810160405280929190818152602001828054801561051057602002820191906000526020600020906000905b82829054906101000a900463ffffffff1663ffffffff16815260200190600401906020826003010492830192600103820291508084116104d35790505b505050505082610793565b610523610343565b1515610567576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610939833981519152604482015290519081900360640190fd5b6103ab816107f3565b6105f5828054806020026020016040519081016040528092919081815260200182805480156105ea57602002820191906000526020600020906000905b82829054906101000a900463ffffffff1663ffffffff16815260200190600401906020826003010492830192600103820291508084116105ad5790505b505050505082610748565b15156106365781546001810183556000838152602090206008820401805460079092166004026101000a63ffffffff81810219909316928416029190911790555b5050565b8154600090815b81811015610695578363ffffffff16858281548110151561065e57fe5b6000918252602090912060088204015460079091166004026101000a900463ffffffff16141561068d57610695565b600101610641565b8181101561073b57600019820181146107215784600183038154811015156106b957fe5b90600052602060002090600891828204019190066004029054906101000a900463ffffffff1685828154811015156106ed57fe5b90600052602060002090600891828204019190066004026101000a81548163ffffffff021916908363ffffffff1602179055505b84546107318660001983016108e1565b5060019250610740565b600092505b505092915050565b8151600090815b8181101561073b578363ffffffff16858281518110151561076c57fe5b9060200190602002015163ffffffff16141561078b5760019250610740565b60010161074f565b61079d8282610748565b1515610636576040805160e560020a62461bcd02815260206004820152601f60248201527f77686974654c6973743a207573696e6720696e76616c69642075696e74333200604482015290519081900360640190fd5b600160a060020a0381161515610879576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b815481835581811115610915576007016008900481600701600890048360005260206000209182019101610915919061091a565b505050565b61028e91905b808211156109345760008155600101610920565b509056004f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a165627a7a72305820b9ec00c04ac70d5533762e0a11d2cc8302f73eb2cfd7d945b830bab903bfe9de0029",
-  "sourceMap": "177:1642:34:-;;;;;659:6:28;:19;;-1:-1:-1;;;;;;659:19:28;668:10;659:19;;;;-1:-1:-1;;;;;726:6:28;;693:40;;659:6;;693:40;177:1642:34;;;;;;",
-  "deployedSourceMap": "177:1642:34:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1039:102;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1039:102:34;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:100:-1;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;1039:102:34;;;;;;;;;;;;;;;;;1599:137:28;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1599:137:28;;;;;;816:77;;8:9:-1;5:2;;;30:1;27;20:12;5:2;816:77:28;;;;;;;;-1:-1:-1;;;;;816:77:28;;;;;;;;;;;;;;1167:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1167:90:28;;;;;;;;;;;;;;;;;;;;;;453:144:34;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;453:144:34;;;;;;;760:185;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;760:185:34;;;;;;;1306:167;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1306:167:34;;;;;;;1479:150;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1479:150:34;;;;;;;1885:107:28;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1885:107:28;-1:-1:-1;;;;;1885:107:28;;;;;1039:102:34;1090:8;1117:16;1110:23;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1039:102;;:::o;1599:137:28:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:28;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:28;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:28;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:28;;;1599:137::o;816:77::-;854:7;880:6;-1:-1:-1;;;;;880:6:28;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:28;1230:10;:20;;1167:90::o;453:144:34:-;1020:9:28;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:28;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:28;;;;;;;;;;;;;;;526:63:34;561:16;578:10;526:34;:63::i;:::-;453:144;:::o;760:185::-;841:4;1020:9:28;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:28;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:28;;;;;;;;;;;;;;;865:72:34;903:16;920;865:37;:72::i;:::-;858:79;760:185;-1:-1:-1;;760:185:34:o;1306:167::-;1381:4;1404:61;1437:16;1404:61;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1454:10;1404:32;:61::i;1479:150::-;1557:64;1593:16;1557:64;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1610:10;1557:35;:64::i;1885:107:28:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:28;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:28;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;79:179:35:-;171:32;188:9;171:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;198:4;171:16;:32::i;:::-;170:33;166:85;;;27:10:-1;;39:1;23:18;;45:23;;-1:-1;219:20:35;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;166:85;79:179;;:::o;264:463::-;383:16;;352:4;;;410:102;429:3;427:1;:5;410:102;;;472:4;456:20;;:9;466:1;456:12;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:20;452:48;;;495:5;;452:48;433:3;;410:102;;;528:3;526:1;:5;522:175;;;-1:-1:-1;;554:5:35;;551:8;;547:80;;595:9;609:1;605:3;:5;595:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;580:9;590:1;580:12;;;;;;;;;;;;;;;;;;;;;;;;;;;;:31;;;;;;;;;;;;;;;;;;547:80;641:18;;;:9;-1:-1:-1;;641:18:35;;;:::i;:::-;;681:4;674:11;;;;522:175;714:5;707:12;;264:463;;;;;;;:::o;914:283::-;1032:16;;1002:4;;;1059:108;1078:3;1076:1;:5;1059:108;;;1121:4;1105:20;;:9;1115:1;1105:12;;;;;;;;;;;;;;;;;;:20;;;1101:54;;;1151:4;1144:11;;;;1101:54;1082:3;;1059:108;;733:175;833:32;850:9;860:4;833:16;:32::i;:::-;825:75;;;;;;;-1:-1:-1;;;;;825:75:35;;;;;;;;;;;;;;;;;;;;;;;;;;;2093:225:28;-1:-1:-1;;;;;2166:22:28;;;;2158:73;;;;;-1:-1:-1;;;;;2158:73:28;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:28;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:28;-1:-1:-1;;;;;2294:17:28;;;;;;;;;;2093:225::o;177:1642:34:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;",
+  "sourceMap": "177:1642:37:-;;;;;659:6:31;:19;;-1:-1:-1;;;;;;659:19:31;668:10;659:19;;;;-1:-1:-1;;;;;726:6:31;;693:40;;659:6;;693:40;177:1642:37;;;;;;",
+  "deployedSourceMap": "177:1642:37:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1039:102;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1039:102:37;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:100:-1;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;1039:102:37;;;;;;;;;;;;;;;;;1599:137:31;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1599:137:31;;;;;;816:77;;8:9:-1;5:2;;;30:1;27;20:12;5:2;816:77:31;;;;;;;;-1:-1:-1;;;;;816:77:31;;;;;;;;;;;;;;1167:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1167:90:31;;;;;;;;;;;;;;;;;;;;;;453:144:37;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;453:144:37;;;;;;;760:185;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;760:185:37;;;;;;;1306:167;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1306:167:37;;;;;;;1479:150;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1479:150:37;;;;;;;1885:107:31;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1885:107:31;-1:-1:-1;;;;;1885:107:31;;;;;1039:102:37;1090:8;1117:16;1110:23;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1039:102;;:::o;1599:137:31:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:31;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:31;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:31;;;1599:137::o;816:77::-;854:7;880:6;-1:-1:-1;;;;;880:6:31;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:31;1230:10;:20;;1167:90::o;453:144:37:-;1020:9:31;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:31;;;;;;;;;;;;;;;526:63:37;561:16;578:10;526:34;:63::i;:::-;453:144;:::o;760:185::-;841:4;1020:9:31;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:31;;;;;;;;;;;;;;;865:72:37;903:16;920;865:37;:72::i;:::-;858:79;760:185;-1:-1:-1;;760:185:37:o;1306:167::-;1381:4;1404:61;1437:16;1404:61;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1454:10;1404:32;:61::i;1479:150::-;1557:64;1593:16;1557:64;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1610:10;1557:35;:64::i;1885:107:31:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:31;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;79:179:38:-;171:32;188:9;171:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;198:4;171:16;:32::i;:::-;170:33;166:85;;;27:10:-1;;39:1;23:18;;45:23;;-1:-1;219:20:38;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;166:85;79:179;;:::o;264:463::-;383:16;;352:4;;;410:102;429:3;427:1;:5;410:102;;;472:4;456:20;;:9;466:1;456:12;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:20;452:48;;;495:5;;452:48;433:3;;410:102;;;528:3;526:1;:5;522:175;;;-1:-1:-1;;554:5:38;;551:8;;547:80;;595:9;609:1;605:3;:5;595:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;580:9;590:1;580:12;;;;;;;;;;;;;;;;;;;;;;;;;;;;:31;;;;;;;;;;;;;;;;;;547:80;641:18;;;:9;-1:-1:-1;;641:18:38;;;:::i;:::-;;681:4;674:11;;;;522:175;714:5;707:12;;264:463;;;;;;;:::o;914:283::-;1032:16;;1002:4;;;1059:108;1078:3;1076:1;:5;1059:108;;;1121:4;1105:20;;:9;1115:1;1105:12;;;;;;;;;;;;;;;;;;:20;;;1101:54;;;1151:4;1144:11;;;;1101:54;1082:3;;1059:108;;733:175;833:32;850:9;860:4;833:16;:32::i;:::-;825:75;;;;;;;-1:-1:-1;;;;;825:75:38;;;;;;;;;;;;;;;;;;;;;;;;;;;2093:225:31;-1:-1:-1;;;;;2166:22:31;;;;2158:73;;;;;-1:-1:-1;;;;;2158:73:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:31;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:31;-1:-1:-1;;;;;2294:17:31;;;;;;;;;;2093:225::o;177:1642:37:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;",
   "source": "pragma solidity ^0.4.26;\r\nimport './Ownable.sol';\r\nimport \"./whiteList.sol\";\r\n    /**\r\n     * @dev Implementation of a underlyingAssets filters a eligible underlying.\r\n     */\r\ncontract UnderlyingAssets is Ownable {\r\n    // The eligible underlying list\r\n    uint32[] internal underlyingAssets;\r\n    /**\r\n     * @dev Implementation of add an eligible underlying into the underlyingAssets.\r\n     * @param underlying new eligible underlying.\r\n     */\r\n    function addUnderlyingAsset(uint32 underlying)public onlyOwner{\r\n        whiteListUint32.addWhiteListUint32(underlyingAssets,underlying);\r\n    }\r\n    /**\r\n     * @dev Implementation of revoke an invalid underlying from the underlyingAssets.\r\n     * @param removeUnderlying revoked underlying.\r\n     */\r\n    function removeUnderlyingAssets(uint32 removeUnderlying)public onlyOwner returns(bool) {\r\n        return whiteListUint32.removeWhiteListUint32(underlyingAssets,removeUnderlying);\r\n    }\r\n    /**\r\n     * @dev Implementation of getting the eligible underlyingAssets.\r\n     */\r\n    function getUnderlyingAssets()public view returns (uint32[]){\r\n        return underlyingAssets;\r\n    }\r\n    /**\r\n     * @dev Implementation of testing whether the input underlying is eligible.\r\n     * @param underlying input underlying for testing.\r\n     */    \r\n    function isEligibleUnderlyingAsset(uint32 underlying) public view returns (bool){\r\n        return whiteListUint32.isEligibleUint32(underlyingAssets,underlying);\r\n    }\r\n    function checkUnderlyingAsset(uint32 underlying) public view{\r\n        return whiteListUint32.checkEligibleUint32(underlyingAssets,underlying);\r\n    }\r\n    function _getEligibleUnderlyingIndex(uint32 underlying) internal view returns (uint256){\r\n        return whiteListUint32._getEligibleIndexUint32(underlyingAssets,underlying);\r\n    }\r\n}",
   "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\modules\\underlyingAssets.sol",
   "ast": {
     "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/underlyingAssets.sol",
     "exportedSymbols": {
       "UnderlyingAssets": [
-        15443
+        16329
       ]
     },
-    "id": 15444,
+    "id": 16330,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 15355,
+        "id": 16241,
         "literals": [
           "solidity",
           "^",
@@ -176,27 +176,27 @@
           ".26"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:34"
+        "src": "0:24:37"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "./Ownable.sol",
-        "id": 15356,
+        "id": 16242,
         "nodeType": "ImportDirective",
-        "scope": 15444,
-        "sourceUnit": 14058,
-        "src": "26:23:34",
+        "scope": 16330,
+        "sourceUnit": 14944,
+        "src": "26:23:37",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/whiteList.sol",
         "file": "./whiteList.sol",
-        "id": 15357,
+        "id": 16243,
         "nodeType": "ImportDirective",
-        "scope": 15444,
-        "sourceUnit": 15989,
-        "src": "51:25:34",
+        "scope": 16330,
+        "sourceUnit": 16875,
+        "src": "51:25:37",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -206,42 +206,42 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 15358,
+              "id": 16244,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14057,
-              "src": "206:7:34",
+              "referencedDeclaration": 14943,
+              "src": "206:7:37",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14057",
+                "typeIdentifier": "t_contract$_Ownable_$14943",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 15359,
+            "id": 16245,
             "nodeType": "InheritanceSpecifier",
-            "src": "206:7:34"
+            "src": "206:7:37"
           }
         ],
         "contractDependencies": [
-          14057
+          14943
         ],
         "contractKind": "contract",
         "documentation": "@dev Implementation of a underlyingAssets filters a eligible underlying.\r",
         "fullyImplemented": true,
-        "id": 15443,
+        "id": 16329,
         "linearizedBaseContracts": [
-          15443,
-          14057
+          16329,
+          14943
         ],
         "name": "UnderlyingAssets",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 15362,
+            "id": 16248,
             "name": "underlyingAssets",
             "nodeType": "VariableDeclaration",
-            "scope": 15443,
-            "src": "258:34:34",
+            "scope": 16329,
+            "src": "258:34:37",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -250,19 +250,19 @@
             },
             "typeName": {
               "baseType": {
-                "id": 15360,
+                "id": 16246,
                 "name": "uint32",
                 "nodeType": "ElementaryTypeName",
-                "src": "258:6:34",
+                "src": "258:6:37",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint32",
                   "typeString": "uint32"
                 }
               },
-              "id": 15361,
+              "id": 16247,
               "length": null,
               "nodeType": "ArrayTypeName",
-              "src": "258:8:34",
+              "src": "258:8:37",
               "typeDescriptions": {
                 "typeIdentifier": "t_array$_t_uint32_$dyn_storage_ptr",
                 "typeString": "uint32[]"
@@ -273,9 +273,9 @@
           },
           {
             "body": {
-              "id": 15376,
+              "id": 16262,
               "nodeType": "Block",
-              "src": "515:82:34",
+              "src": "515:82:37",
               "statements": [
                 {
                   "expression": {
@@ -283,12 +283,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15372,
+                        "id": 16258,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "561:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "561:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -296,12 +296,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15373,
+                        "id": 16259,
                         "name": "underlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15364,
-                        "src": "578:10:34",
+                        "referencedDeclaration": 16250,
+                        "src": "578:10:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -321,32 +321,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15369,
+                        "id": 16255,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "526:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "526:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15371,
+                      "id": 16257,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "addWhiteListUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15467,
-                      "src": "526:34:34",
+                      "referencedDeclaration": 16353,
+                      "src": "526:34:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_uint32_$dyn_storage_ptr_$_t_uint32_$returns$__$",
                         "typeString": "function (uint32[] storage pointer,uint32)"
                       }
                     },
-                    "id": 15374,
+                    "id": 16260,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -354,57 +354,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "526:63:34",
+                    "src": "526:63:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 15375,
+                  "id": 16261,
                   "nodeType": "ExpressionStatement",
-                  "src": "526:63:34"
+                  "src": "526:63:37"
                 }
               ]
             },
             "documentation": "@dev Implementation of add an eligible underlying into the underlyingAssets.\r\n@param underlying new eligible underlying.\r",
-            "id": 15377,
+            "id": 16263,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 15367,
+                "id": 16253,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 15366,
+                  "id": 16252,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 13990,
-                  "src": "506:9:34",
+                  "referencedDeclaration": 14876,
+                  "src": "506:9:37",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "506:9:34"
+                "src": "506:9:37"
               }
             ],
             "name": "addUnderlyingAsset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15365,
+              "id": 16251,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15364,
+                  "id": 16250,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15377,
-                  "src": "481:17:34",
+                  "scope": 16263,
+                  "src": "481:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -412,10 +412,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15363,
+                    "id": 16249,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "481:6:34",
+                    "src": "481:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -425,26 +425,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "480:19:34"
+              "src": "480:19:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15368,
+              "id": 16254,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "515:0:34"
+              "src": "515:0:37"
             },
-            "scope": 15443,
-            "src": "453:144:34",
+            "scope": 16329,
+            "src": "453:144:37",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15392,
+              "id": 16278,
               "nodeType": "Block",
-              "src": "847:98:34",
+              "src": "847:98:37",
               "statements": [
                 {
                   "expression": {
@@ -452,12 +452,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15388,
+                        "id": 16274,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "903:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "903:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -465,12 +465,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15389,
+                        "id": 16275,
                         "name": "removeUnderlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15379,
-                        "src": "920:16:34",
+                        "referencedDeclaration": 16265,
+                        "src": "920:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -490,32 +490,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15386,
+                        "id": 16272,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "865:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "865:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15387,
+                      "id": 16273,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "removeWhiteListUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15533,
-                      "src": "865:37:34",
+                      "referencedDeclaration": 16419,
+                      "src": "865:37:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_uint32_$dyn_storage_ptr_$_t_uint32_$returns$_t_bool_$",
                         "typeString": "function (uint32[] storage pointer,uint32) returns (bool)"
                       }
                     },
-                    "id": 15390,
+                    "id": 16276,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -523,58 +523,58 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "865:72:34",
+                    "src": "865:72:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 15385,
-                  "id": 15391,
+                  "functionReturnParameters": 16271,
+                  "id": 16277,
                   "nodeType": "Return",
-                  "src": "858:79:34"
+                  "src": "858:79:37"
                 }
               ]
             },
             "documentation": "@dev Implementation of revoke an invalid underlying from the underlyingAssets.\r\n@param removeUnderlying revoked underlying.\r",
-            "id": 15393,
+            "id": 16279,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 15382,
+                "id": 16268,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 15381,
+                  "id": 16267,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 13990,
-                  "src": "823:9:34",
+                  "referencedDeclaration": 14876,
+                  "src": "823:9:37",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "823:9:34"
+                "src": "823:9:37"
               }
             ],
             "name": "removeUnderlyingAssets",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15380,
+              "id": 16266,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15379,
+                  "id": 16265,
                   "name": "removeUnderlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15393,
-                  "src": "792:23:34",
+                  "scope": 16279,
+                  "src": "792:23:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -582,10 +582,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15378,
+                    "id": 16264,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "792:6:34",
+                    "src": "792:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -595,20 +595,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "791:25:34"
+              "src": "791:25:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15385,
+              "id": 16271,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15384,
+                  "id": 16270,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15393,
-                  "src": "841:4:34",
+                  "scope": 16279,
+                  "src": "841:4:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -616,10 +616,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 15383,
+                    "id": 16269,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "841:4:34",
+                    "src": "841:4:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -629,43 +629,43 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "840:6:34"
+              "src": "840:6:37"
             },
-            "scope": 15443,
-            "src": "760:185:34",
+            "scope": 16329,
+            "src": "760:185:37",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15401,
+              "id": 16287,
               "nodeType": "Block",
-              "src": "1099:42:34",
+              "src": "1099:42:37",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 15399,
+                    "id": 16285,
                     "name": "underlyingAssets",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 15362,
-                    "src": "1117:16:34",
+                    "referencedDeclaration": 16248,
+                    "src": "1117:16:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                       "typeString": "uint32[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 15398,
-                  "id": 15400,
+                  "functionReturnParameters": 16284,
+                  "id": 16286,
                   "nodeType": "Return",
-                  "src": "1110:23:34"
+                  "src": "1110:23:37"
                 }
               ]
             },
             "documentation": "@dev Implementation of getting the eligible underlyingAssets.\r",
-            "id": 15402,
+            "id": 16288,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -673,23 +673,23 @@
             "name": "getUnderlyingAssets",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15394,
+              "id": 16280,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1067:2:34"
+              "src": "1067:2:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15398,
+              "id": 16284,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15397,
+                  "id": 16283,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15402,
-                  "src": "1090:8:34",
+                  "scope": 16288,
+                  "src": "1090:8:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -698,19 +698,19 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 15395,
+                      "id": 16281,
                       "name": "uint32",
                       "nodeType": "ElementaryTypeName",
-                      "src": "1090:6:34",
+                      "src": "1090:6:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
-                    "id": 15396,
+                    "id": 16282,
                     "length": null,
                     "nodeType": "ArrayTypeName",
-                    "src": "1090:8:34",
+                    "src": "1090:8:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_uint32_$dyn_storage_ptr",
                       "typeString": "uint32[]"
@@ -720,19 +720,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1089:10:34"
+              "src": "1089:10:37"
             },
-            "scope": 15443,
-            "src": "1039:102:34",
+            "scope": 16329,
+            "src": "1039:102:37",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15415,
+              "id": 16301,
               "nodeType": "Block",
-              "src": "1386:87:34",
+              "src": "1386:87:37",
               "statements": [
                 {
                   "expression": {
@@ -740,12 +740,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15411,
+                        "id": 16297,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "1437:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "1437:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -753,12 +753,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15412,
+                        "id": 16298,
                         "name": "underlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15404,
-                        "src": "1454:10:34",
+                        "referencedDeclaration": 16290,
+                        "src": "1454:10:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -778,32 +778,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15409,
+                        "id": 16295,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "1404:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "1404:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15410,
+                      "id": 16296,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "isEligibleUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15588,
-                      "src": "1404:32:34",
+                      "referencedDeclaration": 16474,
+                      "src": "1404:32:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint32_$dyn_memory_ptr_$_t_uint32_$returns$_t_bool_$",
                         "typeString": "function (uint32[] memory,uint32) pure returns (bool)"
                       }
                     },
-                    "id": 15413,
+                    "id": 16299,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -811,21 +811,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1404:61:34",
+                    "src": "1404:61:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 15408,
-                  "id": 15414,
+                  "functionReturnParameters": 16294,
+                  "id": 16300,
                   "nodeType": "Return",
-                  "src": "1397:68:34"
+                  "src": "1397:68:37"
                 }
               ]
             },
             "documentation": "@dev Implementation of testing whether the input underlying is eligible.\r\n@param underlying input underlying for testing.\r",
-            "id": 15416,
+            "id": 16302,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -833,16 +833,16 @@
             "name": "isEligibleUnderlyingAsset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15405,
+              "id": 16291,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15404,
+                  "id": 16290,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15416,
-                  "src": "1341:17:34",
+                  "scope": 16302,
+                  "src": "1341:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -850,10 +850,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15403,
+                    "id": 16289,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1341:6:34",
+                    "src": "1341:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -863,20 +863,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1340:19:34"
+              "src": "1340:19:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15408,
+              "id": 16294,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15407,
+                  "id": 16293,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15416,
-                  "src": "1381:4:34",
+                  "scope": 16302,
+                  "src": "1381:4:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -884,10 +884,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 15406,
+                    "id": 16292,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1381:4:34",
+                    "src": "1381:4:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -897,19 +897,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1380:6:34"
+              "src": "1380:6:37"
             },
-            "scope": 15443,
-            "src": "1306:167:34",
+            "scope": 16329,
+            "src": "1306:167:37",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15427,
+              "id": 16313,
               "nodeType": "Block",
-              "src": "1539:90:34",
+              "src": "1539:90:37",
               "statements": [
                 {
                   "expression": {
@@ -917,12 +917,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15423,
+                        "id": 16309,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "1593:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "1593:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -930,12 +930,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15424,
+                        "id": 16310,
                         "name": "underlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15418,
-                        "src": "1610:10:34",
+                        "referencedDeclaration": 16304,
+                        "src": "1610:10:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -955,32 +955,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15421,
+                        "id": 16307,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "1557:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "1557:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15422,
+                      "id": 16308,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "checkEligibleUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15550,
-                      "src": "1557:35:34",
+                      "referencedDeclaration": 16436,
+                      "src": "1557:35:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint32_$dyn_memory_ptr_$_t_uint32_$returns$__$",
                         "typeString": "function (uint32[] memory,uint32) pure"
                       }
                     },
-                    "id": 15425,
+                    "id": 16311,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -988,21 +988,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1557:64:34",
+                    "src": "1557:64:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "functionReturnParameters": 15420,
-                  "id": 15426,
+                  "functionReturnParameters": 16306,
+                  "id": 16312,
                   "nodeType": "Return",
-                  "src": "1550:71:34"
+                  "src": "1550:71:37"
                 }
               ]
             },
             "documentation": null,
-            "id": 15428,
+            "id": 16314,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -1010,16 +1010,16 @@
             "name": "checkUnderlyingAsset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15419,
+              "id": 16305,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15418,
+                  "id": 16304,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15428,
-                  "src": "1509:17:34",
+                  "scope": 16314,
+                  "src": "1509:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1027,10 +1027,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15417,
+                    "id": 16303,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1509:6:34",
+                    "src": "1509:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1040,26 +1040,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1508:19:34"
+              "src": "1508:19:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15420,
+              "id": 16306,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1539:0:34"
+              "src": "1539:0:37"
             },
-            "scope": 15443,
-            "src": "1479:150:34",
+            "scope": 16329,
+            "src": "1479:150:37",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15441,
+              "id": 16327,
               "nodeType": "Block",
-              "src": "1722:94:34",
+              "src": "1722:94:37",
               "statements": [
                 {
                   "expression": {
@@ -1067,12 +1067,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15437,
+                        "id": 16323,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "1780:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "1780:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -1080,12 +1080,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15438,
+                        "id": 16324,
                         "name": "underlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15430,
-                        "src": "1797:10:34",
+                        "referencedDeclaration": 16316,
+                        "src": "1797:10:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -1105,32 +1105,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15435,
+                        "id": 16321,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "1740:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "1740:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15436,
+                      "id": 16322,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "_getEligibleIndexUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15625,
-                      "src": "1740:39:34",
+                      "referencedDeclaration": 16511,
+                      "src": "1740:39:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint32_$dyn_memory_ptr_$_t_uint32_$returns$_t_uint256_$",
                         "typeString": "function (uint32[] memory,uint32) pure returns (uint256)"
                       }
                     },
-                    "id": 15439,
+                    "id": 16325,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1138,21 +1138,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1740:68:34",
+                    "src": "1740:68:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 15434,
-                  "id": 15440,
+                  "functionReturnParameters": 16320,
+                  "id": 16326,
                   "nodeType": "Return",
-                  "src": "1733:75:34"
+                  "src": "1733:75:37"
                 }
               ]
             },
             "documentation": null,
-            "id": 15442,
+            "id": 16328,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -1160,16 +1160,16 @@
             "name": "_getEligibleUnderlyingIndex",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15431,
+              "id": 16317,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15430,
+                  "id": 16316,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15442,
-                  "src": "1672:17:34",
+                  "scope": 16328,
+                  "src": "1672:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1177,10 +1177,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15429,
+                    "id": 16315,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1672:6:34",
+                    "src": "1672:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1190,20 +1190,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1671:19:34"
+              "src": "1671:19:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15434,
+              "id": 16320,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15433,
+                  "id": 16319,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15442,
-                  "src": "1714:7:34",
+                  "scope": 16328,
+                  "src": "1714:7:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1211,10 +1211,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 15432,
+                    "id": 16318,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1714:7:34",
+                    "src": "1714:7:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1224,33 +1224,33 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1713:9:34"
+              "src": "1713:9:37"
             },
-            "scope": 15443,
-            "src": "1635:181:34",
+            "scope": 16329,
+            "src": "1635:181:37",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 15444,
-        "src": "177:1642:34"
+        "scope": 16330,
+        "src": "177:1642:37"
       }
     ],
-    "src": "0:1819:34"
+    "src": "0:1819:37"
   },
   "legacyAST": {
     "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/underlyingAssets.sol",
     "exportedSymbols": {
       "UnderlyingAssets": [
-        15443
+        16329
       ]
     },
-    "id": 15444,
+    "id": 16330,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 15355,
+        "id": 16241,
         "literals": [
           "solidity",
           "^",
@@ -1258,27 +1258,27 @@
           ".26"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:34"
+        "src": "0:24:37"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "./Ownable.sol",
-        "id": 15356,
+        "id": 16242,
         "nodeType": "ImportDirective",
-        "scope": 15444,
-        "sourceUnit": 14058,
-        "src": "26:23:34",
+        "scope": 16330,
+        "sourceUnit": 14944,
+        "src": "26:23:37",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/whiteList.sol",
         "file": "./whiteList.sol",
-        "id": 15357,
+        "id": 16243,
         "nodeType": "ImportDirective",
-        "scope": 15444,
-        "sourceUnit": 15989,
-        "src": "51:25:34",
+        "scope": 16330,
+        "sourceUnit": 16875,
+        "src": "51:25:37",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -1288,42 +1288,42 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 15358,
+              "id": 16244,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14057,
-              "src": "206:7:34",
+              "referencedDeclaration": 14943,
+              "src": "206:7:37",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14057",
+                "typeIdentifier": "t_contract$_Ownable_$14943",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 15359,
+            "id": 16245,
             "nodeType": "InheritanceSpecifier",
-            "src": "206:7:34"
+            "src": "206:7:37"
           }
         ],
         "contractDependencies": [
-          14057
+          14943
         ],
         "contractKind": "contract",
         "documentation": "@dev Implementation of a underlyingAssets filters a eligible underlying.\r",
         "fullyImplemented": true,
-        "id": 15443,
+        "id": 16329,
         "linearizedBaseContracts": [
-          15443,
-          14057
+          16329,
+          14943
         ],
         "name": "UnderlyingAssets",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 15362,
+            "id": 16248,
             "name": "underlyingAssets",
             "nodeType": "VariableDeclaration",
-            "scope": 15443,
-            "src": "258:34:34",
+            "scope": 16329,
+            "src": "258:34:37",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1332,19 +1332,19 @@
             },
             "typeName": {
               "baseType": {
-                "id": 15360,
+                "id": 16246,
                 "name": "uint32",
                 "nodeType": "ElementaryTypeName",
-                "src": "258:6:34",
+                "src": "258:6:37",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint32",
                   "typeString": "uint32"
                 }
               },
-              "id": 15361,
+              "id": 16247,
               "length": null,
               "nodeType": "ArrayTypeName",
-              "src": "258:8:34",
+              "src": "258:8:37",
               "typeDescriptions": {
                 "typeIdentifier": "t_array$_t_uint32_$dyn_storage_ptr",
                 "typeString": "uint32[]"
@@ -1355,9 +1355,9 @@
           },
           {
             "body": {
-              "id": 15376,
+              "id": 16262,
               "nodeType": "Block",
-              "src": "515:82:34",
+              "src": "515:82:37",
               "statements": [
                 {
                   "expression": {
@@ -1365,12 +1365,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15372,
+                        "id": 16258,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "561:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "561:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -1378,12 +1378,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15373,
+                        "id": 16259,
                         "name": "underlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15364,
-                        "src": "578:10:34",
+                        "referencedDeclaration": 16250,
+                        "src": "578:10:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -1403,32 +1403,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15369,
+                        "id": 16255,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "526:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "526:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15371,
+                      "id": 16257,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "addWhiteListUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15467,
-                      "src": "526:34:34",
+                      "referencedDeclaration": 16353,
+                      "src": "526:34:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_uint32_$dyn_storage_ptr_$_t_uint32_$returns$__$",
                         "typeString": "function (uint32[] storage pointer,uint32)"
                       }
                     },
-                    "id": 15374,
+                    "id": 16260,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1436,57 +1436,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "526:63:34",
+                    "src": "526:63:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 15375,
+                  "id": 16261,
                   "nodeType": "ExpressionStatement",
-                  "src": "526:63:34"
+                  "src": "526:63:37"
                 }
               ]
             },
             "documentation": "@dev Implementation of add an eligible underlying into the underlyingAssets.\r\n@param underlying new eligible underlying.\r",
-            "id": 15377,
+            "id": 16263,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 15367,
+                "id": 16253,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 15366,
+                  "id": 16252,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 13990,
-                  "src": "506:9:34",
+                  "referencedDeclaration": 14876,
+                  "src": "506:9:37",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "506:9:34"
+                "src": "506:9:37"
               }
             ],
             "name": "addUnderlyingAsset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15365,
+              "id": 16251,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15364,
+                  "id": 16250,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15377,
-                  "src": "481:17:34",
+                  "scope": 16263,
+                  "src": "481:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1494,10 +1494,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15363,
+                    "id": 16249,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "481:6:34",
+                    "src": "481:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1507,26 +1507,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "480:19:34"
+              "src": "480:19:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15368,
+              "id": 16254,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "515:0:34"
+              "src": "515:0:37"
             },
-            "scope": 15443,
-            "src": "453:144:34",
+            "scope": 16329,
+            "src": "453:144:37",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15392,
+              "id": 16278,
               "nodeType": "Block",
-              "src": "847:98:34",
+              "src": "847:98:37",
               "statements": [
                 {
                   "expression": {
@@ -1534,12 +1534,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15388,
+                        "id": 16274,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "903:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "903:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -1547,12 +1547,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15389,
+                        "id": 16275,
                         "name": "removeUnderlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15379,
-                        "src": "920:16:34",
+                        "referencedDeclaration": 16265,
+                        "src": "920:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -1572,32 +1572,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15386,
+                        "id": 16272,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "865:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "865:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15387,
+                      "id": 16273,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "removeWhiteListUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15533,
-                      "src": "865:37:34",
+                      "referencedDeclaration": 16419,
+                      "src": "865:37:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_uint32_$dyn_storage_ptr_$_t_uint32_$returns$_t_bool_$",
                         "typeString": "function (uint32[] storage pointer,uint32) returns (bool)"
                       }
                     },
-                    "id": 15390,
+                    "id": 16276,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1605,58 +1605,58 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "865:72:34",
+                    "src": "865:72:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 15385,
-                  "id": 15391,
+                  "functionReturnParameters": 16271,
+                  "id": 16277,
                   "nodeType": "Return",
-                  "src": "858:79:34"
+                  "src": "858:79:37"
                 }
               ]
             },
             "documentation": "@dev Implementation of revoke an invalid underlying from the underlyingAssets.\r\n@param removeUnderlying revoked underlying.\r",
-            "id": 15393,
+            "id": 16279,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 15382,
+                "id": 16268,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 15381,
+                  "id": 16267,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 13990,
-                  "src": "823:9:34",
+                  "referencedDeclaration": 14876,
+                  "src": "823:9:37",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "823:9:34"
+                "src": "823:9:37"
               }
             ],
             "name": "removeUnderlyingAssets",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15380,
+              "id": 16266,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15379,
+                  "id": 16265,
                   "name": "removeUnderlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15393,
-                  "src": "792:23:34",
+                  "scope": 16279,
+                  "src": "792:23:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1664,10 +1664,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15378,
+                    "id": 16264,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "792:6:34",
+                    "src": "792:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1677,20 +1677,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "791:25:34"
+              "src": "791:25:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15385,
+              "id": 16271,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15384,
+                  "id": 16270,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15393,
-                  "src": "841:4:34",
+                  "scope": 16279,
+                  "src": "841:4:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1698,10 +1698,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 15383,
+                    "id": 16269,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "841:4:34",
+                    "src": "841:4:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1711,43 +1711,43 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "840:6:34"
+              "src": "840:6:37"
             },
-            "scope": 15443,
-            "src": "760:185:34",
+            "scope": 16329,
+            "src": "760:185:37",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15401,
+              "id": 16287,
               "nodeType": "Block",
-              "src": "1099:42:34",
+              "src": "1099:42:37",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 15399,
+                    "id": 16285,
                     "name": "underlyingAssets",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 15362,
-                    "src": "1117:16:34",
+                    "referencedDeclaration": 16248,
+                    "src": "1117:16:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                       "typeString": "uint32[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 15398,
-                  "id": 15400,
+                  "functionReturnParameters": 16284,
+                  "id": 16286,
                   "nodeType": "Return",
-                  "src": "1110:23:34"
+                  "src": "1110:23:37"
                 }
               ]
             },
             "documentation": "@dev Implementation of getting the eligible underlyingAssets.\r",
-            "id": 15402,
+            "id": 16288,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -1755,23 +1755,23 @@
             "name": "getUnderlyingAssets",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15394,
+              "id": 16280,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1067:2:34"
+              "src": "1067:2:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15398,
+              "id": 16284,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15397,
+                  "id": 16283,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15402,
-                  "src": "1090:8:34",
+                  "scope": 16288,
+                  "src": "1090:8:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1780,19 +1780,19 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 15395,
+                      "id": 16281,
                       "name": "uint32",
                       "nodeType": "ElementaryTypeName",
-                      "src": "1090:6:34",
+                      "src": "1090:6:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
-                    "id": 15396,
+                    "id": 16282,
                     "length": null,
                     "nodeType": "ArrayTypeName",
-                    "src": "1090:8:34",
+                    "src": "1090:8:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_uint32_$dyn_storage_ptr",
                       "typeString": "uint32[]"
@@ -1802,19 +1802,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1089:10:34"
+              "src": "1089:10:37"
             },
-            "scope": 15443,
-            "src": "1039:102:34",
+            "scope": 16329,
+            "src": "1039:102:37",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15415,
+              "id": 16301,
               "nodeType": "Block",
-              "src": "1386:87:34",
+              "src": "1386:87:37",
               "statements": [
                 {
                   "expression": {
@@ -1822,12 +1822,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15411,
+                        "id": 16297,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "1437:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "1437:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -1835,12 +1835,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15412,
+                        "id": 16298,
                         "name": "underlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15404,
-                        "src": "1454:10:34",
+                        "referencedDeclaration": 16290,
+                        "src": "1454:10:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -1860,32 +1860,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15409,
+                        "id": 16295,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "1404:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "1404:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15410,
+                      "id": 16296,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "isEligibleUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15588,
-                      "src": "1404:32:34",
+                      "referencedDeclaration": 16474,
+                      "src": "1404:32:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint32_$dyn_memory_ptr_$_t_uint32_$returns$_t_bool_$",
                         "typeString": "function (uint32[] memory,uint32) pure returns (bool)"
                       }
                     },
-                    "id": 15413,
+                    "id": 16299,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1893,21 +1893,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1404:61:34",
+                    "src": "1404:61:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 15408,
-                  "id": 15414,
+                  "functionReturnParameters": 16294,
+                  "id": 16300,
                   "nodeType": "Return",
-                  "src": "1397:68:34"
+                  "src": "1397:68:37"
                 }
               ]
             },
             "documentation": "@dev Implementation of testing whether the input underlying is eligible.\r\n@param underlying input underlying for testing.\r",
-            "id": 15416,
+            "id": 16302,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -1915,16 +1915,16 @@
             "name": "isEligibleUnderlyingAsset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15405,
+              "id": 16291,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15404,
+                  "id": 16290,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15416,
-                  "src": "1341:17:34",
+                  "scope": 16302,
+                  "src": "1341:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1932,10 +1932,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15403,
+                    "id": 16289,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1341:6:34",
+                    "src": "1341:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1945,20 +1945,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1340:19:34"
+              "src": "1340:19:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15408,
+              "id": 16294,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15407,
+                  "id": 16293,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15416,
-                  "src": "1381:4:34",
+                  "scope": 16302,
+                  "src": "1381:4:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1966,10 +1966,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 15406,
+                    "id": 16292,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1381:4:34",
+                    "src": "1381:4:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1979,19 +1979,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1380:6:34"
+              "src": "1380:6:37"
             },
-            "scope": 15443,
-            "src": "1306:167:34",
+            "scope": 16329,
+            "src": "1306:167:37",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15427,
+              "id": 16313,
               "nodeType": "Block",
-              "src": "1539:90:34",
+              "src": "1539:90:37",
               "statements": [
                 {
                   "expression": {
@@ -1999,12 +1999,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15423,
+                        "id": 16309,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "1593:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "1593:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -2012,12 +2012,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15424,
+                        "id": 16310,
                         "name": "underlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15418,
-                        "src": "1610:10:34",
+                        "referencedDeclaration": 16304,
+                        "src": "1610:10:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -2037,32 +2037,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15421,
+                        "id": 16307,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "1557:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "1557:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15422,
+                      "id": 16308,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "checkEligibleUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15550,
-                      "src": "1557:35:34",
+                      "referencedDeclaration": 16436,
+                      "src": "1557:35:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint32_$dyn_memory_ptr_$_t_uint32_$returns$__$",
                         "typeString": "function (uint32[] memory,uint32) pure"
                       }
                     },
-                    "id": 15425,
+                    "id": 16311,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2070,21 +2070,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1557:64:34",
+                    "src": "1557:64:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "functionReturnParameters": 15420,
-                  "id": 15426,
+                  "functionReturnParameters": 16306,
+                  "id": 16312,
                   "nodeType": "Return",
-                  "src": "1550:71:34"
+                  "src": "1550:71:37"
                 }
               ]
             },
             "documentation": null,
-            "id": 15428,
+            "id": 16314,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -2092,16 +2092,16 @@
             "name": "checkUnderlyingAsset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15419,
+              "id": 16305,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15418,
+                  "id": 16304,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15428,
-                  "src": "1509:17:34",
+                  "scope": 16314,
+                  "src": "1509:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2109,10 +2109,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15417,
+                    "id": 16303,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1509:6:34",
+                    "src": "1509:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -2122,26 +2122,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1508:19:34"
+              "src": "1508:19:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15420,
+              "id": 16306,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1539:0:34"
+              "src": "1539:0:37"
             },
-            "scope": 15443,
-            "src": "1479:150:34",
+            "scope": 16329,
+            "src": "1479:150:37",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 15441,
+              "id": 16327,
               "nodeType": "Block",
-              "src": "1722:94:34",
+              "src": "1722:94:37",
               "statements": [
                 {
                   "expression": {
@@ -2149,12 +2149,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 15437,
+                        "id": 16323,
                         "name": "underlyingAssets",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15362,
-                        "src": "1780:16:34",
+                        "referencedDeclaration": 16248,
+                        "src": "1780:16:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint32_$dyn_storage",
                           "typeString": "uint32[] storage ref"
@@ -2162,12 +2162,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 15438,
+                        "id": 16324,
                         "name": "underlying",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15430,
-                        "src": "1797:10:34",
+                        "referencedDeclaration": 16316,
+                        "src": "1797:10:37",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -2187,32 +2187,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 15435,
+                        "id": 16321,
                         "name": "whiteListUint32",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15626,
-                        "src": "1740:15:34",
+                        "referencedDeclaration": 16512,
+                        "src": "1740:15:37",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$15626_$",
+                          "typeIdentifier": "t_type$_t_contract$_whiteListUint32_$16512_$",
                           "typeString": "type(library whiteListUint32)"
                         }
                       },
-                      "id": 15436,
+                      "id": 16322,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "_getEligibleIndexUint32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 15625,
-                      "src": "1740:39:34",
+                      "referencedDeclaration": 16511,
+                      "src": "1740:39:37",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint32_$dyn_memory_ptr_$_t_uint32_$returns$_t_uint256_$",
                         "typeString": "function (uint32[] memory,uint32) pure returns (uint256)"
                       }
                     },
-                    "id": 15439,
+                    "id": 16325,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2220,21 +2220,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1740:68:34",
+                    "src": "1740:68:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 15434,
-                  "id": 15440,
+                  "functionReturnParameters": 16320,
+                  "id": 16326,
                   "nodeType": "Return",
-                  "src": "1733:75:34"
+                  "src": "1733:75:37"
                 }
               ]
             },
             "documentation": null,
-            "id": 15442,
+            "id": 16328,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -2242,16 +2242,16 @@
             "name": "_getEligibleUnderlyingIndex",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 15431,
+              "id": 16317,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15430,
+                  "id": 16316,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15442,
-                  "src": "1672:17:34",
+                  "scope": 16328,
+                  "src": "1672:17:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2259,10 +2259,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 15429,
+                    "id": 16315,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1672:6:34",
+                    "src": "1672:6:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -2272,20 +2272,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1671:19:34"
+              "src": "1671:19:37"
             },
             "payable": false,
             "returnParameters": {
-              "id": 15434,
+              "id": 16320,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 15433,
+                  "id": 16319,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 15442,
-                  "src": "1714:7:34",
+                  "scope": 16328,
+                  "src": "1714:7:37",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2293,10 +2293,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 15432,
+                    "id": 16318,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1714:7:34",
+                    "src": "1714:7:37",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2306,20 +2306,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1713:9:34"
+              "src": "1713:9:37"
             },
-            "scope": 15443,
-            "src": "1635:181:34",
+            "scope": 16329,
+            "src": "1635:181:37",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 15444,
-        "src": "177:1642:34"
+        "scope": 16330,
+        "src": "177:1642:37"
       }
     ],
-    "src": "0:1819:34"
+    "src": "0:1819:37"
   },
   "compiler": {
     "name": "solc",
@@ -2327,7 +2327,7 @@
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-08-03T07:47:17.063Z",
+  "updatedAt": "2020-08-03T14:27:23.556Z",
   "devdoc": {
     "methods": {
       "addUnderlyingAsset(uint32)": {

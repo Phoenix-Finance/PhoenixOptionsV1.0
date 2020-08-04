@@ -47,25 +47,24 @@ contract('OptionsManagerV2', function (accounts){
                 await OptionsManger.buyOption(collateral0,200000000000000,9250*1e8,1,month,10000000000,1,{value : 200000000000000});
         //        console.log(tx);
             }
-            optionsLen = await options.getOptionInfoLength()
-            for (j=0;j<Math.floor(optionsLen/400)+1;j++){
-                let bn = new BN(j);
-                let bn1 = new BN(40);
-                bn1 = bn1.ushln(64);
-                bn = bn.add(bn1);
-                console.log(bn.toString(16));
-                let result =  await options.calculatePhaseOccupiedCollateral(bn);
-                console.log(result[0].toString(10),result[1].toString(10));
-                let tx = await options.setPhaseOccupiedCollateral(bn);
-                console.log(tx);
-                let whiteList = [collateral0,fnx.address];
-                result =  await options.calRangeSharedPayment(0,0,20,whiteList);
-                console.log(result[1].toString(10),result[2].toString(10));
-//                return;
-                tx = await OptionsManger.setPhaseSharedPayment(bn);
-                console.log(tx);
-                return;
-            }  
+            await calculateNetWroth(options,OptionsManger,fnx);
+            return;
+
         }
      });
 });
+async function calculateNetWroth(options,OptionsManger,fnx){
+    let whiteList = [collateral0,fnx.address];
+    optionsLen = await options.getOptionCalRangeAll(whiteList);
+    console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
+
+    let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
+    console.log(result[0].toString(10),result[1].toString(10));
+    let tx = await options.setOccupiedCollateral();
+    result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
+    console.log(result[0][0].toString(10),result[0][1].toString(10));
+
+//                return;
+    tx = await OptionsManger.calSharedPayment();
+    console.log(tx);
+}

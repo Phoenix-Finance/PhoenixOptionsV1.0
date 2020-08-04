@@ -9,8 +9,8 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
     string public symbol = "FPT";
     
     uint256 internal _totalLockedWorth = 0;
-    mapping (address => uint256) public lockedBalances;
-    mapping (address => uint256) public lockedTotalWorth;
+    mapping (address => uint256) internal lockedBalances;
+    mapping (address => uint256) internal lockedTotalWorth;
 
     event AddLocked(address indexed owner, uint256 amount,uint256 worth);
     event BurnLocked(address indexed owner, uint256 amount,uint256 worth);
@@ -80,5 +80,34 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
         lockedTotalWorth[account]= lockedTotalWorth[account].sub(lockedWorth);
         _totalLockedWorth = _totalLockedWorth.sub(lockedWorth);
         emit BurnLocked(account, amount,lockedWorth);
+    }
+    function redeemLockedCollateral(address account,uint256 tokenAmount,uint256 leftColateral)public onlyManager returns (uint256,uint256){
+        if (leftColateral == 0){
+            return(0,0);
+        }
+        uint256 lockedAmount = lockedBalances[account];
+        uint256 lockedWorth = lockedTotalWorth[account];
+        if (lockedAmount == 0){
+            return (0,0);
+        }
+        uint256 redeemWorth = 0;
+        uint256 lockedBurn = 0;
+        uint256 lockedPrice = lockedWorth/lockedAmount;
+        if (lockedAmount >= tokenAmount){
+            lockedBurn = tokenAmount;
+            redeemWorth = tokenAmount.mul(lockedPrice);
+        }else{
+            lockedBurn = lockedAmount;
+            redeemWorth = lockedWorth;
+        }
+        if (redeemWorth > leftColateral) {
+            lockedBurn = leftColateral.div(lockedPrice);
+            redeemWorth = lockedBurn.mul(lockedPrice);
+        }
+        if (lockedBurn > 0){
+            burnLocked(msg.sender,lockedBurn);
+            return (lockedBurn,redeemWorth);
+        }
+        return (0,0);
     }
 }

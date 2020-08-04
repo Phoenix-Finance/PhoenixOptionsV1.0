@@ -1,6 +1,7 @@
 
 pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
+import "./modules/SafeInt256.sol";
 import "./modules/ReentrancyGuard.sol";
 import "./modules/underlyingAssets.sol";
 import "./modules/TransactionFee.sol";
@@ -12,16 +13,17 @@ import "./modules/Operator.sol";
 
 contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator {
     using SafeMath for uint256;
+    using SafeInt256 for int256;
     fraction private collateralRate = fraction(5, 1);
  
     event AddCollateral(address indexed from,address indexed collateral,uint256 amount,uint256 tokenAmount);
     event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);
 
     event DebugEvent(uint256 indexed value1,uint256 indexed value2,uint256 indexed value3);
-
+    event DebugEventInt(int256 value1,int256 value2,int256 value3);
     function addNetBalance(address settlement,uint256 amount) public payable onlyOperatorIndex(1) {
         amount = getPayableAmount(settlement,amount);
-        _collateralPool.addNetWorthBalance(settlement,amount);
+        _collateralPool.addNetWorthBalance(settlement,int256(amount));
 //        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
     }
     function setCollateralRate(uint256 numerator,uint256 denominator) public onlyOwner {
@@ -36,32 +38,29 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
         //userCollateralPaying[user];
     }
     function userInputCollateral(address user,address collateral)public view returns (uint256){
-        _collateralPool.userInputCollateral(user,collateral);
+        _collateralPool.getUserInputCollateral(user,collateral);
         //return userInputCollateral[user][collateral];
     }
-    function setPhaseSharedPayment(uint256 calInfo) public onlyOperatorIndex(0) {
-        (uint256[] memory sharedBalances,uint256 firstOption,bool success) =
-             _optionsPool.calculatePhaseSharedPayment(calInfo,whiteList);
+    function calSharedPayment() public onlyOperatorIndex(0) {
+        address[] memory tmpWhiteList = whiteList;
+        (uint256 firstOption,int256[] memory latestShared) = _optionsPool.getNetWrothCalInfo(tmpWhiteList);
+        uint256 lastOption = _optionsPool.getOptionInfoLength();
+        (uint256[] memory sharedBalance,uint256 newFirst,bool success) = _optionsPool.calRangeSharedPayment(lastOption,firstOption,lastOption,tmpWhiteList);
         if (success){
-            (int256[] memory fallBalance,uint256[] memory prices) = _optionsPool.calculatePhaseOptionsFall(calInfo,whiteList);
+            emit DebugEvent(34567,sharedBalance[0],sharedBalance[1]);
+            int256[] memory newNetworth = _optionsPool.calculateExpiredPayment(firstOption,newFirst,tmpWhiteList);
+            int256[] memory fallBalance = _optionsPool.calculatePhaseOptionsFall(lastOption,newFirst,lastOption,tmpWhiteList);
+            emit DebugEventInt(34567,newNetworth[0],newNetworth[1]);
             for (uint256 i= 0;i<fallBalance.length;i++){
-                fallBalance[i] += int256(sharedBalances[i]);
+                fallBalance[i] = int256(sharedBalance[i])-latestShared[i]+fallBalance[i];
             }
-            setSharedPayment(calInfo,fallBalance,prices,firstOption,now);
+            emit DebugEventInt(34567,fallBalance[0],fallBalance[1]);
+            setSharedPayment(newNetworth,fallBalance,newFirst);
         }
     }
-    function setSharedPayment(uint256 calInfo,int256[] sharedBalances,uint256[] prices,uint256 firstOption,uint256 calTime) public onlyOperatorIndex(0){
-        _optionsPool.setSharedState(calInfo,firstOption,prices,calTime);
-        for (uint i=0;i<sharedBalances.length;i++){
-            address addr = whiteList[i];
-            if(sharedBalances[i]>=0){
-                _collateralPool.addNetWorthBalance(addr,uint256(sharedBalances[i]));
-//                netWorthBalances[addr] = netWorthBalances[addr].add(uint256(sharedBalances[i]));
-            }else{
-                _collateralPool.subNetWorthBalance(addr,uint256(-sharedBalances[i]));
-//                netWorthBalances[addr] = netWorthBalances[addr].sub(uint256(-sharedBalances[i]));
-            }
-        }
+    function setSharedPayment(int256[] newNetworth,int256[] sharedBalances,uint256 firstOption) public onlyOperatorIndex(0){
+        _optionsPool.setSharedState(firstOption,sharedBalances,whiteList);
+        _collateralPool.addNetWorthBalances(whiteList,newNetworth);
     }
     function getUserTotalWorth(address account)public view returns (uint256){
         return getTokenNetworth().mul(_FPTCoin.balanceOf(account)).add(_FPTCoin.lockedWorthOf(account));
@@ -71,7 +70,8 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
         if (_totalSupply == 0){
             return 1e8;
         }
-        return getUnlockedCollateral()/_totalSupply;
+        uint256 netWorth = getUnlockedCollateral()/_totalSupply;
+        return netWorth>100 ? netWorth : 100;
     }
     function addCollateral(address collateral,uint256 amount) nonReentrant notHalted public payable {
         amount = getPayableAmount(collateral,amount);
@@ -88,7 +88,7 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
         //collateralBalances[collateral] = collateralBalances[collateral].add(amount);
         _collateralPool.addUserInputCollateral(msg.sender,collateral,amount);
         //userInputCollateral[msg.sender][collateral] = userInputCollateral[msg.sender][collateral].add(amount);
-        _collateralPool.addNetWorthBalance(collateral,amount);
+        _collateralPool.addNetWorthBalance(collateral,int256(amount));
         //netWorthBalances[collateral] = netWorthBalances[collateral].add(amount);
         emit AddCollateral(msg.sender,collateral,amount,mintAmount);
         _FPTCoin.mint(msg.sender,mintAmount);
@@ -103,7 +103,7 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
         }
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
         uint256 leftColateral = getLeftCollateral();
-        (uint256 burnAmount,uint256 redeemWorth) = _redeemLockedCollateral(tokenAmount,leftColateral);
+        (uint256 burnAmount,uint256 redeemWorth) = _FPTCoin.redeemLockedCollateral(msg.sender,tokenAmount,leftColateral);
         tokenAmount -= burnAmount;
         burnAmount = 0;
         if (tokenAmount > 0){
@@ -123,42 +123,14 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
             _FPTCoin.burn(msg.sender, burnAmount);
         }
     }
-    function _redeemLockedCollateral(uint256 tokenAmount,uint256 leftColateral)internal returns (uint256,uint256){
-        if (leftColateral == 0){
-            return;
-        }
-        (uint256 lockedAmount,uint256 lockedWorth) = _FPTCoin.getLockedBalance(msg.sender);
-        if (lockedAmount == 0){
-            return (0,0);
-        }
-        uint256 redeemWorth = 0;
-        uint256 lockedBurn = 0;
-        uint256 lockedPrice = lockedWorth/lockedAmount;
-        if (lockedAmount >= tokenAmount){
-            lockedBurn = tokenAmount;
-            redeemWorth = tokenAmount.mul(lockedPrice);
-        }else{
-            lockedBurn = lockedAmount;
-            redeemWorth = lockedWorth;
-        }
-        if (redeemWorth > leftColateral) {
-            lockedBurn = leftColateral.div(lockedPrice);
-            redeemWorth = lockedBurn.mul(lockedPrice);
-        }
-        if (lockedBurn > 0){
-            _FPTCoin.burnLocked(msg.sender,lockedBurn);
-            return (lockedBurn,redeemWorth);
-        }
-        return (0,0);
-    }
     function _redeemCollateral(uint256 leftAmount,uint256 leftColateral)internal returns (uint256,uint256){
         uint256 tokenNetWorth = getTokenNetworth();
-        uint256 leftWorth = leftAmount.mul(tokenNetWorth);        
+        uint256 leftWorth = leftAmount*tokenNetWorth;        
         if (leftWorth > leftColateral){
-            uint256 newRedeem = leftColateral.div(tokenNetWorth);
-            uint256 newWorth = newRedeem.mul(tokenNetWorth);
+            uint256 newRedeem = leftColateral/tokenNetWorth;
+            uint256 newWorth = newRedeem*tokenNetWorth;
             uint256 locked = leftAmount - newRedeem;
-            _FPTCoin.addlockBalance(msg.sender,locked,locked.mul(tokenNetWorth));
+            _FPTCoin.addlockBalance(msg.sender,locked,locked/tokenNetWorth);
             return (newRedeem,newWorth);
         }
         return (leftAmount,leftWorth);
@@ -180,44 +152,11 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
         (uint256[] memory colBalances,uint256[] memory PremiumBalances,uint256[] memory prices) = _getCollateralAndPremiumBalances(msg.sender,collateral,userTotalWorth);
         emit DebugEvent(3333,colBalances[0],colBalances[1]);
         emit DebugEvent(3333,PremiumBalances[0],PremiumBalances[1]);
-        _transferPaybackBalances(collateral,redeemWorth,colBalances,PremiumBalances,prices);
-    }
-    function _transferPaybackBalances(address collateral,uint256 redeemWorth,uint256[] memory colBalances,uint256[] memory PremiumBalances,uint256[] memory prices)internal {
         address[] memory tmpWhiteList = getTempWhiteList(collateral);
-        uint256 ln = tmpWhiteList.length;
-        uint256[] memory PaybackBalances = new uint256[](ln);
-        for (uint256 i=0; i<ln && redeemWorth>0;i++){
-            uint256 totalWorth = prices[i].mul(colBalances[i]);
-            if (redeemWorth < totalWorth){
-                _collateralPool.setUserInputCollateral(msg.sender,tmpWhiteList[i],
-                    _collateralPool.userInputCollateral(msg.sender,tmpWhiteList[i]).mul(totalWorth-redeemWorth).div(totalWorth));
-//                userInputCollateral[msg.sender][addr] = userInputCollateral[msg.sender][addr].mul(totalWorth-redeemWorth).div(totalWorth);
-                PaybackBalances[i] = redeemWorth.div(prices[i]);
-                redeemWorth = 0;
-                break;
-            }else{
-                _collateralPool.setUserInputCollateral(msg.sender,tmpWhiteList[i],0);
-                //userInputCollateral[msg.sender][addr] = 0;
-                PaybackBalances[i] = colBalances[i];
-                redeemWorth = redeemWorth - totalWorth;
-            }
-        }
-        if (redeemWorth>0) {
-           totalWorth = 0;
-            for (i=0; i<ln;i++){
-                totalWorth = totalWorth.add(PremiumBalances[i].mul(prices[i]));
-            }
-            for (i=0; i<ln;i++){
-                PaybackBalances[i] = PaybackBalances[i].add(PremiumBalances[i].mul(redeemWorth).div(totalWorth));
-            }
-        }
-        for (i=0;i<ln;i++){ 
-            _collateralPool.transferPaybackAndFee(msg.sender,tmpWhiteList[i],PaybackBalances[i],redeemColFee);
-//            addr = whiteList[i];
-//            netWorthBalances[addr] = netWorthBalances[addr].sub(PaybackBalances[i]);
-//            _transferPaybackAndFee(msg.sender,addr,PaybackBalances[i],redeemColFee);
-        } 
+        _collateralPool.transferPaybackBalances(msg.sender,redeemWorth,tmpWhiteList,colBalances,
+                PremiumBalances,prices);
     }
+
     function calCollateralWorth(address account)public view returns(uint256[]){
         uint256 worth = getUserTotalWorth(account);
         (uint256[] memory colBalances,uint256[] memory PremiumBalances,) = _getCollateralAndPremiumBalances(account,whiteList[0],worth);
@@ -229,29 +168,14 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
     }
     function _getCollateralAndPremiumBalances(address account,address priorCollateral,uint256 userTotalWorth) internal view returns(uint256[],uint256[],uint256[]){
         address[] memory tmpWhiteList = getTempWhiteList(priorCollateral);
-//        uint256 ln = tmpWhiteList.length;
-        uint256[] memory colBalances = new uint256[](tmpWhiteList.length);
-        uint256[] memory PremiumBalances = new uint256[](tmpWhiteList.length);
         uint256[] memory prices = new uint256[](tmpWhiteList.length);
-        uint256 totalWorth = 0;
-        uint256 PremiumWorth = 0;
+        uint256[] memory netWorthBalances = new uint256[](tmpWhiteList.length);
         for (uint256 i=0; i<tmpWhiteList.length;i++){
-            (colBalances[i],PremiumBalances[i]) = _collateralPool.calUserNetWorthBalanceRate(tmpWhiteList[i],account);
-            //(colBalances[i],PremiumBalances[i]) = _calBalanceRate(collateralBalances[tmpWhiteList[i]],netWorthBalances[tmpWhiteList[i]],userInputCollateral[msg.sender][tmpWhiteList[i]]);
+            netWorthBalances[i] = getNetWorthBalance(tmpWhiteList[i]);
             prices[i] = _oracle.getPrice(tmpWhiteList[i]);
-            totalWorth = totalWorth.add(prices[i].mul(colBalances[i]));
-            PremiumWorth = PremiumWorth.add(prices[i].mul(PremiumBalances[i]));
         }
-        if (totalWorth >= userTotalWorth){
-            for (i=0; i<tmpWhiteList.length;i++){
-                colBalances[i] = colBalances[i].mul(userTotalWorth).div(totalWorth);
-            }
-        }else{
-            userTotalWorth = userTotalWorth - totalWorth;
-            for (i=0; i<tmpWhiteList.length;i++){
-                PremiumBalances[i] = PremiumBalances[i].mul(userTotalWorth).div(PremiumWorth);
-            }
-        }
+        (uint256[] memory colBalances,uint256[] memory PremiumBalances) = _collateralPool.getCollateralAndPremiumBalances(account,userTotalWorth,tmpWhiteList,
+                netWorthBalances,prices);
         return (colBalances,PremiumBalances,prices);
     } 
     /*
@@ -283,25 +207,40 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
     function calOptionsOccupied(uint256 strikePrice,uint256 underlyingPrice,uint256 amount,uint8 optType)public view returns(uint256){
         uint256 totalOccupied = 0;
         if ((optType == 0) == (strikePrice>underlyingPrice)){ // call
-            totalOccupied = strikePrice.mul(amount);
+            totalOccupied = strikePrice*amount;
         } else {
-            totalOccupied = underlyingPrice.mul(amount);
+            totalOccupied = underlyingPrice*amount;
         }
         return calculateCollateral(totalOccupied);
     }
-
     function getTotalCollateral()public view returns(uint256){
-        uint256 totalNum = 0;
+        int256 totalNum = 0;
         uint whiteListLen = whiteList.length;
         for (uint256 i=0;i<whiteListLen;i++){
             address addr = whiteList[i];
-            uint256 price = _oracle.getPrice(addr);
-            totalNum = totalNum.add(price.mul(_collateralPool.getNetWorthBalance(addr)));
+            int256 price = int256(_oracle.getPrice(addr));
+            int256 netWorth = getRealBalance(addr);
+            if (netWorth != 0){
+                totalNum = totalNum.add(price.mul(netWorth));
+            }
             //totalNum = totalNum.add(price.mul(netWorthBalances[addr]));
         }
-        return totalNum;  
+        return totalNum>=0 ? uint256(totalNum) : 0;  
     }
-
+    function getRealBalance(address settlement)public view returns(int256){
+        int256 netWorth = _collateralPool.getNetWorthBalance(settlement);
+        int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
+        return netWorth.add(latestWorth);
+    }
+    function getNetWorthBalance(address settlement)public view returns(uint256){
+        int256 netWorth = _collateralPool.getNetWorthBalance(settlement);
+        int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
+        netWorth = netWorth.add(latestWorth);
+        if (netWorth>0){
+            return uint256(netWorth);
+        }
+        return 0;
+    }
     function _paybackWorth(uint256 worth,uint256 feeType) internal {
         uint256 totalPrice = 0;
         uint whiteLen = whiteList.length;
@@ -309,7 +248,7 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
         for (uint256 i=0;i<whiteLen;i++){
             address addr = whiteList[i];
             uint256 price = _oracle.getPrice(addr);
-            balances[i] = _collateralPool.getNetWorthBalance(addr);
+            balances[i] = getNetWorthBalance(addr);
             //balances[i] = netWorthBalances[addr];
             totalPrice = totalPrice.add(price.mul(balances[i]));
         }
@@ -317,7 +256,7 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
             return;
         }
         for (i=0;i<whiteLen;i++){
-            uint256 _payBack = balances[i].mul(worth).div(totalPrice);
+            uint256 _payBack = balances[i].mul(worth)/totalPrice;
             _collateralPool.transferPaybackAndFee(msg.sender,whiteList[i],_payBack,feeType);
             //addr = whiteList[i];
             //netWorthBalances[addr] = balances[i].sub(_payBack);
@@ -340,7 +279,6 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
     }
     function calculateCollateral(uint256 amount)internal view returns (uint256){
         uint256 result = collateralRate.numerator.mul(amount);
-        return result.div(collateralRate.denominator);
+        return result/collateralRate.denominator;
     }
-
 }

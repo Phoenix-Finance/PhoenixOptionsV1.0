@@ -4,7 +4,7 @@ contract ImpliedVolatility is Ownable {
     uint256 private ValidUntil = 1200;
     uint256 constant private _calDecimal = 1e8;
     uint256 private inptutTime;
-    mapping(uint256=>uint256[][]) public ivMatrixMap;
+    mapping(uint256=>uint256[][]) private ivMatrixMap;
     function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }

@@ -110,7 +110,6 @@ async function SendArrayNew(volInstance,optype,Ary){
             IvBn[i] = IvBn[i].add(curBn.ushln(j*32));
             index++;
         }
-        console.log(IvBn[i].toString(16));
         if(index<len){
             IvBn.push(new BN(0));
         }

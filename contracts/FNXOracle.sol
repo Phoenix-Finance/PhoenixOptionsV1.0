@@ -4,7 +4,7 @@ import "./modules/SafeMath.sol";
 import "./modules/Operator.sol";
 contract FNXOracle is IFNXOracle,Operator {
     using SafeMath for uint256;
-    uint256 public ValidUntil = 600;
+    uint256 private ValidUntil = 600;
     mapping(uint256 => uint256) private priceMap;
     function setValidUntil(uint256 timeLimit) public onlyOperatorIndex(0) {
         ValidUntil = timeLimit;

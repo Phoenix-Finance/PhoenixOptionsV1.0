@@ -3,7 +3,7 @@ import "./modules/Ownable.sol";
 import "./modules/tuple.sol";
 contract ImpliedVol is Ownable {
     uint256 internal ValidUntil = 1200;
-    uint256 constant internal _calDecimal = 1e8;
+    uint256 constant private _calDecimal = 1e8;
     uint256 internal inptutTime;
     mapping(uint256=>uint256)internal ivMatrixMap;
     function setValidUntil(uint256 timeLimit) public onlyOwner {

@@ -18,13 +18,14 @@ contract('OptionsManagerV2', function (accounts){
         let options = await OptionsPool.deployed();
         let fnx = await FNXCoin.deployed();
         let amount = 1e14;
-        await OptionsManger.addCollateral(collateral0,amount,{value : amount});
         await logNetWroth(options,OptionsManger);
         await OptionsManger.addCollateral(collateral0,amount,{value : amount});
         await logNetWroth(options,OptionsManger);
-       
+        await OptionsManger.addCollateral(collateral0,amount,{value : amount});
+        await logNetWroth(options,OptionsManger);
+        tx = await OptionsManger.calSharedPayment();
         tx = await OptionsManger.buyOption(collateral0,1000000000000000,20000000000,1,month,10000000000,0,{value : 1000000000000000});
-//        console.log(tx);
+        await logNetWroth(options,OptionsManger);
         tx = await OptionsManger.buyOption(collateral0,1000000000000000,20000000000,1,month,10000000000,0,{value : 1000000000000000});
 //        console.log(tx);
         tx = await OptionsManger.buyOption(collateral0,200000000000000,10000000000,1,month,10000000000,0,{value : 200000000000000});
@@ -43,9 +44,11 @@ contract('OptionsManagerV2', function (accounts){
         await logNetWroth(options,OptionsManger);
         tx = await OptionsManger.sellOption(3,10000000000);
         await logNetWroth(options,OptionsManger);
+        console.log("-----------------------------------------");
         await calculateNetWroth(options,OptionsManger,fnx);
         await logNetWroth(options,OptionsManger);
     });
+    return;
     it('OptionsManagerV2 exercise networth', async function (){
         
         let volInstance = await imVolatility32.deployed();
@@ -95,6 +98,8 @@ async function logBalance(fnx,addr){
 async function logNetWroth(options,OptionsManger){
     let result = await OptionsManger.getTotalCollateral();
     console.log("TotalCollateral : ",result.toString(10));
+    result = await options.getNetWrothLatestWorth(collateral0);
+    console.log("LatestWorth : ",result.toString(10));
     result = await options.getTotalOccupiedCollateral();
     console.log("TotalOccupied : ",result.toString(10));
     result = await OptionsManger.getOccupiedCollateral();
@@ -105,29 +110,17 @@ async function logNetWroth(options,OptionsManger){
     console.log("Networth : ",result.toString(10));
 }
 async function calculateNetWroth(options,OptionsManger,fnx){
-    optionsLen = await options.getOptionCalRangeAll()
-    console.log(optionsLen[0].toNumber(),optionsLen[1].toNumber(),optionsLen[2].toNumber(),optionsLen[3].toNumber());
-    let bn = new BN(0);
-    let bn1 = new BN(optionsLen[2]);
-    bn1 = bn1.ushln(64);
-    bn = bn.add(bn1);
-    bn1 = new BN(optionsLen[3]);
-    bn1 = bn1.ushln(128);
-    bn = bn.add(bn1);
-    let result =  await options.calculatePhaseOccupiedCollateral(bn);
-    console.log(result[0].toString(10),result[1].toString(10));
-    let tx = await options.setPhaseOccupiedCollateral(bn);
-    bn = new BN(0);
-    bn1 = new BN(optionsLen[2]);
-    bn1 = bn1.ushln(64);
-    bn = bn.add(bn1);
-    bn1 = new BN(optionsLen[3]);
-    bn1 = bn1.ushln(128);
-    bn = bn.add(bn1);
     let whiteList = [collateral0,fnx.address];
-    result =  await options.calRangeSharedPayment(bn,0,optionsLen[2],whiteList);
+    optionsLen = await options.getOptionCalRangeAll(whiteList);
+    console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
+
+    let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
+    console.log(result[0].toString(10),result[1].toString(10));
+    let tx = await options.setOccupiedCollateral();
+    result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
     console.log(result[0][0].toString(10),result[0][1].toString(10));
 
 //                return;
-    tx = await OptionsManger.setPhaseSharedPayment(bn);
+    tx = await OptionsManger.calSharedPayment();
+//    console.log(tx);
 }

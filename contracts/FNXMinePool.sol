@@ -15,9 +15,9 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     mapping(address=>uint256) internal mineAmount;
     mapping(address=>uint256) internal mineInterval;
     mapping(address=>uint256) internal buyingMineMap;
-    uint256 constant opBurnCoin = 1;
-    uint256 constant opMintCoin = 2;
-    uint256 constant opTransferCoin = 3;
+    uint256 constant private opBurnCoin = 1;
+    uint256 constant private opMintCoin = 2;
+    uint256 constant private opTransferCoin = 3;
     event DebugEvent(uint256 value0,uint256 value1,uint256 value2,uint256 value3);
     event MintMiner(address indexed account,uint256 amount);
     event BurnMiner(address indexed account,uint256 amount);
@@ -35,7 +35,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         uint256 _mineInterval = mineInterval[mineCoin];
         if (_totalSupply > 0 && _mineInterval>0){
             uint256 _mineAmount = mineAmount[mineCoin];
-            uint256 latestMined = _mineAmount.mul(now-latestSettleTime[mineCoin]).div(_mineInterval);
+            uint256 latestMined = _mineAmount.mul(now-latestSettleTime[mineCoin])/_mineInterval;
             return totalMinedCoin[mineCoin] + latestMined;
         }
         return totalMinedCoin[mineCoin];
@@ -97,7 +97,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
             address addr = whiteList[i];
             uint256 mineNum = buyingMineMap[addr];
             if (mineNum > 0){
-                uint256 _mineAmount = mineNum.mul(amount).div(calDecimals);
+                uint256 _mineAmount = mineNum.mul(amount)/calDecimals;
                 minerBalances[addr][account] = minerBalances[addr][account].add(_mineAmount);
                 totalMinedCoin[addr] = totalMinedCoin[addr].add(_mineAmount);
                 emit BuyingMiner(account,addr,_mineAmount);
@@ -147,7 +147,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
             totalMinedCoin[mineCoin] = totalMinedCoin[mineCoin].add(latestMined);
         }
         if (_mineInterval>0){
-            latestSettleTime[mineCoin] = now.div(_mineInterval)*_mineInterval;
+            latestSettleTime[mineCoin] = now/_mineInterval*_mineInterval;
         }else{
             latestSettleTime[mineCoin] = now;
         }
@@ -204,7 +204,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     function _settlement(address mineCoin,address account,uint256 amount,uint256 tokenNetWorth)internal view returns (uint256) {
         uint256 origin = minerOrigins[mineCoin][account];
         require(tokenNetWorth>=origin,"error: tokenNetWorth logic error!");
-        return amount.mul(tokenNetWorth-origin).div(calDecimals);
+        return amount.mul(tokenNetWorth-origin)/calDecimals;
     }
     function _getCurrentTokenNetWorth(address mineCoin)internal view returns (uint256) {
         uint256 latestMined = _getLatestMined(mineCoin);

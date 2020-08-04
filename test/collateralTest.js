@@ -10,6 +10,7 @@ let collateral0 = "0x0000000000000000000000000000000000000000";
 let testFunc = require("./testFunction.js")
 let FNXMinePool = artifacts.require("FNXMinePool");
 contract('OptionsManagerV2', function (accounts){
+        /*
     it('OptionsManagerV2 redeem collateral', async function (){
         let volInstance = await imVolatility32.deployed();
         await testFunc.AddImpliedVolatility(volInstance,false);
@@ -53,6 +54,7 @@ contract('OptionsManagerV2', function (accounts){
         await logBalance(fnx,accounts[0]);
         
     });
+    */
     it('OptionsManagerV2 add collateral', async function (){
         let collateralInstance = await CollateralPool.deployed();
         let volInstance = await imVolatility32.deployed();
@@ -157,18 +159,7 @@ contract('OptionsManagerV2', function (accounts){
         console.log(result.toString(10));
         result = await OptionsManger.getTokenNetworth();
         console.log("3-----------------------------------",result.toString(10));
-        let optionsLen = await options.getOptionPhaseCalRange();
-        console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10));
-        let bn = new BN(0);
-        let bn1 = optionsLen[1];
-        bn1 = bn1.ushln(64);
-        bn = bn.add(bn1);
-        let bn2 = optionsLen[2];
-        bn2 = bn2.ushln(128);
-        bn = bn.add(bn2);
-        console.log(bn.toString(16));
-        await options.setPhaseOccupiedCollateral(bn);
-        await OptionsManger.setPhaseSharedPayment(bn);
+        await calculateNetWroth(options,OptionsManger,fnx)
         result = await options.getTotalOccupiedCollateral();
         console.log(result.toString(10));
         result = await OptionsManger.getTotalCollateral();
@@ -210,6 +201,7 @@ contract('OptionsManagerV2', function (accounts){
         result = await OptionsManger.getAvailableCollateral();
         console.log(result.toString(10));
         result = await OptionsManger.getTokenNetworth();
+
         console.log("5-----------------------------------",result.toString(10));
         minebalance = await minePool.getMinerBalance(accounts[0],collateral0);
         await minePool.redeemMinerCoin(collateral0,minebalance);
@@ -235,3 +227,18 @@ async function logBalance(fnx,addr){
         let fnxBalance = await fnx.balanceOf(addr);
         console.log("fnx : ",addr,fnxBalance.toString(10));
 }
+async function calculateNetWroth(options,OptionsManger,fnx){
+        let whiteList = [collateral0,fnx.address];
+        optionsLen = await options.getOptionCalRangeAll(whiteList);
+        console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
+    
+        let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
+        console.log(result[0].toString(10),result[1].toString(10));
+        let tx = await options.setOccupiedCollateral();
+        result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
+        console.log(result[0][0].toString(10),result[0][1].toString(10));
+    
+    //                return;
+        tx = await OptionsManger.calSharedPayment();
+    //    console.log(tx);
+    }
