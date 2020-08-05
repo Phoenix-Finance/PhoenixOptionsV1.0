@@ -81,7 +81,7 @@ contract CollateralPool is Managerable,TransactionFee{
     function transferPaybackAndFee(address recieptor,address settleMent,uint256 payback,
             uint256 feeType)public onlyManager{
         _transferPaybackAndFee(recieptor,settleMent,payback,feeType);
-        netWorthBalances[settleMent] = netWorthBalances[settleMent].sub(int256(payback));
+        netWorthBalances[settleMent] = netWorthBalances[settleMent]-int256(payback);
     }
     function transferPayback(address recieptor,address settlement,uint256 payback)public onlyManager{
         _transferPayback(recieptor,settlement,payback);
@@ -110,7 +110,7 @@ contract CollateralPool is Managerable,TransactionFee{
         if (redeemWorth>0) {
            totalWorth = 0;
             for (i=0; i<ln;i++){
-                totalWorth = totalWorth.add(PremiumBalances[i].mul(prices[i]));
+                totalWorth = totalWorth.add(PremiumBalances[i]*prices[i]);
             }
             if (totalWorth>0){
                 for (i=0; i<ln;i++){
@@ -134,17 +134,17 @@ contract CollateralPool is Managerable,TransactionFee{
         uint256 PremiumWorth = 0;
         for (uint256 i=0; i<tmpWhiteList.length;i++){
             (colBalances[i],PremiumBalances[i]) = calUserNetWorthBalanceRate(tmpWhiteList[i],account,_RealBalances[i]);
-            totalWorth = totalWorth.add(prices[i].mul(colBalances[i]));
-            PremiumWorth = PremiumWorth.add(prices[i].mul(PremiumBalances[i]));
+            totalWorth = totalWorth.add(prices[i]*colBalances[i]);
+            PremiumWorth = PremiumWorth.add(prices[i]*PremiumBalances[i]);
         }
         if (totalWorth >= userTotalWorth){
             for (i=0; i<tmpWhiteList.length;i++){
                 colBalances[i] = colBalances[i].mul(userTotalWorth)/totalWorth;
             }
-        }else{
+        }else if (PremiumWorth>0){
             userTotalWorth = userTotalWorth - totalWorth;
             for (i=0; i<tmpWhiteList.length;i++){
-                PremiumBalances[i] = PremiumBalances[i].mul(userTotalWorth).div(PremiumWorth);
+                PremiumBalances[i] = PremiumBalances[i].mul(userTotalWorth)/PremiumWorth;
             }
         }
         return (colBalances,PremiumBalances);
@@ -153,7 +153,7 @@ contract CollateralPool is Managerable,TransactionFee{
         uint256 collateralBalance = collateralBalances[settlement];
         uint256 amount = userInputCollateral[user][settlement];
         if (collateralBalance > 0){
-            uint256 curAmount = netWorthBalance.mul(amount).div(collateralBalance);
+            uint256 curAmount = netWorthBalance.mul(amount)/collateralBalance;
             return (curAmount,netWorthBalance.sub(curAmount));
         }else{
             return (0,netWorthBalance);

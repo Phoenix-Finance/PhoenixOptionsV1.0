@@ -40,7 +40,7 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
             if (amount == lockedAmount){
                 _subLockBalance(account,lockedAmount,lockedWorth);
             }else{
-                uint256 burnWorth = amount.mul(lockedWorth.div(lockedAmount));
+                uint256 burnWorth = amount*lockedWorth/lockedAmount;
                 _subLockBalance(account,amount,burnWorth);
             }
         }
@@ -87,7 +87,7 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
         }
         uint256 lockedAmount = lockedBalances[account];
         uint256 lockedWorth = lockedTotalWorth[account];
-        if (lockedAmount == 0){
+        if (lockedAmount == 0 || lockedWorth == 0){
             return (0,0);
         }
         uint256 redeemWorth = 0;
@@ -101,7 +101,7 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
             redeemWorth = lockedWorth;
         }
         if (redeemWorth > leftColateral) {
-            lockedBurn = leftColateral.div(lockedPrice);
+            lockedBurn = leftColateral/lockedPrice;
             redeemWorth = lockedBurn.mul(lockedPrice);
         }
         if (lockedBurn > 0){

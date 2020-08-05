@@ -47,7 +47,7 @@ contract OptionsOccupiedCal is OptionsBase,Operator {
         for (;begin<end;begin++){
             uint256 index = _getEligibleUnderlyingIndex(allOptions[begin].underlying);
             uint256 value = calOptionsCollateral(allOptions[begin],prices[index]);
-            totalOccupied = totalOccupied.add(value);
+            totalOccupied = totalOccupied+value;
         }
         return (totalOccupied,newFirstOption);
     }

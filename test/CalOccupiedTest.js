@@ -7,12 +7,9 @@ let FNXMinePool = artifacts.require("FNXMinePool");
 let month = 30*60*60*24;
 let collateral0 = "0x0000000000000000000000000000000000000000";
 const BN = require("bn.js");
-const imVolatility32 = artifacts.require("imVolatility32");
 let testFunc = require("./testFunction.js")
 contract('OptionsManagerV2', function (accounts){
     it('OptionsManagerV2 add collateral', async function (){
-        let volInstance = await imVolatility32.deployed();
-        await testFunc.AddImpliedVolatility(volInstance,false);
         let OptionsManger = await OptionsManagerV2.deployed();
         let options = await OptionsPool.deployed();
 //        let ivInstance = await ImpliedVolatility.at("0x54E8BB9dEC82B695C0Fa977070e74a06BE68001d");
@@ -36,6 +33,11 @@ contract('OptionsManagerV2', function (accounts){
             for (var j=0;j<10;j++){
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
+                OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
+                OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
                 OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
                 OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
                 OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
@@ -49,7 +51,6 @@ contract('OptionsManagerV2', function (accounts){
             }
             await calculateNetWroth(options,OptionsManger,fnx);
             return;
-
         }
      });
 });
@@ -61,10 +62,10 @@ async function calculateNetWroth(options,OptionsManger,fnx){
     let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
     console.log(result[0].toString(10),result[1].toString(10));
     let tx = await options.setOccupiedCollateral();
-    result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
-    console.log(result[0][0].toString(10),result[0][1].toString(10));
+//    result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
+//    console.log(result[0][0].toString(10),result[0][1].toString(10));
 
-//                return;
+//                return;q
     tx = await OptionsManger.calSharedPayment();
     console.log(tx);
 }

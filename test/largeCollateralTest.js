@@ -10,61 +10,10 @@ let collateral0 = "0x0000000000000000000000000000000000000000";
 let testFunc = require("./testFunction.js")
 let FNXMinePool = artifacts.require("FNXMinePool");
 contract('OptionsManagerV2', function (accounts){
-    it('OptionsManagerV2 redeem collateral', async function (){
-        let OptionsManger = await OptionsManagerV2.deployed();
+    it('OptionsManagerV2 add small collateral', async function (){
         let collateralInstance = await CollateralPool.deployed();
-        let options = await OptionsPool.deployed();
-        let fnx = await FNXCoin.deployed();
-        let tx = await OptionsManger.addWhiteList(collateral0);
-//        console.log(tx);
-        tx = await OptionsManger.addWhiteList(fnx.address);
-        await options.addUnderlyingAsset(1);
-        let minePool = await FNXMinePool.deployed();
-//        console.log(tx);
-//        return;
-        await OptionsManger.addWhiteList(fnx.address);
-        await fnx.approve(OptionsManger.address,10000000000000);
-        await OptionsManger.addCollateral(fnx.address,10000000000000);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        for (var i=0;i<10;i++){
-                await OptionsManger.addWhiteList(fnx.address);
-        }
-        await OptionsManger.redeemCollateral(500000000000000,collateral0);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        await OptionsManger.addCollateral(collateral0,10000000000000,{value:10000000000000});
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        for (var i=0;i<10;i++){
-                await OptionsManger.addWhiteList(fnx.address);
-        }
-        await OptionsManger.redeemCollateral(500000000000000,fnx.address);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        await fnx.approve(OptionsManger.address,10000000000000);
-        await OptionsManger.addCollateral(fnx.address,10000000000000);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        for (var i=0;i<10;i++){
-                await OptionsManger.addWhiteList(fnx.address);
-        }
-        await OptionsManger.redeemCollateral(500000000000000,collateral0);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        await OptionsManger.addCollateral(collateral0,10000000000000,{value:10000000000000});
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        for (var i=0;i<10;i++){
-                await OptionsManger.addWhiteList(fnx.address);
-        }
-        await OptionsManger.redeemCollateral(500000000000000,fnx.address);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        
-    });
-    it('OptionsManagerV2 add collateral', async function (){
-        let collateralInstance = await CollateralPool.deployed();
+        let volInstance = await imVolatility32.deployed();
+        await testFunc.AddImpliedVolatility(volInstance,false);
         let OptionsManger = await OptionsManagerV2.deployed();
         let options = await OptionsPool.deployed();
         let fnx = await FNXCoin.deployed();
@@ -78,26 +27,10 @@ contract('OptionsManagerV2', function (accounts){
 //        console.log(tx);
 //        return;
         await OptionsManger.addWhiteList(fnx.address);
-        await OptionsManger.addCollateral(collateral0,10000000000000,{value : 10000000000000});
-        let minebalance = await minePool.getMinerBalance(accounts[0],collateral0);
-        console.log(33333333333333,minebalance.toString(10));
-        minebalance = await minePool.getMinerBalance(accounts[0],fnx.address);
-        console.log(33333333333333,minebalance.toString(10));
-        for (var i=0;i<100;i++){
-                await options.addExpiration(month);
-        }
-        await logBalance(fnx,collateralInstance.address);
-        await OptionsManger.addCollateral(collateral0,1000000000000000,{from : accounts[1],value : 1000000000000000});
-        minebalance = await minePool.getMinerBalance(accounts[0],collateral0);
-        console.log(33333333333333,minebalance.toString(10));
-        minebalance = await minePool.getMinerBalance(accounts[0],fnx.address);
-        console.log(33333333333333,minebalance.toString(10));
-        for (var i=0;i<100;i++){
-                await options.addExpiration(month);
-        }
-        await logBalance(fnx,collateralInstance.address);
-        await fnx.approve(OptionsManger.address,1000000000000000);
-        await OptionsManger.addCollateral(fnx.address,1000000000000000);
+        let amount = new BN(1);
+        amount = amount.ushln(100);
+        await fnx.approve(OptionsManger.address,amount);
+        await OptionsManger.addCollateral(fnx.address,amount);
         await logBalance(fnx,collateralInstance.address);
         let result = await options.getTotalOccupiedCollateral();
         console.log(result.toString(10));
@@ -122,13 +55,14 @@ contract('OptionsManagerV2', function (accounts){
 //        fnx.approve(OptionsManger.address,1000000000000000);
 //        tx = await OptionsManger.buyOption(fnx.address,1000000000000000,20000000000,1,month,10000000000,0);
 //        console.log(tx)
-       
-        tx = await OptionsManger.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
+/*       
+        tx = await OptionsManger.buyOption(collateral0,1,20000000000,1,month,1,0,{value : 1});
 //        console.log(tx);
-        tx = await OptionsManger.buyOption(collateral0,1000000000000000,9500e8,1,month,10000000000,0,{value : 1000000000000000});
+        tx = await OptionsManger.buyOption(collateral0,1,20000000000,1,month,1,0,{value : 1});
 //        console.log(tx);
-        tx = await OptionsManger.buyOption(collateral0,200000000000000,8000e8,1,month,10000000000,0,{value : 200000000000000});
+        tx = await OptionsManger.buyOption(collateral0,1,10000000000,1,month,1,0,{value : 1});
 //        console.log(tx);
+*/
         result = await options.getTotalOccupiedCollateral();
         console.log(result.toString(10));
         result = await OptionsManger.getTotalCollateral();
@@ -139,6 +73,7 @@ contract('OptionsManagerV2', function (accounts){
         console.log(result.toString(10));
         result = await OptionsManger.getTokenNetworth();
         console.log("2-----------------------------------",result.toString(10));
+        /*
         result = await options.getOptionsById(1);
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
         result = await options.getOptionsById(2);
@@ -155,6 +90,7 @@ contract('OptionsManagerV2', function (accounts){
         result = await options.getOptionsById(3);
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
 //        console.log(tx);
+*/
         result = await options.getTotalOccupiedCollateral();
         console.log(result.toString(10));
         result = await OptionsManger.getTotalCollateral();
@@ -178,7 +114,7 @@ contract('OptionsManagerV2', function (accounts){
         
         console.log("4-----------------------------------",result.toString(10));
         await logBalance(fnx,collateralInstance.address);
-        await OptionsManger.redeemCollateral(498500000000000,collateral0);
+        await OptionsManger.redeemCollateral(1,collateral0);
         await logBalance(fnx,collateralInstance.address);
         result = await options.getTotalOccupiedCollateral();
         console.log(result.toString(10));
@@ -190,12 +126,12 @@ contract('OptionsManagerV2', function (accounts){
         console.log(result.toString(10));
         result = await OptionsManger.getTokenNetworth();
         console.log("5-----------------------------------",result.toString(10));
-        await OptionsManger.redeemCollateral(498500000000000,fnx.address);
+        await OptionsManger.redeemCollateral(1,fnx.address);
         await logBalance(fnx,collateralInstance.address);
-        await OptionsManger.redeemCollateral(498500000000000,fnx.address,{from:accounts[1]});
+        await OptionsManger.redeemCollateral(1,fnx.address);
         await logBalance(fnx,collateralInstance.address);
-//        await OptionsManger.redeemCollateral(0,fnx.address,{from:accounts[2]});
- //       await logBalance(fnx,collateralInstance.address);
+        await OptionsManger.redeemCollateral(0,fnx.address);
+        await logBalance(fnx,collateralInstance.address);
         result = await options.getTotalOccupiedCollateral();
         console.log(result.toString(10));
         result = await OptionsManger.getTotalCollateral();

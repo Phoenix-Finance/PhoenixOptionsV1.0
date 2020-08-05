@@ -52,12 +52,11 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
             OptionsInfoEx storage optionEx = optionExtraMap[begin];
             uint256 timeValue = _calculateCurrentPrice(optionEx.underlyingPrice,info.strikePrice,info.expiration,
                 optionEx.ivNumerator,optionEx.ivDenominator,info.optType);
-                emit DebugEvent(1111111,timeValue,optionEx.fullPrice);
             if (timeValue<optionEx.fullPrice){
                 timeValue = optionEx.fullPrice - timeValue;
                 uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                timeValue = optionEx.tokenTimePrice.mul(timeValue).mul(info.amount)/calDecimals;
-                totalSharedPayment[index] = totalSharedPayment[index].add(timeValue);
+                timeValue = optionEx.tokenTimePrice.mul(timeValue*info.amount)/calDecimals;
+                totalSharedPayment[index] = totalSharedPayment[index]+timeValue;
             }
         }
         return (totalSharedPayment,newFirstOption);
@@ -69,8 +68,8 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
             if (info.amount>0){
                 OptionsInfoEx storage optionEx = optionExtraMap[begin];
                 uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                uint256 timeValue = optionEx.tokenTimePrice.mul(info.amount)/calDecimals;
-                totalExpiredPayment[index] = totalExpiredPayment[index].add(int256(timeValue));
+                uint256 timeValue = optionEx.tokenTimePrice*info.amount/calDecimals;
+                totalExpiredPayment[index] = totalExpiredPayment[index]+int256(timeValue);
             }
         }
         return totalExpiredPayment;
@@ -130,7 +129,6 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         uint256 timeWorth = optionEx.fullPrice>currentPrice ? optionEx.fullPrice-currentPrice : 0;
         timeWorth = optionEx.tokenTimePrice.mul(timeWorth*amount)/calDecimals;
         curValue = curValue / _oracle.getPrice(optionEx.settlement);
-        emit DebugEvent(123456789,curValue,timeWorth);
         int256 value = int256(curValue) - int256(timeWorth);
         optionsLatestNetWorth[optionEx.settlement] = optionsLatestNetWorth[optionEx.settlement]+value;
     }

@@ -23,9 +23,8 @@ contract OptionsPrice is ImportVolatility{
         minPrice = _minPrice;
         maxPrice = _maxPrice;
     }
-    //todo : debug expiration = expiration*1000;
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint32 underlying,uint8 optType)public view returns (uint256){
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(underlying,optType,expiration,strikePrice);
+        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(underlying,optType,expiration,currentPrice,strikePrice);
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
@@ -77,7 +76,7 @@ contract OptionsPrice is ImportVolatility{
         rt = Fraction.invert(Fraction.fractionExp(rt));
         Fraction.fractionNumber memory price = Fraction.safeFractionMul(d2, rt);
         price = Fraction.safeFractionSub(price, d1);
-        return returnSafePrice(uint256(price.numerator/price.denominator));
+        return uint256(price.numerator/price.denominator);
     }
 
     /*
@@ -98,10 +97,6 @@ contract OptionsPrice is ImportVolatility{
         rt = Fraction.invert(Fraction.fractionExp(rt));
         Fraction.fractionNumber memory price = Fraction.safeFractionMul(d2, rt);
         price = Fraction.safeFractionSub(d1, price);
-        return returnSafePrice(uint256(price.numerator/price.denominator));
-    }
-    function returnSafePrice(uint256 price)internal view returns (uint256){
-        require(price<=maxPrice && price>=minPrice,"option price is out of range");
-        return price;
+        return uint256(price.numerator/price.denominator);
     }
 }

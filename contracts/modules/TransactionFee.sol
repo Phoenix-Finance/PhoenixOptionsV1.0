@@ -83,14 +83,14 @@ contract TransactionFee is AddressWhiteList {
     }
     function _addTransactionFee(address settleMent,uint256 amount) internal {
         if (amount > 0){
-            feeBalances[settleMent] = feeBalances[settleMent].add(amount);
+            feeBalances[settleMent] = feeBalances[settleMent]+amount;
             emit AddFee(settleMent,amount);
         }
     }
     function calculateFee(uint256 feeType,uint256 amount)public view returns (uint256){
         fraction storage feeRate = _getFeeRate(feeType);
         uint256 result = feeRate.numerator.mul(amount);
-        return result.div(feeRate.denominator);
+        return result/feeRate.denominator;
     }
     function _getFeeRate(uint256 feeType)internal view returns(fraction storage){
         require(feeType<FeeRates.length,"fee type is valid!");
@@ -107,7 +107,7 @@ contract TransactionFee is AddressWhiteList {
             return;
         }
         uint256 fee = calculateFee(feeType,payback);
-        _transferPayback(recieptor,settleMent,payback.sub(fee));
+        _transferPayback(recieptor,settleMent,payback-fee);
         _addTransactionFee(settleMent,fee);
     }
     /**

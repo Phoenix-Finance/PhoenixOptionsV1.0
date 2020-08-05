@@ -157,7 +157,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         uint256 _totalSupply = totalSupply();
         if (_totalSupply > 0 && _mineInterval>0){
             uint256 _mineAmount = mineAmount[mineCoin];
-            uint256 mintTime = (now-latestSettleTime[mineCoin]).div(_mineInterval);
+            uint256 mintTime = (now-latestSettleTime[mineCoin])/_mineInterval;
             uint256 latestMined = _mineAmount.mul(mintTime);
             return latestMined;
         }
@@ -192,9 +192,9 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
             minerBalances[mineCoin][account] = minerBalances[mineCoin][account].add(
                     _settlement(mineCoin,account,balanceOf(account),tokenNetWorth));
             if (operators == opBurnCoin){
-                totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].sub(tokenNetWorth.mul(amount));
+                totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].sub(tokenNetWorth*amount);
             }else if (operators==opMintCoin){
-                totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(tokenNetWorth.mul(amount));
+                totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(tokenNetWorth*amount);
             }else if (operators==opTransferCoin){
                 minerOrigins[mineCoin][recipient] = tokenNetWorth;
             }
@@ -210,14 +210,14 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
         uint256 latestMined = _getLatestMined(mineCoin);
         uint256 _totalSupply = totalSupply();
         if (_totalSupply > 0){
-            return (totalMinedWorth[mineCoin].add(latestMined*calDecimals)).div(_totalSupply);
+            return (totalMinedWorth[mineCoin].add(latestMined*calDecimals))/_totalSupply;
         }
         return 0;
     }
     function _getTokenNetWorth(address mineCoin)internal view returns (uint256) {
         uint256 _totalSupply = totalSupply();
         if (_totalSupply > 0){
-            return totalMinedWorth[mineCoin].div(_totalSupply);
+            return totalMinedWorth[mineCoin]/_totalSupply;
         }
         return 0;
     }

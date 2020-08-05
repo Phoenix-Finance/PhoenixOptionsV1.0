@@ -42,8 +42,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
     event BurnOption(address indexed owner,uint256 indexed optionID,uint amount);
     event DebugEvent(uint256 value1,uint256 value2,uint256 value3);
     constructor () public{
-        //todo : debug 100
-        expirationList =  [100,1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
+        expirationList =  [1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
         underlyingAssets = [1,2];
     }
     function getBurnTimeLimit()public view returns(uint256){
@@ -145,7 +144,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
     function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice,uint256 strikePrice,uint256 underlying) internal{
         uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
         uint256 expiration = info.expiration - now;
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,strikePrice);
+        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,underlyingPrice,strikePrice);
         uint256 tokenTimePrice = calDecimals/_oracle.getPrice(settlement);
         optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,underlyingPrice,optionPrice,ivNumerator,ivDenominator);
     }
@@ -155,7 +154,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
         checkBurnable(info.optionID);
         checkOwner(info,from);
         checkSufficient(info,amount);
-        info.amount = info.amount.sub(amount);
+        info.amount = info.amount-amount;
         emit BurnOption(from,id,amount);
     }
     function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){
