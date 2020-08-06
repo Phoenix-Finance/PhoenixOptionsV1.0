@@ -14,8 +14,17 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
 
     event AddLocked(address indexed owner, uint256 amount,uint256 worth);
     event BurnLocked(address indexed owner, uint256 amount,uint256 worth);
+    mapping(address=>uint256) private latestTransferIn;
+    uint256 private timeLimited = 1 hours;
+ 
     constructor (address minePoolAddr) public{
         setFNXMinePoolAddress(minePoolAddr);
+    }
+    function setBurnTimeLimited(uint256 _timeLimited) public onlyOwner {
+        timeLimited = _timeLimited;
+    }
+    function getUserBurnTimeLimite(address user) public view returns (uint256){
+        return latestTransferIn[user]+timeLimited;
     }
     function getTotalLockedWorth() public view returns (uint256) {
         return _totalLockedWorth;
@@ -33,6 +42,7 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
         _FnxMinePool.addMinerBalance(account,amount);
     }
     function burnLocked(address account, uint256 amount) public onlyManager{
+        require(latestTransferIn[account]+timeLimited<now,"FPT coin locked time is not expired!");
         uint256 lockedAmount = lockedBalances[account];
         require(amount<=lockedAmount,"burnLocked: balance is insufficient");
         if(lockedAmount>0){
@@ -52,14 +62,17 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
     function transfer(address recipient, uint256 amount)public returns (bool){
         require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
         _FnxMinePool.transferMinerCoin(msg.sender,recipient,amount);
+        latestTransferIn[recipient] = now;
         return SharedCoin.transfer(recipient,amount);
     }
     function transferFrom(address sender, address recipient, uint256 amount)public returns (bool){
         require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
         _FnxMinePool.transferMinerCoin(sender,recipient,amount);
+        latestTransferIn[recipient] = now;
         return SharedCoin.transferFrom(sender,recipient,amount);
     }
     function burn(address account, uint256 amount) public onlyManager {
+        require(latestTransferIn[account]+timeLimited<now,"FPT coin locked time is not expired!");
         require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
         _FnxMinePool.burnMinerCoin(account,amount);
         SharedCoin._burn(account,amount);
@@ -67,6 +80,7 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
     function mint(address account, uint256 amount) public onlyManager {
         require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
         _FnxMinePool.mintMinerCoin(account,amount);
+        latestTransferIn[account] = now;
         SharedCoin._mint(account,amount);
     }
     function _addLockBalance(address account, uint256 amount,uint256 lockedWorth)internal {

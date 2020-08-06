@@ -1,6 +1,6 @@
 const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
 const OptionsPool = artifacts.require("OptionsPoolTest");
-const imVolatility32 = artifacts.require("imVolatility32");
+const FPTCoin = artifacts.require("FPTCoin");
 const OptionsPrice = artifacts.require("OptionsPrice");
 let CollateralPool = artifacts.require("CollateralPool");
 let FNXCoin = artifacts.require("FNXCoin");
@@ -70,6 +70,7 @@ contract('OptionsManagerV2', function (accounts){
         let OptionsManger = await OptionsManagerV2.deployed();
         let options = await OptionsPool.deployed();
         let fnx = await FNXCoin.deployed();
+        let fpt = await FPTCoin.deployed();
         let tx = await OptionsManger.addWhiteList(collateral0);
 //        console.log(tx);
         tx = await OptionsManger.addWhiteList(fnx.address);
@@ -94,6 +95,9 @@ contract('OptionsManagerV2', function (accounts){
         console.log(33333333333333,minebalance.toString(10));
         minebalance = await minePool.getMinerBalance(accounts[0],fnx.address);
         console.log(33333333333333,minebalance.toString(10));
+        await fpt.transfer(accounts[2],200000000000000);
+        minebalance = await minePool.getMinerBalance(accounts[2],fnx.address);
+        console.log(555555,minebalance.toString(10));
         for (var i=0;i<100;i++){
                 await options.addExpiration(month);
         }
@@ -120,7 +124,8 @@ contract('OptionsManagerV2', function (accounts){
         console.log(44444444444444,minebalance.toString(10));
         minebalance = await minePool.getMinerBalance(accounts[1],fnx.address);
         console.log(44444444444444,minebalance.toString(10));
-
+        minebalance = await minePool.getMinerBalance(accounts[2],fnx.address);
+        console.log(555555,minebalance.toString(10));
 //        fnx.approve(OptionsManger.address,1000000000000000);
 //        tx = await OptionsManger.buyOption(fnx.address,1000000000000000,20000000000,1,month,10000000000,0);
 //        console.log(tx)

@@ -13,9 +13,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
     using SafeMath for uint256;
     using SafeInt256 for int256;
     uint256 private collateralRate = 5000;
-    mapping(address=>uint256) private latestAddCollateral;
-    uint256 private timeLimited = 1 hours;
- 
+
     event AddCollateral(address indexed from,address indexed collateral,uint256 amount,uint256 tokenAmount);
     event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);
     event DebugEvent(int256 value1,uint256 value2,int256 value3);
@@ -36,12 +34,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         _collateralPool.addNetWorthBalance(settlement,int256(amount));
 //        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
     }
-    function setCollateralTimeLimited(uint256 _timeLimited) public onlyOwner {
-        timeLimited = _timeLimited;
-    }
-    function getUserCollateralTimeLimite(address user) public view returns (uint256){
-        return latestAddCollateral[user]+timeLimited;
-    }
+
     function setCollateralRate(uint256 colRate) public onlyOwner {
         collateralRate = colRate;
 
@@ -99,7 +92,6 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         //userInputCollateral[msg.sender][collateral] = userInputCollateral[msg.sender][collateral].add(amount);
         _collateralPool.addNetWorthBalance(collateral,int256(amount));
         //netWorthBalances[collateral] = netWorthBalances[collateral].add(amount);
-        latestAddCollateral[msg.sender] = now;
         emit AddCollateral(msg.sender,collateral,amount,mintAmount);
         _FPTCoin.mint(msg.sender,mintAmount);
     }
@@ -107,7 +99,6 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
     function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted public {
         checkInputAmount(tokenAmount);
         require(checkAddressRedeemOut(collateral) , "settlement is unsupported token");
-        require(latestAddCollateral[msg.sender]+timeLimited < now , "collateral lock limitation is not expired");
         uint256 lockedAmount = _FPTCoin.lockedBalanceOf(msg.sender);
         require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
