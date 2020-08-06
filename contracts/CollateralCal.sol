@@ -1,27 +1,24 @@
-
 pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
 import "./modules/SafeInt256.sol";
+import "./modules/AddressWhiteList.sol";
 import "./modules/ReentrancyGuard.sol";
-import "./modules/underlyingAssets.sol";
-import "./modules/TransactionFee.sol";
 import "./interfaces/IOptionsPool.sol";
 import "./interfaces/IFNXOracle.sol";
 import "./interfaces/ICollateralPool.sol";
 import "./interfaces/IFPTCoin.sol";
 import "./modules/Operator.sol";
-
-contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator {
+import "./interfaces/IERC20.sol";
+contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator {
     using SafeMath for uint256;
     using SafeInt256 for int256;
-    fraction private collateralRate = fraction(5, 1);
+    uint256 private collateralRate = 5000;
     mapping(address=>uint256) private latestAddCollateral;
     uint256 private timeLimited = 1 hours;
  
     event AddCollateral(address indexed from,address indexed collateral,uint256 amount,uint256 tokenAmount);
     event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);
-    event DebugEvent(uint256 indexed value1,uint256 indexed value2,uint256 indexed value3);
-    event DebugEventInt(int256 value1,int256 value2,int256 value3);
+    event DebugEvent(int256 value1,uint256 value2,int256 value3);
     uint256 internal maxAmount = 1e30;
     uint256 internal minAmount = 1e9;
     function getInputAmountRange() public view returns(uint256,uint256) {
@@ -42,12 +39,15 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
     function setCollateralTimeLimited(uint256 _timeLimited) public onlyOwner {
         timeLimited = _timeLimited;
     }
-    function setCollateralRate(uint256 numerator,uint256 denominator) public onlyOwner {
-        collateralRate.numerator = numerator;
-        collateralRate.denominator = denominator;
+    function getUserCollateralTimeLimite(address user) public view returns (uint256){
+        return latestAddCollateral[user]+timeLimited;
     }
-    function getCollateralRate()public view returns (uint256,uint256) {
-        return (collateralRate.numerator,collateralRate.denominator);
+    function setCollateralRate(uint256 colRate) public onlyOwner {
+        collateralRate = colRate;
+
+    }
+    function getCollateralRate()public view returns (uint256) {
+        return collateralRate;
     }
     function getUserPayingUsd(address user)public view returns (uint256){
         return _collateralPool.getUserPayingUsd(user);
@@ -61,15 +61,13 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
         address[] memory tmpWhiteList = whiteList;
         (uint256 firstOption,int256[] memory latestShared) = _optionsPool.getNetWrothCalInfo(tmpWhiteList);
         uint256 lastOption = _optionsPool.getOptionInfoLength();
-        (uint256[] memory sharedBalance,uint256 newFirst,bool success) = _optionsPool.calRangeSharedPayment(lastOption,firstOption,lastOption,tmpWhiteList);
-        if (success){
-            int256[] memory newNetworth = _optionsPool.calculateExpiredPayment(firstOption,newFirst,tmpWhiteList);
-            int256[] memory fallBalance = _optionsPool.calculatePhaseOptionsFall(lastOption,newFirst,lastOption,tmpWhiteList);
-            for (uint256 i= 0;i<fallBalance.length;i++){
-                fallBalance[i] = int256(sharedBalance[i])-latestShared[i]+fallBalance[i];
-            }
-            setSharedPayment(newNetworth,fallBalance,newFirst);
+        (int256[] memory newNetworth,uint256[] memory sharedBalance,uint256 newFirst) =
+                     _optionsPool.calRangeSharedPayment(lastOption,firstOption,lastOption,tmpWhiteList);
+        int256[] memory fallBalance = _optionsPool.calculatePhaseOptionsFall(lastOption,newFirst,lastOption,tmpWhiteList);
+        for (uint256 i= 0;i<fallBalance.length;i++){
+            fallBalance[i] = int256(sharedBalance[i])-latestShared[i]+fallBalance[i];
         }
+        setSharedPayment(newNetworth,fallBalance,newFirst);
     }
     function setSharedPayment(int256[] newNetworth,int256[] sharedBalances,uint256 firstOption) public onlyOperatorIndex(0){
         _optionsPool.setSharedState(firstOption,sharedBalances,whiteList);
@@ -88,12 +86,10 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
     }
     function addCollateral(address collateral,uint256 amount) nonReentrant notHalted public payable {
         amount = getPayableAmount(collateral,amount);
-        require(amount>0 , "settlement amount is zero!");
-        uint256 fee = calculateFee(addColFee,amount);
-        _addTransactionFee(collateral,fee);
+        uint256 fee = _collateralPool.addTransactionFee(collateral,amount,3);
         amount = amount-fee;
         uint256 price = _oracle.getPrice(collateral);
-        uint256 userPaying = price.mul(amount);
+        uint256 userPaying = price*amount;
         uint256 mintAmount = userPaying/getTokenNetworth();
         _collateralPool.addUserPayingUsd(msg.sender,userPaying);
         //userCollateralPaying[msg.sender] = userCollateralPaying[msg.sender].add(userPaying);
@@ -290,7 +286,6 @@ contract CollateralCal is ReentrancyGuard,TransactionFee,ImportIFPTCoin,ImportOr
         return colAmount;
     }
     function calculateCollateral(uint256 amount)internal view returns (uint256){
-        uint256 result = collateralRate.numerator.mul(amount);
-        return result/collateralRate.denominator;
+        return collateralRate.mul(amount)/1000;
     }
 }

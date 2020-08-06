@@ -16,7 +16,7 @@ contract TransactionFee is AddressWhiteList {
         uint256 numerator;
         uint256 denominator;
     }
-    event FeePayback(address indexed recieptor,address indexed settlement,uint256 payback);
+    event RedeemFee(address indexed recieptor,address indexed settlement,uint256 payback);
     event AddFee(address indexed settlement,uint256 payback);
     event TransferPayback(address indexed recieptor,address indexed settlement,uint256 payback);
     // The total fees accumulated in the contract
@@ -74,7 +74,7 @@ contract TransactionFee is AddressWhiteList {
             IERC20 currencyToken = IERC20(currency);
            currencyToken.transfer(msg.sender,fee);
         }
-        emit FeePayback(msg.sender,currency,fee);
+        emit RedeemFee(msg.sender,currency,fee);
     }
     function redeemAll()public onlyOwner{
         for (uint256 i=0;i<whiteList.length;i++){

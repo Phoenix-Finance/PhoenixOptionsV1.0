@@ -57,7 +57,6 @@ contract('OptionsPoolTest', function (accounts){
             await OptionsManger.sellOption(info1.optionId,sellAmount);
             info1.amount -= sellAmount;
         }
-        return;
         let totalCollateral = new BN(0);
         for (var i=0;i<optionInfos.length;i++){
             info1 = optionInfos[i];

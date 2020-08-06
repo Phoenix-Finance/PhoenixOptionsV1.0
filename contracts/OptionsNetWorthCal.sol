@@ -31,16 +31,20 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         }
     }
     function calRangeSharedPayment(uint256 lastOption,uint256 begin,uint256 end,address[] memory whiteList)
-            public view returns(uint256[],uint256,bool){
+            public view returns(int256[],uint256[],uint256){
         if (begin>=lastOption || end < firstOption){
-            return(new uint256[](whiteList.length),0,false);
+            return(new int256[](whiteList.length),new uint256[](whiteList.length),0);
         }
         if (end>lastOption) {
             end = lastOption;
         }
-        (uint256[] memory sharedBalances,uint256 _firstOption) = 
-            _calculateSharedPayment(begin,end,whiteList);
-        return (sharedBalances,_firstOption,true);
+        (uint256[] memory sharedBalances,uint256 _firstOption) = _calculateSharedPayment(begin,end,whiteList);
+        if (begin < _firstOption){
+            int256[] memory newNetworth = calculateExpiredPayment(begin,_firstOption,whiteList);
+            return (newNetworth,sharedBalances,_firstOption);
+        }
+        
+        return (new int256[](whiteList.length),sharedBalances,_firstOption);
     }
     function _calculateSharedPayment(uint256 begin,uint256 end,address[] memory whiteList)
             internal view returns(uint256[],uint256){
@@ -61,14 +65,14 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         }
         return (totalSharedPayment,newFirstOption);
     }
-    function calculateExpiredPayment(uint256 begin,uint256 end,address[] memory whiteList)public view returns(int256[]){
+    function calculateExpiredPayment(uint256 begin,uint256 end,address[] memory whiteList)internal view returns(int256[]){
         int256[] memory totalExpiredPayment = new int256[](whiteList.length);
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
             if (info.amount>0){
                 OptionsInfoEx storage optionEx = optionExtraMap[begin];
                 uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                uint256 timeValue = optionEx.tokenTimePrice*info.amount/calDecimals;
+                uint256 timeValue = optionEx.fullPrice*optionEx.tokenTimePrice*info.amount/calDecimals;
                 totalExpiredPayment[index] = totalExpiredPayment[index]+int256(timeValue);
             }
         }
@@ -101,35 +105,40 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
                 continue;
             }
             index = _getEligibleUnderlyingIndex(info.underlying);
-            uint256 curValue = _calCurtimeCallateralFall(info,info.amount,prices[index]);
+            int256 curValue = _calCurtimeCallateralFall(info,info.amount,prices[index]);
             if (curValue != 0){
                 OptionsInfoEx storage optionEx = optionExtraMap[begin];
                 uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                OptionsFallBalances[index] = OptionsFallBalances[index]-int256(curValue);
+                OptionsFallBalances[index] = OptionsFallBalances[index]-curValue;
             }
         }
         return OptionsFallBalances;
     }
 
-    function _calCurtimeCallateralFall(OptionsInfo memory info,uint256 amount,uint256 curPrice) internal view returns(uint256){
+    function _calCurtimeCallateralFall(OptionsInfo memory info,uint256 amount,uint256 curPrice) internal view returns(int256){
         if (info.expiration<=now || amount == 0){
             return 0;
         }
-        return _getOptionsPayback(info.optType,info.strikePrice,curPrice).mul(amount);
+        uint256 newFall = _getOptionsPayback(info.optType,info.strikePrice,curPrice)*amount;
+        OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
+        uint256 OriginFall = _getOptionsPayback(info.optType,info.strikePrice,optionEx.underlyingPrice)*amount;
+        return int256(newFall) - int256(OriginFall);
     }
+    /*
     function _addNewOptionsNetworth(OptionsInfo memory info)  internal {
         OptionsInfoEx storage infoEx =  optionExtraMap[info.optionID-1];
         uint256 price = _oracle.getPrice(infoEx.settlement);
         uint256 curValue = _calCurtimeCallateralFall(info,info.amount,infoEx.underlyingPrice)/price;
         optionsLatestNetWorth[infoEx.settlement] = optionsLatestNetWorth[infoEx.settlement].sub(int256(curValue));
     }
+    */
     function _burnOptionsNetworth(OptionsInfo memory info,uint256 amount,uint256 underlyingPrice,uint256 currentPrice) internal returns (uint256) {
-        uint256 curValue = _calCurtimeCallateralFall(info,amount,underlyingPrice);
+        int256 curValue = _calCurtimeCallateralFall(info,amount,underlyingPrice);
         OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
         uint256 timeWorth = optionEx.fullPrice>currentPrice ? optionEx.fullPrice-currentPrice : 0;
         timeWorth = optionEx.tokenTimePrice.mul(timeWorth*amount)/calDecimals;
-        curValue = curValue / _oracle.getPrice(optionEx.settlement);
-        int256 value = int256(curValue) - int256(timeWorth);
+        curValue = curValue / int256(_oracle.getPrice(optionEx.settlement));
+        int256 value = curValue - int256(timeWorth);
         optionsLatestNetWorth[optionEx.settlement] = optionsLatestNetWorth[optionEx.settlement]+value;
     }
     function _calculateCurrentPrice(uint256 curprice,uint256 strikePrice,uint256 expiration,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){

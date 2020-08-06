@@ -107,12 +107,6 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
         }
         return (ownerArr,typeAndUnderArr,expArr,priceArr,amountArr);
     }
-    function getLatestOption()public view returns(uint256,address,uint8,uint32,uint256,uint256,uint256){
-        uint256 len = allOptions.length;
-        require(len>0,"options list is empty");
-        OptionsInfo storage info = allOptions[len-1];
-        return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);
-    }
     function getOptionsLimitTimeById(uint256 optionsId)public view returns(uint256){
         require(optionsId>0 && optionsId <= allOptions.length,"option id is not exist");
         return optionExtraMap[optionsId-1].createdTime + burnTimeLimit;

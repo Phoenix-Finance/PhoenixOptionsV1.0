@@ -19,7 +19,7 @@ contract OptionsPool is OptionsNetWorthCal {
         _createOptions(from,settlement,type_ly_exp,strikePrice,optionPrice,amount);
         OptionsInfo memory info = _getOptionsById(allOptions.length);
         _addOptionsCollateral(info);
-        _addNewOptionsNetworth(info);
+//        _addNewOptionsNetworth(info);
     }
     function burnOptions(address from,uint256 id,uint256 amount,uint256 optionPrice)public onlyManager{
         _burnOptions(from,id,amount);

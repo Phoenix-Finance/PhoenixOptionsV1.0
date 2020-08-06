@@ -38,10 +38,19 @@ contract ImpliedVolatility is Operator {
                         169440882,169690552,169937557,170181957,170423810,170663172,170900097,171134638,171366845,171596767];
          ATMIvRate[2] =  ATMIvRate[1];
     }
-    function setcalculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 currentPrice,uint256 strikePrice)public{
-        (uint256 iv1,uint256 iv2) = calculateIv(underlying,optType,expiration,currentPrice,strikePrice);
-        emit DebugEvent(9999,iv1,iv2);
-        debugMap[msg.sender] = iv1;
+    function SetAtmIv(uint32 underlying,uint256 _Iv0)public onlyOperatorIndex(0){
+        ATMIv0[underlying] = _Iv0;
+    }
+    function SetFormulasParam(uint32 underlying,int256 _paramA,int256 _paramB,int256 _paramC,int256 _paramD,int256 _paramE)
+        public onlyOwner{
+        paramA[underlying] = _paramA;
+        paramB[underlying] = _paramB;
+        paramC[underlying] = _paramC;
+        paramD[underlying] = _paramD;
+        paramE[underlying] = _paramE;
+    }
+    function SetATMIvRate(uint32 underlying,uint256[] IvRate)public onlyOwner{
+        ATMIvRate[underlying] = IvRate;
     }
     function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 currentPrice,uint256 strikePrice)public view returns (uint256,uint256){
         uint256 iv = calATMIv(underlying,expiration);

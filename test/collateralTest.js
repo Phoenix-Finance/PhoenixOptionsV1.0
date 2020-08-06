@@ -10,6 +10,7 @@ let collateral0 = "0x0000000000000000000000000000000000000000";
 let testFunc = require("./testFunction.js")
 let FNXMinePool = artifacts.require("FNXMinePool");
 contract('OptionsManagerV2', function (accounts){
+        /*
     it('OptionsManagerV2 redeem collateral', async function (){
         let OptionsManger = await OptionsManagerV2.deployed();
         let collateralInstance = await CollateralPool.deployed();
@@ -63,6 +64,7 @@ contract('OptionsManagerV2', function (accounts){
         await logBalance(fnx,accounts[0]);
         
     });
+    */
     it('OptionsManagerV2 add collateral', async function (){
         let collateralInstance = await CollateralPool.deployed();
         let OptionsManger = await OptionsManagerV2.deployed();
@@ -145,6 +147,9 @@ contract('OptionsManagerV2', function (accounts){
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
         result = await options.getOptionsById(3);
         console.log(result[0].toString(10),result[1],result[2].toString(10),result[3].toString(10),result[4].toString(10),result[5].toString(10),result[6].toString(10));
+        for (var i=0;i<100;i++){
+                await options.addExpiration(month);
+        }
 //        tx = await OptionsManger.sellOption(1,10000000000);
 //        console.log(tx);
 //        tx = await OptionsManger.exerciseOption(3,10000000000);
@@ -175,10 +180,13 @@ contract('OptionsManagerV2', function (accounts){
         result = await OptionsManger.getLeftCollateral();
         console.log(result.toString(10));
         result = await OptionsManger.getTokenNetworth();
-        
         console.log("4-----------------------------------",result.toString(10));
+        for (var i=0;i<100;i++){
+                await options.addExpiration(month);
+        }
         await logBalance(fnx,collateralInstance.address);
         await OptionsManger.redeemCollateral(498500000000000,collateral0);
+        await calculateNetWroth(options,OptionsManger,fnx);
         await logBalance(fnx,collateralInstance.address);
         result = await options.getTotalOccupiedCollateral();
         console.log(result.toString(10));

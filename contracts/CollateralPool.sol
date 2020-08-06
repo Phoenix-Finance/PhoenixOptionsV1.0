@@ -18,6 +18,11 @@ contract CollateralPool is Managerable,TransactionFee{
     function () public payable onlyManager{
 
     }
+    function addTransactionFee(address collateral,uint256 amount,uint256 feeType)public onlyManager returns (uint256) {
+        uint256 fee = calculateFee(feeType,amount);
+        _addTransactionFee(collateral,fee);
+        return fee;
+    }
     function getUserPayingUsd(address user)public view returns (uint256){
         return userCollateralPaying[user];
     }

@@ -1,18 +1,17 @@
 pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
 import "./CollateralCal.sol";
-import "./modules/whiteList.sol";
 import "./interfaces/IOptionsPrice.sol";
 import "./modules/tuple.sol";
 contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
     using SafeMath for uint256;
 
     constructor (address oracleAddr,address optionsPriceAddr,address optionsPoolAddr,address collateralPoolAddr,address FPTCoinAddr) public{
-        setOracleAddress(oracleAddr);
-        setOptionsPriceAddress(optionsPriceAddr);
-        setOptionsPoolAddress(optionsPoolAddr);
-        setFPTCoinAddress(FPTCoinAddr);
-        setCollateralPoolAddress(collateralPoolAddr);
+        _oracle = IFNXOracle(oracleAddr);
+        _optionsPrice = IOptionsPrice(optionsPriceAddr);
+        _optionsPool = IOptionsPool(optionsPoolAddr);
+        _collateralPool = ICollateralPool(collateralPoolAddr);
+        _FPTCoin = IFPTCoin(FPTCoinAddr);
     }
 
     uint256 internal maxPriceRate = 1500;
@@ -31,9 +30,9 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
     event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);
     event SellOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
     event ExerciseOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);
-    event DebugEvent(uint256 value0,uint256 value1,uint256 value2,uint256 value3);
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
                 uint256 expiration,uint256 amount,uint8 optType) nonReentrant notHalted public payable{
+        require(optType<2," Must input 0 for call option or 1 for put option");
         _optionsPool.buyOptionCheck(expiration,underlying);
         uint256 ty_ly_exp = tuple64.getTuple(uint256(optType),uint256(underlying),uint256(expiration),0);
         uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
@@ -46,17 +45,13 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
 
     function buyOption_sub(address settlement,uint256 settlementAmount,
             uint256 optionPrice,uint256 amount)internal{
-        
-        uint256 allPay = amount.mul(optionPrice);
         settlementAmount = getPayableAmount(settlement,settlementAmount);
-        require(settlementAmount>0 , "settlement amount is zero!");
-        uint256 fee = calculateFee(buyFee,allPay);
         uint256 settlePrice = _oracle.getPrice(settlement);
-        require(settlePrice.mul(settlementAmount)>=allPay+fee,"settlement asset is insufficient!");
+        uint256 allPay = amount*optionPrice;
         uint256 allPayUSd = allPay/1e8;
         allPay = allPay/settlePrice;
-        fee = fee/settlePrice;
-        _addTransactionFee(settlement,fee);
+        uint256 fee = _collateralPool.addTransactionFee(settlement,allPay,0);
+        require(settlementAmount>=allPay+fee,"settlement asset is insufficient!");
         settlementAmount = settlementAmount.sub(allPay+fee);
         if (settlementAmount > 0){
             _collateralPool.transferPayback(msg.sender,settlement,settlementAmount);
@@ -72,10 +67,10 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
         uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);
         uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
         _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
-        uint256 allPay = optPrice.mul(amount);
+        uint256 allPay = optPrice*amount;
         (address settlement,uint256 fullPay) = _optionsPool.getBurnedFullPay(optionsId,amount);
         _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
-        _paybackWorth(allPay,sellFee);
+        _paybackWorth(allPay,1);
         emit SellOption(msg.sender,optionsId,amount,allPay);
     }
     function exerciseOption(uint256 optionsId,uint256 amount) nonReentrant notHalted public{
@@ -85,13 +80,13 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
             return;
         }
         (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
-        expiration = expiration-now;
+        expiration = expiration.sub(now);
         uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);
         uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
         _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
         (address settlement,uint256 fullPay) = _optionsPool.getBurnedFullPay(optionsId,amount);
         _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
-        _paybackWorth(allPay,exerciseFee);
+        _paybackWorth(allPay,2);
         emit ExerciseOption(msg.sender,optionsId,amount,allPay);
     }
 }

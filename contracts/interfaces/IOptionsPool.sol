@@ -14,10 +14,10 @@ interface IOptionsPool {
     function calculatePhaseOptionsFall(uint256 lastOption,uint256 begin,uint256 end,address[] whiteList) external view returns(int256[]);
     function getOptionInfoLength()external view returns (uint256);
     function getNetWrothCalInfo(address[] whiteList)external view returns(uint256,int256[]);
-    function calculateExpiredPayment(uint256 begin,uint256 end,address[] whiteList)external view returns(int256[]);
-    function calRangeSharedPayment(uint256 lastOption,uint256 begin,uint256 end,address[] whiteList)external view returns(uint256[],uint256,bool);
+    function calRangeSharedPayment(uint256 lastOption,uint256 begin,uint256 end,address[] whiteList)external view returns(int256[],uint256[],uint256);
     function getNetWrothLatestWorth(address settlement)external view returns(int256);
     function getBurnedFullPay(uint256 optionID,uint256 amount) external view returns(address,uint256);
+
 }
 contract ImportOptionsPool is Ownable{
     IOptionsPool internal _optionsPool;

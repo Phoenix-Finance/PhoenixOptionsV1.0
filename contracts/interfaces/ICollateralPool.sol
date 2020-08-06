@@ -29,6 +29,7 @@ interface ICollateralPool {
         uint256[] PremiumBalances,uint256[] prices)external;
     function getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] tmpWhiteList,
         uint256[] _RealBalances,uint256[] prices) external view returns(uint256[],uint256[]);
+    function addTransactionFee(address collateral,uint256 amount,uint256 feeType)external returns (uint256);
 }
 contract ImportCollateralPool is Ownable{
     ICollateralPool internal _collateralPool;
