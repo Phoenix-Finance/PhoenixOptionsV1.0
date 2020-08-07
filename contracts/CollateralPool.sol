@@ -97,19 +97,21 @@ contract CollateralPool is Managerable,TransactionFee{
         uint256[] memory PaybackBalances = new uint256[](ln);
         for (uint256 i=0; i<ln && redeemWorth>0;i++){
             //address addr = tmpWhiteList[i];
-            uint256 totalWorth = prices[i].mul(colBalances[i]);
-            if (redeemWorth < totalWorth){
-//                setUserInputCollateral(account,tmpWhiteList[i],
-//                    getUserInputCollateral(account,tmpWhiteList[i]).mul(totalWorth-redeemWorth).div(totalWorth));
-                userInputCollateral[account][tmpWhiteList[i]] = userInputCollateral[account][tmpWhiteList[i]].mul(totalWorth-redeemWorth).div(totalWorth);
-                PaybackBalances[i] = redeemWorth/prices[i];
-                redeemWorth = 0;
-                break;
-            }else{
-                //_collateralPool.setUserInputCollateral(msg.sender,tmpWhiteList[i],0);
-                userInputCollateral[account][tmpWhiteList[i]] = 0;
-                PaybackBalances[i] = colBalances[i];
-                redeemWorth = redeemWorth - totalWorth;
+            if (colBalances[i] > 0){
+                uint256 totalWorth = prices[i].mul(colBalances[i]);
+                if (redeemWorth < totalWorth){
+    //                setUserInputCollateral(account,tmpWhiteList[i],
+    //                    getUserInputCollateral(account,tmpWhiteList[i]).mul(totalWorth-redeemWorth).div(totalWorth));
+                    userInputCollateral[account][tmpWhiteList[i]] = userInputCollateral[account][tmpWhiteList[i]].mul(totalWorth-redeemWorth).div(totalWorth);
+                    PaybackBalances[i] = redeemWorth/prices[i];
+                    redeemWorth = 0;
+                    break;
+                }else{
+                    //_collateralPool.setUserInputCollateral(msg.sender,tmpWhiteList[i],0);
+                    userInputCollateral[account][tmpWhiteList[i]] = 0;
+                    PaybackBalances[i] = colBalances[i];
+                    redeemWorth = redeemWorth - totalWorth;
+                }
             }
         }
         if (redeemWorth>0) {
