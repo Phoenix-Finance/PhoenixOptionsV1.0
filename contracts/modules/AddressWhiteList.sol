@@ -6,12 +6,13 @@ import "./whiteList.sol";
      */
 contract AddressWhiteList is Halt {
 
-    uint256 constant private allPermission = 0xffffffff;
-    uint256 constant private allowPayIn = 0x0001;
-    uint256 constant private allowRedeemOut = 0x0002;
+    uint256 constant internal allPermission = 0xffffffff;
+    uint256 constant internal allowPayIn = 0x0001;
+    uint256 constant internal allowRedeemOut = 0x0002;
+    uint256 constant internal allowSellOut = 0x0004;
     // The eligible adress list
     address[] internal whiteList;
-    mapping(address => uint256) addressPermission;
+    mapping(address => uint256) internal addressPermission;
     /**
      * @dev Implementation of add an eligible address into the whitelist.
      * @param addAddress new eligible address.
@@ -48,5 +49,8 @@ contract AddressWhiteList is Halt {
     }
     function checkAddressRedeemOut(address tmpAddress) public view returns (bool){
         return isEligibleAddress(tmpAddress) && ((addressPermission[tmpAddress]&allowRedeemOut) == allowRedeemOut);
+    }
+    function checkAddressPermission(address tmpAddress,uint256 state) internal view returns (bool){
+        return  (addressPermission[tmpAddress]&state) == state;
     }
 }

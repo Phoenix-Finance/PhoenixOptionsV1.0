@@ -149,27 +149,30 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
             return;
         }
         emit RedeemCollateral(msg.sender,collateral,redeemWorth);
-        (uint256[] memory colBalances,uint256[] memory PremiumBalances,uint256[] memory prices) = _getCollateralAndPremiumBalances(msg.sender,collateral,userTotalWorth);
         address[] memory tmpWhiteList = getTempWhiteList(collateral);
+        (uint256[] memory colBalances,uint256[] memory PremiumBalances,uint256[] memory prices) = 
+                _getCollateralAndPremiumBalances(msg.sender,userTotalWorth,tmpWhiteList);
         _collateralPool.transferPaybackBalances(msg.sender,redeemWorth,tmpWhiteList,colBalances,
                 PremiumBalances,prices);
     }
 
     function calCollateralWorth(address account)public view returns(uint256[]){
         uint256 worth = getUserTotalWorth(account);
-        (uint256[] memory colBalances,uint256[] memory PremiumBalances,) = _getCollateralAndPremiumBalances(account,whiteList[0],worth);
+        (uint256[] memory colBalances,uint256[] memory PremiumBalances,) = 
+        _getCollateralAndPremiumBalances(account,worth,whiteList);
         uint256 whiteLen = whiteList.length;
         for (uint256 i=0; i<whiteLen;i++){
             colBalances[i] = colBalances[i].add(PremiumBalances[i]);
         }
         return colBalances;
     }
-    function _getCollateralAndPremiumBalances(address account,address priorCollateral,uint256 userTotalWorth) internal view returns(uint256[],uint256[],uint256[]){
-        address[] memory tmpWhiteList = getTempWhiteList(priorCollateral);
+    function _getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] memory tmpWhiteList) internal view returns(uint256[],uint256[],uint256[]){
         uint256[] memory prices = new uint256[](tmpWhiteList.length);
         uint256[] memory netWorthBalances = new uint256[](tmpWhiteList.length);
         for (uint256 i=0; i<tmpWhiteList.length;i++){
-            netWorthBalances[i] = getNetWorthBalance(tmpWhiteList[i]);
+            if (checkAddressPermission(tmpWhiteList[i],0x0002)){
+                netWorthBalances[i] = getNetWorthBalance(tmpWhiteList[i]);
+            }
             prices[i] = _oracle.getPrice(tmpWhiteList[i]);
         }
         (uint256[] memory colBalances,uint256[] memory PremiumBalances) = _collateralPool.getCollateralAndPremiumBalances(account,userTotalWorth,tmpWhiteList,
@@ -245,14 +248,14 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         uint256[] memory balances = new uint256[](whiteLen);
         for (uint256 i=0;i<whiteLen;i++){
             address addr = whiteList[i];
-            uint256 price = _oracle.getPrice(addr);
-            balances[i] = getNetWorthBalance(addr);
-            //balances[i] = netWorthBalances[addr];
-            totalPrice = totalPrice.add(price.mul(balances[i]));
+            if (checkAddressPermission(addr,allowSellOut)){
+                uint256 price = _oracle.getPrice(addr);
+                balances[i] = getNetWorthBalance(addr);
+                //balances[i] = netWorthBalances[addr];
+                totalPrice = totalPrice.add(price.mul(balances[i]));
+            }
         }
-        if (totalPrice == 0){
-            return;
-        }
+        require(totalPrice>=worth && worth > 0,"payback settlement is insufficient!");
         for (i=0;i<whiteLen;i++){
             uint256 _payBack = balances[i].mul(worth)/totalPrice;
             _collateralPool.transferPaybackAndFee(msg.sender,whiteList[i],_payBack,feeType);

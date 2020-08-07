@@ -117,10 +117,9 @@ contract CollateralPool is Managerable,TransactionFee{
             for (i=0; i<ln;i++){
                 totalWorth = totalWorth.add(PremiumBalances[i]*prices[i]);
             }
-            if (totalWorth>0){
-                for (i=0; i<ln;i++){
-                    PaybackBalances[i] = PaybackBalances[i].add(PremiumBalances[i].mul(redeemWorth)/totalWorth);
-                }
+            require(totalWorth >= redeemWorth ,"redeem collateral is insufficient");
+            for (i=0; i<ln;i++){
+                PaybackBalances[i] = PaybackBalances[i].add(PremiumBalances[i].mul(redeemWorth)/totalWorth);
             }
         }
         for (i=0;i<ln;i++){ 
