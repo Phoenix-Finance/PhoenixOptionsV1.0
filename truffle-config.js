@@ -24,7 +24,6 @@
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 //const HDWalletProvider = require('truffle-hdwallet-provider');
- const HDWalletProvider = require('../wan-hdwallet-provider');
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -49,18 +48,6 @@ module.exports = {
         network_id: "*",       // Any network (default: none)
   //      gas: 7500000,
       },
-    // Useful for private networks
-     wanTest: {
-       provider: () => new HDWalletProvider("7218e1c28129b5583e91cbfa4d079428496d72df494a2a133efe4d5b8b2da7b1",
-        "https://demodex.wandevs.org:48545"),
-//      provider: () => new HDWalletProvider("7218e1c28129b5583e91cbfa4d079428496d72df494a2a133efe4d5b8b2da7b1",
-//       "http://gwan.wandevs.org:36891"),
-       network_id: 3,   // This network is yours, in the cloud.
-//       production: true    // Treats this network as if it was a public net. (default: false)
-        timeoutBlocks: 300,  // # of blocks before a deployment times out  (minimum/default: 50)
-        gasPrice: 1000000000,
-       skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
-    }
     // Another network with more advanced options...
     // advanced: {
       // port: 8777,             // Custom port
