@@ -1,6 +1,5 @@
 pragma solidity ^0.4.26;
 import "./OptionsBase.sol";
-import "./modules/tuple.sol";
 import "./OptionsOccupiedCal.sol";
 import "./interfaces/IOptionsPrice.sol";
 import "./modules/SafeInt256.sol";

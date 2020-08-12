@@ -4,6 +4,7 @@ import "./modules/Ownable.sol";
 import "./modules/Fraction.sol";
 import "./interfaces/IVolatility.sol";
 contract OptionsPrice is ImportVolatility{
+    using Fraction for Fraction.fractionNumber;
     constructor (address ivContract) public{
         setVolatilityAddress(ivContract);
     }
@@ -40,18 +41,18 @@ contract OptionsPrice is ImportVolatility{
             internal pure returns (Fraction.fractionNumber, Fraction.fractionNumber) {
         Fraction.fractionNumber memory d1 = Fraction.fractionNumber(0,1);
         if (currentPrice != strikePrice){
-            Fraction.fractionNumber memory lns = Fraction.fractionLn(currentPrice);
-            Fraction.fractionNumber memory lnl = Fraction.fractionLn(strikePrice);
-            d1 = Fraction.safeFractionSub(lns, lnl);
+            Fraction.fractionNumber memory lns = Fraction.ln(currentPrice);
+            Fraction.fractionNumber memory lnl = Fraction.ln(strikePrice);
+            d1 = lns.sub(lnl);
         }
-        Fraction.fractionNumber memory derta2 = Fraction.safeFractionMul(derta, derta);
-        derta2 = Fraction.safeFractionMul(derta2, Fraction.fractionNumber(1,2));
-        derta2 = Fraction.safeFractionAdd(derta2, r);
-        derta2 = Fraction.safeFractionMul(derta2, Fraction.fractionNumber(int256(expiration),int256(Year)));
-        d1 = Fraction.safeFractionAdd(d1, derta2);
-        Fraction.fractionNumber memory dertaT = Fraction.safeFractionMul(Fraction.fractionSqrt(Fraction.fractionNumber(int256(expiration*1e10),int256(Year*1e10))), derta);
-        d1 = Fraction.safeFractionDiv(d1, dertaT);
-        Fraction.fractionNumber memory d2 = Fraction.safeFractionSub(d1, dertaT);
+        Fraction.fractionNumber memory derta2 = derta.mul(derta);
+        derta2 = derta2.mul(Fraction.fractionNumber(1,2));
+        derta2 = derta2.add(r);
+        derta2 = derta2.mul(Fraction.fractionNumber(int256(expiration),int256(Year)));
+        d1 = d1.add(derta2);
+        derta2 = Fraction.fractionNumber(int256(expiration*1e10),int256(Year*1e10)).sqrt().mul(derta);
+        d1 = d1.div(derta2);
+        Fraction.fractionNumber memory d2 = d1.sub(derta2);
         return (d1, d2);
     }
 
@@ -60,16 +61,16 @@ contract OptionsPrice is ImportVolatility{
             Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
                 internal pure returns (uint256) {
        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice, strikePrice, expiration, r, derta);
-        d1 = Fraction.normsDist(d1);
-        d2 = Fraction.normsDist(d2);
-        d1 = Fraction.safeFractionSub(Fraction.fractionNumber(1,1), d1);
-        d2 = Fraction.safeFractionSub(Fraction.fractionNumber(1,1), d2);
-        d1 = Fraction.safeFractionMul(d1, Fraction.fractionNumber(int256(currentPrice),1));
-        d2 = Fraction.safeFractionMul(d2, Fraction.fractionNumber(int256(strikePrice),1));
-        Fraction.fractionNumber memory rt = Fraction.safeFractionMul(r,Fraction.fractionNumber(int256(expiration),int256(Year)));
-        rt = Fraction.invert(Fraction.fractionExp(rt));
-        Fraction.fractionNumber memory price = Fraction.safeFractionMul(d2, rt);
-        price = Fraction.safeFractionSub(price, d1);
+        d1 = d1.normsDist();
+        d2 = d2.normsDist();
+        d1 = Fraction.fractionNumber(1,1).sub(d1);
+        d2 = Fraction.fractionNumber(1,1).sub(d2);
+        d1 = d1.mul(Fraction.fractionNumber(int256(currentPrice),1));
+        d2 = d2.mul(Fraction.fractionNumber(int256(strikePrice),1));
+        Fraction.fractionNumber memory rt = r.mul(Fraction.fractionNumber(int256(expiration),int256(Year)));
+        rt = rt.exp().invert();
+        Fraction.fractionNumber memory price = d2.mul(rt);
+        price = price.sub(d1);
         return uint256(price.numerator/price.denominator);
     }
 
@@ -83,14 +84,14 @@ contract OptionsPrice is ImportVolatility{
             Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
                 internal pure returns (uint256) {
        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice, strikePrice, expiration, r, derta);
-        d1 = Fraction.normsDist(d1);
-        d2 = Fraction.normsDist(d2);
-        d1 = Fraction.safeFractionMul(d1, Fraction.fractionNumber(int256(currentPrice),1));
-        d2 = Fraction.safeFractionMul(d2, Fraction.fractionNumber(int256(strikePrice),1));
-        Fraction.fractionNumber memory rt = Fraction.safeFractionMul(r,Fraction.fractionNumber(int256(expiration),int256(Year)));
-        rt = Fraction.invert(Fraction.fractionExp(rt));
-        Fraction.fractionNumber memory price = Fraction.safeFractionMul(d2, rt);
-        price = Fraction.safeFractionSub(d1, price);
+        d1 = d1.normsDist();
+        d2 = d2.normsDist();
+        d1 = d1.mul(Fraction.fractionNumber(int256(currentPrice),1));
+        d2 = d2.mul(Fraction.fractionNumber(int256(strikePrice),1));
+        Fraction.fractionNumber memory rt = r.mul(Fraction.fractionNumber(int256(expiration),int256(Year)));
+        rt = rt.exp().invert();
+        Fraction.fractionNumber memory price = d2.mul(rt);
+        price = d1.sub(price);
         return uint256(price.numerator/price.denominator);
     }
 }

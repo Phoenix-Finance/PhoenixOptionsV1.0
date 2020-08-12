@@ -1,6 +1,6 @@
 pragma solidity ^0.4.26;
 import "./modules/Operator.sol";
-import "./modules/tuple.sol";
+import "./modules/tuple64.sol";
 import "./modules/ArraySave.sol";
 contract imVolatility64 is Operator {
     uint256 private ValidUntil = 1200;

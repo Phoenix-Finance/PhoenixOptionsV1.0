@@ -2,6 +2,7 @@ pragma solidity ^0.4.26;
 import "./modules/Operator.sol";
 import "./modules/Fraction.sol";
 contract ImpliedVolatility is Operator {
+    using Fraction for Fraction.fractionNumber;
     uint256 constant private _calDecimal = 1e8;
     uint256 constant private DaySecond = 1 days;
     mapping(uint32=>uint256) internal ATMIv0;
@@ -76,17 +77,18 @@ contract ImpliedVolatility is Operator {
         int256 intDecimal = int256(_calDecimal);
         Fraction.fractionNumber memory ln = calImpliedVolLn(underlying,currentPrice,strikePrice);
         //ln*ln+e
-        Fraction.fractionNumber memory lnSqrt = Fraction.safeFractionAdd(Fraction.safeFractionMul(ln,ln),Fraction.fractionNumber(paramE[underlying],intDecimal)); 
-        uint256 sqrtNum = uint256(lnSqrt.numerator*intDecimal*intDecimal/lnSqrt.denominator);
-        sqrtNum = Fraction.sqrt(sqrtNum)*_calDecimal;  
+        Fraction.fractionNumber memory lnSqrt = ln.mul(ln).add(Fraction.fractionNumber(paramE[underlying],intDecimal)); 
+        lnSqrt.numerator = lnSqrt.numerator*intDecimal*intDecimal;
+        lnSqrt = lnSqrt.sqrt();  
+        lnSqrt.numerator = lnSqrt.numerator*intDecimal;
         //ln*c+sqrt
         ln.numerator = ln.numerator*paramC[underlying]*intDecimal;
-        ln = Fraction.safeFractionAdd(ln,Fraction.fractionNumber(int256(sqrtNum),1));
+        ln = ln.add(lnSqrt);
 
-        ln = Fraction.safeFractionMul(ln,Fraction.fractionNumber(paramB[underlying],intDecimal));
-        ln = Fraction.safeFractionAdd(ln,Fraction.fractionNumber(paramA[underlying]*intDecimal,1));
-        ln = Fraction.safeFractionAdd(ln,Fraction.fractionNumber(int256(_ATMIv*_ATMIv),1));
-        sqrtNum = uint256(ln.numerator/ln.denominator);
+        ln = ln.mul(Fraction.fractionNumber(paramB[underlying],intDecimal));
+        ln = ln.add(Fraction.fractionNumber(paramA[underlying]*intDecimal,1));
+        ln = ln.add(Fraction.fractionNumber(int256(_ATMIv*_ATMIv),1));
+        uint256 sqrtNum = uint256(ln.numerator/ln.denominator);
         return Fraction.sqrt(sqrtNum);
     }
     //ln(k) - ln(s) + d
@@ -94,8 +96,8 @@ contract ImpliedVolatility is Operator {
         if (currentPrice == strikePrice){
             return Fraction.fractionNumber(paramD[underlying],int256(_calDecimal));
         }
-        Fraction.fractionNumber memory ln = Fraction.safeFractionSub(Fraction.fractionLn(currentPrice),Fraction.fractionLn(strikePrice));
-        return Fraction.safeFractionAdd(ln,Fraction.fractionNumber(paramD[underlying],int256(_calDecimal)));
+        Fraction.fractionNumber memory ln = Fraction.ln(currentPrice).sub(Fraction.ln(strikePrice));
+        return ln.add(Fraction.fractionNumber(paramD[underlying],int256(_calDecimal)));
     }
     function insertValue(uint256 x0,uint256 x1,uint256 y0, uint256 y1,uint256 x)internal pure returns (uint256){
         require(x1 != x0,"input values are duplicated!");

@@ -10,7 +10,6 @@ let collateral0 = "0x0000000000000000000000000000000000000000";
 let testFunc = require("./testFunction.js")
 let FNXMinePool = artifacts.require("FNXMinePool");
 contract('OptionsManagerV2', function (accounts){
-        /*
     it('OptionsManagerV2 redeem collateral', async function (){
         let OptionsManger = await OptionsManagerV2.deployed();
         let collateralInstance = await CollateralPool.deployed();
@@ -64,7 +63,6 @@ contract('OptionsManagerV2', function (accounts){
         await logBalance(fnx,accounts[0]);
         
     });
-    */
     it('OptionsManagerV2 add collateral', async function (){
         let collateralInstance = await CollateralPool.deployed();
         let OptionsManger = await OptionsManagerV2.deployed();

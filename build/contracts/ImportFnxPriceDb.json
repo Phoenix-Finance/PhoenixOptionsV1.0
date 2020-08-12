@@ -1,68 +1,125 @@
 {
-  "contractName": "IVolatility",
+  "contractName": "ImportFnxPriceDb",
   "abi": [
     {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "constant": true,
-      "inputs": [
-        {
-          "name": "underlying",
-          "type": "uint32"
-        },
-        {
-          "name": "optType",
-          "type": "uint8"
-        },
-        {
-          "name": "expiration",
-          "type": "uint256"
-        },
-        {
-          "name": "currentPrice",
-          "type": "uint256"
-        },
-        {
-          "name": "strikePrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "calculateIv",
+      "inputs": [],
+      "name": "owner",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
-        },
-        {
-          "name": "",
-          "type": "uint256"
+          "type": "address"
         }
       ],
       "payable": false,
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getFnxPriceDbAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "priceAddr",
+          "type": "address"
+        }
+      ],
+      "name": "setFnxPriceDbAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
-  "metadata": "",
-  "bytecode": "0x",
-  "deployedBytecode": "0x",
-  "sourceMap": "",
-  "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.26;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IVolatility {\r\n    function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 currentPrice,uint256 strikePrice)external view returns (uint256,uint256);\r\n}\r\ncontract ImportVolatility is Ownable{\r\n    IVolatility internal _volatility;\r\n    function getVolatilityAddress() public view returns(address){\r\n        return address(_volatility);\r\n    }\r\n    function setVolatilityAddress(address volatility)public onlyOwner{\r\n        _volatility = IVolatility(volatility);\r\n    }\r\n}",
-  "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\interfaces\\IVolatility.sol",
+  "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getFnxPriceDbAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"priceAddr\",\"type\":\"address\"}],\"name\":\"setFnxPriceDbAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFnxPriceDb.sol\":\"ImportFnxPriceDb\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFnxPriceDb.sol\":{\"keccak256\":\"0x4f901ee1d4cd1d09cfe52694b328b12444a2b0bd84f92e3e787b0243accfbb20\",\"urls\":[\"bzzr://8110e82d86c23e6c83143be7c34adee2f8ea74b839f918eff2b687673709b092\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x32e86cf1f96e3e879768e0d0440f35011232004420d3c4f84492f23664cba015\",\"urls\":[\"bzzr://5725cb4758935a4e7ebc5f963b0a46da11e6c81ac5dcedd214e425546e8b83a7\"]}},\"version\":1}",
+  "bytecode": "0x6080604081905260008054600160a060020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610439806100576000396000f3006080604052600436106100775763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663715018a6811461007c5780638da5cb5b146100935780638f32d59b146100c45780639436bfff146100ed578063c891ea1514610102578063f2fde38b14610123575b600080fd5b34801561008857600080fd5b50610091610144565b005b34801561009f57600080fd5b506100a86101f9565b60408051600160a060020a039092168252519081900360200190f35b3480156100d057600080fd5b506100d9610208565b604080519115158252519081900360200190f35b3480156100f957600080fd5b506100a8610219565b34801561010e57600080fd5b50610091600160a060020a0360043516610228565b34801561012f57600080fd5b50610091600160a060020a03600435166102b5565b61014c610208565b15156101a2576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b600154600160a060020a031690565b610230610208565b1515610286576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b6102bd610208565b1515610313576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61031c8161031f565b50565b600160a060020a03811615156103a5576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820d41339dc80b2355b315a572ab5c81ff8c86d7a5ba39487e4ce3154347fb9eab10029",
+  "deployedBytecode": "0x6080604052600436106100775763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663715018a6811461007c5780638da5cb5b146100935780638f32d59b146100c45780639436bfff146100ed578063c891ea1514610102578063f2fde38b14610123575b600080fd5b34801561008857600080fd5b50610091610144565b005b34801561009f57600080fd5b506100a86101f9565b60408051600160a060020a039092168252519081900360200190f35b3480156100d057600080fd5b506100d9610208565b604080519115158252519081900360200190f35b3480156100f957600080fd5b506100a8610219565b34801561010e57600080fd5b50610091600160a060020a0360043516610228565b34801561012f57600080fd5b50610091600160a060020a03600435166102b5565b61014c610208565b15156101a2576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b600154600160a060020a031690565b610230610208565b1515610286576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b6102bd610208565b1515610313576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61031c8161031f565b50565b600160a060020a03811615156103a5576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820d41339dc80b2355b315a572ab5c81ff8c86d7a5ba39487e4ce3154347fb9eab10029",
+  "sourceMap": "157:316:21:-;;;;;659:6:31;:19;;-1:-1:-1;;;;;;659:19:31;668:10;659:19;;;;-1:-1:-1;;;;;726:6:31;;693:40;;659:6;;693:40;157:316:21;;;;;;",
+  "deployedSourceMap": "157:316:21:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1599:137:31;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1599:137:31;;;;;;816:77;;8:9:-1;5:2;;;30:1;27;20:12;5:2;816:77:31;;;;;;;;-1:-1:-1;;;;;816:77:31;;;;;;;;;;;;;;1167:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1167:90:31;;;;;;;;;;;;;;;;;;;;;;239:106:21;;8:9:-1;5:2;;;30:1;27;20:12;5:2;239:106:21;;;;351:119;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;351:119:21;-1:-1:-1;;;;;351:119:21;;;;;1885:107:31;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1885:107:31;-1:-1:-1;;;;;1885:107:31;;;;;1599:137;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:31;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:31;;;1599:137::o;816:77::-;854:7;880:6;-1:-1:-1;;;;;880:6:31;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:31;1230:10;:20;;1167:90::o;239:106:21:-;325:11;;-1:-1:-1;;;;;325:11:21;239:106;:::o;351:119::-;1020:9:31;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;426:11:21;:36;;-1:-1:-1;;426:36:21;-1:-1:-1;;;;;426:36:21;;;;;;;;;;351:119::o;1885:107:31:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;:::-;1885:107;:::o;2093:225::-;-1:-1:-1;;;;;2166:22:31;;;;2158:73;;;;;-1:-1:-1;;;;;2158:73:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:31;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:31;-1:-1:-1;;;;;2294:17:31;;;;;;;;;;2093:225::o",
+  "source": "pragma solidity ^0.4.26;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IFnxPriceDb{\r\n    function getPrice(string symbol) external view returns(uint256);\r\n}\r\ncontract ImportFnxPriceDb is Ownable{\r\n    IFnxPriceDb internal _FnxPriceDb;\r\n    function getFnxPriceDbAddress() public view returns(address){\r\n        return address(_FnxPriceDb);\r\n    }\r\n    function setFnxPriceDbAddress(address priceAddr)public onlyOwner{\r\n        _FnxPriceDb = IFnxPriceDb(priceAddr);\r\n    }\r\n}",
+  "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\interfaces\\IFnxPriceDb.sol",
   "ast": {
-    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol",
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFnxPriceDb.sol",
     "exportedSymbols": {
-      "IVolatility": [
-        12341
+      "IFnxPriceDb": [
+        12047
       ],
-      "ImportVolatility": [
-        12370
+      "ImportFnxPriceDb": [
+        12076
       ]
     },
-    "id": 12371,
+    "id": 12077,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 12322,
+        "id": 12038,
         "literals": [
           "solidity",
           "^",
@@ -70,16 +127,16 @@
           ".26"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:24"
+        "src": "0:24:21"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "../modules/Ownable.sol",
-        "id": 12323,
+        "id": 12039,
         "nodeType": "ImportDirective",
-        "scope": 12371,
+        "scope": 12077,
         "sourceUnit": 14812,
-        "src": "26:32:24",
+        "src": "26:32:21",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -89,172 +146,68 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 12341,
+        "id": 12047,
         "linearizedBaseContracts": [
-          12341
+          12047
         ],
-        "name": "IVolatility",
+        "name": "IFnxPriceDb",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": null,
             "documentation": null,
-            "id": 12340,
+            "id": 12046,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": true,
             "modifiers": [],
-            "name": "calculateIv",
+            "name": "getPrice",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12334,
+              "id": 12042,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12325,
-                  "name": "underlying",
+                  "id": 12041,
+                  "name": "symbol",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "110:17:24",
+                  "scope": 12046,
+                  "src": "106:13:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint32",
-                    "typeString": "uint32"
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
                   },
                   "typeName": {
-                    "id": 12324,
-                    "name": "uint32",
+                    "id": 12040,
+                    "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "110:6:24",
+                    "src": "106:6:21",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_uint32",
-                      "typeString": "uint32"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12327,
-                  "name": "optType",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "128:13:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint8",
-                    "typeString": "uint8"
-                  },
-                  "typeName": {
-                    "id": 12326,
-                    "name": "uint8",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "128:5:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint8",
-                      "typeString": "uint8"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12329,
-                  "name": "expiration",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "142:18:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 12328,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "142:7:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12331,
-                  "name": "currentPrice",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "161:20:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 12330,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "161:7:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12333,
-                  "name": "strikePrice",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "182:19:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 12332,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "182:7:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "109:93:24"
+              "src": "105:15:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 12339,
+              "id": 12045,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12336,
+                  "id": 12044,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "225:7:24",
+                  "scope": 12046,
+                  "src": "143:7:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -262,36 +215,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12335,
+                    "id": 12043,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "225:7:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12338,
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "233:7:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 12337,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "233:7:24",
+                    "src": "143:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -301,17 +228,17 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "224:17:24"
+              "src": "142:9:21"
             },
-            "scope": 12341,
-            "src": "89:153:24",
+            "scope": 12047,
+            "src": "88:64:21",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 12371,
-        "src": "60:185:24"
+        "scope": 12077,
+        "src": "60:95:21"
       },
       {
         "baseContracts": [
@@ -319,19 +246,19 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 12342,
+              "id": 12048,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 14811,
-              "src": "276:7:24",
+              "src": "186:7:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_contract$_Ownable_$14811",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 12343,
+            "id": 12049,
             "nodeType": "InheritanceSpecifier",
-            "src": "276:7:24"
+            "src": "186:7:21"
           }
         ],
         "contractDependencies": [
@@ -340,37 +267,37 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 12370,
+        "id": 12076,
         "linearizedBaseContracts": [
-          12370,
+          12076,
           14811
         ],
-        "name": "ImportVolatility",
+        "name": "ImportFnxPriceDb",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 12345,
-            "name": "_volatility",
+            "id": 12051,
+            "name": "_FnxPriceDb",
             "nodeType": "VariableDeclaration",
-            "scope": 12370,
-            "src": "290:32:24",
+            "scope": 12076,
+            "src": "200:32:21",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IVolatility_$12341",
-              "typeString": "contract IVolatility"
+              "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+              "typeString": "contract IFnxPriceDb"
             },
             "typeName": {
               "contractScope": null,
-              "id": 12344,
-              "name": "IVolatility",
+              "id": 12050,
+              "name": "IFnxPriceDb",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12341,
-              "src": "290:11:24",
+              "referencedDeclaration": 12047,
+              "src": "200:11:21",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IVolatility_$12341",
-                "typeString": "contract IVolatility"
+                "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                "typeString": "contract IFnxPriceDb"
               }
             },
             "value": null,
@@ -378,9 +305,9 @@
           },
           {
             "body": {
-              "id": 12354,
+              "id": 12060,
               "nodeType": "Block",
-              "src": "389:46:24",
+              "src": "299:46:21",
               "statements": [
                 {
                   "expression": {
@@ -388,39 +315,39 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 12351,
-                        "name": "_volatility",
+                        "id": 12057,
+                        "name": "_FnxPriceDb",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12345,
-                        "src": "415:11:24",
+                        "referencedDeclaration": 12051,
+                        "src": "325:11:21",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IVolatility_$12341",
-                          "typeString": "contract IVolatility"
+                          "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                          "typeString": "contract IFnxPriceDb"
                         }
                       }
                     ],
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_IVolatility_$12341",
-                          "typeString": "contract IVolatility"
+                          "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                          "typeString": "contract IFnxPriceDb"
                         }
                       ],
-                      "id": 12350,
+                      "id": 12056,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "407:7:24",
+                      "src": "317:7:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 12352,
+                    "id": 12058,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -428,45 +355,45 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "407:20:24",
+                    "src": "317:20:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 12349,
-                  "id": 12353,
+                  "functionReturnParameters": 12055,
+                  "id": 12059,
                   "nodeType": "Return",
-                  "src": "400:27:24"
+                  "src": "310:27:21"
                 }
               ]
             },
             "documentation": null,
-            "id": 12355,
+            "id": 12061,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
             "modifiers": [],
-            "name": "getVolatilityAddress",
+            "name": "getFnxPriceDbAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12346,
+              "id": 12052,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "358:2:24"
+              "src": "268:2:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 12349,
+              "id": 12055,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12348,
+                  "id": 12054,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12355,
-                  "src": "381:7:24",
+                  "scope": 12061,
+                  "src": "291:7:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -474,10 +401,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12347,
+                    "id": 12053,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "381:7:24",
+                    "src": "291:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -487,39 +414,39 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "380:9:24"
+              "src": "290:9:21"
             },
-            "scope": 12370,
-            "src": "329:106:24",
+            "scope": 12076,
+            "src": "239:106:21",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 12368,
+              "id": 12074,
               "nodeType": "Block",
-              "src": "506:56:24",
+              "src": "415:55:21",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 12366,
+                    "id": 12072,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 12362,
-                      "name": "_volatility",
+                      "id": 12068,
+                      "name": "_FnxPriceDb",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 12345,
-                      "src": "517:11:24",
+                      "referencedDeclaration": 12051,
+                      "src": "426:11:21",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IVolatility_$12341",
-                        "typeString": "contract IVolatility"
+                        "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                        "typeString": "contract IFnxPriceDb"
                       }
                     },
                     "nodeType": "Assignment",
@@ -529,12 +456,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 12364,
-                          "name": "volatility",
+                          "id": 12070,
+                          "name": "priceAddr",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 12357,
-                          "src": "543:10:24",
+                          "referencedDeclaration": 12063,
+                          "src": "452:9:21",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -548,18 +475,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 12363,
-                        "name": "IVolatility",
+                        "id": 12069,
+                        "name": "IFnxPriceDb",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12341,
-                        "src": "531:11:24",
+                        "referencedDeclaration": 12047,
+                        "src": "440:11:21",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_IVolatility_$12341_$",
-                          "typeString": "type(contract IVolatility)"
+                          "typeIdentifier": "t_type$_t_contract$_IFnxPriceDb_$12047_$",
+                          "typeString": "type(contract IFnxPriceDb)"
                         }
                       },
-                      "id": 12365,
+                      "id": 12071,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -567,63 +494,63 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "531:23:24",
+                      "src": "440:22:21",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IVolatility_$12341",
-                        "typeString": "contract IVolatility"
+                        "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                        "typeString": "contract IFnxPriceDb"
                       }
                     },
-                    "src": "517:37:24",
+                    "src": "426:36:21",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IVolatility_$12341",
-                      "typeString": "contract IVolatility"
+                      "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                      "typeString": "contract IFnxPriceDb"
                     }
                   },
-                  "id": 12367,
+                  "id": 12073,
                   "nodeType": "ExpressionStatement",
-                  "src": "517:37:24"
+                  "src": "426:36:21"
                 }
               ]
             },
             "documentation": null,
-            "id": 12369,
+            "id": 12075,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 12360,
+                "id": 12066,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 12359,
+                  "id": 12065,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
                   "referencedDeclaration": 14744,
-                  "src": "497:9:24",
+                  "src": "406:9:21",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "497:9:24"
+                "src": "406:9:21"
               }
             ],
-            "name": "setVolatilityAddress",
+            "name": "setFnxPriceDbAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12358,
+              "id": 12064,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12357,
-                  "name": "volatility",
+                  "id": 12063,
+                  "name": "priceAddr",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12369,
-                  "src": "471:18:24",
+                  "scope": 12075,
+                  "src": "381:17:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -631,10 +558,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12356,
+                    "id": 12062,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "471:7:24",
+                    "src": "381:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -644,43 +571,43 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "470:20:24"
+              "src": "380:19:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 12361,
+              "id": 12067,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "506:0:24"
+              "src": "415:0:21"
             },
-            "scope": 12370,
-            "src": "441:121:24",
+            "scope": 12076,
+            "src": "351:119:21",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 12371,
-        "src": "247:318:24"
+        "scope": 12077,
+        "src": "157:316:21"
       }
     ],
-    "src": "0:565:24"
+    "src": "0:473:21"
   },
   "legacyAST": {
-    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol",
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFnxPriceDb.sol",
     "exportedSymbols": {
-      "IVolatility": [
-        12341
+      "IFnxPriceDb": [
+        12047
       ],
-      "ImportVolatility": [
-        12370
+      "ImportFnxPriceDb": [
+        12076
       ]
     },
-    "id": 12371,
+    "id": 12077,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 12322,
+        "id": 12038,
         "literals": [
           "solidity",
           "^",
@@ -688,16 +615,16 @@
           ".26"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:24"
+        "src": "0:24:21"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "../modules/Ownable.sol",
-        "id": 12323,
+        "id": 12039,
         "nodeType": "ImportDirective",
-        "scope": 12371,
+        "scope": 12077,
         "sourceUnit": 14812,
-        "src": "26:32:24",
+        "src": "26:32:21",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -707,172 +634,68 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 12341,
+        "id": 12047,
         "linearizedBaseContracts": [
-          12341
+          12047
         ],
-        "name": "IVolatility",
+        "name": "IFnxPriceDb",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": null,
             "documentation": null,
-            "id": 12340,
+            "id": 12046,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": true,
             "modifiers": [],
-            "name": "calculateIv",
+            "name": "getPrice",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12334,
+              "id": 12042,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12325,
-                  "name": "underlying",
+                  "id": 12041,
+                  "name": "symbol",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "110:17:24",
+                  "scope": 12046,
+                  "src": "106:13:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint32",
-                    "typeString": "uint32"
+                    "typeIdentifier": "t_string_calldata_ptr",
+                    "typeString": "string"
                   },
                   "typeName": {
-                    "id": 12324,
-                    "name": "uint32",
+                    "id": 12040,
+                    "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "110:6:24",
+                    "src": "106:6:21",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_uint32",
-                      "typeString": "uint32"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12327,
-                  "name": "optType",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "128:13:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint8",
-                    "typeString": "uint8"
-                  },
-                  "typeName": {
-                    "id": 12326,
-                    "name": "uint8",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "128:5:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint8",
-                      "typeString": "uint8"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12329,
-                  "name": "expiration",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "142:18:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 12328,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "142:7:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12331,
-                  "name": "currentPrice",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "161:20:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 12330,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "161:7:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12333,
-                  "name": "strikePrice",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "182:19:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 12332,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "182:7:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "109:93:24"
+              "src": "105:15:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 12339,
+              "id": 12045,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12336,
+                  "id": 12044,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "225:7:24",
+                  "scope": 12046,
+                  "src": "143:7:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -880,36 +703,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12335,
+                    "id": 12043,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "225:7:24",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 12338,
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 12340,
-                  "src": "233:7:24",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 12337,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "233:7:24",
+                    "src": "143:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -919,17 +716,17 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "224:17:24"
+              "src": "142:9:21"
             },
-            "scope": 12341,
-            "src": "89:153:24",
+            "scope": 12047,
+            "src": "88:64:21",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 12371,
-        "src": "60:185:24"
+        "scope": 12077,
+        "src": "60:95:21"
       },
       {
         "baseContracts": [
@@ -937,19 +734,19 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 12342,
+              "id": 12048,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 14811,
-              "src": "276:7:24",
+              "src": "186:7:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_contract$_Ownable_$14811",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 12343,
+            "id": 12049,
             "nodeType": "InheritanceSpecifier",
-            "src": "276:7:24"
+            "src": "186:7:21"
           }
         ],
         "contractDependencies": [
@@ -958,37 +755,37 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 12370,
+        "id": 12076,
         "linearizedBaseContracts": [
-          12370,
+          12076,
           14811
         ],
-        "name": "ImportVolatility",
+        "name": "ImportFnxPriceDb",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 12345,
-            "name": "_volatility",
+            "id": 12051,
+            "name": "_FnxPriceDb",
             "nodeType": "VariableDeclaration",
-            "scope": 12370,
-            "src": "290:32:24",
+            "scope": 12076,
+            "src": "200:32:21",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IVolatility_$12341",
-              "typeString": "contract IVolatility"
+              "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+              "typeString": "contract IFnxPriceDb"
             },
             "typeName": {
               "contractScope": null,
-              "id": 12344,
-              "name": "IVolatility",
+              "id": 12050,
+              "name": "IFnxPriceDb",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12341,
-              "src": "290:11:24",
+              "referencedDeclaration": 12047,
+              "src": "200:11:21",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IVolatility_$12341",
-                "typeString": "contract IVolatility"
+                "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                "typeString": "contract IFnxPriceDb"
               }
             },
             "value": null,
@@ -996,9 +793,9 @@
           },
           {
             "body": {
-              "id": 12354,
+              "id": 12060,
               "nodeType": "Block",
-              "src": "389:46:24",
+              "src": "299:46:21",
               "statements": [
                 {
                   "expression": {
@@ -1006,39 +803,39 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 12351,
-                        "name": "_volatility",
+                        "id": 12057,
+                        "name": "_FnxPriceDb",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12345,
-                        "src": "415:11:24",
+                        "referencedDeclaration": 12051,
+                        "src": "325:11:21",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IVolatility_$12341",
-                          "typeString": "contract IVolatility"
+                          "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                          "typeString": "contract IFnxPriceDb"
                         }
                       }
                     ],
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_IVolatility_$12341",
-                          "typeString": "contract IVolatility"
+                          "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                          "typeString": "contract IFnxPriceDb"
                         }
                       ],
-                      "id": 12350,
+                      "id": 12056,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "407:7:24",
+                      "src": "317:7:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 12352,
+                    "id": 12058,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1046,45 +843,45 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "407:20:24",
+                    "src": "317:20:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 12349,
-                  "id": 12353,
+                  "functionReturnParameters": 12055,
+                  "id": 12059,
                   "nodeType": "Return",
-                  "src": "400:27:24"
+                  "src": "310:27:21"
                 }
               ]
             },
             "documentation": null,
-            "id": 12355,
+            "id": 12061,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
             "modifiers": [],
-            "name": "getVolatilityAddress",
+            "name": "getFnxPriceDbAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12346,
+              "id": 12052,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "358:2:24"
+              "src": "268:2:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 12349,
+              "id": 12055,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12348,
+                  "id": 12054,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12355,
-                  "src": "381:7:24",
+                  "scope": 12061,
+                  "src": "291:7:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1092,10 +889,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12347,
+                    "id": 12053,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "381:7:24",
+                    "src": "291:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1105,39 +902,39 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "380:9:24"
+              "src": "290:9:21"
             },
-            "scope": 12370,
-            "src": "329:106:24",
+            "scope": 12076,
+            "src": "239:106:21",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 12368,
+              "id": 12074,
               "nodeType": "Block",
-              "src": "506:56:24",
+              "src": "415:55:21",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 12366,
+                    "id": 12072,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 12362,
-                      "name": "_volatility",
+                      "id": 12068,
+                      "name": "_FnxPriceDb",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 12345,
-                      "src": "517:11:24",
+                      "referencedDeclaration": 12051,
+                      "src": "426:11:21",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IVolatility_$12341",
-                        "typeString": "contract IVolatility"
+                        "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                        "typeString": "contract IFnxPriceDb"
                       }
                     },
                     "nodeType": "Assignment",
@@ -1147,12 +944,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 12364,
-                          "name": "volatility",
+                          "id": 12070,
+                          "name": "priceAddr",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 12357,
-                          "src": "543:10:24",
+                          "referencedDeclaration": 12063,
+                          "src": "452:9:21",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -1166,18 +963,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 12363,
-                        "name": "IVolatility",
+                        "id": 12069,
+                        "name": "IFnxPriceDb",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12341,
-                        "src": "531:11:24",
+                        "referencedDeclaration": 12047,
+                        "src": "440:11:21",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_IVolatility_$12341_$",
-                          "typeString": "type(contract IVolatility)"
+                          "typeIdentifier": "t_type$_t_contract$_IFnxPriceDb_$12047_$",
+                          "typeString": "type(contract IFnxPriceDb)"
                         }
                       },
-                      "id": 12365,
+                      "id": 12071,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1185,63 +982,63 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "531:23:24",
+                      "src": "440:22:21",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IVolatility_$12341",
-                        "typeString": "contract IVolatility"
+                        "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                        "typeString": "contract IFnxPriceDb"
                       }
                     },
-                    "src": "517:37:24",
+                    "src": "426:36:21",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IVolatility_$12341",
-                      "typeString": "contract IVolatility"
+                      "typeIdentifier": "t_contract$_IFnxPriceDb_$12047",
+                      "typeString": "contract IFnxPriceDb"
                     }
                   },
-                  "id": 12367,
+                  "id": 12073,
                   "nodeType": "ExpressionStatement",
-                  "src": "517:37:24"
+                  "src": "426:36:21"
                 }
               ]
             },
             "documentation": null,
-            "id": 12369,
+            "id": 12075,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 12360,
+                "id": 12066,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 12359,
+                  "id": 12065,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
                   "referencedDeclaration": 14744,
-                  "src": "497:9:24",
+                  "src": "406:9:21",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "497:9:24"
+                "src": "406:9:21"
               }
             ],
-            "name": "setVolatilityAddress",
+            "name": "setFnxPriceDbAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12358,
+              "id": 12064,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12357,
-                  "name": "volatility",
+                  "id": 12063,
+                  "name": "priceAddr",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12369,
-                  "src": "471:18:24",
+                  "scope": 12075,
+                  "src": "381:17:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1249,10 +1046,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12356,
+                    "id": 12062,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "471:7:24",
+                    "src": "381:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1262,27 +1059,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "470:20:24"
+              "src": "380:19:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 12361,
+              "id": 12067,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "506:0:24"
+              "src": "415:0:21"
             },
-            "scope": 12370,
-            "src": "441:121:24",
+            "scope": 12076,
+            "src": "351:119:21",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 12371,
-        "src": "247:318:24"
+        "scope": 12077,
+        "src": "157:316:21"
       }
     ],
-    "src": "0:565:24"
+    "src": "0:473:21"
   },
   "compiler": {
     "name": "solc",
@@ -1290,9 +1087,22 @@
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-08-12T10:47:35.007Z",
+  "updatedAt": "2020-08-12T10:47:34.999Z",
   "devdoc": {
-    "methods": {}
+    "methods": {
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    }
   },
   "userdoc": {
     "methods": {}

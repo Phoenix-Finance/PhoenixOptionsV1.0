@@ -6,6 +6,7 @@ import "./whiteList.sol";
      */
 contract AddressWhiteList is Halt {
 
+    using whiteListAddress for address[];
     uint256 constant internal allPermission = 0xffffffff;
     uint256 constant internal allowPayIn = 0x0001;
     uint256 constant internal allowRedeemOut = 0x0002;
@@ -18,7 +19,7 @@ contract AddressWhiteList is Halt {
      * @param addAddress new eligible address.
      */
     function addWhiteList(address addAddress)public onlyOwner{
-        whiteListAddress.addWhiteListAddress(whiteList,addAddress);
+        whiteList.addWhiteListAddress(addAddress);
         addressPermission[addAddress] = allPermission;
     }
     function modifyPermission(address addAddress,uint256 permission)public onlyOwner{
@@ -29,7 +30,7 @@ contract AddressWhiteList is Halt {
      * @param removeAddress revoked address.
      */
     function removeWhiteList(address removeAddress)public onlyOwner returns (bool){
-        return whiteListAddress.removeWhiteListAddress(whiteList,removeAddress);
+        return whiteList.removeWhiteListAddress(removeAddress);
     }
     /**
      * @dev Implementation of getting the eligible whitelist.
@@ -42,7 +43,7 @@ contract AddressWhiteList is Halt {
      * @param tmpAddress input address for testing.
      */    
     function isEligibleAddress(address tmpAddress) public view returns (bool){
-        return whiteListAddress.isEligibleAddress(whiteList,tmpAddress);
+        return whiteList.isEligibleAddress(tmpAddress);
     }
     function checkAddressPayIn(address tmpAddress) public view returns (bool){
         return isEligibleAddress(tmpAddress) && ((addressPermission[tmpAddress]&allowPayIn) == allowPayIn);

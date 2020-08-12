@@ -5,6 +5,7 @@ import "./whiteList.sol";
      * @dev Implementation of a underlyingAssets filters a eligible underlying.
      */
 contract UnderlyingAssets is Ownable {
+    using whiteListUint32 for uint32[];
     // The eligible underlying list
     uint32[] internal underlyingAssets;
     /**
@@ -12,14 +13,14 @@ contract UnderlyingAssets is Ownable {
      * @param underlying new eligible underlying.
      */
     function addUnderlyingAsset(uint32 underlying)public onlyOwner{
-        whiteListUint32.addWhiteListUint32(underlyingAssets,underlying);
+        underlyingAssets.addWhiteListUint32(underlying);
     }
     /**
      * @dev Implementation of revoke an invalid underlying from the underlyingAssets.
      * @param removeUnderlying revoked underlying.
      */
     function removeUnderlyingAssets(uint32 removeUnderlying)public onlyOwner returns(bool) {
-        return whiteListUint32.removeWhiteListUint32(underlyingAssets,removeUnderlying);
+        return underlyingAssets.removeWhiteListUint32(removeUnderlying);
     }
     /**
      * @dev Implementation of getting the eligible underlyingAssets.
@@ -32,12 +33,12 @@ contract UnderlyingAssets is Ownable {
      * @param underlying input underlying for testing.
      */    
     function isEligibleUnderlyingAsset(uint32 underlying) public view returns (bool){
-        return whiteListUint32.isEligibleUint32(underlyingAssets,underlying);
+        return underlyingAssets.isEligibleUint32(underlying);
     }
     function checkUnderlyingAsset(uint32 underlying) public view{
-        return whiteListUint32.checkEligibleUint32(underlyingAssets,underlying);
+        return underlyingAssets.checkEligibleUint32(underlying);
     }
     function _getEligibleUnderlyingIndex(uint32 underlying) internal view returns (uint256){
-        return whiteListUint32._getEligibleIndexUint32(underlyingAssets,underlying);
+        return underlyingAssets._getEligibleIndexUint32(underlying);
     }
 }

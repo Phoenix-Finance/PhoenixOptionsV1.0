@@ -4,9 +4,9 @@ import "./modules/Managerable.sol";
 import "./interfaces/IFNXOracle.sol";
 import "./modules/underlyingAssets.sol";
 import "./interfaces/IVolatility.sol";
-import "./modules/tuple.sol";
+import "./modules/tuple64.sol";
 contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatility {
-    
+    using whiteListUint256 for uint256[];
     using SafeMath for uint256;
     struct OptionsInfo {
         uint64     optionID;
@@ -194,14 +194,14 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
      * @param expiration new eligible expiration.
      */
     function addExpiration(uint256 expiration)public onlyOwner{
-        whiteListUint256.addWhiteListUint256(expirationList,expiration);
+        expirationList.addWhiteListUint256(expiration);
     }
     /**
      * @dev Implementation of revoke an invalid expiration from the expirationList.
      * @param removeExpiration revoked expiration.
      */
     function removeExpirationList(uint256 removeExpiration)public onlyOwner returns(bool) {
-        return whiteListUint256.removeWhiteListUint256(expirationList,removeExpiration);
+        return expirationList.removeWhiteListUint256(removeExpiration);
     }
     /**
      * @dev Implementation of getting the eligible expirationList.
@@ -214,13 +214,13 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
      * @param expiration input expiration for testing.
      */    
     function isEligibleExpiration(uint256 expiration) public view returns (bool){
-        return whiteListUint256.isEligibleUint256(expirationList,expiration);
+        return expirationList.isEligibleUint256(expiration);
     }
     function checkExpiration(uint256 expiration) public view{
         return require(isEligibleExpiration(expiration),"expiration value is not supported");
     }
     function _getEligibleExpirationIndex(uint256 expiration) internal view returns (uint256){
-        return whiteListUint256._getEligibleIndexUint256(expirationList,expiration);
+        return expirationList._getEligibleIndexUint256(expiration);
     }
     function getFirstOption(uint256 begin,uint256 latestBegin,uint256 end) internal view returns(uint256,uint256){
         uint256 newFirstOption = latestBegin;

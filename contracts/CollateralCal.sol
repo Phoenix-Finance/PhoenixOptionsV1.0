@@ -16,7 +16,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
 
     event AddCollateral(address indexed from,address indexed collateral,uint256 amount,uint256 tokenAmount);
     event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);
-    event DebugEvent(int256 value1,uint256 value2,int256 value3);
+    event DebugEvent(uint256 value1,uint256 value2,uint256 value3);
     uint256 internal maxAmount = 1e30;
     uint256 internal minAmount = 1e9;
     function getInputAmountRange() public view returns(uint256,uint256) {
@@ -85,13 +85,9 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         uint256 userPaying = price*amount;
         uint256 mintAmount = userPaying/getTokenNetworth();
         _collateralPool.addUserPayingUsd(msg.sender,userPaying);
-        //userCollateralPaying[msg.sender] = userCollateralPaying[msg.sender].add(userPaying);
         _collateralPool.addCollateralBalance(collateral,amount);
-        //collateralBalances[collateral] = collateralBalances[collateral].add(amount);
         _collateralPool.addUserInputCollateral(msg.sender,collateral,amount);
-        //userInputCollateral[msg.sender][collateral] = userInputCollateral[msg.sender][collateral].add(amount);
-        _collateralPool.addNetWorthBalance(collateral,int256(amount));
-        //netWorthBalances[collateral] = netWorthBalances[collateral].add(amount);
+         _collateralPool.addNetWorthBalance(collateral,int256(amount));
         emit AddCollateral(msg.sender,collateral,amount,mintAmount);
         _FPTCoin.mint(msg.sender,mintAmount);
     }
@@ -179,16 +175,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
                 netWorthBalances,prices);
         return (colBalances,PremiumBalances,prices);
     } 
-    /*
-    function _calBalanceRate(uint256 collateralBalance,uint256 netWorthBalance,uint256 amount)internal pure returns(uint256,uint256){
-        if (collateralBalance > 0){
-            uint256 curAmount = netWorthBalance.mul(amount).div(collateralBalance);
-            return (curAmount,netWorthBalance.sub(curAmount));
-        }else{
-            return (0,netWorthBalance);
-        }
-    }
-*/
+
     function getOccupiedCollateral() public view returns(uint256){
         uint256 totalOccupied = _optionsPool.getTotalOccupiedCollateral();
         return calculateCollateral(totalOccupied);
@@ -222,9 +209,8 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
             int256 price = int256(_oracle.getPrice(addr));
             int256 netWorth = getRealBalance(addr);
             if (netWorth != 0){
-                totalNum = totalNum.add(price.mul(netWorth));
+                totalNum = totalNum.add(price*netWorth);
             }
-            //totalNum = totalNum.add(price.mul(netWorthBalances[addr]));
         }
         return totalNum>=0 ? uint256(totalNum) : 0;  
     }
@@ -252,7 +238,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
                 uint256 price = _oracle.getPrice(addr);
                 balances[i] = getNetWorthBalance(addr);
                 //balances[i] = netWorthBalances[addr];
-                totalPrice = totalPrice.add(price.mul(balances[i]));
+                totalPrice = totalPrice.add(price*balances[i]);
             }
         }
         require(totalPrice>=worth && worth > 0,"payback settlement is insufficient!");
@@ -280,6 +266,6 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         return colAmount;
     }
     function calculateCollateral(uint256 amount)internal view returns (uint256){
-        return collateralRate.mul(amount)/1000;
+        return collateralRate*amount/1000;
     }
 }

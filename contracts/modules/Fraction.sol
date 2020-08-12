@@ -1,5 +1,6 @@
 pragma solidity ^0.4.26;
 library Fraction {
+    using Fraction for fractionNumber;
     int256 constant private sqrtNum = 1<<120;
     int256 constant private shl = 80;
     uint8 constant private PRECISION   = 32;  // fractional bits
@@ -29,7 +30,7 @@ library Fraction {
     function invert(fractionNumber memory a) internal pure returns (fractionNumber){
         return fractionNumber(a.denominator,a.numerator);
     }
-    function fractionSqrt(fractionNumber memory a) internal pure returns (fractionNumber) {
+    function sqrt(fractionNumber memory a) internal pure returns (fractionNumber) {
         require(a.numerator>=0 && a.denominator>=0,"Sqrt must input a positive value");
         return fractionNumber(int256(sqrt(uint256(a.numerator))),int256(sqrt(uint256(a.denominator))));
     }
@@ -37,24 +38,24 @@ library Fraction {
         a = safeFractionNumber(a);
         return fractionNumber(a.numerator+a.denominator*b,a.denominator);
     }
-    function safeFractionDiv(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+    function div(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
         return fractionDiv(safeFractionNumber(a), safeFractionNumber(b));
     }
-    function safeFractionMul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+    function mul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
         return fractionMul(safeFractionNumber(a), safeFractionNumber(b));
     }
-    function safeFractionAdd(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
+    function add(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
         return fractionAdd(safeFractionNumber(a), safeFractionNumber(b));
     }
-    function safeFractionSub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
+    function sub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
         return fractionSub(safeFractionNumber(a), safeFractionNumber(b));
     }
 
-    function fractionNumberZoomOut(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
+    function zoomOut(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
         require(a.denominator>rate,"fraction number is overflow");
         return fractionNumber(a.numerator/rate,a.denominator/rate);
     }
-    function fractionNumberZoomin(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
+    function zoomin(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
         return safeFractionNumber(fractionNumber(a.numerator*rate,a.denominator*rate));
     }
     function safeFractionNumber(fractionNumber memory a) internal pure returns (fractionNumber) {
@@ -63,12 +64,12 @@ library Fraction {
         if(deno>num){
             if (deno>sqrtNum) {
                 int256 rate = deno>>shl;
-                return fractionNumberZoomOut(a, rate);
+                return a.zoomOut(rate);
             }
         } else {
             if (num>sqrtNum) {
                 rate = num>>shl;
-                return fractionNumberZoomOut(a, rate);
+                return a.zoomOut(rate);
             }
         }
         return a;
@@ -102,27 +103,27 @@ library Fraction {
             fractionNumber(1781477937,1e9),
             fractionNumber(-1821255978,1e9),
             fractionNumber(1330274429,1e9)];
-        fractionNumber memory t = safeFractionMul(xNum, p);
-        t = safeFractionAdd(t, fractionNumber(1,1));
-        t = invert(t);
+        fractionNumber memory t = xNum.mul(p);
+        t = t.add(fractionNumber(1,1));
+        t = t.invert();
         fractionNumber memory sqrtPiInv = fractionNumber(39894228040143267793,1e20);
-        fractionNumber memory expValue = safeFractionMul(xNum, xNum);
-        expValue = safeFractionMul(expValue,fractionNumber(-1,2));
-        expValue = fractionExp(expValue);
-        expValue = safeFractionMul(sqrtPiInv, expValue);
+        fractionNumber memory expValue = xNum.mul(xNum);
+        expValue = expValue.mul(fractionNumber(-1,2));
+        expValue = expValue.exp();
+        expValue = sqrtPiInv.mul(expValue);
         fractionNumber memory secondArg = fractionNumber(0,1);
         fractionNumber memory tt = t;
         for (uint256 i = 0; i < b.length; i++) {
-            secondArg = safeFractionAdd(secondArg, safeFractionMul(b[i], tt));
-            tt = safeFractionMul(tt, t);
+            secondArg = secondArg.add(b[i].mul(tt));
+            tt = tt.mul(t);
         }
-        expValue = safeFractionMul(expValue, secondArg);
+        expValue = expValue.mul(secondArg);
         if (!_isNeg) {
-            expValue = safeFractionSub(fractionNumber(1,1), expValue);
+            expValue = fractionNumber(1,1).sub(expValue);
         }
         return expValue;
     }
-    function fractionExp(fractionNumber memory _x) internal pure returns (fractionNumber){
+    function exp(fractionNumber memory _x) internal pure returns (fractionNumber){
         bool _isNeg = isNeg(_x);
         if (_isNeg) {
             _x = abs(_x);
@@ -131,7 +132,7 @@ library Fraction {
         _x.numerator = _x.numerator << PRECISION;
         fractionNumber memory result =  fractionExp_sub(_x);
         if (_isNeg) {
-            result = invert(result);
+            result = result.invert();
         }
         return result;
     }
@@ -142,7 +143,7 @@ library Fraction {
             fractionNumber memory _x2 = fractionNumber(_x.numerator-_x1.numerator,_x.denominator);
             _x1 = fractionExp_sub(_x1);
             _x2 = fractionExp_sub(_x2);
-            return safeFractionMul(_x1,_x2);
+            return _x1.mul(_x2);
         }else{
             return fractionNumber(int256(fixedExp(intValue)),int256(FIXED_ONE));
         }
@@ -157,7 +158,7 @@ library Fraction {
             z = (x / z + z) / 2;
         }
     }
-    function fractionLn(uint256 _x)  internal pure returns (fractionNumber) {
+    function ln(uint256 _x)  internal pure returns (fractionNumber) {
         _x = _x << PRECISION;
         return fractionNumber(int256(fixedLoge(_x)),int256(FIXED_ONE));
     }

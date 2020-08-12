@@ -2,10 +2,10 @@ pragma solidity ^0.4.11;
 import './Ownable.sol';
 import "./whiteList.sol";
 contract Operator is Ownable {
-
+    using whiteListAddress for address[];
     address[] private _operatorList;
     modifier onlyOperator() {
-        require(whiteListAddress.isEligibleAddress(_operatorList,msg.sender),"Managerable: caller is not the Operator");
+        require(_operatorList.isEligibleAddress(msg.sender),"Managerable: caller is not the Operator");
         _;
     }
     modifier onlyOperatorIndex(uint256 index) {
@@ -13,13 +13,13 @@ contract Operator is Ownable {
         _;
     }
     function addOperator(address addAddress)public onlyOwner{
-        whiteListAddress.addWhiteListAddress(_operatorList,addAddress);
+        _operatorList.addWhiteListAddress(addAddress);
     }
     function setOperator(uint256 index,address addAddress)public onlyOwner{
         _operatorList[index] = addAddress;
     }
     function removeOperator(address removeAddress)public onlyOwner returns (bool){
-        return whiteListAddress.removeWhiteListAddress(_operatorList,removeAddress);
+        return _operatorList.removeWhiteListAddress(removeAddress);
     }
     function getOperator()public view returns (address[]) {
         return _operatorList;

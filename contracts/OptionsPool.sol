@@ -1,13 +1,12 @@
 pragma solidity ^0.4.26;
 import "./OptionsNetWorthCal.sol";
-import "./modules/tuple.sol";
 
 contract OptionsPool is OptionsNetWorthCal {
 
     constructor (address oracleAddr,address optionsPriceAddr,address ivAddress)public{
-        setOracleAddress(oracleAddr);
-        setOptionsPriceAddress(optionsPriceAddr);
-        setVolatilityAddress(ivAddress);
+        _oracle = IFNXOracle(oracleAddr);
+        _optionsPrice = IOptionsPrice(optionsPriceAddr);
+        _volatility = IVolatility(ivAddress);
     }
     function getOptionCalRangeAll(address[] whiteList)public view returns(uint256,int256,uint256,int256[],uint256,uint256){
         (uint256 occupiedFirst,int256 occupiedlatest) = getOccupiedCalInfo();

@@ -2,7 +2,7 @@ pragma solidity ^0.4.26;
 import "./modules/SafeMath.sol";
 import "./CollateralCal.sol";
 import "./interfaces/IOptionsPrice.sol";
-import "./modules/tuple.sol";
+import "./modules/tuple64.sol";
 contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
     using SafeMath for uint256;
 
@@ -51,6 +51,8 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
         uint256 allPayUSd = allPay/1e8;
         allPay = allPay/settlePrice;
         uint256 fee = _collateralPool.addTransactionFee(settlement,allPay,0);
+        emit DebugEvent(optionPrice, allPay, fee);
+        return;
         require(settlementAmount>=allPay+fee,"settlement asset is insufficient!");
         settlementAmount = settlementAmount.sub(allPay+fee);
         if (settlementAmount > 0){

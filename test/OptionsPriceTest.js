@@ -1,4 +1,4 @@
-let OptionsPrice = artifacts.require("OptionsPrice");
+let OptionsPrice = artifacts.require("OptionsPriceTest");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 let month = 30*60*60*24;
 let day = 60*60*24;
@@ -6,13 +6,17 @@ let testFunc = require("./testFunction.js")
 contract('OptionsPrice', function (accounts){
     it('OptionsPrice Call options', async function (){
         let priceInstance = await OptionsPrice.deployed();
-        for (var i=23000;i<2300000;i+=20000){
-            for (j=500;j<23000;j+=2000){
-//                let price = await priceInstance.getOptionsPrice(i*1e8, j*1e8, day,1,0);
-//                console.log(i,j,price.toString(10));
-                price = await priceInstance.getOptionsPrice(i*1e8, j*1e8, day,1,1);
-                console.log(i,j,price.toString(10));
-                break;
+        let iv = await ImpliedVolatility.deployed();
+        for (var i=1000;i<10000;i+=1000){
+            for (j=1000;j<10000;j+=1000){
+//                let result = await iv.calculateIv(1,0,day,i*1e8, j*1e8);
+//                console.log(result[0].toString(10),result[1].toString(10));
+//                result = await priceInstance.testCalculateND1ND2_iv(i*1e8, j*1e8,day,result[0],result[1]);
+//                console.log(result[0].toString(10),result[1].toString(10),result[2].toString(10),result[3].toString(10));
+                let price0 = await priceInstance.getOptionsPrice(i*1e8, j*1e8, day,1,0);
+                //console.log(i,j,price.toString(10));
+                price1 = await priceInstance.getOptionsPrice(i*1e8, j*1e8, day,1,1);
+                console.log(i,j,price0.toString(10),price1.toString(10));
             }
         }
 

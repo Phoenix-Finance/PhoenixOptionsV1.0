@@ -9,10 +9,8 @@ let collateral0 = "0x0000000000000000000000000000000000000000";
 contract('OptionsPoolTest', function (accounts){
     it('OptionsPoolTest add collateral', async function (){
         let optionsInstance = await OptionsPoolTest.deployed();
-        let volInstance = await imVolatility32.deployed();
         let priceInstance = await OptionsPrice.deployed();
         let oracle = await FNXOracle.deployed();
-        await testFunc.AddImpliedVolatility(volInstance,false);
         let OptionsManger = await OptionsManagerV2.deployed();
         await OptionsManger.addWhiteList(collateral0);
         let deposit = new BN(1000*1e6);
