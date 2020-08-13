@@ -8,7 +8,7 @@ contract OptionsPrice is ImportVolatility{
     constructor (address ivContract) public{
         setVolatilityAddress(ivContract);
     }
-    uint256 constant internal Year = 365 days;
+    int256 constant internal Year = 365 days;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
     //B_S formulas r
     function getRate()public view returns(int256,int256){
@@ -39,21 +39,17 @@ contract OptionsPrice is ImportVolatility{
     function calculateD1D2(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
          Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
             internal pure returns (Fraction.fractionNumber, Fraction.fractionNumber) {
-        Fraction.fractionNumber memory d1 = Fraction.fractionNumber(0,1);
-        if (currentPrice != strikePrice){
-            Fraction.fractionNumber memory lns = Fraction.ln(currentPrice);
-            Fraction.fractionNumber memory lnl = Fraction.ln(strikePrice);
-            d1 = lns.sub(lnl);
-        }
+        Fraction.fractionNumber memory d1 = (currentPrice == strikePrice) ? Fraction.fractionNumber(0,1) :
+            Fraction.ln(currentPrice).sub(Fraction.ln(strikePrice));
         Fraction.fractionNumber memory derta2 = derta.mul(derta);
         derta2.denominator = derta2.denominator*2;
         derta2 = derta2.add(r);
-        derta2 = derta2.mul(Fraction.fractionNumber(int256(expiration),int256(Year)));
+        derta2 = derta2.mul(Fraction.fractionNumber(int256(expiration),Year));
         d1 = d1.add(derta2);
-        derta2 = Fraction.fractionNumber(int256(expiration*1e10),int256(Year*1e10)).sqrt().mul(derta);
+        derta2 = Fraction.fractionNumber(int256(expiration*1e10),Year*1e10).sqrt().mul(derta);
         d1 = d1.div(derta2);
-        Fraction.fractionNumber memory d2 = d1.sub(derta2);
-        return (d1, d2);
+        derta2 = d1.sub(derta2);
+        return (d1, derta2);
     }
 
     //L*pow(e,-rT)*(1-N(d2)) - S*(1-N(d1))
@@ -65,11 +61,10 @@ contract OptionsPrice is ImportVolatility{
         d2 = d2.normsDist();
         d1.numerator = (d1.denominator - d1.numerator)*int256(currentPrice);
         d2.numerator = (d2.denominator - d2.numerator)*int256(strikePrice);
-        Fraction.fractionNumber memory rt = r.mul(Fraction.fractionNumber(int256(expiration),int256(Year)));
-        rt = rt.exp().invert();
-        Fraction.fractionNumber memory price = d2.mul(rt);
-        price = price.sub(d1);
-        return uint256(price.numerator/price.denominator);
+        r = r.mul(Fraction.fractionNumber(int256(expiration),Year));
+        r = r.exp().invert();
+        d1 = d2.mul(r).sub(d1);
+        return uint256(d1.numerator/d1.denominator);
     }
 
     /*
@@ -86,10 +81,9 @@ contract OptionsPrice is ImportVolatility{
         d2 = d2.normsDist();
         d1.numerator = d1.numerator*int256(currentPrice);
         d2.numerator = d2.numerator*int256(strikePrice);
-        Fraction.fractionNumber memory rt = r.mul(Fraction.fractionNumber(int256(expiration),int256(Year)));
-        rt = rt.exp().invert();
-        Fraction.fractionNumber memory price = d2.mul(rt);
-        price = d1.sub(price);
-        return uint256(price.numerator/price.denominator);
+        r = r.mul(Fraction.fractionNumber(int256(expiration),Year));
+        r = r.exp().invert();
+        d1 = d1.sub(d2.mul(r));
+        return uint256(d1.numerator/d1.denominator);
     }
 }

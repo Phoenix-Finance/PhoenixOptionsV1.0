@@ -100,32 +100,30 @@ library Fraction {
         if (value > 10){
             return _isNeg ? fractionNumber(0,1) : fractionNumber(1,1);
         } 
-        fractionNumber memory p = fractionNumber(2316419, 1e7);
         fractionNumber[5] memory b = [
             fractionNumber(31938153,1e8),
             fractionNumber(-356563782,1e9),
             fractionNumber(1781477937,1e9),
             fractionNumber(-1821255978,1e9),
             fractionNumber(1330274429,1e9)];
-        fractionNumber memory t = mul(xNum,p);
+        fractionNumber memory t = mul(xNum,fractionNumber(2316419, 1e7));
         t.numerator += t.denominator;
         t = invert(t);
-        fractionNumber memory sqrtPiInv = fractionNumber(39894228040143267793,1e20);
-        fractionNumber memory expValue = mul(xNum,xNum);
-        expValue.denominator *= -2;
-        expValue = exp(expValue);
-        expValue = mul(sqrtPiInv,expValue);
+        xNum = mul(xNum,xNum);
+        xNum.denominator *= -2;
+        xNum = exp(xNum);
+        xNum = mul(fractionNumber(39894228040143267793,1e20),xNum);
         fractionNumber memory secondArg = fractionNumber(0,1);
         fractionNumber memory tt = t;
         for (uint256 i = 0; i < b.length; i++) {
             secondArg = add(secondArg,mul(b[i],tt));
             tt = mul(tt,t);
         }
-        expValue = mul(expValue,secondArg);
+        xNum = mul(xNum,secondArg);
         if (!_isNeg) {
-            expValue.numerator = expValue.denominator - expValue.numerator;
+            xNum.numerator = xNum.denominator - xNum.numerator;
         }
-        return expValue;
+        return xNum;
     }
     function exp(fractionNumber memory _x) internal pure returns (fractionNumber){
         bool _isNeg = isNeg(_x);
@@ -134,11 +132,11 @@ library Fraction {
         }
         _x = safeFractionNumber(_x);
         _x.numerator = _x.numerator << PRECISION;
-        fractionNumber memory result =  fractionExp_sub(_x);
+        _x =  fractionExp_sub(_x);
         if (_isNeg) {
-            result = invert(result);
+            _x = invert(_x);
         }
-        return result;
+        return _x;
     }
     function fractionExp_sub(fractionNumber memory _x) internal pure returns (fractionNumber){
         uint256 intValue = uint256(_x.numerator/_x.denominator);
