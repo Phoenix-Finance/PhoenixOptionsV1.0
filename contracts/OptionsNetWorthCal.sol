@@ -103,11 +103,11 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
             if(info.expiration<now || info.amount == 0){
                 continue;
             }
-            index = _getEligibleUnderlyingIndex(info.underlying);
+            uint256 index = _getEligibleUnderlyingIndex(info.underlying);
             int256 curValue = _calCurtimeCallateralFall(info,info.amount,prices[index]);
             if (curValue != 0){
                 OptionsInfoEx storage optionEx = optionExtraMap[begin];
-                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
+                index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
                 OptionsFallBalances[index] = OptionsFallBalances[index]-curValue;
             }
         }

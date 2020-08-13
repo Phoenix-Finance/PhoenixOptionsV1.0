@@ -9,6 +9,7 @@ contract OptionsPrice is ImportVolatility{
         setVolatilityAddress(ivContract);
     }
     int256 constant internal Year = 365 days;
+    int256 constant internal YearSqrt = 561569230;
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(5,1000);
     //B_S formulas r
     function getRate()public view returns(int256,int256){
@@ -46,7 +47,7 @@ contract OptionsPrice is ImportVolatility{
         derta2 = derta2.add(r);
         derta2 = derta2.mul(Fraction.fractionNumber(int256(expiration),Year));
         d1 = d1.add(derta2);
-        derta2 = Fraction.fractionNumber(int256(expiration*1e10),Year*1e10).sqrt().mul(derta);
+        derta2 = Fraction.fractionNumber(int256(Fraction.sqrt(expiration*1e10)),YearSqrt).mul(derta);
         d1 = d1.div(derta2);
         derta2 = d1.sub(derta2);
         return (d1, derta2);
@@ -62,8 +63,8 @@ contract OptionsPrice is ImportVolatility{
         d1.numerator = (d1.denominator - d1.numerator)*int256(currentPrice);
         d2.numerator = (d2.denominator - d2.numerator)*int256(strikePrice);
         r = r.mul(Fraction.fractionNumber(int256(expiration),Year));
-        r = r.exp().invert();
-        d1 = d2.mul(r).sub(d1);
+//        r = r.exp().invert();
+        d1 = d2.div(r.exp()).sub(d1);
         return uint256(d1.numerator/d1.denominator);
     }
 
@@ -82,8 +83,8 @@ contract OptionsPrice is ImportVolatility{
         d1.numerator = d1.numerator*int256(currentPrice);
         d2.numerator = d2.numerator*int256(strikePrice);
         r = r.mul(Fraction.fractionNumber(int256(expiration),Year));
-        r = r.exp().invert();
-        d1 = d1.sub(d2.mul(r));
+//        r = r.exp().invert();
+        d1 = d1.sub(d2.div(r.exp()));
         return uint256(d1.numerator/d1.denominator);
     }
 }
