@@ -78,17 +78,13 @@ contract ImpliedVolatility is Operator {
         Fraction.fractionNumber memory ln = calImpliedVolLn(underlying,currentPrice,strikePrice);
         //ln*ln+e
         Fraction.fractionNumber memory lnSqrt = ln.mul(ln).add(Fraction.fractionNumber(paramE[underlying],intDecimal)); 
-        lnSqrt.numerator = lnSqrt.numerator*intDecimal*intDecimal;
-        lnSqrt = lnSqrt.sqrt();  
-        lnSqrt.numerator = lnSqrt.numerator*intDecimal;
+        uint256 sqrtNum = uint256(lnSqrt.numerator*intDecimal*intDecimal/lnSqrt.denominator);
+        sqrtNum = Fraction.sqrt(sqrtNum);  
         //ln*c+sqrt
-        ln.numerator = ln.numerator*paramC[underlying]*intDecimal;
-        ln = ln.add(lnSqrt);
-
-        ln = ln.mul(Fraction.fractionNumber(paramB[underlying],intDecimal));
-        ln = ln.add(Fraction.fractionNumber(paramA[underlying]*intDecimal,1));
-        ln = ln.add(Fraction.fractionNumber(int256(_ATMIv*_ATMIv),1));
-        uint256 sqrtNum = uint256(ln.numerator/ln.denominator);
+        ln.numerator = ln.numerator*paramC[underlying]+ln.denominator*int256(sqrtNum);
+        //ln = ln.add(Fraction.fractionNumber(int256(sqrtNum),1));
+        ln = ln.mul(Fraction.fractionNumber(paramB[underlying],1));
+        sqrtNum = uint256(ln.numerator/ln.denominator)+_ATMIv*_ATMIv+uint256(paramA[underlying])*_calDecimal;
         return Fraction.sqrt(sqrtNum);
     }
     //ln(k) - ln(s) + d

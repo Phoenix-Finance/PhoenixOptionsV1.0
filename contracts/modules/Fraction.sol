@@ -1,6 +1,6 @@
 pragma solidity ^0.4.26;
 library Fraction {
-    using Fraction for fractionNumber;
+//    using Fraction for fractionNumber;
     int256 constant private sqrtNum = 1<<120;
     int256 constant private shl = 80;
     uint8 constant private PRECISION   = 32;  // fractional bits
@@ -39,16 +39,16 @@ library Fraction {
         return fractionNumber(a.numerator+a.denominator*b,a.denominator);
     }
     function div(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
-        return fractionDiv(safeFractionNumber(a), safeFractionNumber(b));
+        return safeFractionNumber(fractionDiv(a,b));
     }
     function mul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
-        return fractionMul(safeFractionNumber(a), safeFractionNumber(b));
+        return safeFractionNumber(fractionMul(a,b));
     }
     function add(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
-        return fractionAdd(safeFractionNumber(a), safeFractionNumber(b));
+        return safeFractionNumber(fractionAdd(a,b));
     }
     function sub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
-        return fractionSub(safeFractionNumber(a), safeFractionNumber(b));
+        return safeFractionNumber(fractionSub(a,b));
     }
 
     function zoomOut(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
@@ -58,18 +58,22 @@ library Fraction {
     function zoomin(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
         return safeFractionNumber(fractionNumber(a.numerator*rate,a.denominator*rate));
     }
+    function ln(fractionNumber memory a)  internal pure returns (fractionNumber) {
+        uint256 _x = uint256((a.numerator << PRECISION)/a.denominator);
+        return fractionNumber(int256(fixedLoge(_x)),int256(FIXED_ONE));
+    }
     function safeFractionNumber(fractionNumber memory a) internal pure returns (fractionNumber) {
         int256 num = intAbs(a.numerator);
         int256 deno = intAbs(a.denominator);
         if(deno>num){
             if (deno>sqrtNum) {
                 int256 rate = deno>>shl;
-                return a.zoomOut(rate);
+                return zoomOut(a,rate);
             }
         } else {
             if (num>sqrtNum) {
                 rate = num>>shl;
-                return a.zoomOut(rate);
+                return zoomOut(a,rate);
             }
         }
         return a;
@@ -103,23 +107,23 @@ library Fraction {
             fractionNumber(1781477937,1e9),
             fractionNumber(-1821255978,1e9),
             fractionNumber(1330274429,1e9)];
-        fractionNumber memory t = xNum.mul(p);
-        t = t.add(fractionNumber(1,1));
-        t = t.invert();
+        fractionNumber memory t = mul(xNum,p);
+        t.numerator += t.denominator;
+        t = invert(t);
         fractionNumber memory sqrtPiInv = fractionNumber(39894228040143267793,1e20);
-        fractionNumber memory expValue = xNum.mul(xNum);
-        expValue = expValue.mul(fractionNumber(-1,2));
-        expValue = expValue.exp();
-        expValue = sqrtPiInv.mul(expValue);
+        fractionNumber memory expValue = mul(xNum,xNum);
+        expValue.denominator *= -2;
+        expValue = exp(expValue);
+        expValue = mul(sqrtPiInv,expValue);
         fractionNumber memory secondArg = fractionNumber(0,1);
         fractionNumber memory tt = t;
         for (uint256 i = 0; i < b.length; i++) {
-            secondArg = secondArg.add(b[i].mul(tt));
-            tt = tt.mul(t);
+            secondArg = add(secondArg,mul(b[i],tt));
+            tt = mul(tt,t);
         }
-        expValue = expValue.mul(secondArg);
+        expValue = mul(expValue,secondArg);
         if (!_isNeg) {
-            expValue = fractionNumber(1,1).sub(expValue);
+            expValue.numerator = expValue.denominator - expValue.numerator;
         }
         return expValue;
     }
@@ -132,7 +136,7 @@ library Fraction {
         _x.numerator = _x.numerator << PRECISION;
         fractionNumber memory result =  fractionExp_sub(_x);
         if (_isNeg) {
-            result = result.invert();
+            result = invert(result);
         }
         return result;
     }
@@ -143,7 +147,7 @@ library Fraction {
             fractionNumber memory _x2 = fractionNumber(_x.numerator-_x1.numerator,_x.denominator);
             _x1 = fractionExp_sub(_x1);
             _x2 = fractionExp_sub(_x2);
-            return _x1.mul(_x2);
+            return mul(_x1,_x2);
         }else{
             return fractionNumber(int256(fixedExp(intValue)),int256(FIXED_ONE));
         }
