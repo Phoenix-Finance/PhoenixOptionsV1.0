@@ -30,23 +30,23 @@ contract('OptionsManagerV2', function (accounts){
         mineInfo = await minePool.getMineInfo(fnx.address);
         console.log (mineInfo);
         for (var i=0;i<10;i++){
-            for (var j=0;j<10;j++){
+            for (var j=0;j<5;j++){
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
                 OptionsManger.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9150*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,8250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9257*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9251*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,11250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9253*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9260*1e8,1,month,10000000000,0,{value : 1000000000000000});
 
-                OptionsManger.buyOption(collateral0,1000000000000000,9050*1e8,1,month,10000000000,1,{value : 1000000000000000});
-                OptionsManger.buyOption(collateral0,1000000000000000,9050*1e8,1,month,10000000000,1,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,11050*1e8,1,month,10000000000,1,{value : 1000000000000000});
+                OptionsManger.buyOption(collateral0,1000000000000000,9056*1e8,1,month,10000000000,1,{value : 1000000000000000});
         //        console.log(tx);
-                await OptionsManger.buyOption(collateral0,200000000000000,9250*1e8,1,month,10000000000,1,{value : 200000000000000});
+                await OptionsManger.buyOption(collateral0,200000000000000,9258*1e8,1,month,10000000000,1,{value : 200000000000000});
         //        console.log(tx);
             }
             await calculateNetWroth(options,OptionsManger,fnx);

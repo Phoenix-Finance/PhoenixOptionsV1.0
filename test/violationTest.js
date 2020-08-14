@@ -104,6 +104,38 @@ contract('OptionsManagerV2', function (accounts){
             await OptionsManger.redeemCollateral(1000000000000,collateral0,{from:accounts[3]});  
         })
     });
+    it('OptionsManagerV2 sell options violation test', async function (){
+        let OptionsManger = await OptionsManagerV2.deployed();
+        let fnx = await FNXCoin.deployed();
+        let optPool = await OptionsPool.deployed();
+        await OptionsManger.modifyPermission(collateral0,0xffffffff);
+        await OptionsManger.buyOption(collateral0,1000000000000000,10000e8,1,month,10000000000,1,{value : 1000000000000000}); 
+        let optionID = await optPool.getOptionInfoLength(); 
+        await testViolation("sell options violated owner  test failed",async function(){
+            await OptionsManger.sellOption(optionID,10000000000,{from : accounts[1]});    
+        })
+        await testViolation("sell options input amount test failed",async function(){
+            await OptionsManger.sellOption(optionID,100);    
+        })
+        await testViolation("sell options insufficient test failed",async function(){
+            await OptionsManger.sellOption(optionID,1000000000000);    
+        })
+        await testViolation("sell options error optionID test failed",async function(){
+            await OptionsManger.sellOption(optionID.toNumber()+1,1000000000000);    
+        })
+        await testViolation("exercise options violated owner  test failed",async function(){
+            await OptionsManger.exerciseOption(optionID,10000000000,{from : accounts[1]});    
+        })
+        await testViolation("exercise options input amount test failed",async function(){
+            await OptionsManger.exerciseOption(optionID,100);    
+        })
+        await testViolation("exercise options insufficient test failed",async function(){
+            await OptionsManger.exerciseOption(optionID,1000000000000);    
+        })
+        await testViolation("exercise options error optionID test failed",async function(){
+            await OptionsManger.exerciseOption(optionID.toNumber()+1,1000000000000);    
+        })
+    });
 });
 async function testViolation(message,testFunc){
     bErr = false;

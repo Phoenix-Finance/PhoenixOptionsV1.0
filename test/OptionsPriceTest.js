@@ -13,9 +13,9 @@ contract('OptionsPrice', function (accounts){
 //                console.log(result[0].toString(10),result[1].toString(10));
 //                result = await priceInstance.testCalculateND1ND2_iv(i*1e8, j*1e8,day,result[0],result[1]);
 //                console.log(result[0].toString(10),result[1].toString(10),result[2].toString(10),result[3].toString(10));
-                let price0 = await priceInstance.getOptionsPrice(i*1e8, j*1e8, day,1,0);
+                let price0 = await priceInstance.getOptionsPrice(i*1e8, j*1e8, 30*day,1,0);
                 //console.log(i,j,price.toString(10));
-                price1 = await priceInstance.getOptionsPrice(i*1e8, j*1e8, day,1,1);
+                price1 = await priceInstance.getOptionsPrice(i*1e8, j*1e8, 30*day,1,1);
                 console.log(i,j,price0.toString(10),price1.toString(10));
             }
         }

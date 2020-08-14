@@ -5,9 +5,9 @@ let daySeconds = 24*3600;
 contract('ImpliedVolatility', function (accounts){
     it('ImpliedVolatility test iv', async function (){
         let volInstance = await ImpliedVolatility.deployed();
-        let price = new BN(1);
-        price = price.ushln(100);
-        await calculateIv(volInstance,10,9000*1e8,11000*1e8);
+        for (i =5000;i<=20000;i+=100){
+            await calculateIv(volInstance,daySeconds*900,i,10000);
+        }
     });
 });
 async function calculateIv(volInstance,expiration,curprice,strikePrice){

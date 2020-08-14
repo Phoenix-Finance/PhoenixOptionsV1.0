@@ -51,8 +51,6 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
         uint256 allPayUSd = allPay/1e8;
         allPay = allPay/settlePrice;
         uint256 fee = _collateralPool.addTransactionFee(settlement,allPay,0);
-        emit DebugEvent(optionPrice, allPay, fee);
-        return;
         require(settlementAmount>=allPay+fee,"settlement asset is insufficient!");
         settlementAmount = settlementAmount.sub(allPay+fee);
         if (settlementAmount > 0){
