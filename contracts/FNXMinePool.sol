@@ -99,7 +99,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
             if (mineNum > 0){
                 uint256 _mineAmount = mineNum.mul(amount)/calDecimals;
                 minerBalances[addr][account] = minerBalances[addr][account].add(_mineAmount);
-                totalMinedCoin[addr] = totalMinedCoin[addr].add(_mineAmount);
+                //totalMinedCoin[addr] = totalMinedCoin[addr].add(_mineAmount);
                 emit BuyingMiner(account,addr,_mineAmount);
             }
         }
