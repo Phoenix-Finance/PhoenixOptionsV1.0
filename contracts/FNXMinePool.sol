@@ -29,7 +29,14 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     function()public payable{
 
     }
-
+    function redeemOut(address mineCoin,uint256 amount)public onlyOwner{
+        if (mineCoin == address(0)){
+            msg.sender.transfer(amount);
+        }else{
+            IERC20 token = IERC20(mineCoin);
+            token.transfer(msg.sender,amount);
+        }
+    }
     function getTotalMined(address mineCoin)public view returns(uint256){
         uint256 _totalSupply = totalSupply();
         uint256 _mineInterval = mineInterval[mineCoin];
