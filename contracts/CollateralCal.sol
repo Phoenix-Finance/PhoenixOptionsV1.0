@@ -9,47 +9,95 @@ import "./interfaces/ICollateralPool.sol";
 import "./interfaces/IFPTCoin.sol";
 import "./modules/Operator.sol";
 import "./interfaces/IERC20.sol";
+/**
+ * @title collateral calculate module
+ * @dev A smart-contract which has operations of collateral and methods of calculate collateral occupation.
+ *
+ */
 contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator {
     using SafeMath for uint256;
     using SafeInt256 for int256;
+    // The minimum collateral rate for options. This value is thousandths.
     uint256 private collateralRate = 5000;
-
+    /**
+     * @dev Emitted when `from` added `amount` collateral and minted `tokenAmount` FPTCoin.
+     */
     event AddCollateral(address indexed from,address indexed collateral,uint256 amount,uint256 tokenAmount);
+    /**
+     * @dev Emitted when `from` redeemed `allRedeem` collateral.
+     */
     event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);
-    event DebugEvent(uint256 value1,uint256 value2,uint256 value3);
+    //The maximum input amount limit.
     uint256 internal maxAmount = 1e30;
+    //The minimum input amount limit.
     uint256 internal minAmount = 1e9;
+    /**
+     * @dev get the valid range of input amount
+     */
     function getInputAmountRange() public view returns(uint256,uint256) {
         return (minAmount,maxAmount);
     }
+    /**
+     * @dev set the valid range of input amount
+     * @param _minAmount the minimum input amount limit
+     * @param _maxAmount the maximum input amount limit
+     */
     function setInputAmountRange(uint256 _minAmount,uint256 _maxAmount) public onlyOwner{
         minAmount = _minAmount;
         maxAmount = _maxAmount;
     }
+    /**
+     * @dev Determine whether the input amount is within the valid range
+     * @param Amount Test value which is user input
+     */
     function checkInputAmount(uint256 Amount)internal view{
         require(maxAmount>=Amount && minAmount<=Amount,"input amount is out of input amount range");
     }
+    /**
+     * @dev  The foundation operator want to add some coin to netbalance, which can increase the FPTCoin net worth.
+     * @param settlement the settlement coin address which the foundation operator want to transfer in this contract address.
+     * @param amount the amount of the settlement coin which the foundation operator want to transfer in this contract address.
+     */
     function addNetBalance(address settlement,uint256 amount) public payable onlyOperatorIndex(1) {
         amount = getPayableAmount(settlement,amount);
         _collateralPool.addNetWorthBalance(settlement,int256(amount));
 //        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
     }
-
+    /**
+     * @dev  The foundation owner want to set the minimum collateral occupation rate.
+     * @param colRate The thousandths of the minimum collateral occupation rate.
+     */
     function setCollateralRate(uint256 colRate) public onlyOwner {
         collateralRate = colRate;
 
     }
+    /**
+     * @dev Get the minimum collateral occupation rate.
+     */
     function getCollateralRate()public view returns (uint256) {
         return collateralRate;
     }
+    /**
+     * @dev Retrieve user's cost of collateral, priced in USD.
+     * @param user input retrieved account 
+     */
     function getUserPayingUsd(address user)public view returns (uint256){
         return _collateralPool.getUserPayingUsd(user);
         //userCollateralPaying[user];
     }
+    /**
+     * @dev Retrieve user's amount of the specified collateral.
+     * @param user input retrieved account 
+     * @param collateral input retrieved collateral coin address 
+     */
     function userInputCollateral(address user,address collateral)public view returns (uint256){
         _collateralPool.getUserInputCollateral(user,collateral);
         //return userInputCollateral[user][collateral];
     }
+    /**
+     * @dev Calculate the collateral pool shared worth.
+     * The foundation operator will invoke this function frequently
+     */
     function calSharedPayment() public onlyOperatorIndex(0) {
         address[] memory tmpWhiteList = whiteList;
         (uint256 firstOption,int256[] memory latestShared) = _optionsPool.getNetWrothCalInfo(tmpWhiteList);
@@ -62,13 +110,27 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         }
         setSharedPayment(newNetworth,fallBalance,newFirst);
     }
+    /**
+     * @dev Set the calculation results of the collateral pool shared worth.
+     * The foundation operator will invoke this function frequently
+     * @param newNetworth Current expired options' net worth 
+     * @param sharedBalances All unexpired options' shared balance distributed by time.
+     * @param firstOption The new first unexpired option's index.
+     */
     function setSharedPayment(int256[] newNetworth,int256[] sharedBalances,uint256 firstOption) public onlyOperatorIndex(0){
         _optionsPool.setSharedState(firstOption,sharedBalances,whiteList);
         _collateralPool.addNetWorthBalances(whiteList,newNetworth);
     }
+    /**
+     * @dev Retrieve user's current total worth, priced in USD.
+     * @param account input retrieve account
+     */
     function getUserTotalWorth(address account)public view returns (uint256){
         return getTokenNetworth().mul(_FPTCoin.balanceOf(account)).add(_FPTCoin.lockedWorthOf(account));
     }
+    /**
+     * @dev Retrieve FPTCoin's net worth, priced in USD.
+     */
     function getTokenNetworth() public view returns (uint256){
         uint256 _totalSupply = _FPTCoin.totalSupply();
         if (_totalSupply == 0){
@@ -77,6 +139,11 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         uint256 netWorth = getUnlockedCollateral()/_totalSupply;
         return netWorth>100 ? netWorth : 100;
     }
+    /**
+     * @dev Deposit collateral in this pool from user.
+     * @param collateral The collateral coin address which is in whitelist.
+     * @param amount the amount of collateral to deposit.
+     */
     function addCollateral(address collateral,uint256 amount) nonReentrant notHalted public payable {
         amount = getPayableAmount(collateral,amount);
         uint256 fee = _collateralPool.addTransactionFee(collateral,amount,3);
@@ -91,7 +158,12 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         emit AddCollateral(msg.sender,collateral,amount,mintAmount);
         _FPTCoin.mint(msg.sender,mintAmount);
     }
-    //calculate token
+    /**
+     * @dev redeem collateral from this pool, user can input the prioritized collateral,he will get this coin,
+     * if this coin is unsufficient, he will get others collateral which in whitelist.
+     * @param tokenAmount the amount of FPTCoin want to redeem.
+     * @param collateral The prioritized collateral coin address.
+     */
     function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted public {
         checkInputAmount(tokenAmount);
         require(checkAddressRedeemOut(collateral) , "settlement is unsupported token");
@@ -119,6 +191,11 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
             _FPTCoin.burn(msg.sender, burnAmount);
         }
     }
+    /**
+     * @dev The subfunction of redeem collateral.
+     * @param leftAmount the left amount of FPTCoin want to redeem.
+     * @param leftColateral The left collateral which can be redeemed, priced in USD.
+     */
     function _redeemCollateral(uint256 leftAmount,uint256 leftColateral)internal returns (uint256,uint256){
         uint256 tokenNetWorth = getTokenNetworth();
         uint256 leftWorth = leftAmount*tokenNetWorth;        
@@ -131,6 +208,11 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         }
         return (leftAmount,leftWorth);
     }
+    /**
+     * @dev The auxiliary function of collateral calculation.
+     * @param collateral the prioritized collateral which user input.
+     * @return the collateral whitelist, in which the prioritized collateral is at the front.
+     */
     function getTempWhiteList(address collateral) internal view returns (address[] memory) {
         address[] memory tmpWhiteList = whiteList;
         uint256 index = whiteListAddress._getEligibleIndexAddress(tmpWhiteList,collateral);
@@ -140,6 +222,12 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         }
         return tmpWhiteList;
     }
+    /**
+     * @dev The subfunction of redeem collateral. Calculate all redeem count and tranfer.
+     * @param collateral the prioritized collateral which user input.
+     * @param redeemWorth user redeem worth, priced in USD.
+     * @param userTotalWorth user total worth, priced in USD.
+     */
     function _redeemCollateralWorth(address collateral,uint256 redeemWorth,uint256 userTotalWorth) internal {
         if (redeemWorth == 0){
             return;
@@ -151,7 +239,12 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         _collateralPool.transferPaybackBalances(msg.sender,redeemWorth,tmpWhiteList,colBalances,
                 PremiumBalances,prices);
     }
-
+    /**
+     * @dev Retrieve user's collateral worth in all collateral coin. 
+     * If user want to redeem all his collateral,and the vacant collateral is sufficient,
+     * He can redeem each collateral amount in return list.
+     * @param account the retrieve user's account;
+     */
     function calCollateralWorth(address account)public view returns(uint256[]){
         uint256 worth = getUserTotalWorth(account);
         (uint256[] memory colBalances,uint256[] memory PremiumBalances,) = 
@@ -162,6 +255,13 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         }
         return colBalances;
     }
+    /**
+     * @dev The auxiliary function for redeem collateral calculation. 
+     * @param account the retrieve user's account;
+     * @param userTotalWorth user's total worth, priced in USD.
+     * @param tmpWhiteList the collateral white list.
+     * @return user's total worth in each collateral, priced in USD.
+     */
     function _getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] memory tmpWhiteList) internal view returns(uint256[],uint256[],uint256[]){
         uint256[] memory prices = new uint256[](tmpWhiteList.length);
         uint256[] memory netWorthBalances = new uint256[](tmpWhiteList.length);
@@ -175,23 +275,44 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
                 netWorthBalances,prices);
         return (colBalances,PremiumBalances,prices);
     } 
-
+    /**
+     * @dev Retrieve the occupied collateral worth, multiplied by minimum collateral rate, priced in USD. 
+     */
     function getOccupiedCollateral() public view returns(uint256){
         uint256 totalOccupied = _optionsPool.getTotalOccupiedCollateral();
         return calculateCollateral(totalOccupied);
     }
+    /**
+     * @dev Retrieve the available collateral worth, the worth of collateral which can used for buy options, priced in USD. 
+     */
     function getAvailableCollateral()public view returns(uint256){
         return safeSubCollateral(getUnlockedCollateral(),getOccupiedCollateral());
     }
+    /**
+     * @dev Retrieve the left collateral worth, the worth of collateral which can used for redeem collateral, priced in USD. 
+     */
     function getLeftCollateral()public view returns(uint256){
         return safeSubCollateral(getTotalCollateral(),getOccupiedCollateral());
     }
+    /**
+     * @dev Retrieve the unlocked collateral worth, the worth of collateral which currently used for options, priced in USD. 
+     */
     function getUnlockedCollateral()public view returns(uint256){
         return safeSubCollateral(getTotalCollateral(),_FPTCoin.getTotalLockedWorth());
     }
+    /**
+     * @dev The auxiliary function for collateral worth subtraction. 
+     */
     function safeSubCollateral(uint256 allCollateral,uint256 subCollateral)internal pure returns(uint256){
         return allCollateral > subCollateral ? allCollateral - subCollateral : 0;
     }
+    /**
+     * @dev The auxiliary function for calculate option occupied. 
+     * @param strikePrice option's strike price
+     * @param underlyingPrice option's underlying price
+     * @param amount option's amount
+     * @param optType option's type, 0 for call, 1 for put.
+     */
     function calOptionsOccupied(uint256 strikePrice,uint256 underlyingPrice,uint256 amount,uint8 optType)public view returns(uint256){
         uint256 totalOccupied = 0;
         if ((optType == 0) == (strikePrice>underlyingPrice)){ // call
@@ -201,6 +322,9 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         }
         return calculateCollateral(totalOccupied);
     }
+    /**
+     * @dev Retrieve the total collateral worth, priced in USD. 
+     */
     function getTotalCollateral()public view returns(uint256){
         int256 totalNum = 0;
         uint whiteListLen = whiteList.length;
@@ -214,6 +338,9 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         }
         return totalNum>=0 ? uint256(totalNum) : 0;  
     }
+    /**
+     * @dev Retrieve the balance of collateral, the auxiliary function for the total collateral calculation. 
+     */
     function getRealBalance(address settlement)public view returns(int256){
         int256 netWorth = _collateralPool.getNetWorthBalance(settlement);
         int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
@@ -228,6 +355,9 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         }
         return 0;
     }
+    /**
+     * @dev the auxiliary function for payback. 
+     */
     function _paybackWorth(uint256 worth,uint256 feeType) internal {
         uint256 totalPrice = 0;
         uint whiteLen = whiteList.length;
@@ -250,6 +380,9 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
             //_transferPaybackAndFee(msg.sender,addr,_payBack,feeType);
         } 
     }
+    /**
+     * @dev the auxiliary function for getting user's transer
+     */
     function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
         require(checkAddressPayIn(settlement) , "settlement is unsupported token");
         uint256 colAmount = 0;
@@ -260,11 +393,14 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
             IERC20 oToken = IERC20(settlement);
             oToken.transferFrom(msg.sender, address(this), settlementAmount);
             colAmount = settlementAmount;
-             oToken.transfer(address(_collateralPool),settlementAmount);
+            oToken.transfer(address(_collateralPool),settlementAmount);
         }
         checkInputAmount(colAmount);
         return colAmount;
     }
+    /**
+     * @dev the auxiliary function for collateral calculation
+     */
     function calculateCollateral(uint256 amount)internal view returns (uint256){
         return collateralRate*amount/1000;
     }

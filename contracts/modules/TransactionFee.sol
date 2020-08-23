@@ -81,10 +81,10 @@ contract TransactionFee is AddressWhiteList {
             redeem(whiteList[i]);
         }
     }
-    function _addTransactionFee(address settleMent,uint256 amount) internal {
+    function _addTransactionFee(address settlement,uint256 amount) internal {
         if (amount > 0){
-            feeBalances[settleMent] = feeBalances[settleMent]+amount;
-            emit AddFee(settleMent,amount);
+            feeBalances[settlement] = feeBalances[settlement]+amount;
+            emit AddFee(settlement,amount);
         }
     }
     function calculateFee(uint256 feeType,uint256 amount)public view returns (uint256){
@@ -97,35 +97,35 @@ contract TransactionFee is AddressWhiteList {
         return FeeRates[feeType];
     }
     /**
-      * @dev  transfer settleMent payback amount;
+      * @dev  transfer settlement payback amount;
       * @param recieptor payback recieptor
-      * @param settleMent settleMent address
-      * @param payback amount of settleMent will payback 
+      * @param settlement settlement address
+      * @param payback amount of settlement will payback 
       */
-    function _transferPaybackAndFee(address recieptor,address settleMent,uint256 payback,uint256 feeType)internal{
+    function _transferPaybackAndFee(address recieptor,address settlement,uint256 payback,uint256 feeType)internal{
         if (payback == 0){
             return;
         }
         uint256 fee = calculateFee(feeType,payback);
-        _transferPayback(recieptor,settleMent,payback-fee);
-        _addTransactionFee(settleMent,fee);
+        _transferPayback(recieptor,settlement,payback-fee);
+        _addTransactionFee(settlement,fee);
     }
     /**
-      * @dev  transfer settleMent payback amount;
+      * @dev  transfer settlement payback amount;
       * @param recieptor payback recieptor
-      * @param settleMent settleMent address
-      * @param payback amount of settleMent will payback 
+      * @param settlement settlement address
+      * @param payback amount of settlement will payback 
       */
-    function _transferPayback(address recieptor,address settleMent,uint256 payback)internal{
+    function _transferPayback(address recieptor,address settlement,uint256 payback)internal{
         if (payback == 0){
             return;
         }
-        if (settleMent == address(0)){
+        if (settlement == address(0)){
             recieptor.transfer(payback);
         }else{
-            IERC20 collateralToken = IERC20(settleMent);
+            IERC20 collateralToken = IERC20(settlement);
             collateralToken.transfer(recieptor,payback);
         }
-        emit TransferPayback(recieptor,settleMent,payback);
+        emit TransferPayback(recieptor,settlement,payback);
     }
 }

@@ -4,11 +4,22 @@ import "./modules/Managerable.sol";
 import "./modules/AddressWhiteList.sol";
 import "./modules/ReentrancyGuard.sol";
 import "./interfaces/IERC20.sol";
+/**
+ * @title FPTCoin mine pool
+ * @dev A smart-contract which distribute some mine coins to FPTCoin.
+ *
+ */
 contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     using SafeMath for uint256;
+    //Special decimals for calculation
     uint256 constant calDecimals = 1e18;
+    // miner's balance
+    // map mineCoin => user => balance
     mapping(address=>mapping(address=>uint256)) internal minerBalances;
+    // miner's origins, specially used for mine distribution
+    // map mineCoin => user => balance
     mapping(address=>mapping(address=>uint256)) internal minerOrigins;
+    
     mapping(address=>uint256) internal totalMinedWorth;
     mapping(address=>uint256) internal totalMinedCoin;
     mapping(address=>uint256) internal latestSettleTime;
@@ -18,7 +29,6 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     uint256 constant private opBurnCoin = 1;
     uint256 constant private opMintCoin = 2;
     uint256 constant private opTransferCoin = 3;
-    event DebugEvent(uint256 value0,uint256 value1,uint256 value2,uint256 value3);
     event MintMiner(address indexed account,uint256 amount);
     event BurnMiner(address indexed account,uint256 amount);
     event RedeemMineCoin(address indexed from, address indexed mineCoin, uint256 value);
