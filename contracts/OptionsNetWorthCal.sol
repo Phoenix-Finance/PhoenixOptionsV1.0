@@ -3,12 +3,23 @@ import "./OptionsBase.sol";
 import "./OptionsOccupiedCal.sol";
 import "./interfaces/IOptionsPrice.sol";
 import "./modules/SafeInt256.sol";
+/**
+ * @title Options net worth calculation contract for finnexus proposal v2.
+ * @dev A Smart-contract for net worth calculation.
+ *
+ */
 contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
 
-    uint256 private firstOption;    //firstOption,lastOption,lastBurn
+    // first option position which needed calculate.
+    uint256 private firstOption;
+    // options latest networth balance. store all options's net worth share started from first option.
     mapping(address=>int256) private optionsLatestNetWorth;
     using SafeInt256 for int256;
     
+    /**
+     * @dev retrieve all information for net worth calculation. 
+     * @param whiteList collateral address whitelist.
+     */ 
     function getNetWrothCalInfo(address[] memory whiteList)public view returns(uint256,int256[]){
         uint256 len = whiteList.length;
         int256[] memory latestNetWorth = new int256[](len);
@@ -17,6 +28,10 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         }
         return (firstOption,latestNetWorth);
     }
+    /**
+     * @dev retrieve latest options net worth which paid in settlement coin. 
+     * @param settlement settlement coin address.
+     */ 
     function getNetWrothLatestWorth(address settlement)public view returns(int256){
         return optionsLatestNetWorth[settlement];
     }

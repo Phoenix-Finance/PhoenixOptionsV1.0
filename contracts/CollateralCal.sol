@@ -170,17 +170,17 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         uint256 lockedAmount = _FPTCoin.lockedBalanceOf(msg.sender);
         require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
-        uint256 leftColateral = getLeftCollateral();
-        (uint256 burnAmount,uint256 redeemWorth) = _FPTCoin.redeemLockedCollateral(msg.sender,tokenAmount,leftColateral);
+        uint256 leftCollateral = getLeftCollateral();
+        (uint256 burnAmount,uint256 redeemWorth) = _FPTCoin.redeemLockedCollateral(msg.sender,tokenAmount,leftCollateral);
         tokenAmount -= burnAmount;
         burnAmount = 0;
         if (tokenAmount > 0){
-            leftColateral -= redeemWorth;
+            leftCollateral -= redeemWorth;
             
             if (lockedAmount > 0){
                 tokenAmount = tokenAmount > lockedAmount ? tokenAmount - lockedAmount : 0;
             }
-            (uint256 newRedeem,uint256 newWorth) = _redeemCollateral(tokenAmount,leftColateral);
+            (uint256 newRedeem,uint256 newWorth) = _redeemCollateral(tokenAmount,leftCollateral);
             if(newRedeem>0){
                 burnAmount = newRedeem;
                 redeemWorth += newWorth;
@@ -194,13 +194,13 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
     /**
      * @dev The subfunction of redeem collateral.
      * @param leftAmount the left amount of FPTCoin want to redeem.
-     * @param leftColateral The left collateral which can be redeemed, priced in USD.
+     * @param leftCollateral The left collateral which can be redeemed, priced in USD.
      */
-    function _redeemCollateral(uint256 leftAmount,uint256 leftColateral)internal returns (uint256,uint256){
+    function _redeemCollateral(uint256 leftAmount,uint256 leftCollateral)internal returns (uint256,uint256){
         uint256 tokenNetWorth = getTokenNetworth();
         uint256 leftWorth = leftAmount*tokenNetWorth;        
-        if (leftWorth > leftColateral){
-            uint256 newRedeem = leftColateral/tokenNetWorth;
+        if (leftWorth > leftCollateral){
+            uint256 newRedeem = leftCollateral/tokenNetWorth;
             uint256 newWorth = newRedeem*tokenNetWorth;
             uint256 locked = leftAmount - newRedeem;
             _FPTCoin.addlockBalance(msg.sender,locked,locked/tokenNetWorth);
