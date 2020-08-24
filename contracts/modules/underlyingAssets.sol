@@ -35,9 +35,6 @@ contract UnderlyingAssets is Ownable {
     function isEligibleUnderlyingAsset(uint32 underlying) public view returns (bool){
         return underlyingAssets.isEligibleUint32(underlying);
     }
-    function checkUnderlyingAsset(uint32 underlying) public view{
-        return underlyingAssets.checkEligibleUint32(underlying);
-    }
     function _getEligibleUnderlyingIndex(uint32 underlying) internal view returns (uint256){
         return underlyingAssets._getEligibleIndexUint32(underlying);
     }

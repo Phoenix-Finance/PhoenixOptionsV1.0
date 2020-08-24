@@ -1,4 +1,7 @@
 pragma solidity ^0.4.26;
+    /**
+     * @dev Implementation of a Fraction number operation library.
+     */
 library Fraction {
 //    using Fraction for fractionNumber;
     int256 constant private sqrtNum = 1<<120;

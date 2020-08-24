@@ -1,5 +1,5 @@
 pragma solidity ^0.4.26;
-import "../imVolatility32.sol";
+import "./imVolatility32.sol";
 contract imVolatilityTest is imVolatility32 {
     function getTimeMapLen(uint32 underlying,uint8 optType)public view returns(uint256){
         uint256 saveKey = getKey(underlying,optType);

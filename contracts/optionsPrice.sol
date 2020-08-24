@@ -3,22 +3,48 @@ pragma solidity ^0.4.26;
 import "./modules/Ownable.sol";
 import "./modules/Fraction.sol";
 import "./interfaces/IVolatility.sol";
+/**
+ * @title Options price calculation contract.
+ * @dev calculate options' price, using B-S formulas.
+ *
+ */
 contract OptionsPrice is ImportVolatility{
     using Fraction for Fraction.fractionNumber;
+    // one year seconds
+    int256 constant internal Year = 365 days;
+    // constant value in B-S formulas.
+    int256 constant internal YearSqrt = 561569230;
+    // rate in B-S formulas.
+    Fraction.fractionNumber internal rate = Fraction.fractionNumber(0,1000);
+    /**
+     * @dev constructor function , setting contract address.
+     * @param ivContract implied volatility contract address
+     */  
     constructor (address ivContract) public{
         setVolatilityAddress(ivContract);
     }
-    int256 constant internal Year = 365 days;
-    int256 constant internal YearSqrt = 561569230;
-    Fraction.fractionNumber internal rate = Fraction.fractionNumber(0,1000);
-    //B_S formulas r
+
+    /**
+     * @dev get B_S formulas r
+     */
     function getRate()public view returns(int256,int256){
         return (rate.numerator,rate.denominator);
     }
+    /**
+     * @dev set B_S formulas r
+     */
     function setRate(int256 numerator,int256 denominator)public onlyOwner{
         rate.numerator = numerator;
         rate.denominator = denominator;
     }
+    /**
+     * @dev calculate option's price using B_S formulas
+     * @param currentPrice current underlying price.
+     * @param strikePrice option's strike price.
+     * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
+     * @param underlying option's underlying id, 1 for BTC, 2 for ETH.
+     * @param optType option's type, 0 for CALL, 2 for PUT.
+     */
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint32 underlying,uint8 optType)public view returns (uint256){
         (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(underlying,optType,expiration,currentPrice,strikePrice);
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
@@ -28,6 +54,15 @@ contract OptionsPrice is ImportVolatility{
             return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
         }
     }
+    /**
+     * @dev calculate option's price using B_S formulas with user input iv.
+     * @param currentPrice current underlying price.
+     * @param strikePrice option's strike price.
+     * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
+     * @param ivNumerator user input iv numerator.
+     * @param ivDenominator user input iv denominator.
+     * @param optType option's type, 0 for CALL, 2 for PUT.
+     */
     function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
             uint256 ivNumerator,uint256 ivDenominator,uint8 optType)public view returns (uint256){
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
@@ -37,6 +72,14 @@ contract OptionsPrice is ImportVolatility{
             return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
         }
     }
+    /**
+     * @dev An auxiliary function, calculate parameter d1 and d2 in B_S formulas.
+     * @param currentPrice current underlying price.
+     * @param strikePrice option's strike price.
+     * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
+     * @param r parameter r in B_S formulas.
+     * @param derta implied volatility value in B-S formulas.
+     */
     function calculateD1D2(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
          Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
             internal pure returns (Fraction.fractionNumber, Fraction.fractionNumber) {
@@ -52,7 +95,14 @@ contract OptionsPrice is ImportVolatility{
         derta2 = d1.sub(derta2);
         return (d1, derta2);
     }
-
+    /**
+     * @dev An auxiliary function, calculate put option price using B_S formulas.
+     * @param currentPrice current underlying price.
+     * @param strikePrice option's strike price.
+     * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
+     * @param r parameter r in B_S formulas.
+     * @param derta implied volatility value in B-S formulas.
+     */
     //L*pow(e,-rT)*(1-N(d2)) - S*(1-N(d1))
     function putOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
             Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
@@ -71,12 +121,14 @@ contract OptionsPrice is ImportVolatility{
         }
         return uint256(d1.numerator/d1.denominator);
     }
-
-    /*
-        r := FloatNum{
-            big.NewInt(5),
-            big.NewInt(1000)}
-    */
+    /**
+     * @dev An auxiliary function, calculate call option price using B_S formulas.
+     * @param currentPrice current underlying price.
+     * @param strikePrice option's strike price.
+     * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
+     * @param r parameter r in B_S formulas.
+     * @param derta implied volatility value in B-S formulas.
+     */
     //S*N(d1)-L*pow(e,-rT)*N(d2)
     function callOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
             Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 

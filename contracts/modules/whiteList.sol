@@ -1,11 +1,22 @@
 pragma solidity ^0.4.26;
+    /**
+     * @dev Implementation of a whitelist which filters a eligible uint32.
+     */
 library whiteListUint32 {
-    // add whiteList
+    /**
+     * @dev add uint32 into white list.
+     * @param whiteList the storage whiteList.
+     * @param temp input value
+     */
+
     function addWhiteListUint32(uint32[] storage whiteList,uint32 temp) internal{
         if (!isEligibleUint32(whiteList,temp)){
             whiteList.push(temp);
         }
     }
+    /**
+     * @dev remove uint32 from whitelist.
+     */
     function removeWhiteListUint32(uint32[] storage whiteList,uint32 temp)internal returns (bool) {
         uint256 len = whiteList.length;
         for (uint256 i=0;i<len;i++){
@@ -20,9 +31,6 @@ library whiteListUint32 {
             return true;
         }
         return false;
-    }
-    function checkEligibleUint32(uint32[] memory whiteList,uint32 temp) internal pure{
-        require(isEligibleUint32(whiteList,temp),"whiteList: using invalid uint32");
     }
     function isEligibleUint32(uint32[] memory whiteList,uint32 temp) internal pure returns (bool){
         uint256 len = whiteList.length;
@@ -41,6 +49,9 @@ library whiteListUint32 {
         return i;
     }
 }
+    /**
+     * @dev Implementation of a whitelist which filters a eligible uint256.
+     */
 library whiteListUint256 {
     // add whiteList
     function addWhiteListUint256(uint256[] storage whiteList,uint256 temp) internal{
@@ -63,9 +74,6 @@ library whiteListUint256 {
         }
         return false;
     }
-    function checkEligibleUint256(uint256[] memory whiteList,uint256 temp) internal pure{
-        require(isEligibleUint256(whiteList,temp),"whiteList: using invalid uint256");
-    }
     function isEligibleUint256(uint256[] memory whiteList,uint256 temp) internal pure returns (bool){
         uint256 len = whiteList.length;
         for (uint256 i=0;i<len;i++){
@@ -83,6 +91,9 @@ library whiteListUint256 {
         return i;
     }
 }
+    /**
+     * @dev Implementation of a whitelist which filters a eligible address.
+     */
 library whiteListAddress {
     // add whiteList
     function addWhiteListAddress(address[] storage whiteList,address temp) internal{
@@ -104,9 +115,6 @@ library whiteListAddress {
             return true;
         }
         return false;
-    }
-    function checkEligibleAddress(address[] memory whiteList,address temp) internal pure{
-        require(isEligibleAddress(whiteList,temp),"whiteList: using invalid address");
     }
     function isEligibleAddress(address[] memory whiteList,address temp) internal pure returns (bool){
         uint256 len = whiteList.length;

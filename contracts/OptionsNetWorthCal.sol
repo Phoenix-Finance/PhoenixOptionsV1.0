@@ -10,7 +10,7 @@ import "./modules/SafeInt256.sol";
  */
 contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
 
-    // first option position which needed calculate.
+    // first option position which is needed calculate.
     uint256 private firstOption;
     // options latest networth balance. store all options's net worth share started from first option.
     mapping(address=>int256) private optionsLatestNetWorth;
@@ -35,6 +35,12 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
     function getNetWrothLatestWorth(address settlement)public view returns(int256){
         return optionsLatestNetWorth[settlement];
     }
+    /**
+     * @dev set latest options net worth balance, only manager contract can modify database.
+     * @param newFirstOption new first valid option position.
+     * @param latestNetWorth latest options net worth.
+     * @param whiteList eligible collateral address white list.
+     */ 
     function setSharedState(uint256 newFirstOption,int256[] latestNetWorth,address[] memory whiteList) public onlyManager{
         if (newFirstOption > firstOption){
             firstOption = newFirstOption;
@@ -44,6 +50,13 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
             optionsLatestNetWorth[whiteList[i]] += latestNetWorth[i];
         }
     }
+    /**
+     * @dev calculate options time shared value,from begin to end in the alloptionsList.
+     * @param lastOption the last option position.
+     * @param begin the begin options position.
+     * @param end the end options position.
+     * @param whiteList eligible collateral address white list.
+     */
     function calRangeSharedPayment(uint256 lastOption,uint256 begin,uint256 end,address[] memory whiteList)
             public view returns(int256[],uint256[],uint256){
         if (begin>=lastOption || end < firstOption){
@@ -60,6 +73,12 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         
         return (new int256[](whiteList.length),sharedBalances,_firstOption);
     }
+    /**
+     * @dev subfunction, calculate options time shared value,from begin to end in the alloptionsList.
+     * @param begin the begin options position.
+     * @param end the end options position.
+     * @param whiteList eligible collateral address white list.
+     */
     function _calculateSharedPayment(uint256 begin,uint256 end,address[] memory whiteList)
             internal view returns(uint256[],uint256){
         uint256[] memory totalSharedPayment = new uint256[](whiteList.length);
@@ -79,6 +98,12 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         }
         return (totalSharedPayment,newFirstOption);
     }
+    /**
+     * @dev subfunction, calculate expired options shared value,from begin to end in the alloptionsList.
+     * @param begin the begin options position.
+     * @param end the end options position.
+     * @param whiteList eligible collateral address white list.
+     */
     function calculateExpiredPayment(uint256 begin,uint256 end,address[] memory whiteList)internal view returns(int256[]){
         int256[] memory totalExpiredPayment = new int256[](whiteList.length);
         for (;begin<end;begin++){
@@ -92,6 +117,13 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         }
         return totalExpiredPayment;
     }
+    /**
+     * @dev calculate options payback fall value,from begin to end in the alloptionsList.
+     * @param lastOption the last option position.
+     * @param begin the begin options position.
+     * @param end the end options position.
+     * @param whiteList eligible collateral address white list.
+     */
     function calculatePhaseOptionsFall(uint256 lastOption,uint256 begin,uint256 end,address[] memory whiteList) public view returns(int256[]){
         if (begin>=lastOption || end < firstOption){
             return new int256[](whiteList.length);
@@ -110,6 +142,13 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         }
         return OptionsFallBalances;
     }
+    /**
+     * @dev subfunction, calculate options payback fall value,from begin to lastOption in the alloptionsList.
+     * @param begin the begin option position.
+     * @param lastOption the last option position.
+     * @param whiteList eligible collateral address white list.
+     * @param prices eligible underlying price list.
+     */
     function _calRangeOptionsFall(uint256 begin,uint256 lastOption,address[] memory whiteList,uint256[] memory prices)
                  internal view returns(int256[] memory){
         int256[] memory OptionsFallBalances = new int256[](whiteList.length);
@@ -128,7 +167,12 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         }
         return OptionsFallBalances;
     }
-
+    /**
+     * @dev subfunction, calculate option payback fall value.
+     * @param info the option information.
+     * @param amount the option amount to calculate.
+     * @param curPrice current underlying price.
+     */
     function _calCurtimeCallateralFall(OptionsInfo memory info,uint256 amount,uint256 curPrice) internal view returns(int256){
         if (info.expiration<=now || amount == 0){
             return 0;
@@ -146,6 +190,13 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         optionsLatestNetWorth[infoEx.settlement] = optionsLatestNetWorth[infoEx.settlement].sub(int256(curValue));
     }
     */
+    /**
+     * @dev set burn option net worth change.
+     * @param info the option information.
+     * @param amount the option amount to calculate.
+     * @param underlyingPrice underlying price when option is created.
+     * @param currentPrice current underlying price.
+     */
     function _burnOptionsNetworth(OptionsInfo memory info,uint256 amount,uint256 underlyingPrice,uint256 currentPrice) internal returns (uint256) {
         int256 curValue = _calCurtimeCallateralFall(info,amount,underlyingPrice);
         OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
@@ -155,6 +206,14 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
         int256 value = curValue - int256(timeWorth);
         optionsLatestNetWorth[optionEx.settlement] = optionsLatestNetWorth[optionEx.settlement]+value;
     }
+    /**
+     * @dev An anxiliary function, calculate time shared current option price.
+     * @param curprice underlying price when option is created.
+     * @param strikePrice the option strikePrice.
+     * @param expiration option time expiration time left, equal option.expiration - now.
+     * @param ivNumerator Implied valotility numerator when option is created.
+     * @param ivDenominator Implied valotility denominator when option is created.
+     */
     function _calculateCurrentPrice(uint256 curprice,uint256 strikePrice,uint256 expiration,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
         if (expiration > now){
             return _optionsPrice.getOptionsPrice_iv(curprice,strikePrice,expiration-now,ivNumerator,

@@ -1,51 +1,54 @@
 let Web3 = require("Web3")
+const fs = require('fs');
 let web3 = new Web3(new Web3.providers.HttpProvider("https://demodex.wandevs.org:48545"));
-let optionsManager = require("../build/contracts/OptionsManagerV2.json");
-let CompoundOracle = require("../build/contracts/CompoundOracle.json");
-let marketTrading = require("../build/contracts/OptionsPool.json");
-let FNXCoin = require("../build/contracts/FNXCoin.json");
-let erc20 = require("../build/contracts/IERC20.json");
+let contract = require("./contract/Contract.js")
+let contractfunc = require("./contract/ContractFunc.js")
+let IFnxPriceDb = require("../build/contracts/IFnxPriceDb.json");
+let FNXOracle = require("../build/contracts/FNXOracle.json");
 let collateral0 = "0x0000000000000000000000000000000000000000";
-async function wanMainNet(){
-    let oracle = await new web3.eth.Contract(CompoundOracle.abi,"0x9590e4DA7D7Cdb8745e79E4C05668A36574100D4");
-    let owner = await oracle.methods.owner().call();
-    console.log(owner);
+async function wanTest(){
+
+    let priceDB = await new web3.eth.Contract(IFnxPriceDb.abi,"0x874091F169983C375DDF067b5ec0CE446855b55d");  
+    let result = await priceDB.methods.getPrice("BTC").call();
+    console.log("BTC :",result.toString(10));
+    result = await priceDB.methods.getPrice("ETH").call();
+    console.log("ETH :",result.toString(10));
+    result = await priceDB.methods.getPrice("WAN").call();
+    console.log("WAN :",result.toString(10));
+    result = await priceDB.methods.getPrice("FNX").call();
+    console.log("FNX :",result.toString(10));
+
+    let oracle = await new web3.eth.Contract(FNXOracle.abi,"0x00db8fec3a5767c96c595814a8c70110ba5091e2");
+    result = await oracle.methods.getUnderlyingPrice(1).call();
+    console.log("btcPrice :",result.toString(10));
+    result = await oracle.methods.getPrice(collateral0).call();
+    console.log("wan price :",result.toString(10));
+    result = await oracle.methods.getUnderlyingPrice("0xdF228001e053641FAd2BD84986413Af3BeD03E0B").call();
+    console.log("fnx Price :",result.toString(10));
     return;
-    let manager = await new web3.eth.Contract(optionsManager.abi,"0xea6ca106373842a09c83459A4a977136E278e9F9");
-    let whiteList = await manager.methods.getWhiteList().call();
-    console.log(whiteList);
-    let fnx = await new web3.eth.Contract(FNXCoin.abi,"0xdf228001e053641fad2bd84986413af3bed03e0b");
-    let fnxBal = await fnx.methods.balanceOf("0xe732e883d03e230b7a5c2891c10222fe0a1fb2cb").call();
-    console.log(fnxBal.toString(10));
-    return;
-    addr = "0x65e5E104C8E96636aEF4728C3623484aE1A21Fa9".toLowerCase();
-    let used = await manager.methods.calculateOptionsValueUSD(collateral0,addr).call();
-    let balance = await manager.methods.getWriterCollateralBalance(addr,collateral0).call();
-    console.log(used.toString(10),balance.toString(10));
-    used = await manager.methods.calculateOptionsValueUSD("0xc6f4465a6a521124c8e3096b62575c157999d361",addr).call();
-    balance = await manager.methods.getWriterCollateralBalance(addr,"0xc6f4465a6a521124c8e3096b62575c157999d361").call();
-    console.log(used.toString(10),balance.toString(10));
-    let optionList = await manager.methods.getOptionsTokenList().call();
-    for (var i=0;i<optionList.length;i++){
-        let optionInfo = await manager.methods.getOptionsTokenInfo(optionList[i]).call();
-        console.log(optionList[i],optionInfo);
-        let writers = await manager.methods.getOptionsTokenWriterList(optionList[i]).call();
-        for (var j=0;j<writers.length;j++){
-            let tokenNum = await manager.methods.getWriterOptionsTokenBalance(writers[j],optionList[i]).call();
-            console.log(optionList[i],tokenNum);
-        }
-        let token = await new web3.eth.Contract(erc20.abi,optionList[i]);
-        let balance = await token.methods.balanceOf("0xe1e4a74A0232AcA5F55a4163DcaE8B6546bf0827").call();
-        console.log(optionList[i],balance);
-    }
-    let market = await new web3.eth.Contract(marketTrading.abi,"0xe1e4a74A0232AcA5F55a4163DcaE8B6546bf0827");
-    for (var i=0;i<optionList.length;i++){
-        let payList = await market.methods.getPayOrderList(optionList[i],"0xc6f4465a6a521124c8e3096b62575c157999d361").call();
-        let sellList = await market.methods.getSellOrderList(optionList[i],"0xc6f4465a6a521124c8e3096b62575c157999d361").call();
-        console.log("fnx buy",payList,"fnx sell",sellList);
-        payList = await market.methods.getPayOrderList(optionList[i],collateral0).call();
-        sellList = await market.methods.getSellOrderList(optionList[i],collateral0).call();
-        console.log("wan buy",payList,"wan sell",sellList);
+    let args = process.argv.splice(2)
+    let txHash = args[0]
+    let receipt = await web3.eth.getTransactionReceipt(txHash);
+    console.log(receipt);
+    let addr = "0xF416BDB17b90F153Eb076D52C4027a6c5371ca06";
+    result = await web3.eth.getBalance(addr.toLowerCase());
+    console.log(result);
+    let market = JSON.parse(fs.readFileSync('./build/contracts/OptionsManagerV2.json'));
+    let tx = await web3.eth.getTransaction(txHash);
+    console.log(tx);
+    let con = new contract(market.abi);
+    
+    let name = con.getFunctionName(tx.input,web3);
+    console.log(name)
+    let func = new contractfunc(con,name);
+    func.initParse(web3);
+    let dict = func.parseContractMethodPara(tx.input.slice(10),web3);
+    console.log(tx.input.slice(10),dict);
+    receipt = await web3.eth.getTransactionReceipt(txHash);
+    for (var i=0;i<receipt.logs.length;i++){
+        let name = con.getEventName(receipt.logs[i].topics[0],web3);
+        console.log(name);
+        console.log(receipt.logs[i]);
     }
 }
-wanMainNet();
+wanTest();

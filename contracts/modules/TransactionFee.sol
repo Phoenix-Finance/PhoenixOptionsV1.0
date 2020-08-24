@@ -6,11 +6,6 @@ import "../interfaces/IERC20.sol";
      * @dev Implementation of a transaction fee manager.
      */
 contract TransactionFee is AddressWhiteList {
-    modifier nonContract() {                // contracts pls go
-        require(tx.origin == msg.sender);
-        _;
-    }
-
     using SafeMath for uint256;
     struct fraction{
         uint256 numerator;

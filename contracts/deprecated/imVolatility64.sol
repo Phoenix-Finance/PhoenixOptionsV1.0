@@ -1,22 +1,17 @@
 pragma solidity ^0.4.26;
-import "./modules/Operator.sol";
-import "./modules/tuple64.sol";
-import "./modules/ArraySave.sol";
-contract imVolatility32 is Operator {
+import "../modules/Operator.sol";
+import "../modules/tuple64.sol";
+import "./ArraySave.sol";
+contract imVolatility64 is Operator {
     uint256 private ValidUntil = 1200;
     uint256 constant private _calDecimal = 1e8;
     uint256 private inptutTime;
     ArraySave.saveMap internal timeSaveMap;
     ArraySave.saveMap internal IvMap;
-    function setValidUntil(uint256 timeLimit) public onlyOperatorIndex(0) {
+    function setValidUntil(uint256 timeLimit) public onlyOwner {
         ValidUntil = timeLimit;
     }
-    function setIvMatrixAll(uint32 underlying,uint256[] put_timeArray,uint256[] put_ivAry,
-        uint256[] call_timeArray,uint256[] call_ivAry) public onlyOperatorIndex(0){
-        setIvMatrix(underlying,1,put_timeArray,put_ivAry);
-        setIvMatrix(underlying,0,call_timeArray,call_ivAry);
-    }
-    function setIvMatrix(uint32 underlying,uint8 optType,uint256[] timeArray,uint256[] ivAry) public onlyOperatorIndex(0){
+    function setIvMatrix(uint32 underlying,uint8 optType,uint256[] timeArray,uint256[] ivAry) public{
         uint256 saveKey = getKey(underlying,optType);
         uint nLen0 = timeArray.length;
         for (uint i=0;i<nLen0;i++){
@@ -31,15 +26,14 @@ contract imVolatility32 is Operator {
         return tuple64.getTuple3(0,underlying,optType);
     }
     /**
-      * @notice retrieves implied volatility of an asset
-      * @dev function to get implied volatility for an asset
-      * @param expiration the option expiration which has been created in option manger contract
-      * @param price the option underlying strikePrice which has been created in option manger contract
-      * @return uint mantissa of asset implied volatility (scaled by 1e18) or zero if unset or contract paused
-      */
+    /**
+  * @notice retrieves implied volatility of an asset
+  * @dev function to get implied volatility for an asset
+  * @param expiration the option expiration which has been created in option manger contract
+  * @param price the option underlying strikePrice which has been created in option manger contract
+  * @return uint mantissa of asset implied volatility (scaled by 1e18) or zero if unset or contract paused
+  */
     function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 price)public view returns (uint256,uint256){
-        expiration = expiration*7000;
-        price = price/1e4;
         uint256 saveKey = getKey(underlying,optType);
         uint256[] memory buffer = ArraySave32.readAllBuffer(timeSaveMap,saveKey);
         uint256 index = getTimeRange(buffer,expiration);
@@ -58,7 +52,6 @@ contract imVolatility32 is Operator {
     }
     function getTimeRange(uint256[] memory buffer,uint256 expiration) internal pure returns(uint256){
         uint256 Len = ArraySave32.getArrayLenFromBuffer(buffer)/2;
-        require (Len>=2,"iv matrix time length is less than 2");
         for (uint256 i=0;i<Len;i++){
             uint256 curTime = ArraySave32.getValueFromBuffer(buffer,i*2);
             if (expiration<=curTime){
@@ -75,9 +68,8 @@ contract imVolatility32 is Operator {
             i = ArraySave32.getValueFromBuffer(buffer,index*2-1);
         }
         uint256 end = ArraySave32.getValueFromBuffer(buffer,index*2+1);
-        require (end-i>=2,"iv matrix price length is less than 2");
         for (;i<end;i++){
-            uint256 ivPrice = ArraySave32.getValue(IvMap,saveKey,i*2);
+            uint256 ivPrice = ArraySave64.getValue(IvMap,saveKey,i*2);
             if (price<=ivPrice){
                 break;                
             }
@@ -87,16 +79,16 @@ contract imVolatility32 is Operator {
         }else if (i == index) {
             i++;
         }
-        uint256 highPrice = ArraySave32.getValue(IvMap,saveKey,i*2);
+        uint256 highPrice = ArraySave64.getValue(IvMap,saveKey,i*2);
         if (highPrice == price) {
-            return ArraySave32.getValue(IvMap,saveKey,i*2+1)*100;
+            return ArraySave64.getValue(IvMap,saveKey,i*2+1);
         }         
-        int iv = insertValue(int256(ArraySave32.getValue(IvMap,saveKey,i*2-2)),int256(highPrice),
-            int256(ArraySave32.getValue(IvMap,saveKey,i*2-1)),int256(ArraySave32.getValue(IvMap,saveKey,i*2+1)),int256(price));
+        int iv = insertValue(int256(ArraySave64.getValue(IvMap,saveKey,i*2-2)),int256(highPrice),
+            int256(ArraySave64.getValue(IvMap,saveKey,i*2-1)),int256(ArraySave64.getValue(IvMap,saveKey,i*2+1)),int256(price));
         if (iv<=0){
             return 1;
         }else{
-            return uint256(iv)*100;
+            return uint256(iv);
         }
     }
     function insertValue(int256 x0,int256 x1,int256 y0, int256 y1,int256 x)internal pure returns (int256){
