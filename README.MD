@@ -1,7 +1,7 @@
 
 # Options Contract
 
-Options Contract is a permissionless options protocal stack.
+Options Contract v2 is a permissionless options pool protocal stack.
 
 ## Environment
 
@@ -15,23 +15,29 @@ Our development environment consists of the following:
 
 ## contracts
 
-### OptionsToken
+### FPTCoin
 
-The OptionsToken is an ERC20 token with options expiration. It inherits the ERC-20 token standard.It can tranfer before expiration.
+The FPTCoin is an ERC20 token. It inherits the ERC-20 token standard.It is finnexus collateral Pool token. Its inside value is collatral pool net worth.
 
+### FNXMinePool
 
-### OptionsManager
+The FNXMinePool is FPTCoin mine pool, which manager contract is FPTCoin.
+A smart-contract which distribute some mine coins buy FPTCoin balance.
+
+### CollateralPool
+
+The CollateralPool is collateral pool contract whcich stores users' deposit collateral coin and necessary storage data.
+
+### OptionsManagerV2
 
 The OptionsManager is a manager contract for Options tokens. It can 
--  create an options token.
--  add collateral and mint optionsToken.
--  exercise options.
--  liquidate options.
+-  buy, sell or exercise options token.
+-  add or redeem collateral.
 
-### OptionsFormulas
+### OptionsPrice
 
-The OptionsFormulas is a calculator for Options tokens.
+The OptionsPrice is an Options price calculation contract, which calculates options' price, using B-S formulas.
 
-### MatchMakingTrading
+### ImpliedVolatility
 
-The MatchMakingTrading is a trading pool for Options tokens.
+The ImpliedVolatility is an Options Implied volatility calculation.
