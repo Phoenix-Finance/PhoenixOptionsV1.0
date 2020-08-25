@@ -6,7 +6,7 @@ import "./modules/ReentrancyGuard.sol";
 import "./interfaces/IERC20.sol";
 /**
  * @title FPTCoin mine pool, which manager contract is FPTCoin.
- * @dev A smart-contract which distribute some mine coins to FPTCoin.
+ * @dev A smart-contract which distribute some mine coins by FPTCoin balance.
  *
  */
 contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {

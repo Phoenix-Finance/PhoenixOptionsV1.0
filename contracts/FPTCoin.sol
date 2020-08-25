@@ -5,7 +5,7 @@ import "./modules/Managerable.sol";
 import "./interfaces/IFNXMinePool.sol";
 /**
  * @title FPTCoin is finnexus collateral Pool token, implement ERC20 interface.
- * @dev ERC20 token. It's inside value is collatral pool net worth.
+ * @dev ERC20 token. Its inside value is collatral pool net worth.
  *
  */
 contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
