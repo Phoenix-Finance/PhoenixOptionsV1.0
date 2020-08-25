@@ -151,6 +151,9 @@ library Fraction {
         }
         return xNum;
     }
+    /**
+     * @dev fraction exponential operator.
+     */
     function exp(fractionNumber memory _x) internal pure returns (fractionNumber){
         bool _isNeg = isNeg(_x);
         if (_isNeg) {
@@ -164,6 +167,10 @@ library Fraction {
         }
         return _x;
     }
+    /**
+     * @dev an auxiliary function for fraction e exponential operator.
+     *      recursive function, calculate exp(x) = exp(x/2)*exp(x-x/2)
+     */
     function fractionExp_sub(fractionNumber memory _x) internal pure returns (fractionNumber){
         uint256 intValue = uint256(_x.numerator/_x.denominator);
         if (intValue > 0x386bfdba29){
