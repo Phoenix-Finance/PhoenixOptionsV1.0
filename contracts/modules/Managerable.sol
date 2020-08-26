@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.26;
 import './Ownable.sol';
 contract Managerable is Ownable {
 

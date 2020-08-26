@@ -1,9 +1,12 @@
 pragma solidity ^0.4.26;
 library SafeInt256 {
+    /*
     uint256 constant private maxInt256 = (1<<255)-1;
     function toInt256(uint256 a)internal pure returns (int256){
         require(a <= maxInt256, "SafeMath: toInt256 overflow");
+        return int256(a);
     }
+    */
     /**
      * @dev Returns the addition of two unsigned integers, reverting on
      * overflow.

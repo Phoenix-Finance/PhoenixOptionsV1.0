@@ -197,7 +197,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
      * @param underlyingPrice underlying price when option is created.
      * @param currentPrice current underlying price.
      */
-    function _burnOptionsNetworth(OptionsInfo memory info,uint256 amount,uint256 underlyingPrice,uint256 currentPrice) internal returns (uint256) {
+    function _burnOptionsNetworth(OptionsInfo memory info,uint256 amount,uint256 underlyingPrice,uint256 currentPrice) internal {
         int256 curValue = _calCurtimeCallateralFall(info,amount,underlyingPrice);
         OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
         uint256 timeWorth = optionEx.fullPrice>currentPrice ? optionEx.fullPrice-currentPrice : 0;

@@ -91,7 +91,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
      * @param collateral input retrieved collateral coin address 
      */
     function userInputCollateral(address user,address collateral)public view returns (uint256){
-        _collateralPool.getUserInputCollateral(user,collateral);
+        return _collateralPool.getUserInputCollateral(user,collateral);
         //return userInputCollateral[user][collateral];
     }
     /**
