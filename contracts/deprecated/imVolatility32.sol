@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "../modules/Operator.sol";
 import "../modules/tuple64.sol";
 import "./ArraySave.sol";
@@ -11,15 +11,16 @@ contract imVolatility32 is Operator {
     function setValidUntil(uint256 timeLimit) public onlyOperatorIndex(0) {
         ValidUntil = timeLimit;
     }
-    function setIvMatrixAll(uint32 underlying,uint256[] put_timeArray,uint256[] put_ivAry,
-        uint256[] call_timeArray,uint256[] call_ivAry) public onlyOperatorIndex(0){
+    function setIvMatrixAll(uint32 underlying,uint256[] memory put_timeArray,uint256[] memory put_ivAry,
+        uint256[] memory call_timeArray,uint256[] memory call_ivAry) public onlyOperatorIndex(0){
         setIvMatrix(underlying,1,put_timeArray,put_ivAry);
         setIvMatrix(underlying,0,call_timeArray,call_ivAry);
     }
-    function setIvMatrix(uint32 underlying,uint8 optType,uint256[] timeArray,uint256[] ivAry) public onlyOperatorIndex(0){
+    function setIvMatrix(uint32 underlying,uint8 optType,uint256[] memory timeArray,uint256[] memory ivAry) public onlyOperatorIndex(0){
         uint256 saveKey = getKey(underlying,optType);
         uint nLen0 = timeArray.length;
-        for (uint i=0;i<nLen0;i++){
+        uint i=0;
+        for (;i<nLen0;i++){
             timeSaveMap.sMap[saveKey+i] = timeArray[i];
         }
         nLen0 = ivAry.length;
@@ -59,7 +60,8 @@ contract imVolatility32 is Operator {
     function getTimeRange(uint256[] memory buffer,uint256 expiration) internal pure returns(uint256){
         uint256 Len = ArraySave32.getArrayLenFromBuffer(buffer)/2;
         require (Len>=2,"iv matrix time length is less than 2");
-        for (uint256 i=0;i<Len;i++){
+        uint256 i=0;
+        for (;i<Len;i++){
             uint256 curTime = ArraySave32.getValueFromBuffer(buffer,i*2);
             if (expiration<=curTime){
                 return i;

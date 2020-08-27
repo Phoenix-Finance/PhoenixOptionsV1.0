@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import './Ownable.sol';
 import "./whiteList.sol";
     /**
@@ -25,7 +25,7 @@ contract UnderlyingAssets is Ownable {
     /**
      * @dev Implementation of getting the eligible underlyingAssets.
      */
-    function getUnderlyingAssets()public view returns (uint32[]){
+    function getUnderlyingAssets()public view returns (uint32[] memory){
         return underlyingAssets;
     }
     /**

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./OptionsBase.sol";
 import "./modules/Operator.sol";
 import "./OptionsBase.sol";

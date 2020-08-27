@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./OptionsBase.sol";
 import "./OptionsOccupiedCal.sol";
 import "./interfaces/IOptionsPrice.sol";
@@ -20,7 +20,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
      * @dev retrieve all information for net worth calculation. 
      * @param whiteList collateral address whitelist.
      */ 
-    function getNetWrothCalInfo(address[] memory whiteList)public view returns(uint256,int256[]){
+    function getNetWrothCalInfo(address[] memory whiteList)public view returns(uint256,int256[] memory){
         uint256 len = whiteList.length;
         int256[] memory latestNetWorth = new int256[](len);
             for (uint256 i = 0;i<len;i++){
@@ -41,7 +41,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
      * @param latestNetWorth latest options net worth.
      * @param whiteList eligible collateral address white list.
      */ 
-    function setSharedState(uint256 newFirstOption,int256[] latestNetWorth,address[] memory whiteList) public onlyManager{
+    function setSharedState(uint256 newFirstOption,int256[] memory latestNetWorth,address[] memory whiteList) public onlyManager{
         if (newFirstOption > firstOption){
             firstOption = newFirstOption;
         }
@@ -58,7 +58,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
      * @param whiteList eligible collateral address white list.
      */
     function calRangeSharedPayment(uint256 lastOption,uint256 begin,uint256 end,address[] memory whiteList)
-            public view returns(int256[],uint256[],uint256){
+            public view returns(int256[] memory,uint256[] memory,uint256){
         if (begin>=lastOption || end < firstOption){
             return(new int256[](whiteList.length),new uint256[](whiteList.length),0);
         }
@@ -80,7 +80,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
      * @param whiteList eligible collateral address white list.
      */
     function _calculateSharedPayment(uint256 begin,uint256 end,address[] memory whiteList)
-            internal view returns(uint256[],uint256){
+            internal view returns(uint256[] memory,uint256){
         uint256[] memory totalSharedPayment = new uint256[](whiteList.length);
         uint256 newFirstOption;
         (begin,newFirstOption) = getFirstOption(begin,firstOption,end); 
@@ -104,7 +104,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
      * @param end the end options position.
      * @param whiteList eligible collateral address white list.
      */
-    function calculateExpiredPayment(uint256 begin,uint256 end,address[] memory whiteList)internal view returns(int256[]){
+    function calculateExpiredPayment(uint256 begin,uint256 end,address[] memory whiteList)internal view returns(int256[] memory){
         int256[] memory totalExpiredPayment = new int256[](whiteList.length);
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
@@ -124,7 +124,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal,ImportOptionsPrice {
      * @param end the end options position.
      * @param whiteList eligible collateral address white list.
      */
-    function calculatePhaseOptionsFall(uint256 lastOption,uint256 begin,uint256 end,address[] memory whiteList) public view returns(int256[]){
+    function calculatePhaseOptionsFall(uint256 lastOption,uint256 begin,uint256 end,address[] memory whiteList) public view returns(int256[] memory){
         if (begin>=lastOption || end < firstOption){
             return new int256[](whiteList.length);
         }

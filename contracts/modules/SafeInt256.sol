@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 library SafeInt256 {
     /*
     uint256 constant private maxInt256 = (1<<255)-1;
@@ -33,14 +33,13 @@ library SafeInt256 {
         return _add(a, -b, "SafeMath: subtraction overflow");
     }
     function _add(int256 a, int256 b, string memory errorMessage) internal pure returns (int256){
-        if ((a>=0) != (b>=0)){
-            return a + b;
-        }else if(a>=0){
             int256 c = a + b;
+        if ((a>=0) != (b>=0)){
+            return c;
+        }else if(a>=0){
             require(c >= a, errorMessage);
             return c;
         }else{
-            c = a + b;
             require(c <= a, errorMessage);
             return c;
         }

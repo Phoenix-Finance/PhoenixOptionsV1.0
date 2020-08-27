@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 
 import "./modules/Ownable.sol";
 import "./modules/Fraction.sol";
@@ -82,7 +82,7 @@ contract OptionsPrice is ImportVolatility{
      */
     function calculateD1D2(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
          Fraction.fractionNumber memory r, Fraction.fractionNumber memory derta) 
-            internal pure returns (Fraction.fractionNumber, Fraction.fractionNumber) {
+            internal pure returns (Fraction.fractionNumber memory, Fraction.fractionNumber memory) {
         Fraction.fractionNumber memory d1 = (currentPrice == strikePrice) ? Fraction.fractionNumber(0,1) :
             Fraction.ln(currentPrice).sub(Fraction.ln(strikePrice));
         Fraction.fractionNumber memory derta2 = derta.mul(derta);

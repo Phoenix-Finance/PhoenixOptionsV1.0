@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./interfaces/IFNXOracle.sol";
 import "./modules/SafeMath.sol";
 import "./modules/Operator.sol";
@@ -33,10 +33,11 @@ contract FNXOracle is IFNXOracle,Operator {
     * @param underlyings a set of underlyings for which to set the price
     * @param ulPrices  a set of the underlyings's price
     */    
-    function setPriceAndUnderlyingPrice(address[] assets,uint256[] assetPrices,uint256[] underlyings,uint256[] ulPrices) public onlyOperatorIndex(0) {
+    function setPriceAndUnderlyingPrice(address[] memory assets,uint256[] memory assetPrices,uint256[] memory underlyings,uint256[] memory ulPrices) public onlyOperatorIndex(0) {
         require(assets.length == assetPrices.length,"assets and assetPrices are not of the same length");
         require(underlyings.length == ulPrices.length,"underlyings and ulPrices are not of the same length");
-        for (uint i = 0;i<assets.length;i++) {
+        uint i = 0;
+        for (;i<assets.length;i++) {
             priceMap[uint256(assets[i])] = assetPrices[i];
         }
         for (i = 0;i<underlyings.length;i++) {
@@ -70,10 +71,11 @@ contract FNXOracle is IFNXOracle,Operator {
       * @param buyPrices a group of buy prices
       * @param SellPrices a group of sell prices
       */    
-    function setOptionsBuyAndSellPrice(address[] optokens,uint256[] buyPrices,uint256[] SellPrices) public onlyOperatorIndex(0) {
+    function setOptionsBuyAndSellPrice(address[] memory optokens,uint256[] memory buyPrices,uint256[] memory SellPrices) public onlyOperatorIndex(0) {
         require(optokens.length == buyPrices.length,"optokens and buyPrices are not of the same length");
         require(optokens.length == SellPrices.length,"optokens and SellPrices are not of the same length");
-        for (uint i=0; i<optokens.length; i++) {
+        uint i=0;
+        for (; i<optokens.length; i++) {
             uint256 sellkey = uint256(optokens[i])*10+1;
             priceMap[sellkey] = SellPrices[i];
         }

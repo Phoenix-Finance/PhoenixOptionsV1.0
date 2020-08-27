@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "../OptionsPool.sol";
 contract OptionsPoolTest is OptionsPool {
         constructor (address oracleAddr,address optionsPriceAddr,address ivAddress) OptionsPool(oracleAddr,optionsPriceAddr,ivAddress) public{

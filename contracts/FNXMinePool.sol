@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./modules/SafeMath.sol";
 import "./modules/Managerable.sol";
 import "./modules/AddressWhiteList.sol";
@@ -61,7 +61,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     /**
      * @dev default function for foundation input miner coins.
      */
-    function()public payable{
+    function()external payable{
 
     }
     /**
@@ -145,7 +145,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
     /**
      * @dev Get the all rewards for buying options.
      */
-    function getBuyingMineInfoAll()public view returns(address[],uint256[]){
+    function getBuyingMineInfoAll()public view returns(address[] memory,uint256[] memory){
         uint256 len = whiteList.length;
         address[] memory mineCoins = new address[](len);
         uint256[] memory mineNums = new uint256[](len);
@@ -241,7 +241,7 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
      * @param recieptor recieptor's account
      * @param amount redeem amount.
      */
-    function _redeemMineCoin(address mineCoin,address recieptor,uint256 amount)internal {
+    function _redeemMineCoin(address mineCoin,address payable recieptor,uint256 amount)internal {
         if (amount == 0){
             return;
         }

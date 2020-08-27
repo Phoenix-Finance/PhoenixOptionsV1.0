@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 library ArraySave{
     struct saveMap{
         mapping(uint256 => uint256) sMap;
@@ -9,11 +9,11 @@ library ArraySave{
         uint256 move = (index%_saveNum)*_BinarayLen;
         return (buffer >> move)&_mark;
     }
-    function readAllBuffer(saveMap storage curMap,uint256 key,uint256 _saveNum,uint256 _mark)internal view returns (uint256[]){
+    function readAllBuffer(saveMap storage curMap,uint256 key,uint256 _saveNum,uint256 _mark)internal view returns (uint256[] memory){
         uint256 buffer0 = curMap.sMap[key];
         uint256 len = buffer0&_mark;
         if (len == 0){
-            return;
+            return new uint256[](0);
         }
         uint256 bufferLen = (len+1)/_saveNum;
         if((len+1)%_saveNum != 0){
@@ -43,7 +43,7 @@ library ArraySave32 {
     function getArrayLen(ArraySave.saveMap storage curMap,uint256 key) internal view returns (uint256){
         return ArraySave.getRawValue(curMap,key,0,saveNum,BinarayLen,mark);
     }
-    function readAllBuffer(ArraySave.saveMap storage curMap,uint256 key)internal view returns (uint256[]){
+    function readAllBuffer(ArraySave.saveMap storage curMap,uint256 key)internal view returns (uint256[] memory){
         return ArraySave.readAllBuffer(curMap,key,saveNum,mark);
     }
     function getValueFromBuffer(uint256[] memory buffer,uint256 index) internal pure returns (uint256){
@@ -67,7 +67,7 @@ library ArraySave64 {
     function getArrayLen(ArraySave.saveMap storage curMap,uint256 key) internal view returns (uint256){
         return ArraySave.getRawValue(curMap,key,0,saveNum,BinarayLen,mark);
     }
-    function readAllBuffer(ArraySave.saveMap storage curMap,uint256 key)internal view returns (uint256[]){
+    function readAllBuffer(ArraySave.saveMap storage curMap,uint256 key)internal view returns (uint256[] memory){
         return ArraySave.readAllBuffer(curMap,key,saveNum,mark);
     }
     function getValueFromBuffer(uint256[] memory buffer,uint256 index) internal pure returns (uint256){

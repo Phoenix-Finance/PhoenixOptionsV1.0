@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./modules/SafeMath.sol";
 import "./modules/SafeInt256.sol";
 import "./modules/AddressWhiteList.sol";
@@ -117,7 +117,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
      * @param sharedBalances All unexpired options' shared balance distributed by time.
      * @param firstOption The new first unexpired option's index.
      */
-    function setSharedPayment(int256[] newNetworth,int256[] sharedBalances,uint256 firstOption) public onlyOperatorIndex(0){
+    function setSharedPayment(int256[] memory newNetworth,int256[] memory sharedBalances,uint256 firstOption) public onlyOperatorIndex(0){
         _optionsPool.setSharedState(firstOption,sharedBalances,whiteList);
         _collateralPool.addNetWorthBalances(whiteList,newNetworth);
     }
@@ -245,7 +245,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
      * He can redeem each collateral amount in return list.
      * @param account the retrieve user's account;
      */
-    function calCollateralWorth(address account)public view returns(uint256[]){
+    function calCollateralWorth(address account)public view returns(uint256[] memory){
         uint256 worth = getUserTotalWorth(account);
         (uint256[] memory colBalances,uint256[] memory PremiumBalances,) = 
         _getCollateralAndPremiumBalances(account,worth,whiteList);
@@ -262,7 +262,7 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
      * @param tmpWhiteList the collateral white list.
      * @return user's total worth in each collateral, priced in USD.
      */
-    function _getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] memory tmpWhiteList) internal view returns(uint256[],uint256[],uint256[]){
+    function _getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] memory tmpWhiteList) internal view returns(uint256[] memory,uint256[] memory,uint256[] memory){
         uint256[] memory prices = new uint256[](tmpWhiteList.length);
         uint256[] memory netWorthBalances = new uint256[](tmpWhiteList.length);
         for (uint256 i=0; i<tmpWhiteList.length;i++){
@@ -362,7 +362,8 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         uint256 totalPrice = 0;
         uint whiteLen = whiteList.length;
         uint256[] memory balances = new uint256[](whiteLen);
-        for (uint256 i=0;i<whiteLen;i++){
+        uint256 i=0;
+        for(;i<whiteLen;i++){
             address addr = whiteList[i];
             if (checkAddressPermission(addr,allowSellOut)){
                 uint256 price = _oracle.getPrice(addr);
@@ -388,7 +389,8 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         uint256 colAmount = 0;
         if (settlement == address(0)){
             colAmount = msg.value;
-            address(_collateralPool).transfer(msg.value);
+            address payable poolAddr = address(uint160(address(_collateralPool)));
+            poolAddr.transfer(msg.value);
         }else if (settlementAmount > 0){
             IERC20 oToken = IERC20(settlement);
             oToken.transferFrom(msg.sender, address(this), settlementAmount);

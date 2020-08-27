@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./AddressWhiteList.sol";
 import "./SafeMath.sol";
 import "../interfaces/IERC20.sol";
@@ -52,7 +52,7 @@ contract TransactionFee is AddressWhiteList {
     function getFeeBalance(address settlement)public view returns(uint256){
         return feeBalances[settlement];
     }
-    function getAllFeeBalances()public view returns(address[],uint256[]){
+    function getAllFeeBalances()public view returns(address[] memory,uint256[] memory){
         uint256[] memory balances = new uint256[](whiteList.length);
         for (uint256 i=0;i<whiteList.length;i++){
             balances[i] = feeBalances[whiteList[i]];
@@ -97,7 +97,7 @@ contract TransactionFee is AddressWhiteList {
       * @param settlement settlement address
       * @param payback amount of settlement will payback 
       */
-    function _transferPaybackAndFee(address recieptor,address settlement,uint256 payback,uint256 feeType)internal{
+    function _transferPaybackAndFee(address payable recieptor,address settlement,uint256 payback,uint256 feeType)internal{
         if (payback == 0){
             return;
         }
@@ -111,7 +111,7 @@ contract TransactionFee is AddressWhiteList {
       * @param settlement settlement address
       * @param payback amount of settlement will payback 
       */
-    function _transferPayback(address recieptor,address settlement,uint256 payback)internal{
+    function _transferPayback(address payable recieptor,address settlement,uint256 payback)internal{
         if (payback == 0){
             return;
         }

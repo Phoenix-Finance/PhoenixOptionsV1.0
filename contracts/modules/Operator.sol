@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import './Ownable.sol';
 import "./whiteList.sol";
 /**
@@ -50,14 +50,14 @@ contract Operator is Ownable {
      * @dev get all operators. 
      *
      */
-    function getOperator()public view returns (address[]) {
+    function getOperator()public view returns (address[] memory) {
         return _operatorList;
     }
     /**
      * @dev set all operators by owner. 
      *
      */
-    function setOperator(address[] operators)public onlyOwner {
+    function setOperator(address[] memory operators)public onlyOwner {
         _operatorList = operators;
     }
 }

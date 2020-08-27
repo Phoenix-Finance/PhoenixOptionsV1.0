@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./Halt.sol";
 import "./whiteList.sol";
     /**
@@ -35,7 +35,7 @@ contract AddressWhiteList is Halt {
     /**
      * @dev Implementation of getting the eligible whitelist.
      */
-    function getWhiteList()public view returns (address[]){
+    function getWhiteList()public view returns (address[] memory){
         return whiteList;
     }
     /**

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "../modules/Ownable.sol";
 interface IFNXMinePool {
     function transferMinerCoin(address account,address recieptor,uint256 amount)external;

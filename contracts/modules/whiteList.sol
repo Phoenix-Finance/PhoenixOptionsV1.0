@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
     /**
      * @dev Implementation of a whitelist which filters a eligible uint32.
      */
@@ -19,7 +19,8 @@ library whiteListUint32 {
      */
     function removeWhiteListUint32(uint32[] storage whiteList,uint32 temp)internal returns (bool) {
         uint256 len = whiteList.length;
-        for (uint256 i=0;i<len;i++){
+        uint256 i=0;
+        for (;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }
@@ -42,7 +43,8 @@ library whiteListUint32 {
     }
     function _getEligibleIndexUint32(uint32[] memory whiteList,uint32 temp) internal pure returns (uint256){
         uint256 len = whiteList.length;
-        for (uint256 i=0;i<len;i++){
+        uint256 i=0;
+        for (;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }
@@ -61,7 +63,8 @@ library whiteListUint256 {
     }
     function removeWhiteListUint256(uint256[] storage whiteList,uint256 temp)internal returns (bool) {
         uint256 len = whiteList.length;
-        for (uint256 i=0;i<len;i++){
+        uint256 i=0;
+        for (;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }
@@ -84,7 +87,8 @@ library whiteListUint256 {
     }
     function _getEligibleIndexUint256(uint256[] memory whiteList,uint256 temp) internal pure returns (uint256){
         uint256 len = whiteList.length;
-        for (uint256 i=0;i<len;i++){
+        uint256 i=0;
+        for (;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }
@@ -103,7 +107,8 @@ library whiteListAddress {
     }
     function removeWhiteListAddress(address[] storage whiteList,address temp)internal returns (bool) {
         uint256 len = whiteList.length;
-        for (uint256 i=0;i<len;i++){
+        uint256 i=0;
+        for (;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }
@@ -126,7 +131,8 @@ library whiteListAddress {
     }
     function _getEligibleIndexAddress(address[] memory whiteList,address temp) internal pure returns (uint256){
         uint256 len = whiteList.length;
-        for (uint256 i=0;i<len;i++){
+        uint256 i=0;
+        for (;i<len;i++){
             if (whiteList[i] == temp)
                 break;
         }

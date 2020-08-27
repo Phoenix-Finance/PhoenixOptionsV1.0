@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
     /**
      * @dev Implementation of a Fraction number operation library.
      */
@@ -24,7 +24,7 @@ library Fraction {
     /**
      * @dev fraction absolute value operator.
      */
-    function abs(fractionNumber memory a) internal pure returns (fractionNumber){
+    function abs(fractionNumber memory a) internal pure returns (fractionNumber memory){
         if (a.numerator<0){
             a.numerator = -a.numerator;
         }
@@ -36,88 +36,88 @@ library Fraction {
     /**
      * @dev fraction reciprocal operator.
      */
-    function invert(fractionNumber memory a) internal pure returns (fractionNumber){
+    function invert(fractionNumber memory a) internal pure returns (fractionNumber memory){
         return fractionNumber(a.denominator,a.numerator);
     }
     /**
      * @dev fraction square root operator.
      */
-    function sqrt(fractionNumber memory a) internal pure returns (fractionNumber) {
+    function sqrt(fractionNumber memory a) internal pure returns (fractionNumber memory) {
         require(a.numerator>=0 && a.denominator>=0,"Sqrt must input a positive value");
         return fractionNumber(int256(sqrt(uint256(a.numerator))),int256(sqrt(uint256(a.denominator))));
     }
     /**
      * @dev fraction division operator.
      */
-    function div(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+    function div(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber memory) {
         return safeFractionNumber(fractionDiv(a,b));
     }
     /**
      * @dev fraction Multiplication operator.
      */
-    function mul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+    function mul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber memory) {
         return safeFractionNumber(fractionMul(a,b));
     }
     /**
      * @dev fraction Addition operator.
      */
-    function add(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
+    function add(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber memory)  {
         return safeFractionNumber(fractionAdd(a,b));
     }
     /**
      * @dev fraction Subtraction operator.
      */
-    function sub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber)  {
+    function sub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber memory)  {
         return safeFractionNumber(fractionSub(a,b));
     }
 
-    function zoomOut(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
+    function zoomOut(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber memory) {
         require(a.denominator>rate,"fraction number is overflow");
         return fractionNumber(a.numerator/rate,a.denominator/rate);
     }
-    function zoomin(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber) {
+    function zoomin(fractionNumber memory a, int256 rate) internal pure returns (fractionNumber memory) {
         return safeFractionNumber(fractionNumber(a.numerator*rate,a.denominator*rate));
     }
     /**
      * @dev fraction Natural logarithm operator.
      */
-    function ln(fractionNumber memory a)  internal pure returns (fractionNumber) {
+    function ln(fractionNumber memory a)  internal pure returns (fractionNumber memory) {
         uint256 _x = uint256((a.numerator << PRECISION)/a.denominator);
         return fractionNumber(int256(fixedLoge(_x)),int256(FIXED_ONE));
     }
     
-    function safeFractionNumber(fractionNumber memory a) internal pure returns (fractionNumber) {
+    function safeFractionNumber(fractionNumber memory a) internal pure returns (fractionNumber memory) {
         int256 num = a.numerator >= 0 ? a.numerator : -a.numerator;
         int256 deno = a.denominator >= 0 ? a.denominator : -a.denominator;
         if(deno>num){
             if (deno>sqrtNum) {
-                int256 rate = deno>>shl;
-                return zoomOut(a,rate);
+                num = deno>>shl;
+                return zoomOut(a,num);
             }
         } else {
             if (num>sqrtNum) {
-                rate = num>>shl;
-                return zoomOut(a,rate);
+                num = num>>shl;
+                return zoomOut(a,num);
             }
         }
         return a;
     }
-    function fractionDiv(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+    function fractionDiv(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber memory) {
         return fractionNumber(a.numerator*b.denominator,a.denominator*b.numerator);
     }
-    function fractionMul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+    function fractionMul(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber memory) {
         return fractionNumber(a.numerator*b.numerator,a.denominator*b.denominator);
     }
-    function fractionAdd(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+    function fractionAdd(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber memory) {
         return fractionNumber(a.numerator*b.denominator+b.numerator*a.denominator,a.denominator*b.denominator);
     }
-    function fractionSub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber) {
+    function fractionSub(fractionNumber memory a,fractionNumber memory b) internal pure returns (fractionNumber memory) {
         return fractionNumber(a.numerator*b.denominator-b.numerator*a.denominator,a.denominator*b.denominator);
     }
     /**
      * @dev Standard normal cumulative distribution function
      */
-    function normsDist(fractionNumber memory xNum) internal pure returns (fractionNumber) {
+    function normsDist(fractionNumber memory xNum) internal pure returns (fractionNumber memory) {
         bool _isNeg = isNeg(xNum);
         if (_isNeg) {
             xNum = abs(xNum);
@@ -154,7 +154,7 @@ library Fraction {
     /**
      * @dev fraction exponential operator.
      */
-    function exp(fractionNumber memory _x) internal pure returns (fractionNumber){
+    function exp(fractionNumber memory _x) internal pure returns (fractionNumber memory){
         bool _isNeg = isNeg(_x);
         if (_isNeg) {
             _x = abs(_x);
@@ -171,7 +171,7 @@ library Fraction {
      * @dev an auxiliary function for fraction e exponential operator.
      *      recursive function, calculate exp(x) = exp(x/2)*exp(x-x/2)
      */
-    function fractionExp_sub(fractionNumber memory _x) internal pure returns (fractionNumber){
+    function fractionExp_sub(fractionNumber memory _x) internal pure returns (fractionNumber memory){
         uint256 intValue = uint256(_x.numerator/_x.denominator);
         if (intValue > 0x386bfdba29){
             fractionNumber memory _x1 = fractionNumber(_x.numerator/2,_x.denominator);
@@ -193,7 +193,7 @@ library Fraction {
             z = (x / z + z) / 2;
         }
     }
-    function ln(uint256 _x)  internal pure returns (fractionNumber) {
+    function ln(uint256 _x)  internal pure returns (fractionNumber memory) {
         _x = _x << PRECISION;
         return fractionNumber(int256(fixedLoge(_x)),int256(FIXED_ONE));
     }

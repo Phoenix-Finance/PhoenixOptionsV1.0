@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./OptionsNetWorthCal.sol";
 /**
  * @title Options pool contract.
@@ -21,7 +21,7 @@ contract OptionsPool is OptionsNetWorthCal {
      * @dev retrieve all information for collateral occupied and net worth calculation.
      * @param whiteList settlement address whitelist.
      */ 
-    function getOptionCalRangeAll(address[] whiteList)public view returns(uint256,int256,uint256,int256[],uint256,uint256){
+    function getOptionCalRangeAll(address[] memory whiteList)public view returns(uint256,int256,uint256,int256[] memory,uint256,uint256){
         (uint256 occupiedFirst,int256 occupiedlatest) = getOccupiedCalInfo();
         (uint256 netFirst,int256[] memory netLatest) = getNetWrothCalInfo(whiteList);
         return (occupiedFirst,occupiedlatest,netFirst,netLatest,allOptions.length,block.number);

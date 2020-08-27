@@ -1,7 +1,7 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "../modules/Ownable.sol";
 interface IFnxPriceDb{
-    function getPrice(string symbol) external view returns(uint256);
+    function getPrice(string calldata symbol) external view returns(uint256);
 }
 contract ImportFnxPriceDb is Ownable{
     IFnxPriceDb internal _FnxPriceDb;

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./modules/SafeMath.sol";
 import "./modules/SafeInt256.sol";
 import "./modules/Managerable.sol";
@@ -25,7 +25,7 @@ contract CollateralPool is Managerable,TransactionFee{
      * @dev Transfer colleteral from manager contract to this contract.
      *  Only manager contract can invoke this function.
      */
-    function () public payable onlyManager{
+    function () external payable onlyManager{
 
     }
     /**
@@ -185,7 +185,7 @@ contract CollateralPool is Managerable,TransactionFee{
      * @param payback the payback amount
      * @param feeType the transaction fee type. see transactionFee contract
      */
-    function transferPaybackAndFee(address recieptor,address settlement,uint256 payback,
+    function transferPaybackAndFee(address payable recieptor,address settlement,uint256 payback,
             uint256 feeType)public onlyManager{
         _transferPaybackAndFee(recieptor,settlement,payback,feeType);
         netWorthBalances[settlement] = netWorthBalances[settlement]-int256(payback);
@@ -196,7 +196,7 @@ contract CollateralPool is Managerable,TransactionFee{
      * @param settlement the settlement coin address.
      * @param payback the payback amount
      */
-    function transferPayback(address recieptor,address settlement,uint256 payback)public onlyManager{
+    function transferPayback(address payable recieptor,address settlement,uint256 payback)public onlyManager{
         _transferPayback(recieptor,settlement,payback);
     }
     /**
@@ -209,11 +209,12 @@ contract CollateralPool is Managerable,TransactionFee{
      * @param PremiumBalances the premium collateral balance if redeem worth is exceeded user's input collateral.
      * @param prices the collateral prices list.
      */
-    function transferPaybackBalances(address account,uint256 redeemWorth,address[] memory tmpWhiteList,uint256[] memory colBalances,
+    function transferPaybackBalances(address payable account,uint256 redeemWorth,address[] memory tmpWhiteList,uint256[] memory colBalances,
         uint256[] memory PremiumBalances,uint256[] memory prices)public onlyManager {
         uint256 ln = tmpWhiteList.length;
         uint256[] memory PaybackBalances = new uint256[](ln);
-        for (uint256 i=0; i<ln && redeemWorth>0;i++){
+        uint256 i=0;
+        for(; i<ln && redeemWorth>0;i++){
             //address addr = tmpWhiteList[i];
             if (colBalances[i] > 0){
                 uint256 totalWorth = prices[i].mul(colBalances[i]);
@@ -233,7 +234,7 @@ contract CollateralPool is Managerable,TransactionFee{
             }
         }
         if (redeemWorth>0) {
-           totalWorth = 0;
+           uint256 totalWorth = 0;
             for (i=0; i<ln;i++){
                 totalWorth = totalWorth.add(PremiumBalances[i]*prices[i]);
             }
@@ -259,13 +260,14 @@ contract CollateralPool is Managerable,TransactionFee{
      * @param prices the collateral prices list.
      */
     function getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] memory tmpWhiteList,
-        uint256[] memory _RealBalances,uint256[] memory prices) public view returns(uint256[],uint256[]){
+        uint256[] memory _RealBalances,uint256[] memory prices) public view returns(uint256[] memory,uint256[] memory){
 //        uint256 ln = tmpWhiteList.length;
         uint256[] memory colBalances = new uint256[](tmpWhiteList.length);
         uint256[] memory PremiumBalances = new uint256[](tmpWhiteList.length);
         uint256 totalWorth = 0;
         uint256 PremiumWorth = 0;
-        for (uint256 i=0; i<tmpWhiteList.length;i++){
+        uint256 i=0;
+        for(; i<tmpWhiteList.length;i++){
             (colBalances[i],PremiumBalances[i]) = calUserNetWorthBalanceRate(tmpWhiteList[i],account,_RealBalances[i]);
             totalWorth = totalWorth.add(prices[i]*colBalances[i]);
             PremiumWorth = PremiumWorth.add(prices[i]*PremiumBalances[i]);

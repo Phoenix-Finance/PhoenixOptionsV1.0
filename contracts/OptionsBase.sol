@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./modules/SafeMath.sol";
 import "./modules/Managerable.sol";
 import "./interfaces/IFNXOracle.sol";
@@ -82,7 +82,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
      * @dev retrieve user's options' id. 
      * @param user user's account.
      */     
-    function getUserOptionsID(address user)public view returns(uint256[]){
+    function getUserOptionsID(address user)public view returns(uint256[] memory){
         return optionsBalances[user];
     }
     /**
@@ -91,7 +91,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
      * @param from user's option list begin positon.
      * @param size retrieve size.
      */ 
-    function getUserOptionsID(address user,uint256 from,uint256 size)public view returns(uint256[]){
+    function getUserOptionsID(address user,uint256 from,uint256 size)public view returns(uint256[] memory){
         uint256[] memory userIdAry = new uint256[](size);
         if (from+size>optionsBalances[user].length){
             size = optionsBalances[user].length.sub(from);
@@ -113,7 +113,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
      * @param size retrieve size.
      */     
     function getOptionInfoList(uint256 from,uint256 size)public view 
-                returns(address[],uint256[],uint256[],uint256[],uint256[]){
+                returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
         if (from+size>allOptions.length){
             size = allOptions.length.sub(from);
         }
@@ -138,8 +138,8 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
      * @dev retrieve given `ids` options' information. 
      * @param ids retrieved options' id.
      */   
-    function getOptionInfoListFromID(uint256[] ids)public view 
-                returns(address[],uint256[],uint256[],uint256[],uint256[]){
+    function getOptionInfoListFromID(uint256[] memory ids)public view 
+                returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
         uint256 size = ids.length;
         address[] memory ownerArr = new address[](size);
         uint256[] memory typeAndUnderArr = new uint256[](size);
@@ -335,7 +335,7 @@ contract OptionsBase is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
     /**
      * @dev Implementation of getting the eligible expirationList.
      */
-    function getExpirationList()public view returns (uint256[]){
+    function getExpirationList()public view returns (uint256[] memory){
         return expirationList;
     }
     /**

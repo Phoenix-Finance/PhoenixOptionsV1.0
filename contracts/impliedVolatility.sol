@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "./modules/Operator.sol";
 import "./modules/Fraction.sol";
 /**
@@ -71,7 +71,7 @@ contract ImpliedVolatility is Operator {
      * @dev set implied volatility surface Formulas param IvRate. 
      * @param underlying underlying ID.,1 for BTC, 2 for ETH
      */ 
-    function SetATMIvRate(uint32 underlying,uint256[] IvRate)public onlyOwner{
+    function SetATMIvRate(uint32 underlying,uint256[] memory IvRate)public onlyOwner{
         ATMIvRate[underlying] = IvRate;
     }
     /**

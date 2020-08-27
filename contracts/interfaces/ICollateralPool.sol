@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.5.1;
 import "../modules/Ownable.sol";
 interface ICollateralPool {
     function getUserPayingUsd(address user)external view returns (uint256);
@@ -11,7 +11,7 @@ interface ICollateralPool {
     function addUserInputCollateral(address user,address collateral,uint256 amount)external;
     function addNetWorthBalance(address collateral,int256 amount)external;
     function addCollateralBalance(address collateral,uint256 amount)external;
-    function addNetWorthBalances(address[] whiteList,int256[] newNetworth)external;
+    function addNetWorthBalances(address[] calldata whiteList,int256[] calldata newNetworth)external;
     //sub
     function subUserPayingUsd(address user,uint256 amount)external;
     function subUserInputCollateral(address user,address collateral,uint256 amount)external;
@@ -25,10 +25,10 @@ interface ICollateralPool {
     function transferPaybackAndFee(address recieptor,address settlement,uint256 payback,uint256 feeType)external;
 
     function transferPayback(address recieptor,address settlement,uint256 payback)external;
-    function transferPaybackBalances(address account,uint256 redeemWorth,address[] tmpWhiteList,uint256[] colBalances,
-        uint256[] PremiumBalances,uint256[] prices)external;
-    function getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] tmpWhiteList,
-        uint256[] _RealBalances,uint256[] prices) external view returns(uint256[],uint256[]);
+    function transferPaybackBalances(address account,uint256 redeemWorth,address[] calldata tmpWhiteList,uint256[] calldata colBalances,
+        uint256[] calldata PremiumBalances,uint256[] calldata prices)external;
+    function getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] calldata tmpWhiteList,
+        uint256[] calldata _RealBalances,uint256[] calldata prices) external view returns(uint256[] memory,uint256[] memory);
     function addTransactionFee(address collateral,uint256 amount,uint256 feeType)external returns (uint256);
 }
 contract ImportCollateralPool is Ownable{
