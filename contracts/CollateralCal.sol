@@ -18,7 +18,8 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
     using SafeMath for uint256;
     using SafeInt256 for int256;
     // The minimum collateral rate for options. This value is thousandths.
-    uint256 private collateralRate = 5000;
+    mapping (address=>uint256) collateralRate;
+//    uint256 private collateralRate = 5000;
     /**
      * @dev Emitted when `from` added `amount` collateral and minted `tokenAmount` FPTCoin.
      */
@@ -65,17 +66,20 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
     }
     /**
      * @dev  The foundation owner want to set the minimum collateral occupation rate.
+     * @param collateral collateral coin address
      * @param colRate The thousandths of the minimum collateral occupation rate.
      */
-    function setCollateralRate(uint256 colRate) public onlyOwner {
-        collateralRate = colRate;
+    function setCollateralRate(address collateral,uint256 colRate) public onlyOwner {
+        addWhiteList(collateral);
+        collateralRate[collateral] = colRate;
+//        collateralRate = colRate;
 
     }
     /**
      * @dev Get the minimum collateral occupation rate.
      */
-    function getCollateralRate()public view returns (uint256) {
-        return collateralRate;
+    function getCollateralRate(address collateral)public view returns (uint256) {
+        return collateralRate[collateral];
     }
     /**
      * @dev Retrieve user's cost of collateral, priced in USD.
@@ -401,9 +405,30 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
         return colAmount;
     }
     /**
+     * @dev collateral occupation rate calculation
+     *      collateral occupation rate = sum(collateral Rate * collateral balance) / sum(collateral balance)
+     */
+    function calculateCollateralRate()public view returns (uint256){
+        uint256 totalCollateral = 0;
+        uint256 totalRate = 0;
+        uint whiteLen = whiteList.length;
+        uint256 i=0;
+        for(;i<whiteLen;i++){
+            address addr = whiteList[i];
+             uint256 balance = getNetWorthBalance(addr);
+             totalCollateral = totalCollateral.add(balance);
+             totalRate = totalRate.add(collateralRate[addr].mul(balance));
+        }
+        if (totalCollateral > 0){
+            return totalRate / totalCollateral;
+        }else{
+            return 5000;
+        }
+    }
+    /**
      * @dev the auxiliary function for collateral calculation
      */
     function calculateCollateral(uint256 amount)internal view returns (uint256){
-        return collateralRate*amount/1000;
+        return calculateCollateralRate()*amount/1000;
     }
 }
