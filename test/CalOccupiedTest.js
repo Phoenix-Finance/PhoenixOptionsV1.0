@@ -19,10 +19,10 @@ contract('OptionsManagerV2', function (accounts){
 //        let temp = await optionPrice.getOptionsPrice_iv(20000000000,20000000000,month,iv[0],iv[1],0);
 //        console.log(temp.toString(10))
         let fnx = await FNXCoin.deployed();
-        let tx = await OptionsManger.addWhiteList(collateral0);
-        tx = await OptionsManger.addWhiteList(fnx.address);
-        await options.addUnderlyingAsset(1);
-        await OptionsManger.addWhiteList(fnx.address); 
+        //let tx = await OptionsManger.addWhiteList(collateral0);
+        //tx = await OptionsManger.addWhiteList(fnx.address);
+        //await options.addUnderlyingAsset(1);
+       // await OptionsManger.addWhiteList(fnx.address); 
         await options.addExpiration(month);      
         let minePool = await FNXMinePool.deployed();
         let mineInfo = await minePool.getMineInfo(collateral0);

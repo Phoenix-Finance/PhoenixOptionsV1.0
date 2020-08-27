@@ -12,10 +12,10 @@ contract('OptionsManagerV2', function (accounts){
         let options = await OptionsPool.deployed();
         let oracle = await FNXOracle.deployed();
         let fnx = await FNXCoin.deployed();
-        let tx = await OptionsManger.addWhiteList(collateral0);
-        tx = await OptionsManger.addWhiteList(fnx.address);
-        await options.addUnderlyingAsset(1);
-        await OptionsManger.addWhiteList(fnx.address);     
+        //let tx = await OptionsManger.addWhiteList(collateral0);
+        //tx = await OptionsManger.addWhiteList(fnx.address);
+        //await options.addUnderlyingAsset(1);
+        //await OptionsManger.addWhiteList(fnx.address);     
         await oracle.setUnderlyingPrice(1,1179262000000);
         await oracle.setPrice(fnx.address,38737698);
         let amount = new BN(1);

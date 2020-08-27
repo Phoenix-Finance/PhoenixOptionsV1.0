@@ -15,9 +15,9 @@ contract('OptionsManagerV2', function (accounts){
         let collateralInstance = await CollateralPool.deployed();
         let options = await OptionsPool.deployed();
         let fnx = await FNXCoin.deployed();
-        let tx = await OptionsManger.addWhiteList(collateral0);
+        //let tx = await OptionsManger.addWhiteList(collateral0);
 //        console.log(tx);
-        tx = await OptionsManger.addWhiteList(fnx.address);
+        //tx = await OptionsManger.addWhiteList(fnx.address);
         await options.addUnderlyingAsset(1);
         let minePool = await FNXMinePool.deployed();
 //        console.log(tx);
