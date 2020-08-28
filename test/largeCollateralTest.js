@@ -14,9 +14,6 @@ contract('OptionsManagerV2', function (accounts){
         let OptionsManger = await OptionsManagerV2.deployed();
         let options = await OptionsPool.deployed();
         let fnx = await FNXCoin.deployed();
-        let tx = await OptionsManger.addWhiteList(collateral0);
-//        console.log(tx);
-        tx = await OptionsManger.addWhiteList(fnx.address);
         await options.addUnderlyingAsset(1);
         let minePool = await FNXMinePool.deployed();
         await web3.eth.sendTransaction({from:accounts[0],to:minePool.address,value:9e18});

@@ -145,9 +145,7 @@ contract OptionsManagerV2 is CollateralCal,ImportOptionsPrice {
     function exerciseOption(uint256 optionsId,uint256 amount) nonReentrant notHalted public{
         checkInputAmount(amount);
         uint256 allPay = _optionsPool.getExerciseWorth(optionsId,amount);
-        if (allPay == 0) {
-            return;
-        }
+        require(allPay > 0,"This option cannot exercise");
         (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
         expiration = expiration.sub(now);
         uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);

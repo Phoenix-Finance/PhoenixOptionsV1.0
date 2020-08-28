@@ -6,7 +6,6 @@ let CollateralPool = artifacts.require("CollateralPool");
 let FNXCoin = artifacts.require("FNXCoin");
 const BN = require("bn.js");
 let month = 30*60*60*24;
-//let collateral0 = "0x0000000000000000000000000000000000000000";
 let testFunc = require("./testFunction.js")
 let FNXMinePool = artifacts.require("FNXMinePool");
 contract('OptionsManagerV2', function (accounts){
@@ -19,7 +18,8 @@ contract('OptionsManagerV2', function (accounts){
         let minePool = await FNXMinePool.deployed();
 //        console.log(tx);
 //        return;
-        await OptionsManger.addWhiteList(fnx.address);
+        await OptionsManger.removeWhiteList(collateral0);
+//        await OptionsManger.setCollateralRate(fnx.addres,5000);
         await fnx.approve(OptionsManger.address,10000000000000);
         await OptionsManger.addCollateral(fnx.address,10000000000000);
         await logBalance(fnx,collateralInstance.address);

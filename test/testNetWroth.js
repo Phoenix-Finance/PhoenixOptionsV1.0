@@ -1,6 +1,6 @@
 const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
 const OptionsPool = artifacts.require("OptionsPoolTest");
-const OptionsPrice = artifacts.require("OptionsPrice");
+const OptionsPrice = artifacts.require("OptionsPriceTest");
 let CollateralPool = artifacts.require("CollateralPool");
 let FNXCoin = artifacts.require("FNXCoin");
 const BN = require("bn.js");
@@ -15,6 +15,9 @@ contract('OptionsManagerV2', function (accounts){
         let collateralInstance = await CollateralPool.deployed();
         let options = await OptionsPool.deployed();
         let fnx = await FNXCoin.deployed();
+        let priceInstance = await OptionsPrice.deployed();
+        await priceInstance.setExpirationZoom(1000);
+        options.addExpiration(month);
         let amount = 1e14;
         await logNetWroth(1,options,OptionsManger);
         await OptionsManger.addCollateral(collateral0,amount,{value : amount});
@@ -54,11 +57,12 @@ contract('OptionsManagerV2', function (accounts){
         await logNetWroth(12,options,OptionsManger);
     });
     it('OptionsManagerV2 exercise networth', async function (){
-        
+        let priceInstance = await OptionsPrice.deployed();
         let OptionsManger = await OptionsManagerV2.deployed();
         let collateralInstance = await CollateralPool.deployed();
         let options = await OptionsPool.deployed();
         let fnx = await FNXCoin.deployed();
+        options.addExpiration(month);
         let Index = await options.getOptionInfoLength();
         Index = Index.toNumber();
         let amount = 1e14;
@@ -95,6 +99,7 @@ contract('OptionsManagerV2', function (accounts){
         }
         await calculateNetWroth(options,OptionsManger,fnx);
         await logNetWroth(30,options,OptionsManger);
+        await priceInstance.setExpirationZoom(1);
     });
 });
 async function logBalance(fnx,addr){

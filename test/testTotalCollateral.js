@@ -1,14 +1,14 @@
 const BN = require("bn.js");
 let testFunc = require("./testFunction.js")
 const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
-const OptionsPoolTest = artifacts.require("OptionsPoolTest");
+const OptionsPool = artifacts.require("OptionsPoolTest");
 const imVolatility32 = artifacts.require("imVolatility32");
-const OptionsPrice = artifacts.require("OptionsPrice");
+const OptionsPrice = artifacts.require("OptionsPriceTest");
 const FNXOracle = artifacts.require("TestFNXOracle");
 let collateral0 = "0x0000000000000000000000000000000000000000";
-contract('OptionsPoolTest', function (accounts){
-    it('OptionsPoolTest add collateral', async function (){
-        let optionsInstance = await OptionsPoolTest.deployed();
+contract('OptionsPool', function (accounts){
+    it('OptionsPool add collateral', async function (){
+        let optionsInstance = await OptionsPool.deployed();
         let priceInstance = await OptionsPrice.deployed();
         let oracle = await FNXOracle.deployed();
         let OptionsManger = await OptionsManagerV2.deployed();
@@ -21,7 +21,7 @@ contract('OptionsPoolTest', function (accounts){
         let btcPrice = 9500*1e8;
         await oracle.setUnderlyingPrice(1,btcPrice);
         await OptionsManger.addCollateral(collateral0,deposit,{value : deposit});
-        let amount = 1000000000;
+        let amount = 100000000000;
         let optionInfos = [];
         for (var i=0;i<1;i++){
             info1 = {
@@ -50,7 +50,7 @@ contract('OptionsPoolTest', function (accounts){
         for (var i=0;i<optionInfos.length;i++){
             
             info1 = optionInfos[i];
-            let sellAmount = info1.amount/100*info1.optionId;
+            let sellAmount = info1.amount/2;
             console.log("sellOption :",info1.optionId,sellAmount)
             await OptionsManger.sellOption(info1.optionId,sellAmount);
             info1.amount -= sellAmount;
@@ -109,15 +109,7 @@ contract('OptionsPoolTest', function (accounts){
     })
 })
 async function setPhaseCollateral(optionsInstance){
-    let phaseRange =  await optionsInstance.getOptionPhaseCalRange();
-    let bn = new BN(0);
-    let bn1 = phaseRange[1];
-    let bn2 = phaseRange[2];
-    bn1 = bn1.ushln(64);
-    bn2 = bn2.ushln(128);
-    bn = bn.add(bn1).add(bn2);
-    console.log(bn.toString(16));
-    await optionsInstance.setPhaseOccupiedCollateral(bn);
+    await optionsInstance.setOccupiedCollateral();
 }
 async function addBuyOptions(wanPrice,btcPrice,priceInstance,OptionsManger,strikePrice,expiration,optType,amount){
     console.log(strikePrice,expiration,optType,amount);
