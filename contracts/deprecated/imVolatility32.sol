@@ -36,7 +36,7 @@ contract imVolatility32 is Operator {
       * @dev function to get implied volatility for an asset
       * @param expiration the option expiration which has been created in option manger contract
       * @param price the option underlying strikePrice which has been created in option manger contract
-      * @return uint mantissa of asset implied volatility (scaled by 1e18) or zero if unset or contract paused
+      * @return uint mantissa of asset implied volatility (scaled by 1e8) or zero if unset or contract paused
       */
     function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 price)public view returns (uint256,uint256){
         expiration = expiration*7000;

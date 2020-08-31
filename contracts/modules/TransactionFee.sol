@@ -67,7 +67,10 @@ contract TransactionFee is AddressWhiteList {
             msg.sender.transfer(fee);
         }else{
             IERC20 currencyToken = IERC20(currency);
-           currencyToken.transfer(msg.sender,fee);
+            uint256 preBalance = currencyToken.balanceOf(address(this));
+            currencyToken.transfer(msg.sender,fee);
+            uint256 afterBalance = currencyToken.balanceOf(address(this));
+            require(preBalance - afterBalance == fee,"settlement token transfer error!");
         }
         emit RedeemFee(msg.sender,currency,fee);
     }
@@ -119,7 +122,10 @@ contract TransactionFee is AddressWhiteList {
             recieptor.transfer(payback);
         }else{
             IERC20 collateralToken = IERC20(settlement);
+            uint256 preBalance = collateralToken.balanceOf(address(this));
             collateralToken.transfer(recieptor,payback);
+            uint256 afterBalance = collateralToken.balanceOf(address(this));
+            require(preBalance - afterBalance == payback,"settlement token transfer error!");
         }
         emit TransferPayback(recieptor,settlement,payback);
     }

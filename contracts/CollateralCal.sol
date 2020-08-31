@@ -397,7 +397,10 @@ contract CollateralCal is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,Import
             poolAddr.transfer(msg.value);
         }else if (settlementAmount > 0){
             IERC20 oToken = IERC20(settlement);
+            uint256 preBalance = oToken.balanceOf(address(this));
             oToken.transferFrom(msg.sender, address(this), settlementAmount);
+            uint256 afterBalance = oToken.balanceOf(address(this));
+            require(afterBalance-preBalance==settlementAmount,"settlement token transfer error!");
             colAmount = settlementAmount;
             oToken.transfer(address(_collateralPool),settlementAmount);
         }

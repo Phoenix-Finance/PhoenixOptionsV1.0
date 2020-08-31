@@ -88,7 +88,7 @@ contract FNXOracle is IFNXOracle,Operator {
   * @notice retrieves price of an asset
   * @dev function to get price for an asset
   * @param asset Asset for which to get the price
-  * @return uint mantissa of asset price (scaled by 1e18) or zero if unset or contract paused
+  * @return uint mantissa of asset price (scaled by 1e8) or zero if unset or contract paused
   */
     function getPrice(address asset) public view returns (uint256) {
         return _getPriceInfo(uint256(asset));

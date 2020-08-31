@@ -85,7 +85,7 @@ contract FNXCoin is IERC20  {
     public
     returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount, "ERC20: transfer amount exceeds allowance"));
+        _approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount));
         return true;
     }
 
@@ -125,7 +125,7 @@ contract FNXCoin is IERC20  {
     function decreaseAllowance(address spender, uint256 subtractedValue)
     public
     returns (bool) {
-        _approve(msg.sender, spender, _allowances[msg.sender][spender].sub(subtractedValue, "ERC20: decreased allowance below zero"));
+        _approve(msg.sender, spender, _allowances[msg.sender][spender].sub(subtractedValue));
         return true;
     }
 
@@ -239,6 +239,6 @@ contract FNXCoin is IERC20  {
      */
     function _burnFrom(address account, uint256 amount) internal {
         _burn(account, amount);
-        _approve(account, msg.sender, _allowances[account][msg.sender].sub(amount, "ERC20: burn amount exceeds allowance"));
+        _approve(account, msg.sender, _allowances[account][msg.sender].sub(amount));
     }
 }

@@ -221,7 +221,7 @@ contract CollateralPool is Managerable,TransactionFee{
                 if (redeemWorth < totalWorth){
     //                setUserInputCollateral(account,tmpWhiteList[i],
     //                    getUserInputCollateral(account,tmpWhiteList[i]).mul(totalWorth-redeemWorth).div(totalWorth));
-                    userInputCollateral[account][tmpWhiteList[i]] = userInputCollateral[account][tmpWhiteList[i]].mul(totalWorth-redeemWorth).div(totalWorth);
+                    userInputCollateral[account][tmpWhiteList[i]] = userInputCollateral[account][tmpWhiteList[i]].mul(totalWorth-redeemWorth)/totalWorth;
                     PaybackBalances[i] = redeemWorth/prices[i];
                     redeemWorth = 0;
                     break;

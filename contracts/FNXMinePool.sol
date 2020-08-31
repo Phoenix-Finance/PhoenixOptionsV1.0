@@ -74,7 +74,10 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
             msg.sender.transfer(amount);
         }else{
             IERC20 token = IERC20(mineCoin);
+            uint256 preBalance = token.balanceOf(address(this));
             token.transfer(msg.sender,amount);
+            uint256 afterBalance = token.balanceOf(address(this));
+            require(preBalance - afterBalance == amount,"settlement token transfer error!");
         }
     }
     /**
@@ -249,7 +252,10 @@ contract FNXMinePool is Managerable,AddressWhiteList,ReentrancyGuard {
             recieptor.transfer(amount);
         }else{
             IERC20 minerToken = IERC20(mineCoin);
+            uint256 preBalance = minerToken.balanceOf(address(this));
             minerToken.transfer(recieptor,amount);
+            uint256 afterBalance = minerToken.balanceOf(address(this));
+            require(preBalance - afterBalance == amount,"settlement token transfer error!");
         }
         emit RedeemMineCoin(recieptor,mineCoin,amount);
     }
