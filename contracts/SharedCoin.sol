@@ -5,13 +5,16 @@ import "./modules/SafeMath.sol";
 contract SharedCoin is IERC20  {
     using SafeMath for uint256;
     uint8 public constant decimals = 18;
-    
-
+    string public name;
+    string public symbol;
+    uint256 public _totalSupply;
     mapping (address => uint256) public balances;
-    mapping (address => mapping (address => uint256)) private _allowances;
+    mapping (address => mapping (address => uint256)) public _allowances;
 
-    uint256 internal _totalSupply = 0;
-    constructor () public{
+    function initialize() public{
+        name = "finnexus pool token";
+        symbol = "FPT";
+        _totalSupply = 0;
     }
     /**
      * @dev See {IERC20-totalSupply}.

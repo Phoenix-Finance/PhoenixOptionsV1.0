@@ -10,18 +10,21 @@ import "./interfaces/IFNXMinePool.sol";
  */
 contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
     using SafeMath for uint256;
-    string public name = "finnexus pool token";
-    string public symbol = "FPT";
     /**
     * @dev lock mechanism is used when user redeem collateral and left collateral is insufficient.
     * _totalLockedWorth stores total locked worth, priced in USD.
     * lockedBalances stores user's locked FPTCoin.
     * lockedTotalWorth stores user's locked worth, priced in USD. For locked FPTCoin's net worth is constant when It was locked.
     */
-    uint256 internal _totalLockedWorth = 0;
-    mapping (address => uint256) internal lockedBalances;
-    mapping (address => uint256) internal lockedTotalWorth;
-
+    uint256 public _totalLockedWorth;
+    mapping (address => uint256) public lockedBalances;
+    mapping (address => uint256) public lockedTotalWorth;
+    /**
+     * @dev FPT has burn time limit. When user's balance is moved in som coins, he will wait `timeLimited` to burn FPT. 
+     * latestTransferIn is user's latest time when his balance is moved in.
+     */
+    mapping(address=>uint256) public latestTransferIn;
+    uint256 public timeLimited;
     /**
      * @dev Emitted when `owner` locked  `amount` FPT, which net worth is  `worth` in USD. 
      */
@@ -30,18 +33,17 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
      * @dev Emitted when `owner` burned locked  `amount` FPT, which net worth is  `worth` in USD. 
      */
     event BurnLocked(address indexed owner, uint256 amount,uint256 worth);
-    /**
-     * @dev FPT has burn time limit. When user's balance is moved in som coins, he will wait `timeLimited` to burn FPT. 
-     * latestTransferIn is user's latest time when his balance is moved in.
-     */
-    mapping(address=>uint256) private latestTransferIn;
-    uint256 private timeLimited = 1 hours;
+
     /**
      * @dev constructor function. set FNX minePool contract address. 
      * @param minePoolAddr FNX minePool contract address.
      */ 
-    constructor (address minePoolAddr) public{
-        setFNXMinePoolAddress(minePoolAddr);
+    function initialize(address minePoolAddr) public{
+        SharedCoin.initialize();
+        return;
+        _FnxMinePool = IFNXMinePool(minePoolAddr);
+        timeLimited = 1 hours;
+        _owner = msg.sender;
     }
     /**
      * @dev set FPT burn time limited, only owner can invoke. 
