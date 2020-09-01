@@ -220,7 +220,7 @@ contract FPTCoin is SharedCoin,ImportFNXMinePool,Managerable {
             redeemWorth = lockedBurn*lockedPrice;
         }
         if (lockedBurn > 0){
-            burnLocked(msg.sender,lockedBurn);
+            burnLocked(account,lockedBurn);
             return (lockedBurn,redeemWorth);
         }
         return (0,0);
