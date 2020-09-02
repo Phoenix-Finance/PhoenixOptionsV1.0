@@ -2,27 +2,23 @@
   "contractName": "ImportVolatility",
   "abi": [
     {
-      "constant": false,
-      "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
+      "anonymous": false,
+      "inputs": [
         {
-          "name": "",
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
           "type": "address"
         }
       ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
+      "name": "OwnershipTransferred",
+      "type": "event"
     },
     {
       "constant": true,
@@ -30,6 +26,7 @@
       "name": "isOwner",
       "outputs": [
         {
+          "internalType": "bool",
           "name": "",
           "type": "bool"
         }
@@ -39,9 +36,34 @@
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "newOwner",
           "type": "address"
         }
@@ -53,28 +75,12 @@
       "type": "function"
     },
     {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "previousOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "OwnershipTransferred",
-      "type": "event"
-    },
-    {
       "constant": true,
       "inputs": [],
       "name": "getVolatilityAddress",
       "outputs": [
         {
+          "internalType": "address",
           "name": "",
           "type": "address"
         }
@@ -87,6 +93,7 @@
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "volatility",
           "type": "address"
         }
@@ -98,45 +105,45 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"volatility\",\"type\":\"address\"}],\"name\":\"setVolatilityAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getVolatilityAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol\":\"ImportVolatility\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol\":{\"keccak256\":\"0x55bd5e04bab87ead6d824f2536c053760d1051a467694443aaac1aec004f851f\",\"urls\":[\"bzzr://74a1d083db2788030cd6fb5ce1115b56835734bd6fa501b3dec910eabb5a70ef\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x32e86cf1f96e3e879768e0d0440f35011232004420d3c4f84492f23664cba015\",\"urls\":[\"bzzr://5725cb4758935a4e7ebc5f963b0a46da11e6c81ac5dcedd214e425546e8b83a7\"]}},\"version\":1}",
-  "bytecode": "0x6080604081905260008054600160a060020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610439806100576000396000f3006080604052600436106100775763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632967eafe811461007c57806342e5479d1461009f578063715018a6146100d05780638da5cb5b146100e55780638f32d59b146100fa578063f2fde38b14610123575b600080fd5b34801561008857600080fd5b5061009d600160a060020a0360043516610144565b005b3480156100ab57600080fd5b506100b46101d1565b60408051600160a060020a039092168252519081900360200190f35b3480156100dc57600080fd5b5061009d6101e0565b3480156100f157600080fd5b506100b4610295565b34801561010657600080fd5b5061010f6102a4565b604080519115158252519081900360200190f35b34801561012f57600080fd5b5061009d600160a060020a03600435166102b5565b61014c6102a4565b15156101a2576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b6101e86102a4565b151561023e576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b6102bd6102a4565b1515610313576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61031c8161031f565b50565b600160a060020a03811615156103a5576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a723058207dd58abbc87d4ac75d251c8a9165f28284487038cba30a62975eb8e37e788ad40029",
-  "deployedBytecode": "0x6080604052600436106100775763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632967eafe811461007c57806342e5479d1461009f578063715018a6146100d05780638da5cb5b146100e55780638f32d59b146100fa578063f2fde38b14610123575b600080fd5b34801561008857600080fd5b5061009d600160a060020a0360043516610144565b005b3480156100ab57600080fd5b506100b46101d1565b60408051600160a060020a039092168252519081900360200190f35b3480156100dc57600080fd5b5061009d6101e0565b3480156100f157600080fd5b506100b4610295565b34801561010657600080fd5b5061010f6102a4565b604080519115158252519081900360200190f35b34801561012f57600080fd5b5061009d600160a060020a03600435166102b5565b61014c6102a4565b15156101a2576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b6101e86102a4565b151561023e576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b6102bd6102a4565b1515610313576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61031c8161031f565b50565b600160a060020a03811615156103a5576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a723058207dd58abbc87d4ac75d251c8a9165f28284487038cba30a62975eb8e37e788ad40029",
-  "sourceMap": "247:318:24:-;;;;;659:6:31;:19;;-1:-1:-1;;;;;;659:19:31;668:10;659:19;;;;-1:-1:-1;;;;;726:6:31;;693:40;;659:6;;693:40;247:318:24;;;;;;",
-  "deployedSourceMap": "247:318:24:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;441:121;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;441:121:24;-1:-1:-1;;;;;441:121:24;;;;;;;329:106;;8:9:-1;5:2;;;30:1;27;20:12;5:2;329:106:24;;;;;;;;-1:-1:-1;;;;;329:106:24;;;;;;;;;;;;;;1599:137:31;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1599:137:31;;;;816:77;;8:9:-1;5:2;;;30:1;27;20:12;5:2;816:77:31;;;;1167:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1167:90:31;;;;;;;;;;;;;;;;;;;;;;1885:107;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1885:107:31;-1:-1:-1;;;;;1885:107:31;;;;;441:121:24;1020:9:31;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;517:11:24;:37;;-1:-1:-1;;517:37:24;-1:-1:-1;;;;;517:37:24;;;;;;;;;;441:121::o;329:106::-;415:11;;-1:-1:-1;;;;;415:11:24;329:106;:::o;1599:137:31:-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:31;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:31;;;1599:137::o;816:77::-;854:7;880:6;-1:-1:-1;;;;;880:6:31;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:31;1230:10;:20;;1167:90::o;1885:107::-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;:::-;1885:107;:::o;2093:225::-;-1:-1:-1;;;;;2166:22:31;;;;2158:73;;;;;-1:-1:-1;;;;;2158:73:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:31;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:31;-1:-1:-1;;;;;2294:17:31;;;;;;;;;;2093:225::o",
-  "source": "pragma solidity ^0.4.26;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IVolatility {\r\n    function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 currentPrice,uint256 strikePrice)external view returns (uint256,uint256);\r\n}\r\ncontract ImportVolatility is Ownable{\r\n    IVolatility internal _volatility;\r\n    function getVolatilityAddress() public view returns(address){\r\n        return address(_volatility);\r\n    }\r\n    function setVolatilityAddress(address volatility)public onlyOwner{\r\n        _volatility = IVolatility(volatility);\r\n    }\r\n}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[],\"name\":\"getVolatilityAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"volatility\",\"type\":\"address\"}],\"name\":\"setVolatilityAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol\":\"ImportVolatility\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol\":{\"keccak256\":\"0x5faf5891b0db5c8cd14e3c26457d1d65b65f8fdfc54124684a6ad52cdee9f181\",\"urls\":[\"bzz-raw://9c38e7fd22ae8d4ad906bb17398f3dbf7e4eac6fb371e7d08010fae519570c8e\",\"dweb:/ipfs/QmPBhoDTZXufmiNY3i3Yf3NtVnBw8D4vJY9sjehyXFeJsc\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0xbe1710912b2b0c2df59e64935f9e4d3d69af51a543edae2dbf53619fb2ffa6a6\",\"urls\":[\"bzz-raw://5563a6aa807414bfb16e43e9b6c59b9c63bb9f95778ffe8636a0f8a9bf97d944\",\"dweb:/ipfs/QmeMrswj4ab8Jp83RxC7rPo8y4XWGqVSGjbtKbc8xuFaT1\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610401806100206000396000f3fe608060405234801561001057600080fd5b506004361061007e577c010000000000000000000000000000000000000000000000000000000060003504632967eafe811461008357806342e5479d146100ab578063715018a6146100cf5780638da5cb5b146100d75780638f32d59b146100df578063f2fde38b146100fb575b600080fd5b6100a96004803603602081101561009957600080fd5b5035600160a060020a0316610121565b005b6100b36101ac565b60408051600160a060020a039092168252519081900360200190f35b6100a96101bb565b6100b361026e565b6100e761027d565b604080519115158252519081900360200190f35b6100a96004803603602081101561011157600080fd5b5035600160a060020a031661028e565b61012961027d565b61017d576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b6101c361027d565b610217576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b61029661027d565b6102ea576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6102f3816102f6565b50565b600160a060020a03811661033e5760405160e560020a62461bcd0281526004018080602001828103825260268152602001806103a76026913960400191505060405180910390fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f2061646472657373a265627a7a72315820809cf9cb718a29227fda16fe0405b048922fffbfd057b124c7ed57cfc0fc095664736f6c63430005100032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061007e577c010000000000000000000000000000000000000000000000000000000060003504632967eafe811461008357806342e5479d146100ab578063715018a6146100cf5780638da5cb5b146100d75780638f32d59b146100df578063f2fde38b146100fb575b600080fd5b6100a96004803603602081101561009957600080fd5b5035600160a060020a0316610121565b005b6100b36101ac565b60408051600160a060020a039092168252519081900360200190f35b6100a96101bb565b6100b361026e565b6100e761027d565b604080519115158252519081900360200190f35b6100a96004803603602081101561011157600080fd5b5035600160a060020a031661028e565b61012961027d565b61017d576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b6101c361027d565b610217576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b61029661027d565b6102ea576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b6102f3816102f6565b50565b600160a060020a03811661033e5760405160e560020a62461bcd0281526004018080602001828103825260268152602001806103a76026913960400191505060405180910390fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f2061646472657373a265627a7a72315820809cf9cb718a29227fda16fe0405b048922fffbfd057b124c7ed57cfc0fc095664736f6c63430005100032",
+  "sourceMap": "246:318:43:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;246:318:43;;;;;;;",
+  "deployedSourceMap": "246:318:43:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;246:318:43;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;440:121;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;440:121:43;-1:-1:-1;;;;;440:121:43;;:::i;:::-;;328:106;;;:::i;:::-;;;;-1:-1:-1;;;;;328:106:43;;;;;;;;;;;;;;1666:140:49;;;:::i;857:79::-;;;:::i;1223:92::-;;;:::i;:::-;;;;;;;;;;;;;;;;;;1961:109;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1961:109:49;-1:-1:-1;;;;;1961:109:49;;:::i;440:121:43:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;516:11:43;:37;;-1:-1:-1;;516:37:43;-1:-1:-1;;;;;516:37:43;;;;;;;;;;440:121::o;328:106::-;414:11;;-1:-1:-1;;;;;414:11:43;328:106;:::o;1666:140:49:-;1069:9;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1765:1;1749:6;;1728:40;;-1:-1:-1;;;;;1749:6:49;;;;1728:40;;1765:1;;1728:40;1796:1;1779:19;;-1:-1:-1;;1779:19:49;;;1666:140::o;857:79::-;895:7;922:6;-1:-1:-1;;;;;922:6:49;857:79;:::o;1223:92::-;1263:4;1301:6;-1:-1:-1;;;;;1301:6:49;1287:10;:20;;1223:92::o;1961:109::-;1069:9;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2034:28;2053:8;2034:18;:28::i;:::-;1961:109;:::o;2176:229::-;-1:-1:-1;;;;;2250:22:49;;2242:73;;;;-1:-1:-1;;;;;2242:73:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2352:6;;;2331:38;;-1:-1:-1;;;;;2331:38:49;;;;2352:6;;;2331:38;;;2380:6;:17;;-1:-1:-1;;2380:17:49;-1:-1:-1;;;;;2380:17:49;;;;;;;;;;2176:229::o",
+  "source": "pragma solidity ^0.5.1;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IVolatility {\r\n    function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 currentPrice,uint256 strikePrice)external view returns (uint256,uint256);\r\n}\r\ncontract ImportVolatility is Ownable{\r\n    IVolatility internal _volatility;\r\n    function getVolatilityAddress() public view returns(address){\r\n        return address(_volatility);\r\n    }\r\n    function setVolatilityAddress(address volatility)public onlyOwner{\r\n        _volatility = IVolatility(volatility);\r\n    }\r\n}",
   "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\interfaces\\IVolatility.sol",
   "ast": {
     "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol",
     "exportedSymbols": {
       "IVolatility": [
-        12309
+        16423
       ],
       "ImportVolatility": [
-        12338
+        16452
       ]
     },
-    "id": 12339,
+    "id": 16453,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 12290,
+        "id": 16404,
         "literals": [
           "solidity",
           "^",
-          "0.4",
-          ".26"
+          "0.5",
+          ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:24"
+        "src": "0:23:43"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "../modules/Ownable.sol",
-        "id": 12291,
+        "id": 16405,
         "nodeType": "ImportDirective",
-        "scope": 12339,
-        "sourceUnit": 14786,
-        "src": "26:32:24",
+        "scope": 16453,
+        "sourceUnit": 18443,
+        "src": "25:32:43",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -146,9 +153,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 12309,
+        "id": 16423,
         "linearizedBaseContracts": [
-          12309
+          16423
         ],
         "name": "IVolatility",
         "nodeType": "ContractDefinition",
@@ -156,24 +163,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 12308,
+            "id": 16422,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "calculateIv",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12302,
+              "id": 16416,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12293,
+                  "id": 16407,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "110:17:24",
+                  "scope": 16422,
+                  "src": "109:17:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -181,10 +187,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 12292,
+                    "id": 16406,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "110:6:24",
+                    "src": "109:6:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -195,11 +201,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12295,
+                  "id": 16409,
                   "name": "optType",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "128:13:24",
+                  "scope": 16422,
+                  "src": "127:13:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -207,10 +213,10 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 12294,
+                    "id": 16408,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
-                    "src": "128:5:24",
+                    "src": "127:5:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
@@ -221,11 +227,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12297,
+                  "id": 16411,
                   "name": "expiration",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "142:18:24",
+                  "scope": 16422,
+                  "src": "141:18:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -233,10 +239,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12296,
+                    "id": 16410,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "142:7:24",
+                    "src": "141:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -247,11 +253,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12299,
+                  "id": 16413,
                   "name": "currentPrice",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "161:20:24",
+                  "scope": 16422,
+                  "src": "160:20:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -259,10 +265,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12298,
+                    "id": 16412,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "161:7:24",
+                    "src": "160:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -273,11 +279,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12301,
+                  "id": 16415,
                   "name": "strikePrice",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "182:19:24",
+                  "scope": 16422,
+                  "src": "181:19:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -285,10 +291,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12300,
+                    "id": 16414,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "182:7:24",
+                    "src": "181:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -298,20 +304,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "109:93:24"
+              "src": "108:93:43"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12307,
+              "id": 16421,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12304,
+                  "id": 16418,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "225:7:24",
+                  "scope": 16422,
+                  "src": "224:7:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -319,10 +324,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12303,
+                    "id": 16417,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "225:7:24",
+                    "src": "224:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -333,11 +338,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12306,
+                  "id": 16420,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "233:7:24",
+                  "scope": 16422,
+                  "src": "232:7:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -345,10 +350,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12305,
+                    "id": 16419,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "233:7:24",
+                    "src": "232:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -358,17 +363,17 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "224:17:24"
+              "src": "223:17:43"
             },
-            "scope": 12309,
-            "src": "89:153:24",
+            "scope": 16423,
+            "src": "88:153:43",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 12339,
-        "src": "60:185:24"
+        "scope": 16453,
+        "src": "59:185:43"
       },
       {
         "baseContracts": [
@@ -376,57 +381,57 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 12310,
+              "id": 16424,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14785,
-              "src": "276:7:24",
+              "referencedDeclaration": 18442,
+              "src": "275:7:43",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14785",
+                "typeIdentifier": "t_contract$_Ownable_$18442",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 12311,
+            "id": 16425,
             "nodeType": "InheritanceSpecifier",
-            "src": "276:7:24"
+            "src": "275:7:43"
           }
         ],
         "contractDependencies": [
-          14785
+          18442
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 12338,
+        "id": 16452,
         "linearizedBaseContracts": [
-          12338,
-          14785
+          16452,
+          18442
         ],
         "name": "ImportVolatility",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 12313,
+            "id": 16427,
             "name": "_volatility",
             "nodeType": "VariableDeclaration",
-            "scope": 12338,
-            "src": "290:32:24",
+            "scope": 16452,
+            "src": "289:32:43",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IVolatility_$12309",
+              "typeIdentifier": "t_contract$_IVolatility_$16423",
               "typeString": "contract IVolatility"
             },
             "typeName": {
               "contractScope": null,
-              "id": 12312,
+              "id": 16426,
               "name": "IVolatility",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12309,
-              "src": "290:11:24",
+              "referencedDeclaration": 16423,
+              "src": "289:11:43",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IVolatility_$12309",
+                "typeIdentifier": "t_contract$_IVolatility_$16423",
                 "typeString": "contract IVolatility"
               }
             },
@@ -435,9 +440,9 @@
           },
           {
             "body": {
-              "id": 12322,
+              "id": 16436,
               "nodeType": "Block",
-              "src": "389:46:24",
+              "src": "388:46:43",
               "statements": [
                 {
                   "expression": {
@@ -445,14 +450,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 12319,
+                        "id": 16433,
                         "name": "_volatility",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12313,
-                        "src": "415:11:24",
+                        "referencedDeclaration": 16427,
+                        "src": "414:11:43",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IVolatility_$12309",
+                          "typeIdentifier": "t_contract$_IVolatility_$16423",
                           "typeString": "contract IVolatility"
                         }
                       }
@@ -460,24 +465,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_IVolatility_$12309",
+                          "typeIdentifier": "t_contract$_IVolatility_$16423",
                           "typeString": "contract IVolatility"
                         }
                       ],
-                      "id": 12318,
+                      "id": 16432,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "407:7:24",
+                      "src": "406:7:43",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 12320,
+                    "id": 16434,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -485,45 +490,43 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "407:20:24",
+                    "src": "406:20:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 12317,
-                  "id": 12321,
+                  "functionReturnParameters": 16431,
+                  "id": 16435,
                   "nodeType": "Return",
-                  "src": "400:27:24"
+                  "src": "399:27:43"
                 }
               ]
             },
             "documentation": null,
-            "id": 12323,
+            "id": 16437,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "getVolatilityAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12314,
+              "id": 16428,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "358:2:24"
+              "src": "357:2:43"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12317,
+              "id": 16431,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12316,
+                  "id": 16430,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12323,
-                  "src": "381:7:24",
+                  "scope": 16437,
+                  "src": "380:7:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -531,10 +534,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12315,
+                    "id": 16429,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "381:7:24",
+                    "src": "380:7:43",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -544,38 +548,38 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "380:9:24"
+              "src": "379:9:43"
             },
-            "scope": 12338,
-            "src": "329:106:24",
+            "scope": 16452,
+            "src": "328:106:43",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 12336,
+              "id": 16450,
               "nodeType": "Block",
-              "src": "506:56:24",
+              "src": "505:56:43",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 12334,
+                    "id": 16448,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 12330,
+                      "id": 16444,
                       "name": "_volatility",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 12313,
-                      "src": "517:11:24",
+                      "referencedDeclaration": 16427,
+                      "src": "516:11:43",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IVolatility_$12309",
+                        "typeIdentifier": "t_contract$_IVolatility_$16423",
                         "typeString": "contract IVolatility"
                       }
                     },
@@ -586,12 +590,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 12332,
+                          "id": 16446,
                           "name": "volatility",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 12325,
-                          "src": "543:10:24",
+                          "referencedDeclaration": 16439,
+                          "src": "542:10:43",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -605,18 +609,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 12331,
+                        "id": 16445,
                         "name": "IVolatility",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12309,
-                        "src": "531:11:24",
+                        "referencedDeclaration": 16423,
+                        "src": "530:11:43",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_IVolatility_$12309_$",
+                          "typeIdentifier": "t_type$_t_contract$_IVolatility_$16423_$",
                           "typeString": "type(contract IVolatility)"
                         }
                       },
-                      "id": 12333,
+                      "id": 16447,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -624,63 +628,62 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "531:23:24",
+                      "src": "530:23:43",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IVolatility_$12309",
+                        "typeIdentifier": "t_contract$_IVolatility_$16423",
                         "typeString": "contract IVolatility"
                       }
                     },
-                    "src": "517:37:24",
+                    "src": "516:37:43",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IVolatility_$12309",
+                      "typeIdentifier": "t_contract$_IVolatility_$16423",
                       "typeString": "contract IVolatility"
                     }
                   },
-                  "id": 12335,
+                  "id": 16449,
                   "nodeType": "ExpressionStatement",
-                  "src": "517:37:24"
+                  "src": "516:37:43"
                 }
               ]
             },
             "documentation": null,
-            "id": 12337,
+            "id": 16451,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 12328,
+                "id": 16442,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 12327,
+                  "id": 16441,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14718,
-                  "src": "497:9:24",
+                  "referencedDeclaration": 18375,
+                  "src": "496:9:43",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "497:9:24"
+                "src": "496:9:43"
               }
             ],
             "name": "setVolatilityAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12326,
+              "id": 16440,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12325,
+                  "id": 16439,
                   "name": "volatility",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12337,
-                  "src": "471:18:24",
+                  "scope": 16451,
+                  "src": "470:18:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -688,10 +691,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12324,
+                    "id": 16438,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "471:7:24",
+                    "src": "470:7:43",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -701,60 +705,59 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "470:20:24"
+              "src": "469:20:43"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12329,
+              "id": 16443,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "506:0:24"
+              "src": "505:0:43"
             },
-            "scope": 12338,
-            "src": "441:121:24",
+            "scope": 16452,
+            "src": "440:121:43",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 12339,
-        "src": "247:318:24"
+        "scope": 16453,
+        "src": "246:318:43"
       }
     ],
-    "src": "0:565:24"
+    "src": "0:564:43"
   },
   "legacyAST": {
     "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IVolatility.sol",
     "exportedSymbols": {
       "IVolatility": [
-        12309
+        16423
       ],
       "ImportVolatility": [
-        12338
+        16452
       ]
     },
-    "id": 12339,
+    "id": 16453,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 12290,
+        "id": 16404,
         "literals": [
           "solidity",
           "^",
-          "0.4",
-          ".26"
+          "0.5",
+          ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:24"
+        "src": "0:23:43"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "../modules/Ownable.sol",
-        "id": 12291,
+        "id": 16405,
         "nodeType": "ImportDirective",
-        "scope": 12339,
-        "sourceUnit": 14786,
-        "src": "26:32:24",
+        "scope": 16453,
+        "sourceUnit": 18443,
+        "src": "25:32:43",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -764,9 +767,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 12309,
+        "id": 16423,
         "linearizedBaseContracts": [
-          12309
+          16423
         ],
         "name": "IVolatility",
         "nodeType": "ContractDefinition",
@@ -774,24 +777,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 12308,
+            "id": 16422,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "calculateIv",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12302,
+              "id": 16416,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12293,
+                  "id": 16407,
                   "name": "underlying",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "110:17:24",
+                  "scope": 16422,
+                  "src": "109:17:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -799,10 +801,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 12292,
+                    "id": 16406,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "110:6:24",
+                    "src": "109:6:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -813,11 +815,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12295,
+                  "id": 16409,
                   "name": "optType",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "128:13:24",
+                  "scope": 16422,
+                  "src": "127:13:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -825,10 +827,10 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 12294,
+                    "id": 16408,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
-                    "src": "128:5:24",
+                    "src": "127:5:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
@@ -839,11 +841,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12297,
+                  "id": 16411,
                   "name": "expiration",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "142:18:24",
+                  "scope": 16422,
+                  "src": "141:18:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -851,10 +853,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12296,
+                    "id": 16410,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "142:7:24",
+                    "src": "141:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -865,11 +867,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12299,
+                  "id": 16413,
                   "name": "currentPrice",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "161:20:24",
+                  "scope": 16422,
+                  "src": "160:20:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -877,10 +879,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12298,
+                    "id": 16412,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "161:7:24",
+                    "src": "160:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -891,11 +893,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12301,
+                  "id": 16415,
                   "name": "strikePrice",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "182:19:24",
+                  "scope": 16422,
+                  "src": "181:19:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -903,10 +905,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12300,
+                    "id": 16414,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "182:7:24",
+                    "src": "181:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -916,20 +918,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "109:93:24"
+              "src": "108:93:43"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12307,
+              "id": 16421,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12304,
+                  "id": 16418,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "225:7:24",
+                  "scope": 16422,
+                  "src": "224:7:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -937,10 +938,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12303,
+                    "id": 16417,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "225:7:24",
+                    "src": "224:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -951,11 +952,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 12306,
+                  "id": 16420,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12308,
-                  "src": "233:7:24",
+                  "scope": 16422,
+                  "src": "232:7:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -963,10 +964,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12305,
+                    "id": 16419,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "233:7:24",
+                    "src": "232:7:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -976,17 +977,17 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "224:17:24"
+              "src": "223:17:43"
             },
-            "scope": 12309,
-            "src": "89:153:24",
+            "scope": 16423,
+            "src": "88:153:43",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 12339,
-        "src": "60:185:24"
+        "scope": 16453,
+        "src": "59:185:43"
       },
       {
         "baseContracts": [
@@ -994,57 +995,57 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 12310,
+              "id": 16424,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14785,
-              "src": "276:7:24",
+              "referencedDeclaration": 18442,
+              "src": "275:7:43",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14785",
+                "typeIdentifier": "t_contract$_Ownable_$18442",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 12311,
+            "id": 16425,
             "nodeType": "InheritanceSpecifier",
-            "src": "276:7:24"
+            "src": "275:7:43"
           }
         ],
         "contractDependencies": [
-          14785
+          18442
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 12338,
+        "id": 16452,
         "linearizedBaseContracts": [
-          12338,
-          14785
+          16452,
+          18442
         ],
         "name": "ImportVolatility",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 12313,
+            "id": 16427,
             "name": "_volatility",
             "nodeType": "VariableDeclaration",
-            "scope": 12338,
-            "src": "290:32:24",
+            "scope": 16452,
+            "src": "289:32:43",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IVolatility_$12309",
+              "typeIdentifier": "t_contract$_IVolatility_$16423",
               "typeString": "contract IVolatility"
             },
             "typeName": {
               "contractScope": null,
-              "id": 12312,
+              "id": 16426,
               "name": "IVolatility",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12309,
-              "src": "290:11:24",
+              "referencedDeclaration": 16423,
+              "src": "289:11:43",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IVolatility_$12309",
+                "typeIdentifier": "t_contract$_IVolatility_$16423",
                 "typeString": "contract IVolatility"
               }
             },
@@ -1053,9 +1054,9 @@
           },
           {
             "body": {
-              "id": 12322,
+              "id": 16436,
               "nodeType": "Block",
-              "src": "389:46:24",
+              "src": "388:46:43",
               "statements": [
                 {
                   "expression": {
@@ -1063,14 +1064,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 12319,
+                        "id": 16433,
                         "name": "_volatility",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12313,
-                        "src": "415:11:24",
+                        "referencedDeclaration": 16427,
+                        "src": "414:11:43",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IVolatility_$12309",
+                          "typeIdentifier": "t_contract$_IVolatility_$16423",
                           "typeString": "contract IVolatility"
                         }
                       }
@@ -1078,24 +1079,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_IVolatility_$12309",
+                          "typeIdentifier": "t_contract$_IVolatility_$16423",
                           "typeString": "contract IVolatility"
                         }
                       ],
-                      "id": 12318,
+                      "id": 16432,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "407:7:24",
+                      "src": "406:7:43",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 12320,
+                    "id": 16434,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1103,45 +1104,43 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "407:20:24",
+                    "src": "406:20:43",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 12317,
-                  "id": 12321,
+                  "functionReturnParameters": 16431,
+                  "id": 16435,
                   "nodeType": "Return",
-                  "src": "400:27:24"
+                  "src": "399:27:43"
                 }
               ]
             },
             "documentation": null,
-            "id": 12323,
+            "id": 16437,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "getVolatilityAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12314,
+              "id": 16428,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "358:2:24"
+              "src": "357:2:43"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12317,
+              "id": 16431,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12316,
+                  "id": 16430,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12323,
-                  "src": "381:7:24",
+                  "scope": 16437,
+                  "src": "380:7:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1149,10 +1148,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12315,
+                    "id": 16429,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "381:7:24",
+                    "src": "380:7:43",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1162,38 +1162,38 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "380:9:24"
+              "src": "379:9:43"
             },
-            "scope": 12338,
-            "src": "329:106:24",
+            "scope": 16452,
+            "src": "328:106:43",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 12336,
+              "id": 16450,
               "nodeType": "Block",
-              "src": "506:56:24",
+              "src": "505:56:43",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 12334,
+                    "id": 16448,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 12330,
+                      "id": 16444,
                       "name": "_volatility",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 12313,
-                      "src": "517:11:24",
+                      "referencedDeclaration": 16427,
+                      "src": "516:11:43",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IVolatility_$12309",
+                        "typeIdentifier": "t_contract$_IVolatility_$16423",
                         "typeString": "contract IVolatility"
                       }
                     },
@@ -1204,12 +1204,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 12332,
+                          "id": 16446,
                           "name": "volatility",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 12325,
-                          "src": "543:10:24",
+                          "referencedDeclaration": 16439,
+                          "src": "542:10:43",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -1223,18 +1223,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 12331,
+                        "id": 16445,
                         "name": "IVolatility",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12309,
-                        "src": "531:11:24",
+                        "referencedDeclaration": 16423,
+                        "src": "530:11:43",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_IVolatility_$12309_$",
+                          "typeIdentifier": "t_type$_t_contract$_IVolatility_$16423_$",
                           "typeString": "type(contract IVolatility)"
                         }
                       },
-                      "id": 12333,
+                      "id": 16447,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1242,63 +1242,62 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "531:23:24",
+                      "src": "530:23:43",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IVolatility_$12309",
+                        "typeIdentifier": "t_contract$_IVolatility_$16423",
                         "typeString": "contract IVolatility"
                       }
                     },
-                    "src": "517:37:24",
+                    "src": "516:37:43",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IVolatility_$12309",
+                      "typeIdentifier": "t_contract$_IVolatility_$16423",
                       "typeString": "contract IVolatility"
                     }
                   },
-                  "id": 12335,
+                  "id": 16449,
                   "nodeType": "ExpressionStatement",
-                  "src": "517:37:24"
+                  "src": "516:37:43"
                 }
               ]
             },
             "documentation": null,
-            "id": 12337,
+            "id": 16451,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 12328,
+                "id": 16442,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 12327,
+                  "id": 16441,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14718,
-                  "src": "497:9:24",
+                  "referencedDeclaration": 18375,
+                  "src": "496:9:43",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "497:9:24"
+                "src": "496:9:43"
               }
             ],
             "name": "setVolatilityAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12326,
+              "id": 16440,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12325,
+                  "id": 16439,
                   "name": "volatility",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12337,
-                  "src": "471:18:24",
+                  "scope": 16451,
+                  "src": "470:18:43",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1306,10 +1305,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12324,
+                    "id": 16438,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "471:7:24",
+                    "src": "470:7:43",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1319,35 +1319,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "470:20:24"
+              "src": "469:20:43"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12329,
+              "id": 16443,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "506:0:24"
+              "src": "505:0:43"
             },
-            "scope": 12338,
-            "src": "441:121:24",
+            "scope": 16452,
+            "src": "440:121:43",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 12339,
-        "src": "247:318:24"
+        "scope": 16453,
+        "src": "246:318:43"
       }
     ],
-    "src": "0:565:24"
+    "src": "0:564:43"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.4.26+commit.4563c3fc.Emscripten.clang"
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-08-14T00:48:40.145Z",
+  "updatedAt": "2020-09-02T10:11:20.822Z",
   "devdoc": {
     "methods": {
       "isOwner()": {
@@ -1357,7 +1356,7 @@
         "details": "Returns the address of the current owner."
       },
       "renounceOwnership()": {
-        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
       },
       "transferOwnership(address)": {
         "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."

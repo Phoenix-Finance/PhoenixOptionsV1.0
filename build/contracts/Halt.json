@@ -2,27 +2,23 @@
   "contractName": "Halt",
   "abi": [
     {
-      "constant": false,
-      "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
+      "anonymous": false,
+      "inputs": [
         {
-          "name": "",
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
           "type": "address"
         }
       ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
+      "name": "OwnershipTransferred",
+      "type": "event"
     },
     {
       "constant": true,
@@ -30,6 +26,7 @@
       "name": "isOwner",
       "outputs": [
         {
+          "internalType": "bool",
           "name": "",
           "type": "bool"
         }
@@ -39,9 +36,34 @@
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "newOwner",
           "type": "address"
         }
@@ -53,26 +75,10 @@
       "type": "function"
     },
     {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "previousOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "OwnershipTransferred",
-      "type": "event"
-    },
-    {
       "constant": false,
       "inputs": [
         {
+          "internalType": "bool",
           "name": "halt",
           "type": "bool"
         }
@@ -84,42 +90,42 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"halt\",\"type\":\"bool\"}],\"name\":\"setHalt\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{\"setHalt(bool)\":{\"notice\":\"function Emergency situation that requires contribution period to stop or not.\"}}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Halt.sol\":\"Halt\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Halt.sol\":{\"keccak256\":\"0xe54a46bbeb85740c63e4bb25ad0ac3a75af9ecf22ee55bb6a0c132da303cc65d\",\"urls\":[\"bzzr://a26b827217e20902f89b6cc171686f22d501bc9698ba9c7b0810b51268853819\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x32e86cf1f96e3e879768e0d0440f35011232004420d3c4f84492f23664cba015\",\"urls\":[\"bzzr://5725cb4758935a4e7ebc5f963b0a46da11e6c81ac5dcedd214e425546e8b83a7\"]}},\"version\":1}",
-  "bytecode": "0x6080604081905260008054600160a860020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610414806100576000396000f30060806040526004361061006c5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663715018a681146100715780638da5cb5b146100885780638f32d59b146100b9578063f2fde38b146100e2578063f495438714610103575b600080fd5b34801561007d57600080fd5b5061008661011d565b005b34801561009457600080fd5b5061009d6101d2565b60408051600160a060020a039092168252519081900360200190f35b3480156100c557600080fd5b506100ce6101e1565b604080519115158252519081900360200190f35b3480156100ee57600080fd5b50610086600160a060020a03600435166101f2565b34801561010f57600080fd5b50610086600435151561025c565b6101256101e1565b151561017b576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b6101fa6101e1565b1515610250576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b610259816102fa565b50565b6102646101e1565b15156102ba576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054911515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019909216919091179055565b600160a060020a0381161515610380576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a723058208d9e2d60e7827e33859415c579e4424a509388028e65b59ae9230782f8f67e3e0029",
-  "deployedBytecode": "0x60806040526004361061006c5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663715018a681146100715780638da5cb5b146100885780638f32d59b146100b9578063f2fde38b146100e2578063f495438714610103575b600080fd5b34801561007d57600080fd5b5061008661011d565b005b34801561009457600080fd5b5061009d6101d2565b60408051600160a060020a039092168252519081900360200190f35b3480156100c557600080fd5b506100ce6101e1565b604080519115158252519081900360200190f35b3480156100ee57600080fd5b50610086600160a060020a03600435166101f2565b34801561010f57600080fd5b50610086600435151561025c565b6101256101e1565b151561017b576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b6101fa6101e1565b1515610250576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b610259816102fa565b50565b6102646101e1565b15156102ba576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054911515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019909216919091179055565b600160a060020a0381161515610380576040805160e560020a62461bcd02815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a723058208d9e2d60e7827e33859415c579e4424a509388028e65b59ae9230782f8f67e3e0029",
-  "sourceMap": "50:486:28:-;;;;;108:5;86:27;;-1:-1:-1;;;;;;659:19:31;668:10;659:19;;;;-1:-1:-1;;;;;726:6:31;;693:40;;108:5:28;;693:40:31;50:486:28;;;;;;",
-  "deployedSourceMap": "50:486:28:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1599:137:31;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1599:137:31;;;;;;816:77;;8:9:-1;5:2;;;30:1;27;20:12;5:2;816:77:31;;;;;;;;-1:-1:-1;;;;;816:77:31;;;;;;;;;;;;;;1167:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1167:90:31;;;;;;;;;;;;;;;;;;;;;;1885:107;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1885:107:31;-1:-1:-1;;;;;1885:107:31;;;;;437:97:28;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;437:97:28;;;;;;;1599:137:31;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:31;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:31;;;1599:137::o;816:77::-;854:7;880:6;-1:-1:-1;;;;;880:6:31;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:31;1230:10;:20;;1167:90::o;1885:107::-;1020:9;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;:::-;1885:107;:::o;437:97:28:-;1020:9:31;:7;:9::i;:::-;1012:54;;;;;;;-1:-1:-1;;;;;1012:54:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;514:6:28;:13;;;;;;;-1:-1:-1;;514:13:28;;;;;;;;;437:97::o;2093:225:31:-;-1:-1:-1;;;;;2166:22:31;;;;2158:73;;;;;-1:-1:-1;;;;;2158:73:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:31;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:31;-1:-1:-1;;;;;2294:17:31;;;;;;;;;;2093:225::o",
-  "source": "pragma solidity ^0.4.11;\nimport './Ownable.sol';\n\ncontract Halt is Ownable {\n    \n    bool private halted = false; \n    \n    modifier notHalted() {\n        require(!halted,\"This contract is halted\");\n        _;\n    }\n\n    modifier isHalted() {\n        require(halted,\"This contract is not halted\");\n        _;\n    }\n    \n    /// @notice function Emergency situation that requires \n    /// @notice contribution period to stop or not.\n    function setHalt(bool halt) \n        public \n        onlyOwner\n    {\n        halted = halt;\n    }\n}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bool\",\"name\":\"halt\",\"type\":\"bool\"}],\"name\":\"setHalt\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{\"setHalt(bool)\":{\"notice\":\"function Emergency situation that requires contribution period to stop or not.\"}}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Halt.sol\":\"Halt\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Halt.sol\":{\"keccak256\":\"0x26a6b75a53e116ea88948bfeaa6e28bc3eadfa9b096b5ff5b9d2496fc215d6e1\",\"urls\":[\"bzz-raw://2a404fbd9cce74500e19ff83bb107021036f7c80c84e6085b0b748f5f0fe30fe\",\"dweb:/ipfs/QmQeMMcFnvu5fXFofmq5FxQj6pChZSeFmMV9cB1HfnEk61\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0xbe1710912b2b0c2df59e64935f9e4d3d69af51a543edae2dbf53619fb2ffa6a6\",\"urls\":[\"bzz-raw://5563a6aa807414bfb16e43e9b6c59b9c63bb9f95778ffe8636a0f8a9bf97d944\",\"dweb:/ipfs/QmeMrswj4ab8Jp83RxC7rPo8y4XWGqVSGjbtKbc8xuFaT1\"]}},\"version\":1}",
+  "bytecode": "0x60806040526000805460a060020a60ff021916905534801561002057600080fd5b506103e9806100306000396000f3fe608060405234801561001057600080fd5b5060043610610073577c01000000000000000000000000000000000000000000000000000000006000350463715018a681146100785780638da5cb5b146100825780638f32d59b146100a6578063f2fde38b146100c2578063f4954387146100e8575b600080fd5b610080610107565b005b61008a6101ba565b60408051600160a060020a039092168252519081900360200190f35b6100ae6101c9565b604080519115158252519081900360200190f35b610080600480360360208110156100d857600080fd5b5035600160a060020a03166101da565b610080600480360360208110156100fe57600080fd5b50351515610242565b61010f6101c9565b610163576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b6101e26101c9565b610236576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61023f816102de565b50565b61024a6101c9565b61029e576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054911515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019909216919091179055565b600160a060020a0381166103265760405160e560020a62461bcd02815260040180806020018281038252602681526020018061038f6026913960400191505060405180910390fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f2061646472657373a265627a7a723158201ff9cea876b6ebe03aea58177df6cf19e0ebcbb7408f9b41648a822dcc1ae35064736f6c63430005100032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b5060043610610073577c01000000000000000000000000000000000000000000000000000000006000350463715018a681146100785780638da5cb5b146100825780638f32d59b146100a6578063f2fde38b146100c2578063f4954387146100e8575b600080fd5b610080610107565b005b61008a6101ba565b60408051600160a060020a039092168252519081900360200190f35b6100ae6101c9565b604080519115158252519081900360200190f35b610080600480360360208110156100d857600080fd5b5035600160a060020a03166101da565b610080600480360360208110156100fe57600080fd5b50351515610242565b61010f6101c9565b610163576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031690565b600054600160a060020a0316331490565b6101e26101c9565b610236576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b61023f816102de565b50565b61024a6101c9565b61029e576040805160e560020a62461bcd02815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015290519081900360640190fd5b60008054911515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019909216919091179055565b600160a060020a0381166103265760405160e560020a62461bcd02815260040180806020018281038252602681526020018061038f6026913960400191505060405180910390fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f2061646472657373a265627a7a723158201ff9cea876b6ebe03aea58177df6cf19e0ebcbb7408f9b41648a822dcc1ae35064736f6c63430005100032",
+  "sourceMap": "49:486:46:-;;;107:5;85:27;;-1:-1:-1;;;;;;85:27:46;;;49:486;5:2:-1;;;;30:1;27;20:12;5:2;49:486:46;;;;;;;",
+  "deployedSourceMap": "49:486:46:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;49:486:46;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1666:140:49;;;:::i;:::-;;857:79;;;:::i;:::-;;;;-1:-1:-1;;;;;857:79:49;;;;;;;;;;;;;;1223:92;;;:::i;:::-;;;;;;;;;;;;;;;;;;1961:109;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1961:109:49;-1:-1:-1;;;;;1961:109:49;;:::i;436:97:46:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;436:97:46;;;;:::i;1666:140:49:-;1069:9;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1765:1;1749:6;;1728:40;;-1:-1:-1;;;;;1749:6:49;;;;1728:40;;1765:1;;1728:40;1796:1;1779:19;;-1:-1:-1;;1779:19:49;;;1666:140::o;857:79::-;895:7;922:6;-1:-1:-1;;;;;922:6:49;857:79;:::o;1223:92::-;1263:4;1301:6;-1:-1:-1;;;;;1301:6:49;1287:10;:20;;1223:92::o;1961:109::-;1069:9;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2034:28;2053:8;2034:18;:28::i;:::-;1961:109;:::o;436:97:46:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;513:6:46;:13;;;;;;;-1:-1:-1;;513:13:46;;;;;;;;;436:97::o;2176:229:49:-;-1:-1:-1;;;;;2250:22:49;;2242:73;;;;-1:-1:-1;;;;;2242:73:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2352:6;;;2331:38;;-1:-1:-1;;;;;2331:38:49;;;;2352:6;;;2331:38;;;2380:6;:17;;-1:-1:-1;;2380:17:49;-1:-1:-1;;;;;2380:17:49;;;;;;;;;;2176:229::o",
+  "source": "pragma solidity ^0.5.1;\nimport './Ownable.sol';\n\ncontract Halt is Ownable {\n    \n    bool private halted = false; \n    \n    modifier notHalted() {\n        require(!halted,\"This contract is halted\");\n        _;\n    }\n\n    modifier isHalted() {\n        require(halted,\"This contract is not halted\");\n        _;\n    }\n    \n    /// @notice function Emergency situation that requires \n    /// @notice contribution period to stop or not.\n    function setHalt(bool halt) \n        public \n        onlyOwner\n    {\n        halted = halt;\n    }\n}",
   "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\modules\\Halt.sol",
   "ast": {
     "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Halt.sol",
     "exportedSymbols": {
       "Halt": [
-        14532
+        18176
       ]
     },
-    "id": 14533,
+    "id": 18177,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 14494,
+        "id": 18138,
         "literals": [
           "solidity",
           "^",
-          "0.4",
-          ".11"
+          "0.5",
+          ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:28"
+        "src": "0:23:46"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "./Ownable.sol",
-        "id": 14495,
+        "id": 18139,
         "nodeType": "ImportDirective",
-        "scope": 14533,
-        "sourceUnit": 14786,
-        "src": "25:23:28",
+        "scope": 18177,
+        "sourceUnit": 18443,
+        "src": "24:23:46",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -129,42 +135,42 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 14496,
+              "id": 18140,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14785,
-              "src": "67:7:28",
+              "referencedDeclaration": 18442,
+              "src": "66:7:46",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14785",
+                "typeIdentifier": "t_contract$_Ownable_$18442",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 14497,
+            "id": 18141,
             "nodeType": "InheritanceSpecifier",
-            "src": "67:7:28"
+            "src": "66:7:46"
           }
         ],
         "contractDependencies": [
-          14785
+          18442
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 14532,
+        "id": 18176,
         "linearizedBaseContracts": [
-          14532,
-          14785
+          18176,
+          18442
         ],
         "name": "Halt",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 14500,
+            "id": 18144,
             "name": "halted",
             "nodeType": "VariableDeclaration",
-            "scope": 14532,
-            "src": "86:27:28",
+            "scope": 18176,
+            "src": "85:27:46",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -172,10 +178,10 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 14498,
+              "id": 18142,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
-              "src": "86:4:28",
+              "src": "85:4:46",
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
                 "typeString": "bool"
@@ -184,14 +190,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "66616c7365",
-              "id": 14499,
+              "id": 18143,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "bool",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "108:5:28",
+              "src": "107:5:46",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
@@ -203,9 +209,9 @@
           },
           {
             "body": {
-              "id": 14509,
+              "id": 18153,
               "nodeType": "Block",
-              "src": "146:70:28",
+              "src": "145:70:46",
               "statements": [
                 {
                   "expression": {
@@ -213,7 +219,7 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 14504,
+                        "id": 18148,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -221,15 +227,15 @@
                         "nodeType": "UnaryOperation",
                         "operator": "!",
                         "prefix": true,
-                        "src": "164:7:28",
+                        "src": "163:7:46",
                         "subExpression": {
                           "argumentTypes": null,
-                          "id": 14503,
+                          "id": 18147,
                           "name": "halted",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 14500,
-                          "src": "165:6:28",
+                          "referencedDeclaration": 18144,
+                          "src": "164:6:46",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
                             "typeString": "bool"
@@ -243,14 +249,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "5468697320636f6e74726163742069732068616c746564",
-                        "id": 14505,
+                        "id": 18149,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "172:25:28",
+                        "src": "171:25:46",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_0f97c2c7360b450e35b0e7baf24d0802638d2cd8fa1c6a752d95b64b03c33e91",
@@ -270,21 +276,21 @@
                           "typeString": "literal_string \"This contract is halted\""
                         }
                       ],
-                      "id": 14502,
+                      "id": 18146,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        18537,
-                        18538
+                        20515,
+                        20516
                       ],
-                      "referencedDeclaration": 18538,
-                      "src": "156:7:28",
+                      "referencedDeclaration": 20516,
+                      "src": "155:7:46",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 14506,
+                    "id": 18150,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -292,41 +298,41 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "156:42:28",
+                    "src": "155:42:46",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 14507,
+                  "id": 18151,
                   "nodeType": "ExpressionStatement",
-                  "src": "156:42:28"
+                  "src": "155:42:46"
                 },
                 {
-                  "id": 14508,
+                  "id": 18152,
                   "nodeType": "PlaceholderStatement",
-                  "src": "208:1:28"
+                  "src": "207:1:46"
                 }
               ]
             },
             "documentation": null,
-            "id": 14510,
+            "id": 18154,
             "name": "notHalted",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 14501,
+              "id": 18145,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "143:2:28"
+              "src": "142:2:46"
             },
-            "src": "125:91:28",
+            "src": "124:91:46",
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 14518,
+              "id": 18162,
               "nodeType": "Block",
-              "src": "242:73:28",
+              "src": "241:73:46",
               "statements": [
                 {
                   "expression": {
@@ -334,12 +340,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 14513,
+                        "id": 18157,
                         "name": "halted",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 14500,
-                        "src": "260:6:28",
+                        "referencedDeclaration": 18144,
+                        "src": "259:6:46",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -348,14 +354,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "5468697320636f6e7472616374206973206e6f742068616c746564",
-                        "id": 14514,
+                        "id": 18158,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "267:29:28",
+                        "src": "266:29:46",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_cb1b3d5ccd65c3fb286d6737dbecf5506148efaeffaf922980d0fad12460150d",
@@ -375,21 +381,21 @@
                           "typeString": "literal_string \"This contract is not halted\""
                         }
                       ],
-                      "id": 14512,
+                      "id": 18156,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        18537,
-                        18538
+                        20515,
+                        20516
                       ],
-                      "referencedDeclaration": 18538,
-                      "src": "252:7:28",
+                      "referencedDeclaration": 20516,
+                      "src": "251:7:46",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 14515,
+                    "id": 18159,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -397,58 +403,58 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "252:45:28",
+                    "src": "251:45:46",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 14516,
+                  "id": 18160,
                   "nodeType": "ExpressionStatement",
-                  "src": "252:45:28"
+                  "src": "251:45:46"
                 },
                 {
-                  "id": 14517,
+                  "id": 18161,
                   "nodeType": "PlaceholderStatement",
-                  "src": "307:1:28"
+                  "src": "306:1:46"
                 }
               ]
             },
             "documentation": null,
-            "id": 14519,
+            "id": 18163,
             "name": "isHalted",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 14511,
+              "id": 18155,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "239:2:28"
+              "src": "238:2:46"
             },
-            "src": "222:93:28",
+            "src": "221:93:46",
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 14530,
+              "id": 18174,
               "nodeType": "Block",
-              "src": "504:30:28",
+              "src": "503:30:46",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 14528,
+                    "id": 18172,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 14526,
+                      "id": 18170,
                       "name": "halted",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14500,
-                      "src": "514:6:28",
+                      "referencedDeclaration": 18144,
+                      "src": "513:6:46",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -458,68 +464,67 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 14527,
+                      "id": 18171,
                       "name": "halt",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14521,
-                      "src": "523:4:28",
+                      "referencedDeclaration": 18165,
+                      "src": "522:4:46",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
                       }
                     },
-                    "src": "514:13:28",
+                    "src": "513:13:46",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "id": 14529,
+                  "id": 18173,
                   "nodeType": "ExpressionStatement",
-                  "src": "514:13:28"
+                  "src": "513:13:46"
                 }
               ]
             },
             "documentation": "@notice function Emergency situation that requires \n @notice contribution period to stop or not.",
-            "id": 14531,
+            "id": 18175,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 14524,
+                "id": 18168,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 14523,
+                  "id": 18167,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14718,
-                  "src": "490:9:28",
+                  "referencedDeclaration": 18375,
+                  "src": "489:9:46",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "490:9:28"
+                "src": "489:9:46"
               }
             ],
             "name": "setHalt",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 14522,
+              "id": 18166,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 14521,
+                  "id": 18165,
                   "name": "halt",
                   "nodeType": "VariableDeclaration",
-                  "scope": 14531,
-                  "src": "454:9:28",
+                  "scope": 18175,
+                  "src": "453:9:46",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -527,10 +532,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 14520,
+                    "id": 18164,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "454:4:28",
+                    "src": "453:4:46",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -540,57 +545,56 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "453:11:28"
+              "src": "452:11:46"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 14525,
+              "id": 18169,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "504:0:28"
+              "src": "503:0:46"
             },
-            "scope": 14532,
-            "src": "437:97:28",
+            "scope": 18176,
+            "src": "436:97:46",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 14533,
-        "src": "50:486:28"
+        "scope": 18177,
+        "src": "49:486:46"
       }
     ],
-    "src": "0:536:28"
+    "src": "0:535:46"
   },
   "legacyAST": {
     "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Halt.sol",
     "exportedSymbols": {
       "Halt": [
-        14532
+        18176
       ]
     },
-    "id": 14533,
+    "id": 18177,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 14494,
+        "id": 18138,
         "literals": [
           "solidity",
           "^",
-          "0.4",
-          ".11"
+          "0.5",
+          ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:28"
+        "src": "0:23:46"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "./Ownable.sol",
-        "id": 14495,
+        "id": 18139,
         "nodeType": "ImportDirective",
-        "scope": 14533,
-        "sourceUnit": 14786,
-        "src": "25:23:28",
+        "scope": 18177,
+        "sourceUnit": 18443,
+        "src": "24:23:46",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -600,42 +604,42 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 14496,
+              "id": 18140,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14785,
-              "src": "67:7:28",
+              "referencedDeclaration": 18442,
+              "src": "66:7:46",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14785",
+                "typeIdentifier": "t_contract$_Ownable_$18442",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 14497,
+            "id": 18141,
             "nodeType": "InheritanceSpecifier",
-            "src": "67:7:28"
+            "src": "66:7:46"
           }
         ],
         "contractDependencies": [
-          14785
+          18442
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 14532,
+        "id": 18176,
         "linearizedBaseContracts": [
-          14532,
-          14785
+          18176,
+          18442
         ],
         "name": "Halt",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 14500,
+            "id": 18144,
             "name": "halted",
             "nodeType": "VariableDeclaration",
-            "scope": 14532,
-            "src": "86:27:28",
+            "scope": 18176,
+            "src": "85:27:46",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -643,10 +647,10 @@
               "typeString": "bool"
             },
             "typeName": {
-              "id": 14498,
+              "id": 18142,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
-              "src": "86:4:28",
+              "src": "85:4:46",
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
                 "typeString": "bool"
@@ -655,14 +659,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "66616c7365",
-              "id": 14499,
+              "id": 18143,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "bool",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "108:5:28",
+              "src": "107:5:46",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
@@ -674,9 +678,9 @@
           },
           {
             "body": {
-              "id": 14509,
+              "id": 18153,
               "nodeType": "Block",
-              "src": "146:70:28",
+              "src": "145:70:46",
               "statements": [
                 {
                   "expression": {
@@ -684,7 +688,7 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 14504,
+                        "id": 18148,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -692,15 +696,15 @@
                         "nodeType": "UnaryOperation",
                         "operator": "!",
                         "prefix": true,
-                        "src": "164:7:28",
+                        "src": "163:7:46",
                         "subExpression": {
                           "argumentTypes": null,
-                          "id": 14503,
+                          "id": 18147,
                           "name": "halted",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 14500,
-                          "src": "165:6:28",
+                          "referencedDeclaration": 18144,
+                          "src": "164:6:46",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
                             "typeString": "bool"
@@ -714,14 +718,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "5468697320636f6e74726163742069732068616c746564",
-                        "id": 14505,
+                        "id": 18149,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "172:25:28",
+                        "src": "171:25:46",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_0f97c2c7360b450e35b0e7baf24d0802638d2cd8fa1c6a752d95b64b03c33e91",
@@ -741,21 +745,21 @@
                           "typeString": "literal_string \"This contract is halted\""
                         }
                       ],
-                      "id": 14502,
+                      "id": 18146,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        18537,
-                        18538
+                        20515,
+                        20516
                       ],
-                      "referencedDeclaration": 18538,
-                      "src": "156:7:28",
+                      "referencedDeclaration": 20516,
+                      "src": "155:7:46",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 14506,
+                    "id": 18150,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -763,41 +767,41 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "156:42:28",
+                    "src": "155:42:46",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 14507,
+                  "id": 18151,
                   "nodeType": "ExpressionStatement",
-                  "src": "156:42:28"
+                  "src": "155:42:46"
                 },
                 {
-                  "id": 14508,
+                  "id": 18152,
                   "nodeType": "PlaceholderStatement",
-                  "src": "208:1:28"
+                  "src": "207:1:46"
                 }
               ]
             },
             "documentation": null,
-            "id": 14510,
+            "id": 18154,
             "name": "notHalted",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 14501,
+              "id": 18145,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "143:2:28"
+              "src": "142:2:46"
             },
-            "src": "125:91:28",
+            "src": "124:91:46",
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 14518,
+              "id": 18162,
               "nodeType": "Block",
-              "src": "242:73:28",
+              "src": "241:73:46",
               "statements": [
                 {
                   "expression": {
@@ -805,12 +809,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 14513,
+                        "id": 18157,
                         "name": "halted",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 14500,
-                        "src": "260:6:28",
+                        "referencedDeclaration": 18144,
+                        "src": "259:6:46",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -819,14 +823,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "5468697320636f6e7472616374206973206e6f742068616c746564",
-                        "id": 14514,
+                        "id": 18158,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "267:29:28",
+                        "src": "266:29:46",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_cb1b3d5ccd65c3fb286d6737dbecf5506148efaeffaf922980d0fad12460150d",
@@ -846,21 +850,21 @@
                           "typeString": "literal_string \"This contract is not halted\""
                         }
                       ],
-                      "id": 14512,
+                      "id": 18156,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        18537,
-                        18538
+                        20515,
+                        20516
                       ],
-                      "referencedDeclaration": 18538,
-                      "src": "252:7:28",
+                      "referencedDeclaration": 20516,
+                      "src": "251:7:46",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 14515,
+                    "id": 18159,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -868,58 +872,58 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "252:45:28",
+                    "src": "251:45:46",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 14516,
+                  "id": 18160,
                   "nodeType": "ExpressionStatement",
-                  "src": "252:45:28"
+                  "src": "251:45:46"
                 },
                 {
-                  "id": 14517,
+                  "id": 18161,
                   "nodeType": "PlaceholderStatement",
-                  "src": "307:1:28"
+                  "src": "306:1:46"
                 }
               ]
             },
             "documentation": null,
-            "id": 14519,
+            "id": 18163,
             "name": "isHalted",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 14511,
+              "id": 18155,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "239:2:28"
+              "src": "238:2:46"
             },
-            "src": "222:93:28",
+            "src": "221:93:46",
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 14530,
+              "id": 18174,
               "nodeType": "Block",
-              "src": "504:30:28",
+              "src": "503:30:46",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 14528,
+                    "id": 18172,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 14526,
+                      "id": 18170,
                       "name": "halted",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14500,
-                      "src": "514:6:28",
+                      "referencedDeclaration": 18144,
+                      "src": "513:6:46",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -929,68 +933,67 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 14527,
+                      "id": 18171,
                       "name": "halt",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14521,
-                      "src": "523:4:28",
+                      "referencedDeclaration": 18165,
+                      "src": "522:4:46",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
                       }
                     },
-                    "src": "514:13:28",
+                    "src": "513:13:46",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "id": 14529,
+                  "id": 18173,
                   "nodeType": "ExpressionStatement",
-                  "src": "514:13:28"
+                  "src": "513:13:46"
                 }
               ]
             },
             "documentation": "@notice function Emergency situation that requires \n @notice contribution period to stop or not.",
-            "id": 14531,
+            "id": 18175,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 14524,
+                "id": 18168,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 14523,
+                  "id": 18167,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14718,
-                  "src": "490:9:28",
+                  "referencedDeclaration": 18375,
+                  "src": "489:9:46",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "490:9:28"
+                "src": "489:9:46"
               }
             ],
             "name": "setHalt",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 14522,
+              "id": 18166,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 14521,
+                  "id": 18165,
                   "name": "halt",
                   "nodeType": "VariableDeclaration",
-                  "scope": 14531,
-                  "src": "454:9:28",
+                  "scope": 18175,
+                  "src": "453:9:46",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -998,10 +1001,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 14520,
+                    "id": 18164,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "454:4:28",
+                    "src": "453:4:46",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1011,35 +1014,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "453:11:28"
+              "src": "452:11:46"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 14525,
+              "id": 18169,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "504:0:28"
+              "src": "503:0:46"
             },
-            "scope": 14532,
-            "src": "437:97:28",
+            "scope": 18176,
+            "src": "436:97:46",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 14533,
-        "src": "50:486:28"
+        "scope": 18177,
+        "src": "49:486:46"
       }
     ],
-    "src": "0:536:28"
+    "src": "0:535:46"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.4.26+commit.4563c3fc.Emscripten.clang"
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-08-14T00:48:40.217Z",
+  "updatedAt": "2020-09-02T10:11:20.863Z",
   "devdoc": {
     "methods": {
       "isOwner()": {
@@ -1049,7 +1051,7 @@
         "details": "Returns the address of the current owner."
       },
       "renounceOwnership()": {
-        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
       },
       "transferOwnership(address)": {
         "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."

@@ -1,0 +1,1360 @@
+{
+  "contractName": "FPTData",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "worth",
+          "type": "uint256"
+        }
+      ],
+      "name": "AddLocked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "worth",
+          "type": "uint256"
+        }
+      ],
+      "name": "BurnLocked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "decimals",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getFNXMinePoolAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getManager",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "fnxMinePool",
+          "type": "address"
+        }
+      ],
+      "name": "setFNXMinePoolAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "managerAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setManager",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"worth\",\"type\":\"uint256\"}],\"name\":\"AddLocked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"worth\",\"type\":\"uint256\"}],\"name\":\"BurnLocked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getFNXMinePoolAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getManager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"fnxMinePool\",\"type\":\"address\"}],\"name\":\"setFNXMinePoolAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"managerAddress\",\"type\":\"address\"}],\"name\":\"setManager\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{\"getManager()\":{\"details\":\"get manager address.       \"},\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"setManager(address)\":{\"details\":\"set manager by owner.       \"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/FPTCoin/FPTData.sol\":\"FPTData\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/ERC20/Erc20Data.sol\":{\"keccak256\":\"0xe102317666ad7e0874ee0bd79b500a164e97492110a2ca6e019c79ed654623de\",\"urls\":[\"bzz-raw://2ac2b8b3c29c2b1f27c2c0663261b054330649bf1770c4069b136e2d30b035c5\",\"dweb:/ipfs/Qmf4EvxpeD1iwRRDdbueQW7mh5GrMW1mAiHeapKXhbBmnV\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/FNXMinePool/IFNXMinePool.sol\":{\"keccak256\":\"0x626eec2069718a2718ea941e549a68992798b3062f0eb8d00b494ed0014eb13b\",\"urls\":[\"bzz-raw://c96249bd09385806681c75315889c80bbc46208480d598f017a801881e4c33d1\",\"dweb:/ipfs/Qmc4b34sip3QYmAXf5SAGKCKTazNaZ9RRcNtC65SfSgHty\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/FPTCoin/FPTData.sol\":{\"keccak256\":\"0xfe7cf08c52872b8516a17a0dc82239b705725be78ca9faa4bc776f0fc7b9b816\",\"urls\":[\"bzz-raw://c48e2d8e0823dbc90c30bf00a63cf1cd91abf4f8ce28a14b92b9d4e643bff70f\",\"dweb:/ipfs/QmW8TYHhkXUBHkrYLzwH4Hry8uTzKgrb1fFcNeDoHQy6rq\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Managerable.sol\":{\"keccak256\":\"0x927e47b116e62d7215a5ea75beed05c92339a986cb65fb4e7bf29557e19ea653\",\"urls\":[\"bzz-raw://ca31b99a8b0aa8371496941e7b4c906aeb663fd54c37128360f9bf01b4704a6e\",\"dweb:/ipfs/QmV2Hn7mpMUvXWw3mmSFdG91dhusgiPMAS8dbZzS5hGYCw\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0xbe1710912b2b0c2df59e64935f9e4d3d69af51a543edae2dbf53619fb2ffa6a6\",\"urls\":[\"bzz-raw://5563a6aa807414bfb16e43e9b6c59b9c63bb9f95778ffe8636a0f8a9bf97d944\",\"dweb:/ipfs/QmeMrswj4ab8Jp83RxC7rPo8y4XWGqVSGjbtKbc8xuFaT1\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5061067a806100206000396000f3fe608060405234801561001057600080fd5b50600436106100c6576000357c0100000000000000000000000000000000000000000000000000000000900480638da5cb5b1161008e5780638da5cb5b146101ba5780638f32d59b146101c257806395d89b41146101de578063d0ebdbe7146101e6578063d50095841461020c578063f2fde38b14610214576100c6565b806306fdde03146100cb578063313ce5671461014857806359653ec9146101665780636f2b70cd1461018a578063715018a6146101b2575b600080fd5b6100d361023a565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561010d5781810151838201526020016100f5565b50505050905090810190601f16801561013a5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6101506102c8565b6040805160ff9092168252519081900360200190f35b61016e6102cd565b60408051600160a060020a039092168252519081900360200190f35b6101b0600480360360208110156101a057600080fd5b5035600160a060020a03166102dc565b005b6101b0610355565b61016e6103f6565b6101ca610405565b604080519115158252519081900360200190f35b6100d3610416565b6101b0600480360360208110156101fc57600080fd5b5035600160a060020a0316610470565b61016e6104e9565b6101b06004803603602081101561022a57600080fd5b5035600160a060020a03166104f8565b6000805460408051602060026001851615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156102c05780601f10610295576101008083540402835291602001916102c0565b820191906000526020600020905b8154815290600101906020018083116102a357829003601f168201915b505050505081565b601281565b600654600160a060020a031690565b6102e4610405565b610326576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610626833981519152604482015290519081900360640190fd5b6006805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b61035d610405565b61039f576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610626833981519152604482015290519081900360640190fd5b600554604051600091600160a060020a0316907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36005805473ffffffffffffffffffffffffffffffffffffffff19169055565b600554600160a060020a031690565b600554600160a060020a0316331490565b60018054604080516020600284861615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156102c05780601f10610295576101008083540402835291602001916102c0565b610478610405565b6104ba576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610626833981519152604482015290519081900360640190fd5b6007805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600754600160a060020a031690565b610500610405565b610542576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610626833981519152604482015290519081900360640190fd5b61054b8161054e565b50565b600160a060020a0381166105965760405160e560020a62461bcd0281526004018080602001828103825260268152602001806106006026913960400191505060405180910390fd5b600554604051600160a060020a038084169216907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a36005805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f20616464726573734f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a265627a7a723158202abce35757ca86b72d16ff40fbd50a4a2d48d20752c5dbb80c61a1240af779d764736f6c63430005100032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100c6576000357c0100000000000000000000000000000000000000000000000000000000900480638da5cb5b1161008e5780638da5cb5b146101ba5780638f32d59b146101c257806395d89b41146101de578063d0ebdbe7146101e6578063d50095841461020c578063f2fde38b14610214576100c6565b806306fdde03146100cb578063313ce5671461014857806359653ec9146101665780636f2b70cd1461018a578063715018a6146101b2575b600080fd5b6100d361023a565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561010d5781810151838201526020016100f5565b50505050905090810190601f16801561013a5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6101506102c8565b6040805160ff9092168252519081900360200190f35b61016e6102cd565b60408051600160a060020a039092168252519081900360200190f35b6101b0600480360360208110156101a057600080fd5b5035600160a060020a03166102dc565b005b6101b0610355565b61016e6103f6565b6101ca610405565b604080519115158252519081900360200190f35b6100d3610416565b6101b0600480360360208110156101fc57600080fd5b5035600160a060020a0316610470565b61016e6104e9565b6101b06004803603602081101561022a57600080fd5b5035600160a060020a03166104f8565b6000805460408051602060026001851615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156102c05780601f10610295576101008083540402835291602001916102c0565b820191906000526020600020905b8154815290600101906020018083116102a357829003601f168201915b505050505081565b601281565b600654600160a060020a031690565b6102e4610405565b610326576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610626833981519152604482015290519081900360640190fd5b6006805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b61035d610405565b61039f576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610626833981519152604482015290519081900360640190fd5b600554604051600091600160a060020a0316907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36005805473ffffffffffffffffffffffffffffffffffffffff19169055565b600554600160a060020a031690565b600554600160a060020a0316331490565b60018054604080516020600284861615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156102c05780601f10610295576101008083540402835291602001916102c0565b610478610405565b6104ba576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610626833981519152604482015290519081900360640190fd5b6007805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600754600160a060020a031690565b610500610405565b610542576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610626833981519152604482015290519081900360640190fd5b61054b8161054e565b50565b600160a060020a0381166105965760405160e560020a62461bcd0281526004018080602001828103825260268152602001806106006026913960400191505060405180910390fd5b600554604051600160a060020a038084169216907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a36005805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039290921691909117905556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f20616464726573734f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a265627a7a723158202abce35757ca86b72d16ff40fbd50a4a2d48d20752c5dbb80c61a1240af779d764736f6c63430005100032",
+  "sourceMap": "140:1282:16:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;140:1282:16;;;;;;;",
+  "deployedSourceMap": "140:1282:16:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;140:1282:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;50:18:6;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:100:-1;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;50:18:6;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;102:35;;;:::i;:::-;;;;;;;;;;;;;;;;;;;476:108:11;;;:::i;:::-;;;;-1:-1:-1;;;;;476:108:11;;;;;;;;;;;;;;590:126;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;590:126:11;-1:-1:-1;;;;;590:126:11;;:::i;:::-;;1666:140:49;;;:::i;857:79::-;;;:::i;1223:92::-;;;:::i;:::-;;;;;;;;;;;;;;;;;;75:20:6;;;:::i;448:127:47:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;448:127:47;-1:-1:-1;;;;;448:127:47;;:::i;642:92::-;;;:::i;1961:109:49:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1961:109:49;-1:-1:-1;;;;;1961:109:49;;:::i;50:18:6:-;;;;;;;;;;;;;;;-1:-1:-1;;50:18:6;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;102:35::-;135:2;102:35;:::o;476:108:11:-;563:12;;-1:-1:-1;;;;;563:12:11;476:108;:::o;590:126::-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;668:12:11;:40;;-1:-1:-1;;668:40:11;-1:-1:-1;;;;;668:40:11;;;;;;;;;;590:126::o;1666:140:49:-;1069:9;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1749:6;;1728:40;;1765:1;;-1:-1:-1;;;;;1749:6:49;;1728:40;;1765:1;;1728:40;1779:6;:19;;-1:-1:-1;;1779:19:49;;;1666:140::o;857:79::-;922:6;;-1:-1:-1;;;;;922:6:49;857:79;:::o;1223:92::-;1301:6;;-1:-1:-1;;;;;1301:6:49;1287:10;:20;;1223:92::o;75:20:6:-;;;;;;;;;;;;;;;-1:-1:-1;;75:20:6;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;448:127:47;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;535:15:47;:32;;-1:-1:-1;;535:32:47;-1:-1:-1;;;;;535:32:47;;;;;;;;;;448:127::o;642:92::-;711:15;;-1:-1:-1;;;;;711:15:47;642:92;:::o;1961:109:49:-;1069:9;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;2034:28;2053:8;2034:18;:28::i;:::-;1961:109;:::o;2176:229::-;-1:-1:-1;;;;;2250:22:49;;2242:73;;;;-1:-1:-1;;;;;2242:73:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2352:6;;2331:38;;-1:-1:-1;;;;;2331:38:49;;;;2352:6;;2331:38;;2352:6;;2331:38;2380:6;:17;;-1:-1:-1;;2380:17:49;-1:-1:-1;;;;;2380:17:49;;;;;;;;;;2176:229::o",
+  "source": "pragma solidity ^0.5.1;\r\nimport \"../modules/Managerable.sol\";\r\nimport \"../FNXMinePool/IFNXMinePool.sol\";\r\nimport \"../ERC20/Erc20Data.sol\";\r\ncontract FPTData is Erc20Data,ImportFNXMinePool,Managerable{\r\n    /**\r\n    * @dev lock mechanism is used when user redeem collateral and left collateral is insufficient.\r\n    * _totalLockedWorth stores total locked worth, priced in USD.\r\n    * lockedBalances stores user's locked FPTCoin.\r\n    * lockedTotalWorth stores user's locked worth, priced in USD. For locked FPTCoin's net worth is constant when It was locked.\r\n    */\r\n    uint256 internal _totalLockedWorth;\r\n    mapping (address => uint256) internal lockedBalances;\r\n    mapping (address => uint256) internal lockedTotalWorth;\r\n    /**\r\n     * @dev FPT has burn time limit. When user's balance is moved in som coins, he will wait `timeLimited` to burn FPT. \r\n     * latestTransferIn is user's latest time when his balance is moved in.\r\n     */\r\n    mapping(address=>uint256) internal latestTransferIn;\r\n    uint256 internal timeLimited;\r\n    /**\r\n     * @dev Emitted when `owner` locked  `amount` FPT, which net worth is  `worth` in USD. \r\n     */\r\n    event AddLocked(address indexed owner, uint256 amount,uint256 worth);\r\n    /**\r\n     * @dev Emitted when `owner` burned locked  `amount` FPT, which net worth is  `worth` in USD. \r\n     */\r\n    event BurnLocked(address indexed owner, uint256 amount,uint256 worth);\r\n\r\n}",
+  "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\FPTCoin\\FPTData.sol",
+  "ast": {
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/FPTCoin/FPTData.sol",
+    "exportedSymbols": {
+      "FPTData": [
+        5367
+      ]
+    },
+    "id": 5368,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5325,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".1"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:16"
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Managerable.sol",
+        "file": "../modules/Managerable.sol",
+        "id": 5326,
+        "nodeType": "ImportDirective",
+        "scope": 5368,
+        "sourceUnit": 18217,
+        "src": "25:36:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/FNXMinePool/IFNXMinePool.sol",
+        "file": "../FNXMinePool/IFNXMinePool.sol",
+        "id": 5327,
+        "nodeType": "ImportDirective",
+        "scope": 5368,
+        "sourceUnit": 4114,
+        "src": "63:41:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/ERC20/Erc20Data.sol",
+        "file": "../ERC20/Erc20Data.sol",
+        "id": 5328,
+        "nodeType": "ImportDirective",
+        "scope": 5368,
+        "sourceUnit": 2229,
+        "src": "106:32:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 5329,
+              "name": "Erc20Data",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2228,
+              "src": "160:9:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Erc20Data_$2228",
+                "typeString": "contract Erc20Data"
+              }
+            },
+            "id": 5330,
+            "nodeType": "InheritanceSpecifier",
+            "src": "160:9:16"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 5331,
+              "name": "ImportFNXMinePool",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4113,
+              "src": "170:17:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportFNXMinePool_$4113",
+                "typeString": "contract ImportFNXMinePool"
+              }
+            },
+            "id": 5332,
+            "nodeType": "InheritanceSpecifier",
+            "src": "170:17:16"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 5333,
+              "name": "Managerable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 18216,
+              "src": "188:11:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Managerable_$18216",
+                "typeString": "contract Managerable"
+              }
+            },
+            "id": 5334,
+            "nodeType": "InheritanceSpecifier",
+            "src": "188:11:16"
+          }
+        ],
+        "contractDependencies": [
+          2228,
+          4113,
+          18216,
+          18442
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 5367,
+        "linearizedBaseContracts": [
+          5367,
+          18216,
+          4113,
+          18442,
+          2228
+        ],
+        "name": "FPTData",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 5336,
+            "name": "_totalLockedWorth",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "572:34:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 5335,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "572:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5340,
+            "name": "lockedBalances",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "613:52:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 5339,
+              "keyType": {
+                "id": 5337,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "622:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "613:28:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 5338,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "633:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5344,
+            "name": "lockedTotalWorth",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "672:54:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 5343,
+              "keyType": {
+                "id": 5341,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "681:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "672:28:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 5342,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "692:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5348,
+            "name": "latestTransferIn",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "950:51:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 5347,
+              "keyType": {
+                "id": 5345,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "958:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "950:25:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 5346,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "967:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5350,
+            "name": "timeLimited",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "1008:28:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 5349,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "1008:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `owner` locked  `amount` FPT, which net worth is  `worth` in USD. ",
+            "id": 5358,
+            "name": "AddLocked",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 5357,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5352,
+                  "indexed": true,
+                  "name": "owner",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5358,
+                  "src": "1170:21:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5351,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1170:7:16",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5354,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5358,
+                  "src": "1193:14:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5353,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1193:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5356,
+                  "indexed": false,
+                  "name": "worth",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5358,
+                  "src": "1208:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5355,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1208:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1169:53:16"
+            },
+            "src": "1154:69:16"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `owner` burned locked  `amount` FPT, which net worth is  `worth` in USD. ",
+            "id": 5366,
+            "name": "BurnLocked",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 5365,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5360,
+                  "indexed": true,
+                  "name": "owner",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5366,
+                  "src": "1364:21:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5359,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1364:7:16",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5362,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5366,
+                  "src": "1387:14:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5361,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1387:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5364,
+                  "indexed": false,
+                  "name": "worth",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5366,
+                  "src": "1402:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5363,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1402:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1363:53:16"
+            },
+            "src": "1347:70:16"
+          }
+        ],
+        "scope": 5368,
+        "src": "140:1282:16"
+      }
+    ],
+    "src": "0:1422:16"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/FPTCoin/FPTData.sol",
+    "exportedSymbols": {
+      "FPTData": [
+        5367
+      ]
+    },
+    "id": 5368,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5325,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".1"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:16"
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Managerable.sol",
+        "file": "../modules/Managerable.sol",
+        "id": 5326,
+        "nodeType": "ImportDirective",
+        "scope": 5368,
+        "sourceUnit": 18217,
+        "src": "25:36:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/FNXMinePool/IFNXMinePool.sol",
+        "file": "../FNXMinePool/IFNXMinePool.sol",
+        "id": 5327,
+        "nodeType": "ImportDirective",
+        "scope": 5368,
+        "sourceUnit": 4114,
+        "src": "63:41:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/ERC20/Erc20Data.sol",
+        "file": "../ERC20/Erc20Data.sol",
+        "id": 5328,
+        "nodeType": "ImportDirective",
+        "scope": 5368,
+        "sourceUnit": 2229,
+        "src": "106:32:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 5329,
+              "name": "Erc20Data",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2228,
+              "src": "160:9:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Erc20Data_$2228",
+                "typeString": "contract Erc20Data"
+              }
+            },
+            "id": 5330,
+            "nodeType": "InheritanceSpecifier",
+            "src": "160:9:16"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 5331,
+              "name": "ImportFNXMinePool",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4113,
+              "src": "170:17:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportFNXMinePool_$4113",
+                "typeString": "contract ImportFNXMinePool"
+              }
+            },
+            "id": 5332,
+            "nodeType": "InheritanceSpecifier",
+            "src": "170:17:16"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 5333,
+              "name": "Managerable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 18216,
+              "src": "188:11:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Managerable_$18216",
+                "typeString": "contract Managerable"
+              }
+            },
+            "id": 5334,
+            "nodeType": "InheritanceSpecifier",
+            "src": "188:11:16"
+          }
+        ],
+        "contractDependencies": [
+          2228,
+          4113,
+          18216,
+          18442
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 5367,
+        "linearizedBaseContracts": [
+          5367,
+          18216,
+          4113,
+          18442,
+          2228
+        ],
+        "name": "FPTData",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 5336,
+            "name": "_totalLockedWorth",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "572:34:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 5335,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "572:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5340,
+            "name": "lockedBalances",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "613:52:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 5339,
+              "keyType": {
+                "id": 5337,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "622:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "613:28:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 5338,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "633:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5344,
+            "name": "lockedTotalWorth",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "672:54:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 5343,
+              "keyType": {
+                "id": 5341,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "681:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "672:28:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 5342,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "692:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5348,
+            "name": "latestTransferIn",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "950:51:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 5347,
+              "keyType": {
+                "id": 5345,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "958:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "950:25:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 5346,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "967:7:16",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 5350,
+            "name": "timeLimited",
+            "nodeType": "VariableDeclaration",
+            "scope": 5367,
+            "src": "1008:28:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 5349,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "1008:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `owner` locked  `amount` FPT, which net worth is  `worth` in USD. ",
+            "id": 5358,
+            "name": "AddLocked",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 5357,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5352,
+                  "indexed": true,
+                  "name": "owner",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5358,
+                  "src": "1170:21:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5351,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1170:7:16",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5354,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5358,
+                  "src": "1193:14:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5353,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1193:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5356,
+                  "indexed": false,
+                  "name": "worth",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5358,
+                  "src": "1208:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5355,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1208:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1169:53:16"
+            },
+            "src": "1154:69:16"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `owner` burned locked  `amount` FPT, which net worth is  `worth` in USD. ",
+            "id": 5366,
+            "name": "BurnLocked",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 5365,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5360,
+                  "indexed": true,
+                  "name": "owner",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5366,
+                  "src": "1364:21:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5359,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1364:7:16",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5362,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5366,
+                  "src": "1387:14:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5361,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1387:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5364,
+                  "indexed": false,
+                  "name": "worth",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 5366,
+                  "src": "1402:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5363,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1402:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1363:53:16"
+            },
+            "src": "1347:70:16"
+          }
+        ],
+        "scope": 5368,
+        "src": "140:1282:16"
+      }
+    ],
+    "src": "0:1422:16"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.1.0",
+  "updatedAt": "2020-09-02T10:11:20.673Z",
+  "devdoc": {
+    "methods": {
+      "getManager()": {
+        "details": "get manager address.       "
+      },
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "setManager(address)": {
+        "details": "set manager by owner.       "
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    }
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

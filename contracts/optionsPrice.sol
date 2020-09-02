@@ -50,8 +50,10 @@ contract OptionsPrice is ImportVolatility{
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
-        }else{
+        }else if (optType == 1){
             return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
+        }else{
+            require(optType<2," Must input 0 for call option or 1 for put option");
         }
     }
     /**
@@ -68,8 +70,10 @@ contract OptionsPrice is ImportVolatility{
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
-        }else{
+        }else if (optType == 1){
             return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
+        }else{
+            require(optType<2," Must input 0 for call option or 1 for put option");
         }
     }
     /**

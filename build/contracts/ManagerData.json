@@ -1,0 +1,3045 @@
+{
+  "contractName": "ManagerData",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "collateral",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "tokenAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "AddCollateral",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "settlement",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "optionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "optionPrice",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "settlementAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "optionAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "BuyOption",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "optionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "sellValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "ExerciseOption",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "collateral",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "allRedeem",
+          "type": "uint256"
+        }
+      ],
+      "name": "RedeemCollateral",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "optionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "sellValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "SellOption",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addAddress",
+          "type": "address"
+        }
+      ],
+      "name": "addOperator",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addAddress",
+          "type": "address"
+        }
+      ],
+      "name": "addWhiteList",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tmpAddress",
+          "type": "address"
+        }
+      ],
+      "name": "checkAddressPayIn",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tmpAddress",
+          "type": "address"
+        }
+      ],
+      "name": "checkAddressRedeemOut",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getCollateralPoolAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getFPTCoinAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getOperator",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getOptionsPoolAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getOptionsPriceAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getOracleAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getWhiteList",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tmpAddress",
+          "type": "address"
+        }
+      ],
+      "name": "isEligibleAddress",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "permission",
+          "type": "uint256"
+        }
+      ],
+      "name": "modifyPermission",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "removeAddress",
+          "type": "address"
+        }
+      ],
+      "name": "removeOperator",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "removeAddress",
+          "type": "address"
+        }
+      ],
+      "name": "removeWhiteList",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "collateralPool",
+          "type": "address"
+        }
+      ],
+      "name": "setCollateralPoolAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "FPTCoinAddr",
+          "type": "address"
+        }
+      ],
+      "name": "setFPTCoinAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "halt",
+          "type": "bool"
+        }
+      ],
+      "name": "setHalt",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "operators",
+          "type": "address[]"
+        }
+      ],
+      "name": "setOperator",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "addAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setOperator",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "optionsPool",
+          "type": "address"
+        }
+      ],
+      "name": "setOptionsPoolAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "optionsPrice",
+          "type": "address"
+        }
+      ],
+      "name": "setOptionsPriceAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "oracle",
+          "type": "address"
+        }
+      ],
+      "name": "setOracleAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"collateral\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tokenAmount\",\"type\":\"uint256\"}],\"name\":\"AddCollateral\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"settlement\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"optionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"optionPrice\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"settlementAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"optionAmount\",\"type\":\"uint256\"}],\"name\":\"BuyOption\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"optionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"sellValue\",\"type\":\"uint256\"}],\"name\":\"ExerciseOption\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"collateral\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"allRedeem\",\"type\":\"uint256\"}],\"name\":\"RedeemCollateral\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"optionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"sellValue\",\"type\":\"uint256\"}],\"name\":\"SellOption\",\"type\":\"event\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"addAddress\",\"type\":\"address\"}],\"name\":\"addOperator\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"addAddress\",\"type\":\"address\"}],\"name\":\"addWhiteList\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"tmpAddress\",\"type\":\"address\"}],\"name\":\"checkAddressPayIn\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"tmpAddress\",\"type\":\"address\"}],\"name\":\"checkAddressRedeemOut\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getCollateralPoolAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getFPTCoinAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getOperator\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getOptionsPoolAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getOptionsPriceAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getOracleAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getWhiteList\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"tmpAddress\",\"type\":\"address\"}],\"name\":\"isEligibleAddress\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"addAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"permission\",\"type\":\"uint256\"}],\"name\":\"modifyPermission\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"removeAddress\",\"type\":\"address\"}],\"name\":\"removeOperator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"removeAddress\",\"type\":\"address\"}],\"name\":\"removeWhiteList\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"collateralPool\",\"type\":\"address\"}],\"name\":\"setCollateralPoolAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"FPTCoinAddr\",\"type\":\"address\"}],\"name\":\"setFPTCoinAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bool\",\"name\":\"halt\",\"type\":\"bool\"}],\"name\":\"setHalt\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"operators\",\"type\":\"address[]\"}],\"name\":\"setOperator\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"addAddress\",\"type\":\"address\"}],\"name\":\"setOperator\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"optionsPool\",\"type\":\"address\"}],\"name\":\"setOptionsPoolAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"optionsPrice\",\"type\":\"address\"}],\"name\":\"setOptionsPriceAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"oracle\",\"type\":\"address\"}],\"name\":\"setOracleAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"A smart-contract which has operations of collateral and methods of calculate collateral occupation.  \",\"methods\":{\"addOperator(address)\":{\"details\":\"add a new operator by owner.       \"},\"addWhiteList(address)\":{\"details\":\"Implementation of add an eligible address into the whitelist.\",\"params\":{\"addAddress\":\"new eligible address.\"}},\"getOperator()\":{\"details\":\"get all operators.       \"},\"getWhiteList()\":{\"details\":\"Implementation of getting the eligible whitelist.\"},\"isEligibleAddress(address)\":{\"details\":\"Implementation of testing whether the input address is eligible.\",\"params\":{\"tmpAddress\":\"input address for testing.\"}},\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"removeOperator(address)\":{\"details\":\"remove operator by owner.       \"},\"removeWhiteList(address)\":{\"details\":\"Implementation of revoke an invalid address from the whitelist.\",\"params\":{\"removeAddress\":\"revoked address.\"}},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"setOperator(address[])\":{\"details\":\"set all operators by owner.       \"},\"setOperator(uint256,address)\":{\"details\":\"modify indexed operator by owner.       \"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"title\":\"collateral calculate module\"},\"userdoc\":{\"methods\":{\"setHalt(bool)\":{\"notice\":\"function Emergency situation that requires contribution period to stop or not.\"}}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/OptionsManager/ManagerData.sol\":\"ManagerData\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/CollateralPool/ICollateralPool.sol\":{\"keccak256\":\"0xcf764bee44e49ee6ace12db98bb08c4739f8a4fcb78f76e8348850b48bf1a940\",\"urls\":[\"bzz-raw://5e265e972df99cc66d23091b9736f461bab4035a1ec2dc5914aa10b54962be36\",\"dweb:/ipfs/QmdxxJeWMMjyjWhicXajMAWf45gzAUVSV7cShGpN51TeuZ\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/ERC20/IERC20.sol\":{\"keccak256\":\"0xc6546de7f0e54c07a45e042b9c8a64b4e7b46d686db45088e87576b3f0236c5b\",\"urls\":[\"bzz-raw://631cd766d4cac84258ea4110daaea5a0f5cebeceb35eca8eb52d067940667b63\",\"dweb:/ipfs/Qmd1171o1Evek9Kb7HUezsVvgQ1fpJJ9RyZBAaLBAKC6yR\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/FPTCoin/IFPTCoin.sol\":{\"keccak256\":\"0x0bf8f86d5040cd6ca58fcd81a6515e9f1990de7bcba429f004ddaef10340ecbb\",\"urls\":[\"bzz-raw://674cd2db7286e224eb831a53d082de9dc621e2d8acf0e6fa8e07067c08c4558d\",\"dweb:/ipfs/QmdZcpZCaC3UvaTkMx6PzaM1ZvJPHCNvZCJibyt9Pw9mCK\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/OptionsManager/ManagerData.sol\":{\"keccak256\":\"0x42f7f64fb15cab7fa197a23773ae50326aa7ed9005bae77d07a9f91807315c4d\",\"urls\":[\"bzz-raw://c6f91a3cf4eab5a565a6d6e0d20d8abe262ccf4e47170c43504afe3076e1b4b0\",\"dweb:/ipfs/QmNQTqu8FWpjuKzbWeYHgXyoAJdHpbGN5WkE4XCUczN7ac\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/OptionsPool/IOptionsPool.sol\":{\"keccak256\":\"0x612f27f19c75e81d88558b48179a7750b3fc4ebc1fc959ac1c6f19a572ad93d2\",\"urls\":[\"bzz-raw://3c0fe6d4e8666d70278c56b948615a19863e7110ff97f5f5c9a1fc1a36deb6aa\",\"dweb:/ipfs/QmSWw24vsrHbxxB5S5ti31t8G7o12xPhbHnffwDbdBfWkP\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFNXOracle.sol\":{\"keccak256\":\"0x1efddebde02f165ecbf6471f50133ba0e96cffdca863fd4e00dbd310a90e0b76\",\"urls\":[\"bzz-raw://33fdfdedca349be4f99aa68d93f8caf4f871a7a48569a5ac9457a5efd301038e\",\"dweb:/ipfs/QmUDTMzAPzL6oyQ19Nh7tkLJHSVidUNS5iNXPC5iFZyuTN\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IOptionsPrice.sol\":{\"keccak256\":\"0xeb617d9512f2a7b49fb335067a2657caba42193767c47190ce9e6810dd26c09d\",\"urls\":[\"bzz-raw://e3167ebb4c5a4dffe77b0bdadba99ac352f6348c7bbdb0eff72316164047ed2c\",\"dweb:/ipfs/QmYUBXAbkNiz2hsM286WuwJfpp2rUJyqw9TrWQEawfCKuD\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol\":{\"keccak256\":\"0x81def677cf1dde78745f2b83c6f74f435eb660c2a241e5c70199e456124e30c0\",\"urls\":[\"bzz-raw://a5f82513342799ed552fcadfb754ad21d54dc810042cbc36f121ca0504068b76\",\"dweb:/ipfs/Qmf8N8c9mjJLfuGq4dqFgM1LvUZVpKpYCkMPMHGbuz53f7\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Halt.sol\":{\"keccak256\":\"0x26a6b75a53e116ea88948bfeaa6e28bc3eadfa9b096b5ff5b9d2496fc215d6e1\",\"urls\":[\"bzz-raw://2a404fbd9cce74500e19ff83bb107021036f7c80c84e6085b0b748f5f0fe30fe\",\"dweb:/ipfs/QmQeMMcFnvu5fXFofmq5FxQj6pChZSeFmMV9cB1HfnEk61\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Operator.sol\":{\"keccak256\":\"0xe2ff19a071b39aa12236706ba87cc01d98840e86ec754883c248daad6e0c333e\",\"urls\":[\"bzz-raw://b52c4ede1a79b4a203c0040378d3b3eee57fbe26f65c1854f3c03c20d3d9bb29\",\"dweb:/ipfs/QmWzpGK3q4j6guUJ7Q2QETXEHD5jtHaZJXxE7eUYjXFeE9\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0xbe1710912b2b0c2df59e64935f9e4d3d69af51a543edae2dbf53619fb2ffa6a6\",\"urls\":[\"bzz-raw://5563a6aa807414bfb16e43e9b6c59b9c63bb9f95778ffe8636a0f8a9bf97d944\",\"dweb:/ipfs/QmeMrswj4ab8Jp83RxC7rPo8y4XWGqVSGjbtKbc8xuFaT1\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol\":{\"keccak256\":\"0x851d0c421f2861776181a318612bf83d8b9ccc6e3f205206400b3bd92cdd1e52\",\"urls\":[\"bzz-raw://8252e53d9a9b4dac568d12939ae40459c302e3496b9010182d8fd948cd2f310b\",\"dweb:/ipfs/QmcH9hcLvaS7ZtmNP3MAcQKawpyBUEUNdhdBg75PwUbUEY\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/whiteList.sol\":{\"keccak256\":\"0xddfae6fb1dc4f08c912111ec619ae7003d85efafc020838dd7477f7a174b3888\",\"urls\":[\"bzz-raw://539d0a3a3db55d71babea0260d03935a3f918ff2b0ffc25d3380927ab4045e59\",\"dweb:/ipfs/QmR259fpZcL8VQiQBa82ydmkp5a9J7HABFq3mQCuPvw3Xa\"]}},\"version\":1}",
+  "bytecode": "0x60806040526000805460ff60a860020a60ff0201191690556c0c9f2c9cd04674edea40000000600a55633b9aca00600b556105dc600c556101f4600d5534801561004857600080fd5b50611214806100586000396000f3fe608060405234801561001057600080fd5b50600436106101c6576000357c0100000000000000000000000000000000000000000000000000000000900480639870d7fe11610116578063d7e57992116100b4578063e7cd4a041161008e578063e7cd4a0414610532578063e7f43c6814610558578063f2fde38b14610560578063f495438714610586576101c6565b8063d7e57992146104d8578063e7122ffd146104e0578063e7a1c1c014610506576101c6565b8063b18b78dd116100f0578063b18b78dd14610476578063bdac4bf61461047e578063c040725a146104a4578063c219043b146104ac576101c6565b80639870d7fe14610404578063a093e2d01461042a578063ac8a584a14610450576101c6565b806342082c1e11610183578063715018a61161015d578063715018a6146103c6578063817bf86d146103ce5780638da5cb5b146103f45780638f32d59b146103fc576101c6565b806342082c1e146102f55780634c69c00f146103985780635ca4b73b146103be576101c6565b8063059621d7146101cb57806309a9d76c146102055780631730b3cb1461025d5780631a5a3fce146102855780632042e5c2146102ab578063251e2fe3146102d1575b600080fd5b6101f1600480360360208110156101e157600080fd5b5035600160a060020a03166105a5565b604080519115158252519081900360200190f35b61020d6105dd565b60408051602080825283518183015283519192839290830191858101910280838360005b83811015610249578181015183820152602001610231565b505050509050019250505060405180910390f35b6102836004803603602081101561027357600080fd5b5035600160a060020a0316610640565b005b6102836004803603602081101561029b57600080fd5b5035600160a060020a03166106ac565b6101f1600480360360208110156102c157600080fd5b5035600160a060020a0316610718565b6102d9610775565b60408051600160a060020a039092168252519081900360200190f35b6102836004803603602081101561030b57600080fd5b81019060208101813564010000000081111561032657600080fd5b82018360208201111561033857600080fd5b8035906020019184602083028401116401000000008311171561035a57600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600092019190915250929550610784945050505050565b610283600480360360208110156103ae57600080fd5b5035600160a060020a03166107e5565b6102d9610851565b610283610860565b6101f1600480360360208110156103e457600080fd5b5035600160a060020a0316610906565b6102d9610975565b6101f1610989565b6102836004803603602081101561041a57600080fd5b5035600160a060020a031661099f565b6102836004803603602081101561044057600080fd5b5035600160a060020a03166109fd565b6101f16004803603602081101561046657600080fd5b5035600160a060020a0316610a69565b6102d9610ac6565b6101f16004803603602081101561049457600080fd5b5035600160a060020a0316610ad5565b6102d9610b09565b610283600480360360408110156104c257600080fd5b50600160a060020a038135169060200135610b18565b6102d9610b7e565b610283600480360360208110156104f657600080fd5b5035600160a060020a0316610b8d565b6102836004803603604081101561051c57600080fd5b5080359060200135600160a060020a0316610bf9565b6102836004803603602081101561054857600080fd5b5035600160a060020a0316610c83565b61020d610cfe565b6102836004803603602081101561057657600080fd5b5035600160a060020a0316610d5e565b6102836004803603602081101561059c57600080fd5b50351515610db1565b60006105b082610906565b80156105d75750600160a060020a0382166000908152600260208190526040909120548116145b92915050565b6060600180548060200260200160405190810160405280929190818152602001828054801561063557602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610617575b505050505090505b90565b610648610989565b61068a576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60068054600160a060020a031916600160a060020a0392909216919091179055565b6106b4610989565b6106f6576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60058054600160a060020a031916600160a060020a0392909216919091179055565b6000610722610989565b610764576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6105d760018363ffffffff610e3d16565b600654600160a060020a031690565b61078c610989565b6107ce576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b80516107e19060079060208401906110cd565b5050565b6107ed610989565b61082f576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60048054600160a060020a031916600160a060020a0392909216919091179055565b600854600160a060020a031690565b610868610989565b6108aa576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60008054604051610100909104600160a060020a0316907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805474ffffffffffffffffffffffffffffffffffffffff0019169055565b60006105d782600180548060200260200160405190810160405280929190818152602001828054801561096257602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610944575b5050505050610f2b90919063ffffffff16565b6000546101009004600160a060020a031690565b6000546101009004600160a060020a0316331490565b6109a7610989565b6109e9576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6109fa60078263ffffffff610f7a16565b50565b610a05610989565b610a47576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60088054600160a060020a031916600160a060020a0392909216919091179055565b6000610a73610989565b610ab5576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6105d760078363ffffffff610e3d16565b600454600160a060020a031690565b6000610ae082610906565b80156105d7575050600160a060020a031660009081526002602052604090205460019081161490565b600554600160a060020a031690565b610b20610989565b610b62576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b600160a060020a03909116600090815260026020526040902055565b600354600160a060020a031690565b610b95610989565b610bd7576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60038054600160a060020a031916600160a060020a0392909216919091179055565b610c01610989565b610c43576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b8060078381548110610c5157fe5b9060005260206000200160006101000a815481600160a060020a030219169083600160a060020a031602179055505050565b610c8b610989565b610ccd576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b610cde60018263ffffffff610f7a16565b600160a060020a0316600090815260026020526040902063ffffffff9055565b6060600780548060200260200160405190810160405280929190818152602001828054801561063557602002820191906000526020600020908154600160a060020a03168152600190910190602001808311610617575050505050905090565b610d66610989565b610da8576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6109fa81611012565b610db9610989565b610dfb576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6000805491151575010000000000000000000000000000000000000000000275ff00000000000000000000000000000000000000000019909216919091179055565b8154600090815b81811015610e8a5783600160a060020a0316858281548110610e6257fe5b600091825260209091200154600160a060020a03161415610e8257610e8a565b600101610e44565b81811015610f2057600182038114610f0457846001830381548110610eab57fe5b9060005260206000200160009054906101000a9004600160a060020a0316858281548110610ed557fe5b9060005260206000200160006101000a815481600160a060020a030219169083600160a060020a031602179055505b8454610f14866000198301611132565b506001925050506105d7565b506000949350505050565b8151600090815b81811015610f205783600160a060020a0316858281518110610f5057fe5b6020026020010151600160a060020a03161415610f72576001925050506105d7565b600101610f32565b610fdd82805480602002602001604051908101604052809291908181526020018280548015610fd257602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610fb4575b505050505082610f2b565b6107e1578154600181018355600083815260209020018054600160a060020a038316600160a060020a03199091161790555050565b600160a060020a03811661105a5760405160e560020a62461bcd02815260040180806020018281038252602681526020018061119a6026913960400191505060405180910390fd5b60008054604051600160a060020a038085169361010090930416917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a360008054600160a060020a039092166101000274ffffffffffffffffffffffffffffffffffffffff0019909216919091179055565b828054828255906000526020600020908101928215611122579160200282015b828111156111225782518254600160a060020a031916600160a060020a039091161782556020909201916001909101906110ed565b5061112e92915061115b565b5090565b8154818355818111156111565760008381526020902061115691810190830161117f565b505050565b61063d91905b8082111561112e578054600160a060020a0319168155600101611161565b61063d91905b8082111561112e576000815560010161118556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f20616464726573734f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a265627a7a72315820a6da990c8d0f94188d55f1537fc5d2dac6599564e9b1abf6fb52f8407aad5f8e64736f6c63430005100032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101c6576000357c0100000000000000000000000000000000000000000000000000000000900480639870d7fe11610116578063d7e57992116100b4578063e7cd4a041161008e578063e7cd4a0414610532578063e7f43c6814610558578063f2fde38b14610560578063f495438714610586576101c6565b8063d7e57992146104d8578063e7122ffd146104e0578063e7a1c1c014610506576101c6565b8063b18b78dd116100f0578063b18b78dd14610476578063bdac4bf61461047e578063c040725a146104a4578063c219043b146104ac576101c6565b80639870d7fe14610404578063a093e2d01461042a578063ac8a584a14610450576101c6565b806342082c1e11610183578063715018a61161015d578063715018a6146103c6578063817bf86d146103ce5780638da5cb5b146103f45780638f32d59b146103fc576101c6565b806342082c1e146102f55780634c69c00f146103985780635ca4b73b146103be576101c6565b8063059621d7146101cb57806309a9d76c146102055780631730b3cb1461025d5780631a5a3fce146102855780632042e5c2146102ab578063251e2fe3146102d1575b600080fd5b6101f1600480360360208110156101e157600080fd5b5035600160a060020a03166105a5565b604080519115158252519081900360200190f35b61020d6105dd565b60408051602080825283518183015283519192839290830191858101910280838360005b83811015610249578181015183820152602001610231565b505050509050019250505060405180910390f35b6102836004803603602081101561027357600080fd5b5035600160a060020a0316610640565b005b6102836004803603602081101561029b57600080fd5b5035600160a060020a03166106ac565b6101f1600480360360208110156102c157600080fd5b5035600160a060020a0316610718565b6102d9610775565b60408051600160a060020a039092168252519081900360200190f35b6102836004803603602081101561030b57600080fd5b81019060208101813564010000000081111561032657600080fd5b82018360208201111561033857600080fd5b8035906020019184602083028401116401000000008311171561035a57600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600092019190915250929550610784945050505050565b610283600480360360208110156103ae57600080fd5b5035600160a060020a03166107e5565b6102d9610851565b610283610860565b6101f1600480360360208110156103e457600080fd5b5035600160a060020a0316610906565b6102d9610975565b6101f1610989565b6102836004803603602081101561041a57600080fd5b5035600160a060020a031661099f565b6102836004803603602081101561044057600080fd5b5035600160a060020a03166109fd565b6101f16004803603602081101561046657600080fd5b5035600160a060020a0316610a69565b6102d9610ac6565b6101f16004803603602081101561049457600080fd5b5035600160a060020a0316610ad5565b6102d9610b09565b610283600480360360408110156104c257600080fd5b50600160a060020a038135169060200135610b18565b6102d9610b7e565b610283600480360360208110156104f657600080fd5b5035600160a060020a0316610b8d565b6102836004803603604081101561051c57600080fd5b5080359060200135600160a060020a0316610bf9565b6102836004803603602081101561054857600080fd5b5035600160a060020a0316610c83565b61020d610cfe565b6102836004803603602081101561057657600080fd5b5035600160a060020a0316610d5e565b6102836004803603602081101561059c57600080fd5b50351515610db1565b60006105b082610906565b80156105d75750600160a060020a0382166000908152600260208190526040909120548116145b92915050565b6060600180548060200260200160405190810160405280929190818152602001828054801561063557602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610617575b505050505090505b90565b610648610989565b61068a576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60068054600160a060020a031916600160a060020a0392909216919091179055565b6106b4610989565b6106f6576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60058054600160a060020a031916600160a060020a0392909216919091179055565b6000610722610989565b610764576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6105d760018363ffffffff610e3d16565b600654600160a060020a031690565b61078c610989565b6107ce576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b80516107e19060079060208401906110cd565b5050565b6107ed610989565b61082f576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60048054600160a060020a031916600160a060020a0392909216919091179055565b600854600160a060020a031690565b610868610989565b6108aa576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60008054604051610100909104600160a060020a0316907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805474ffffffffffffffffffffffffffffffffffffffff0019169055565b60006105d782600180548060200260200160405190810160405280929190818152602001828054801561096257602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610944575b5050505050610f2b90919063ffffffff16565b6000546101009004600160a060020a031690565b6000546101009004600160a060020a0316331490565b6109a7610989565b6109e9576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6109fa60078263ffffffff610f7a16565b50565b610a05610989565b610a47576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60088054600160a060020a031916600160a060020a0392909216919091179055565b6000610a73610989565b610ab5576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6105d760078363ffffffff610e3d16565b600454600160a060020a031690565b6000610ae082610906565b80156105d7575050600160a060020a031660009081526002602052604090205460019081161490565b600554600160a060020a031690565b610b20610989565b610b62576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b600160a060020a03909116600090815260026020526040902055565b600354600160a060020a031690565b610b95610989565b610bd7576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b60038054600160a060020a031916600160a060020a0392909216919091179055565b610c01610989565b610c43576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b8060078381548110610c5157fe5b9060005260206000200160006101000a815481600160a060020a030219169083600160a060020a031602179055505050565b610c8b610989565b610ccd576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b610cde60018263ffffffff610f7a16565b600160a060020a0316600090815260026020526040902063ffffffff9055565b6060600780548060200260200160405190810160405280929190818152602001828054801561063557602002820191906000526020600020908154600160a060020a03168152600190910190602001808311610617575050505050905090565b610d66610989565b610da8576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6109fa81611012565b610db9610989565b610dfb576040805160e560020a62461bcd02815260206004820181905260248201526000805160206111c0833981519152604482015290519081900360640190fd5b6000805491151575010000000000000000000000000000000000000000000275ff00000000000000000000000000000000000000000019909216919091179055565b8154600090815b81811015610e8a5783600160a060020a0316858281548110610e6257fe5b600091825260209091200154600160a060020a03161415610e8257610e8a565b600101610e44565b81811015610f2057600182038114610f0457846001830381548110610eab57fe5b9060005260206000200160009054906101000a9004600160a060020a0316858281548110610ed557fe5b9060005260206000200160006101000a815481600160a060020a030219169083600160a060020a031602179055505b8454610f14866000198301611132565b506001925050506105d7565b506000949350505050565b8151600090815b81811015610f205783600160a060020a0316858281518110610f5057fe5b6020026020010151600160a060020a03161415610f72576001925050506105d7565b600101610f32565b610fdd82805480602002602001604051908101604052809291908181526020018280548015610fd257602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610fb4575b505050505082610f2b565b6107e1578154600181018355600083815260209020018054600160a060020a038316600160a060020a03199091161790555050565b600160a060020a03811661105a5760405160e560020a62461bcd02815260040180806020018281038252602681526020018061119a6026913960400191505060405180910390fd5b60008054604051600160a060020a038085169361010090930416917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a360008054600160a060020a039092166101000274ffffffffffffffffffffffffffffffffffffffff0019909216919091179055565b828054828255906000526020600020908101928215611122579160200282015b828111156111225782518254600160a060020a031916600160a060020a039091161782556020909201916001909101906110ed565b5061112e92915061115b565b5090565b8154818355818111156111565760008381526020902061115691810190830161117f565b505050565b61063d91905b8082111561112e578054600160a060020a0319168155600101611161565b61063d91905b8082111561112e576000815560010161118556fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f20616464726573734f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a265627a7a72315820a6da990c8d0f94188d55f1537fc5d2dac6599564e9b1abf6fb52f8407aad5f8e64736f6c63430005100032",
+  "sourceMap": "548:2374:22:-;;;159:5:50;129:35;;-1:-1:-1;;;;;;;;85:27:46;;;903:4:22;874:33;;982:3;953:32;;1826:4;1794:36;;1869:3;1837:35;;548:2374;5:2:-1;;;;30:1;27;20:12;5:2;548:2374:22;;;;;;;",
+  "deployedSourceMap": "548:2374:22:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;548:2374:22;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2040:202:44;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2040:202:44;-1:-1:-1;;;;;2040:202:44;;:::i;:::-;;;;;;;;;;;;;;;;;;1445:96;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:100:-1;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;1445:96:44;;;;;;;;;;;;;;;;;2534:141:3;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2534:141:3;-1:-1:-1;;;;;2534:141:3;;:::i;:::-;;1838:126:25;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1838:126:25;-1:-1:-1;;;;;1838:126:25;;:::i;1207:151:44:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1207:151:44;-1:-1:-1;;;;;1207:151:44;;:::i;2414:114:3:-;;;:::i;:::-;;;;-1:-1:-1;;;;;2414:114:3;;;;;;;;;;;;;;1822:109:48;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1822:109:48;;;;;;;;21:11:-1;5:28;;2:2;;;46:1;43;36:12;2:2;1822:109:48;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;1822:109:48;;;;;;101:9:-1;95:2;81:12;77:21;67:8;63:36;60:51;39:11;25:12;22:29;11:108;8:2;;;132:1;129;122:12;8:2;1822:109:48;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;81:16;;74:27;;;;-1:-1;1822:109:48;;-1:-1:-1;1822:109:48;;-1:-1:-1;;;;;1822:109:48:i;808:102:40:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;808:102:40;-1:-1:-1;;;;;808:102:40;;:::i;536:110:42:-;;;:::i;1666:140:49:-;;;:::i;1700:138:44:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1700:138:44;-1:-1:-1;;;;;1700:138:44;;:::i;857:79:49:-;;;:::i;1223:92::-;;;:::i;1035:120:48:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1035:120:48;-1:-1:-1;;;;;1035:120:48;;:::i;652:131:42:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;652:131:42;-1:-1:-1;;;;;652:131:42;;:::i;1429:154:48:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1429:154:48;-1:-1:-1;;;;;1429:154:48;;:::i;707:96:40:-;;;:::i;1844:190:44:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1844:190:44;-1:-1:-1;;;;;1844:190:44;;:::i;1724:108:25:-;;;:::i;919:141:44:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;919:141:44;;;;;;;;:::i;1029:100:18:-;;;:::i;1135:114::-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1135:114:18;-1:-1:-1;;;;;1135:114:18;;:::i;1235:122:48:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1235:122:48;;;;;;-1:-1:-1;;;;;1235:122:48;;:::i;740:173:44:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;740:173:44;-1:-1:-1;;;;;740:173:44;;:::i;1648:100:48:-;;;:::i;1961:109:49:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1961:109:49;-1:-1:-1;;;;;1961:109:49;;:::i;436:97:46:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;436:97:46;;;;:::i;2040:202:44:-;2112:4;2135:29;2153:10;2135:17;:29::i;:::-;:99;;;;-1:-1:-1;;;;;;2170:29:44;;;;;;403:6;2170:29;;;;;;;;;:44;;2169:64;2135:99;2128:106;2040:202;-1:-1:-1;;2040:202:44:o;1445:96::-;1489:16;1524:9;1517:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1517:16:44;;;;;;;;;;;;;;;;;;;;;;;1445:96;;:::o;2534:141:3:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;2618:15:3;:49;;-1:-1:-1;;;;;;2618:49:3;-1:-1:-1;;;;;2618:49:3;;;;;;;;;;2534:141::o;1838:126:25:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1916:12:25;:40;;-1:-1:-1;;;;;;1916:40:25;-1:-1:-1;;;;;1916:40:25;;;;;;;;;;1838:126::o;1207:151:44:-;1280:4;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1303:47:44;:9;1336:13;1303:47;:32;:47;:::i;2414:114:3:-;2504:15;;-1:-1:-1;;;;;2504:15:3;2414:114;:::o;1822:109:48:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1898:25:48;;;;:13;;:25;;;;;:::i;:::-;;1822:109;:::o;808:102:40:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;875:7:40;:28;;-1:-1:-1;;;;;;875:28:40;-1:-1:-1;;;;;875:28:40;;;;;;;;;;808:102::o;536:110:42:-;624:13;;-1:-1:-1;;;;;624:13:42;536:110;:::o;1666:140:49:-;1069:9;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1765:1;1749:6;;1728:40;;1749:6;;;;-1:-1:-1;;;;;1749:6:49;;1728:40;;1765:1;;1728:40;1796:1;1779:19;;-1:-1:-1;;1779:19:49;;;1666:140::o;1700:138:44:-;1768:4;1791:39;1819:10;1791:9;:27;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1791:27:44;;;;;;;;;;;;;;;;;;;;;;;:39;;;;:::i;857:79:49:-;895:7;922:6;;;;-1:-1:-1;;;;;922:6:49;;857:79::o;1223:92::-;1263:4;1301:6;;;;-1:-1:-1;;;;;1301:6:49;1287:10;:20;;1223:92::o;1035:120:48:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1102:45:48;:13;1136:10;1102:45;:33;:45;:::i;:::-;1035:120;:::o;652:131:42:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;732:13:42;:43;;-1:-1:-1;;;;;;732:43:42;-1:-1:-1;;;;;732:43:42;;;;;;;;;;652:131::o;1429:154:48:-;1501:4;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1524:51:48;:13;1561;1524:51;:36;:51;:::i;707:96:40:-;788:7;;-1:-1:-1;;;;;788:7:40;707:96;:::o;1844:190:44:-;1912:4;1935:29;1953:10;1935:17;:29::i;:::-;:91;;;;-1:-1:-1;;;;;;;1970:29:44;;;;;:17;:29;;;;;;347:6;1970:40;;;1969:56;;1844:190::o;1724:108:25:-;1811:12;;-1:-1:-1;;;;;1811:12:25;1724:108;:::o;919:141:44:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;-1:-1:-1;;;;;1010:29:44;;;;;;;:17;:29;;;;;:42;919:141::o;1029:100:18:-;1112:8;;-1:-1:-1;;;;;1112:8:18;1029:100;:::o;1135:114::-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1209:8:18;:32;;-1:-1:-1;;;;;;1209:32:18;-1:-1:-1;;;;;1209:32:18;;;;;;;;;;1135:114::o;1235:122:48:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;1339:10:48;1316:13;1330:5;1316:20;;;;;;;;;;;;;;;;:33;;;;;-1:-1:-1;;;;;1316:33:48;;;;;-1:-1:-1;;;;;1316:33:48;;;;;;1235:122;;:::o;740:173:44:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;808:41:44;:9;838:10;808:41;:29;:41;:::i;:::-;-1:-1:-1;;;;;860:29:44;;;;;:17;:29;;;;;291:10;860:45;;740:173::o;1648:100:48:-;1691:16;1727:13;1720:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1720:20:48;;;;;;;;;;;;;;;;;;;;;;1648:100;:::o;1961:109:49:-;1069:9;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;2034:28;2053:8;2034:18;:28::i;436:97:46:-;1069:9:49;:7;:9::i;:::-;1061:54;;;;;-1:-1:-1;;;;;1061:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1061:54:49;;;;;;;;;;;;;;;513:6:46;:13;;;;;;;-1:-1:-1;;513:13:46;;;;;;;;;436:97::o;3358:477:55:-;3480:16;;3449:4;;;3529:91;3537:3;3535:1;:5;3529:91;;;3580:4;-1:-1:-1;;;;;3564:20:55;:9;3574:1;3564:12;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3564:12:55;:20;3560:48;;;3603:5;;3560:48;3541:3;;3529:91;;;3636:3;3634:1;:5;3630:175;;;3666:1;3662:3;:5;3659:1;:8;3655:80;;3703:9;3717:1;3713:3;:5;3703:16;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3703:16:55;3688:9;3698:1;3688:12;;;;;;;;;;;;;;;;:31;;;;;-1:-1:-1;;;;;3688:31:55;;;;;-1:-1:-1;;;;;3688:31:55;;;;;;3655:80;3749:18;;;:9;-1:-1:-1;;3749:18:55;;;:::i;:::-;;3789:4;3782:11;;;;;;3630:175;-1:-1:-1;3822:5:55;;3358:477;-1:-1:-1;;;;3358:477:55:o;3841:286::-;3962:16;;3932:4;;;3989:108;4008:3;4006:1;:5;3989:108;;;4051:4;-1:-1:-1;;;;;4035:20:55;:9;4045:1;4035:12;;;;;;;;;;;;;;-1:-1:-1;;;;;4035:20:55;;4031:54;;;4081:4;4074:11;;;;;;4031:54;4012:3;;3989:108;;3169:183;3264:33;3282:9;3264:33;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3264:33:55;;;;;;;;;;;;;;;;;;;;;3292:4;3264:17;:33::i;:::-;3259:86;;27:10:-1;;39:1;23:18;;45:23;;-1:-1;3313:20:55;;;;;;;;;-1:-1:-1;;;;;3313:20:55;;-1:-1:-1;;;;;;3313:20:55;;;;;;3169:183;;:::o;2176:229:49:-;-1:-1:-1;;;;;2250:22:49;;2242:73;;;;-1:-1:-1;;;;;2242:73:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2352:6;;;2331:38;;-1:-1:-1;;;;;2331:38:49;;;;2352:6;;;;;;2331:38;;;2380:6;:17;;-1:-1:-1;;;;;2380:17:49;;;;;-1:-1:-1;;2380:17:49;;;;;;;;;2176:229::o;548:2374:22:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;;548:2374:22;-1:-1:-1;;;;;548:2374:22;;;;;;;;;;;-1:-1:-1;548:2374:22;;;;;;;-1:-1:-1;548:2374:22;;;-1:-1:-1;548:2374:22;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;:::o;:::-;;;;;;;;;;;;;-1:-1:-1;;;;;;548:2374:22;;;;;;;;;;;;;;;;;;;;;;;;",
+  "source": "pragma solidity ^0.5.1;\r\nimport \"../modules/AddressWhiteList.sol\";\r\nimport \"../modules/ReentrancyGuard.sol\";\r\nimport \"../OptionsPool/IOptionsPool.sol\";\r\nimport \"../interfaces/IFNXOracle.sol\";\r\nimport \"../interfaces/IOptionsPrice.sol\";\r\nimport \"../CollateralPool/ICollateralPool.sol\";\r\nimport \"../FPTCoin/IFPTCoin.sol\";\r\nimport \"../modules/Operator.sol\";\r\nimport \"../ERC20/IERC20.sol\";\r\n/**\r\n * @title collateral calculate module\r\n * @dev A smart-contract which has operations of collateral and methods of calculate collateral occupation.\r\n *\r\n */\r\ncontract ManagerData is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator,ImportOptionsPrice {\r\n    // The minimum collateral rate for options. This value is thousandths.\r\n    mapping (address=>uint256) collateralRate;\r\n        //The maximum input amount limit.\r\n    uint256 internal maxAmount = 1e30;\r\n    //The minimum input amount limit.\r\n    uint256 internal minAmount = 1e9;\r\n//    uint256 private collateralRate = 5000;\r\n    /**\r\n     * @dev Emitted when `from` added `amount` collateral and minted `tokenAmount` FPTCoin.\r\n     */\r\n    event AddCollateral(address indexed from,address indexed collateral,uint256 amount,uint256 tokenAmount);\r\n    /**\r\n     * @dev Emitted when `from` redeemed `allRedeem` collateral.\r\n     */\r\n    event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);\r\n\r\n        /**\r\n    * @dev input price valid range rate, thousandths.\r\n    * the input price must greater than current price * minPriceRate /1000\r\n    *       and less  than current price * maxPriceRate /1000 \r\n    * maxPriceRate is the maximum limit of the price valid range rate\r\n    * maxPriceRate is the minimum limit of the price valid range rage\r\n    */   \r\n    uint256 internal maxPriceRate = 1500;\r\n    uint256 internal minPriceRate = 500;\r\n    /**\r\n     * @dev Emitted when `from` buy `optionAmount` option and create new option.\r\n     * @param from user's account\r\n     * @param settlement user's input settlement paid for buy new option.\r\n     * @param optionId new option's id\r\n     * @param optionPrice option's paid price\r\n     * @param settlementAmount settement cost\r\n     * @param optionAmount mint option token amount.\r\n     */  \r\n    event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);\r\n    /**\r\n     * @dev Emitted when `from` sell `amount` option whose id is `optionId` and received sellValue,priced in usd.\r\n     */  \r\n    event SellOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);\r\n    /**\r\n     * @dev Emitted when `from` exercise `amount` option whose id is `optionId` and received sellValue,priced in usd.\r\n     */  \r\n    event ExerciseOption(address indexed from,uint256 indexed optionId,uint256 amount,uint256 sellValue);\r\n}\r\n",
+  "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\OptionsManager\\ManagerData.sol",
+  "ast": {
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/OptionsManager/ManagerData.sol",
+    "exportedSymbols": {
+      "ManagerData": [
+        7672
+      ]
+    },
+    "id": 7673,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 7578,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".1"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:22"
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol",
+        "file": "../modules/AddressWhiteList.sol",
+        "id": 7579,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 16619,
+        "src": "25:41:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol",
+        "file": "../modules/ReentrancyGuard.sol",
+        "id": 7580,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 18466,
+        "src": "68:40:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/OptionsPool/IOptionsPool.sol",
+        "file": "../OptionsPool/IOptionsPool.sol",
+        "id": 7581,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 8761,
+        "src": "110:41:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFNXOracle.sol",
+        "file": "../interfaces/IFNXOracle.sol",
+        "id": 7582,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 16298,
+        "src": "153:38:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IOptionsPrice.sol",
+        "file": "../interfaces/IOptionsPrice.sol",
+        "id": 7583,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 16403,
+        "src": "193:41:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/CollateralPool/ICollateralPool.sol",
+        "file": "../CollateralPool/ICollateralPool.sol",
+        "id": 7584,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 1615,
+        "src": "236:47:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/FPTCoin/IFPTCoin.sol",
+        "file": "../FPTCoin/IFPTCoin.sol",
+        "id": 7585,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 5637,
+        "src": "285:33:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Operator.sol",
+        "file": "../modules/Operator.sol",
+        "id": 7586,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 18332,
+        "src": "320:33:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/ERC20/IERC20.sol",
+        "file": "../ERC20/IERC20.sol",
+        "id": 7587,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 2840,
+        "src": "355:29:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7588,
+              "name": "ReentrancyGuard",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 18465,
+              "src": "572:15:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ReentrancyGuard_$18465",
+                "typeString": "contract ReentrancyGuard"
+              }
+            },
+            "id": 7589,
+            "nodeType": "InheritanceSpecifier",
+            "src": "572:15:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7590,
+              "name": "AddressWhiteList",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 16618,
+              "src": "588:16:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_AddressWhiteList_$16618",
+                "typeString": "contract AddressWhiteList"
+              }
+            },
+            "id": 7591,
+            "nodeType": "InheritanceSpecifier",
+            "src": "588:16:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7592,
+              "name": "ImportIFPTCoin",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5636,
+              "src": "605:14:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportIFPTCoin_$5636",
+                "typeString": "contract ImportIFPTCoin"
+              }
+            },
+            "id": 7593,
+            "nodeType": "InheritanceSpecifier",
+            "src": "605:14:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7594,
+              "name": "ImportOracle",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 16297,
+              "src": "620:12:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportOracle_$16297",
+                "typeString": "contract ImportOracle"
+              }
+            },
+            "id": 7595,
+            "nodeType": "InheritanceSpecifier",
+            "src": "620:12:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7596,
+              "name": "ImportOptionsPool",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 8760,
+              "src": "633:17:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportOptionsPool_$8760",
+                "typeString": "contract ImportOptionsPool"
+              }
+            },
+            "id": 7597,
+            "nodeType": "InheritanceSpecifier",
+            "src": "633:17:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7598,
+              "name": "ImportCollateralPool",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1614,
+              "src": "651:20:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportCollateralPool_$1614",
+                "typeString": "contract ImportCollateralPool"
+              }
+            },
+            "id": 7599,
+            "nodeType": "InheritanceSpecifier",
+            "src": "651:20:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7600,
+              "name": "Operator",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 18331,
+              "src": "672:8:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Operator_$18331",
+                "typeString": "contract Operator"
+              }
+            },
+            "id": 7601,
+            "nodeType": "InheritanceSpecifier",
+            "src": "672:8:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7602,
+              "name": "ImportOptionsPrice",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 16402,
+              "src": "681:18:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportOptionsPrice_$16402",
+                "typeString": "contract ImportOptionsPrice"
+              }
+            },
+            "id": 7603,
+            "nodeType": "InheritanceSpecifier",
+            "src": "681:18:22"
+          }
+        ],
+        "contractDependencies": [
+          1614,
+          5636,
+          8760,
+          16297,
+          16402,
+          16618,
+          18176,
+          18331,
+          18442,
+          18465
+        ],
+        "contractKind": "contract",
+        "documentation": "@title collateral calculate module\n@dev A smart-contract which has operations of collateral and methods of calculate collateral occupation.\n\n ",
+        "fullyImplemented": true,
+        "id": 7672,
+        "linearizedBaseContracts": [
+          7672,
+          16402,
+          18331,
+          1614,
+          8760,
+          16297,
+          5636,
+          16618,
+          18176,
+          18442,
+          18465
+        ],
+        "name": "ManagerData",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 7607,
+            "name": "collateralRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "783:41:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 7606,
+              "keyType": {
+                "id": 7604,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "792:7:22",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "783:26:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 7605,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "801:7:22",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 7610,
+            "name": "maxAmount",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "874:33:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7608,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "874:7:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31653330",
+              "id": 7609,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "903:4:22",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1000000000000000000000000000000_by_1",
+                "typeString": "int_const 1000000000000000000000000000000"
+              },
+              "value": "1e30"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 7613,
+            "name": "minAmount",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "953:32:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7611,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "953:7:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "316539",
+              "id": 7612,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "982:3:22",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1000000000_by_1",
+                "typeString": "int_const 1000000000"
+              },
+              "value": "1e9"
+            },
+            "visibility": "internal"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` added `amount` collateral and minted `tokenAmount` FPTCoin.",
+            "id": 7623,
+            "name": "AddCollateral",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7622,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7615,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7623,
+                  "src": "1169:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7614,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1169:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7617,
+                  "indexed": true,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7623,
+                  "src": "1190:26:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7616,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1190:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7619,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7623,
+                  "src": "1217:14:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7618,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1217:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7621,
+                  "indexed": false,
+                  "name": "tokenAmount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7623,
+                  "src": "1232:19:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7620,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1232:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1168:84:22"
+            },
+            "src": "1149:104:22"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` redeemed `allRedeem` collateral.",
+            "id": 7631,
+            "name": "RedeemCollateral",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7630,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7625,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7631,
+                  "src": "1366:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7624,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1366:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7627,
+                  "indexed": false,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7631,
+                  "src": "1387:18:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7626,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1387:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7629,
+                  "indexed": false,
+                  "name": "allRedeem",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7631,
+                  "src": "1406:17:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7628,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1406:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1365:59:22"
+            },
+            "src": "1343:82:22"
+          },
+          {
+            "constant": false,
+            "id": 7634,
+            "name": "maxPriceRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "1794:36:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7632,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "1794:7:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31353030",
+              "id": 7633,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1826:4:22",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1500_by_1",
+                "typeString": "int_const 1500"
+              },
+              "value": "1500"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 7637,
+            "name": "minPriceRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "1837:35:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7635,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "1837:7:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "353030",
+              "id": 7636,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1869:3:22",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_500_by_1",
+                "typeString": "int_const 500"
+              },
+              "value": "500"
+            },
+            "visibility": "internal"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` buy `optionAmount` option and create new option.\n@param from user's account\n@param settlement user's input settlement paid for buy new option.\n@param optionId new option's id\n@param optionPrice option's paid price\n@param settlementAmount settement cost\n@param optionAmount mint option token amount.",
+            "id": 7651,
+            "name": "BuyOption",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7650,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7639,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2295:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7638,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2295:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7641,
+                  "indexed": true,
+                  "name": "settlement",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2316:26:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7640,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2316:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7643,
+                  "indexed": true,
+                  "name": "optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2343:24:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7642,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2343:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7645,
+                  "indexed": false,
+                  "name": "optionPrice",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2368:19:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7644,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2368:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7647,
+                  "indexed": false,
+                  "name": "settlementAmount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2388:24:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7646,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2388:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7649,
+                  "indexed": false,
+                  "name": "optionAmount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2413:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7648,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2413:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2294:140:22"
+            },
+            "src": "2279:156:22"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` sell `amount` option whose id is `optionId` and received sellValue,priced in usd.",
+            "id": 7661,
+            "name": "SellOption",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7660,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7653,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7661,
+                  "src": "2593:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7652,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2593:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7655,
+                  "indexed": true,
+                  "name": "optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7661,
+                  "src": "2614:24:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7654,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2614:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7657,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7661,
+                  "src": "2639:14:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7656,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2639:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7659,
+                  "indexed": false,
+                  "name": "sellValue",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7661,
+                  "src": "2654:17:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7658,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2654:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2592:80:22"
+            },
+            "src": "2576:97:22"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` exercise `amount` option whose id is `optionId` and received sellValue,priced in usd.",
+            "id": 7671,
+            "name": "ExerciseOption",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7670,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7663,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7671,
+                  "src": "2839:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7662,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2839:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7665,
+                  "indexed": true,
+                  "name": "optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7671,
+                  "src": "2860:24:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7664,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2860:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7667,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7671,
+                  "src": "2885:14:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7666,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2885:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7669,
+                  "indexed": false,
+                  "name": "sellValue",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7671,
+                  "src": "2900:17:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7668,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2900:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2838:80:22"
+            },
+            "src": "2818:101:22"
+          }
+        ],
+        "scope": 7673,
+        "src": "548:2374:22"
+      }
+    ],
+    "src": "0:2924:22"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/OptionsManager/ManagerData.sol",
+    "exportedSymbols": {
+      "ManagerData": [
+        7672
+      ]
+    },
+    "id": 7673,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 7578,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".1"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:22"
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol",
+        "file": "../modules/AddressWhiteList.sol",
+        "id": 7579,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 16619,
+        "src": "25:41:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol",
+        "file": "../modules/ReentrancyGuard.sol",
+        "id": 7580,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 18466,
+        "src": "68:40:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/OptionsPool/IOptionsPool.sol",
+        "file": "../OptionsPool/IOptionsPool.sol",
+        "id": 7581,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 8761,
+        "src": "110:41:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFNXOracle.sol",
+        "file": "../interfaces/IFNXOracle.sol",
+        "id": 7582,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 16298,
+        "src": "153:38:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IOptionsPrice.sol",
+        "file": "../interfaces/IOptionsPrice.sol",
+        "id": 7583,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 16403,
+        "src": "193:41:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/CollateralPool/ICollateralPool.sol",
+        "file": "../CollateralPool/ICollateralPool.sol",
+        "id": 7584,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 1615,
+        "src": "236:47:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/FPTCoin/IFPTCoin.sol",
+        "file": "../FPTCoin/IFPTCoin.sol",
+        "id": 7585,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 5637,
+        "src": "285:33:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Operator.sol",
+        "file": "../modules/Operator.sol",
+        "id": 7586,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 18332,
+        "src": "320:33:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/ERC20/IERC20.sol",
+        "file": "../ERC20/IERC20.sol",
+        "id": 7587,
+        "nodeType": "ImportDirective",
+        "scope": 7673,
+        "sourceUnit": 2840,
+        "src": "355:29:22",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7588,
+              "name": "ReentrancyGuard",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 18465,
+              "src": "572:15:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ReentrancyGuard_$18465",
+                "typeString": "contract ReentrancyGuard"
+              }
+            },
+            "id": 7589,
+            "nodeType": "InheritanceSpecifier",
+            "src": "572:15:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7590,
+              "name": "AddressWhiteList",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 16618,
+              "src": "588:16:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_AddressWhiteList_$16618",
+                "typeString": "contract AddressWhiteList"
+              }
+            },
+            "id": 7591,
+            "nodeType": "InheritanceSpecifier",
+            "src": "588:16:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7592,
+              "name": "ImportIFPTCoin",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5636,
+              "src": "605:14:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportIFPTCoin_$5636",
+                "typeString": "contract ImportIFPTCoin"
+              }
+            },
+            "id": 7593,
+            "nodeType": "InheritanceSpecifier",
+            "src": "605:14:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7594,
+              "name": "ImportOracle",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 16297,
+              "src": "620:12:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportOracle_$16297",
+                "typeString": "contract ImportOracle"
+              }
+            },
+            "id": 7595,
+            "nodeType": "InheritanceSpecifier",
+            "src": "620:12:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7596,
+              "name": "ImportOptionsPool",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 8760,
+              "src": "633:17:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportOptionsPool_$8760",
+                "typeString": "contract ImportOptionsPool"
+              }
+            },
+            "id": 7597,
+            "nodeType": "InheritanceSpecifier",
+            "src": "633:17:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7598,
+              "name": "ImportCollateralPool",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1614,
+              "src": "651:20:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportCollateralPool_$1614",
+                "typeString": "contract ImportCollateralPool"
+              }
+            },
+            "id": 7599,
+            "nodeType": "InheritanceSpecifier",
+            "src": "651:20:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7600,
+              "name": "Operator",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 18331,
+              "src": "672:8:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Operator_$18331",
+                "typeString": "contract Operator"
+              }
+            },
+            "id": 7601,
+            "nodeType": "InheritanceSpecifier",
+            "src": "672:8:22"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 7602,
+              "name": "ImportOptionsPrice",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 16402,
+              "src": "681:18:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImportOptionsPrice_$16402",
+                "typeString": "contract ImportOptionsPrice"
+              }
+            },
+            "id": 7603,
+            "nodeType": "InheritanceSpecifier",
+            "src": "681:18:22"
+          }
+        ],
+        "contractDependencies": [
+          1614,
+          5636,
+          8760,
+          16297,
+          16402,
+          16618,
+          18176,
+          18331,
+          18442,
+          18465
+        ],
+        "contractKind": "contract",
+        "documentation": "@title collateral calculate module\n@dev A smart-contract which has operations of collateral and methods of calculate collateral occupation.\n\n ",
+        "fullyImplemented": true,
+        "id": 7672,
+        "linearizedBaseContracts": [
+          7672,
+          16402,
+          18331,
+          1614,
+          8760,
+          16297,
+          5636,
+          16618,
+          18176,
+          18442,
+          18465
+        ],
+        "name": "ManagerData",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 7607,
+            "name": "collateralRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "783:41:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+              "typeString": "mapping(address => uint256)"
+            },
+            "typeName": {
+              "id": 7606,
+              "keyType": {
+                "id": 7604,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "792:7:22",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "783:26:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                "typeString": "mapping(address => uint256)"
+              },
+              "valueType": {
+                "id": 7605,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "801:7:22",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 7610,
+            "name": "maxAmount",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "874:33:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7608,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "874:7:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31653330",
+              "id": 7609,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "903:4:22",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1000000000000000000000000000000_by_1",
+                "typeString": "int_const 1000000000000000000000000000000"
+              },
+              "value": "1e30"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 7613,
+            "name": "minAmount",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "953:32:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7611,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "953:7:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "316539",
+              "id": 7612,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "982:3:22",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1000000000_by_1",
+                "typeString": "int_const 1000000000"
+              },
+              "value": "1e9"
+            },
+            "visibility": "internal"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` added `amount` collateral and minted `tokenAmount` FPTCoin.",
+            "id": 7623,
+            "name": "AddCollateral",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7622,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7615,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7623,
+                  "src": "1169:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7614,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1169:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7617,
+                  "indexed": true,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7623,
+                  "src": "1190:26:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7616,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1190:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7619,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7623,
+                  "src": "1217:14:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7618,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1217:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7621,
+                  "indexed": false,
+                  "name": "tokenAmount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7623,
+                  "src": "1232:19:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7620,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1232:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1168:84:22"
+            },
+            "src": "1149:104:22"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` redeemed `allRedeem` collateral.",
+            "id": 7631,
+            "name": "RedeemCollateral",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7630,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7625,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7631,
+                  "src": "1366:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7624,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1366:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7627,
+                  "indexed": false,
+                  "name": "collateral",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7631,
+                  "src": "1387:18:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7626,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1387:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7629,
+                  "indexed": false,
+                  "name": "allRedeem",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7631,
+                  "src": "1406:17:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7628,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1406:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1365:59:22"
+            },
+            "src": "1343:82:22"
+          },
+          {
+            "constant": false,
+            "id": 7634,
+            "name": "maxPriceRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "1794:36:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7632,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "1794:7:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31353030",
+              "id": 7633,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1826:4:22",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1500_by_1",
+                "typeString": "int_const 1500"
+              },
+              "value": "1500"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 7637,
+            "name": "minPriceRate",
+            "nodeType": "VariableDeclaration",
+            "scope": 7672,
+            "src": "1837:35:22",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7635,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "1837:7:22",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "353030",
+              "id": 7636,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1869:3:22",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_500_by_1",
+                "typeString": "int_const 500"
+              },
+              "value": "500"
+            },
+            "visibility": "internal"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` buy `optionAmount` option and create new option.\n@param from user's account\n@param settlement user's input settlement paid for buy new option.\n@param optionId new option's id\n@param optionPrice option's paid price\n@param settlementAmount settement cost\n@param optionAmount mint option token amount.",
+            "id": 7651,
+            "name": "BuyOption",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7650,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7639,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2295:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7638,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2295:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7641,
+                  "indexed": true,
+                  "name": "settlement",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2316:26:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7640,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2316:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7643,
+                  "indexed": true,
+                  "name": "optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2343:24:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7642,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2343:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7645,
+                  "indexed": false,
+                  "name": "optionPrice",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2368:19:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7644,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2368:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7647,
+                  "indexed": false,
+                  "name": "settlementAmount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2388:24:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7646,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2388:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7649,
+                  "indexed": false,
+                  "name": "optionAmount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7651,
+                  "src": "2413:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7648,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2413:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2294:140:22"
+            },
+            "src": "2279:156:22"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` sell `amount` option whose id is `optionId` and received sellValue,priced in usd.",
+            "id": 7661,
+            "name": "SellOption",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7660,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7653,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7661,
+                  "src": "2593:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7652,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2593:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7655,
+                  "indexed": true,
+                  "name": "optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7661,
+                  "src": "2614:24:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7654,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2614:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7657,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7661,
+                  "src": "2639:14:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7656,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2639:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7659,
+                  "indexed": false,
+                  "name": "sellValue",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7661,
+                  "src": "2654:17:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7658,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2654:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2592:80:22"
+            },
+            "src": "2576:97:22"
+          },
+          {
+            "anonymous": false,
+            "documentation": "@dev Emitted when `from` exercise `amount` option whose id is `optionId` and received sellValue,priced in usd.",
+            "id": 7671,
+            "name": "ExerciseOption",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 7670,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 7663,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7671,
+                  "src": "2839:20:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 7662,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2839:7:22",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7665,
+                  "indexed": true,
+                  "name": "optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7671,
+                  "src": "2860:24:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7664,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2860:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7667,
+                  "indexed": false,
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7671,
+                  "src": "2885:14:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7666,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2885:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 7669,
+                  "indexed": false,
+                  "name": "sellValue",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 7671,
+                  "src": "2900:17:22",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 7668,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2900:7:22",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2838:80:22"
+            },
+            "src": "2818:101:22"
+          }
+        ],
+        "scope": 7673,
+        "src": "548:2374:22"
+      }
+    ],
+    "src": "0:2924:22"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.1.0",
+  "updatedAt": "2020-09-02T10:11:20.699Z",
+  "devdoc": {
+    "details": "A smart-contract which has operations of collateral and methods of calculate collateral occupation.  ",
+    "methods": {
+      "addOperator(address)": {
+        "details": "add a new operator by owner.       "
+      },
+      "addWhiteList(address)": {
+        "details": "Implementation of add an eligible address into the whitelist.",
+        "params": {
+          "addAddress": "new eligible address."
+        }
+      },
+      "getOperator()": {
+        "details": "get all operators.       "
+      },
+      "getWhiteList()": {
+        "details": "Implementation of getting the eligible whitelist."
+      },
+      "isEligibleAddress(address)": {
+        "details": "Implementation of testing whether the input address is eligible.",
+        "params": {
+          "tmpAddress": "input address for testing."
+        }
+      },
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "removeOperator(address)": {
+        "details": "remove operator by owner.       "
+      },
+      "removeWhiteList(address)": {
+        "details": "Implementation of revoke an invalid address from the whitelist.",
+        "params": {
+          "removeAddress": "revoked address."
+        }
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "setOperator(address[])": {
+        "details": "set all operators by owner.       "
+      },
+      "setOperator(uint256,address)": {
+        "details": "modify indexed operator by owner.       "
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "title": "collateral calculate module"
+  },
+  "userdoc": {
+    "methods": {
+      "setHalt(bool)": {
+        "notice": "function Emergency situation that requires contribution period to stop or not."
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@
       "constant": true,
       "inputs": [
         {
+          "internalType": "string",
           "name": "symbol",
           "type": "string"
         }
@@ -12,6 +13,7 @@
       "name": "getPrice",
       "outputs": [
         {
+          "internalType": "uint256",
           "name": "",
           "type": "uint256"
         }
@@ -21,45 +23,45 @@
       "type": "function"
     }
   ],
-  "metadata": "",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"string\",\"name\":\"symbol\",\"type\":\"string\"}],\"name\":\"getPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFnxPriceDb.sol\":\"IFnxPriceDb\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFnxPriceDb.sol\":{\"keccak256\":\"0x4e3e3ed6efea4d83ffa3be101d9eca3816129cd89c19aa3d5056431499fa10f0\",\"urls\":[\"bzz-raw://7079e3c94d5c5039d7588be533190555d99a5aa12c1b0e2ca1815bb6302d6552\",\"dweb:/ipfs/Qmej5RobYdEuKE3nzXSQNkkdsh5g3YEvvWX8wvDVcduwHV\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0xbe1710912b2b0c2df59e64935f9e4d3d69af51a543edae2dbf53619fb2ffa6a6\",\"urls\":[\"bzz-raw://5563a6aa807414bfb16e43e9b6c59b9c63bb9f95778ffe8636a0f8a9bf97d944\",\"dweb:/ipfs/QmeMrswj4ab8Jp83RxC7rPo8y4XWGqVSGjbtKbc8xuFaT1\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.26;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IFnxPriceDb{\r\n    function getPrice(string symbol) external view returns(uint256);\r\n}\r\ncontract ImportFnxPriceDb is Ownable{\r\n    IFnxPriceDb internal _FnxPriceDb;\r\n    function getFnxPriceDbAddress() public view returns(address){\r\n        return address(_FnxPriceDb);\r\n    }\r\n    function setFnxPriceDbAddress(address priceAddr)public onlyOwner{\r\n        _FnxPriceDb = IFnxPriceDb(priceAddr);\r\n    }\r\n}",
+  "source": "pragma solidity ^0.5.1;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IFnxPriceDb{\r\n    function getPrice(string calldata symbol) external view returns(uint256);\r\n}\r\ncontract ImportFnxPriceDb is Ownable{\r\n    IFnxPriceDb internal _FnxPriceDb;\r\n    function getFnxPriceDbAddress() public view returns(address){\r\n        return address(_FnxPriceDb);\r\n    }\r\n    function setFnxPriceDbAddress(address priceAddr)public onlyOwner{\r\n        _FnxPriceDb = IFnxPriceDb(priceAddr);\r\n    }\r\n}",
   "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\interfaces\\IFnxPriceDb.sol",
   "ast": {
     "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFnxPriceDb.sol",
     "exportedSymbols": {
       "IFnxPriceDb": [
-        12015
+        16308
       ],
       "ImportFnxPriceDb": [
-        12044
+        16337
       ]
     },
-    "id": 12045,
+    "id": 16338,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 12006,
+        "id": 16299,
         "literals": [
           "solidity",
           "^",
-          "0.4",
-          ".26"
+          "0.5",
+          ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:21"
+        "src": "0:23:41"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "../modules/Ownable.sol",
-        "id": 12007,
+        "id": 16300,
         "nodeType": "ImportDirective",
-        "scope": 12045,
-        "sourceUnit": 14786,
-        "src": "26:32:21",
+        "scope": 16338,
+        "sourceUnit": 18443,
+        "src": "25:32:41",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -69,9 +71,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 12015,
+        "id": 16308,
         "linearizedBaseContracts": [
-          12015
+          16308
         ],
         "name": "IFnxPriceDb",
         "nodeType": "ContractDefinition",
@@ -79,35 +81,34 @@
           {
             "body": null,
             "documentation": null,
-            "id": 12014,
+            "id": 16307,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "getPrice",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12010,
+              "id": 16303,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12009,
+                  "id": 16302,
                   "name": "symbol",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12014,
-                  "src": "106:13:21",
+                  "scope": 16307,
+                  "src": "105:22:41",
                   "stateVariable": false,
-                  "storageLocation": "default",
+                  "storageLocation": "calldata",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_calldata_ptr",
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 12008,
+                    "id": 16301,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "106:6:21",
+                    "src": "105:6:41",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -117,20 +118,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "105:15:21"
+              "src": "104:24:41"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12013,
+              "id": 16306,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12012,
+                  "id": 16305,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12014,
-                  "src": "143:7:21",
+                  "scope": 16307,
+                  "src": "151:7:41",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -138,10 +138,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12011,
+                    "id": 16304,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "143:7:21",
+                    "src": "151:7:41",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -151,17 +151,17 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "142:9:21"
+              "src": "150:9:41"
             },
-            "scope": 12015,
-            "src": "88:64:21",
+            "scope": 16308,
+            "src": "87:73:41",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 12045,
-        "src": "60:95:21"
+        "scope": 16338,
+        "src": "59:104:41"
       },
       {
         "baseContracts": [
@@ -169,57 +169,57 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 12016,
+              "id": 16309,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14785,
-              "src": "186:7:21",
+              "referencedDeclaration": 18442,
+              "src": "194:7:41",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14785",
+                "typeIdentifier": "t_contract$_Ownable_$18442",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 12017,
+            "id": 16310,
             "nodeType": "InheritanceSpecifier",
-            "src": "186:7:21"
+            "src": "194:7:41"
           }
         ],
         "contractDependencies": [
-          14785
+          18442
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 12044,
+        "id": 16337,
         "linearizedBaseContracts": [
-          12044,
-          14785
+          16337,
+          18442
         ],
         "name": "ImportFnxPriceDb",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 12019,
+            "id": 16312,
             "name": "_FnxPriceDb",
             "nodeType": "VariableDeclaration",
-            "scope": 12044,
-            "src": "200:32:21",
+            "scope": 16337,
+            "src": "208:32:41",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+              "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
               "typeString": "contract IFnxPriceDb"
             },
             "typeName": {
               "contractScope": null,
-              "id": 12018,
+              "id": 16311,
               "name": "IFnxPriceDb",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12015,
-              "src": "200:11:21",
+              "referencedDeclaration": 16308,
+              "src": "208:11:41",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                 "typeString": "contract IFnxPriceDb"
               }
             },
@@ -228,9 +228,9 @@
           },
           {
             "body": {
-              "id": 12028,
+              "id": 16321,
               "nodeType": "Block",
-              "src": "299:46:21",
+              "src": "307:46:41",
               "statements": [
                 {
                   "expression": {
@@ -238,14 +238,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 12025,
+                        "id": 16318,
                         "name": "_FnxPriceDb",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12019,
-                        "src": "325:11:21",
+                        "referencedDeclaration": 16312,
+                        "src": "333:11:41",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                          "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                           "typeString": "contract IFnxPriceDb"
                         }
                       }
@@ -253,24 +253,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                          "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                           "typeString": "contract IFnxPriceDb"
                         }
                       ],
-                      "id": 12024,
+                      "id": 16317,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "317:7:21",
+                      "src": "325:7:41",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 12026,
+                    "id": 16319,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -278,45 +278,43 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "317:20:21",
+                    "src": "325:20:41",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 12023,
-                  "id": 12027,
+                  "functionReturnParameters": 16316,
+                  "id": 16320,
                   "nodeType": "Return",
-                  "src": "310:27:21"
+                  "src": "318:27:41"
                 }
               ]
             },
             "documentation": null,
-            "id": 12029,
+            "id": 16322,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "getFnxPriceDbAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12020,
+              "id": 16313,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "268:2:21"
+              "src": "276:2:41"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12023,
+              "id": 16316,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12022,
+                  "id": 16315,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12029,
-                  "src": "291:7:21",
+                  "scope": 16322,
+                  "src": "299:7:41",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -324,10 +322,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12021,
+                    "id": 16314,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "291:7:21",
+                    "src": "299:7:41",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -337,38 +336,38 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "290:9:21"
+              "src": "298:9:41"
             },
-            "scope": 12044,
-            "src": "239:106:21",
+            "scope": 16337,
+            "src": "247:106:41",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 12042,
+              "id": 16335,
               "nodeType": "Block",
-              "src": "415:55:21",
+              "src": "423:55:41",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 12040,
+                    "id": 16333,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 12036,
+                      "id": 16329,
                       "name": "_FnxPriceDb",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 12019,
-                      "src": "426:11:21",
+                      "referencedDeclaration": 16312,
+                      "src": "434:11:41",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                        "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                         "typeString": "contract IFnxPriceDb"
                       }
                     },
@@ -379,12 +378,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 12038,
+                          "id": 16331,
                           "name": "priceAddr",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 12031,
-                          "src": "452:9:21",
+                          "referencedDeclaration": 16324,
+                          "src": "460:9:41",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -398,18 +397,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 12037,
+                        "id": 16330,
                         "name": "IFnxPriceDb",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12015,
-                        "src": "440:11:21",
+                        "referencedDeclaration": 16308,
+                        "src": "448:11:41",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_IFnxPriceDb_$12015_$",
+                          "typeIdentifier": "t_type$_t_contract$_IFnxPriceDb_$16308_$",
                           "typeString": "type(contract IFnxPriceDb)"
                         }
                       },
-                      "id": 12039,
+                      "id": 16332,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -417,63 +416,62 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "440:22:21",
+                      "src": "448:22:41",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                        "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                         "typeString": "contract IFnxPriceDb"
                       }
                     },
-                    "src": "426:36:21",
+                    "src": "434:36:41",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                      "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                       "typeString": "contract IFnxPriceDb"
                     }
                   },
-                  "id": 12041,
+                  "id": 16334,
                   "nodeType": "ExpressionStatement",
-                  "src": "426:36:21"
+                  "src": "434:36:41"
                 }
               ]
             },
             "documentation": null,
-            "id": 12043,
+            "id": 16336,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 12034,
+                "id": 16327,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 12033,
+                  "id": 16326,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14718,
-                  "src": "406:9:21",
+                  "referencedDeclaration": 18375,
+                  "src": "414:9:41",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "406:9:21"
+                "src": "414:9:41"
               }
             ],
             "name": "setFnxPriceDbAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12032,
+              "id": 16325,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12031,
+                  "id": 16324,
                   "name": "priceAddr",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12043,
-                  "src": "381:17:21",
+                  "scope": 16336,
+                  "src": "389:17:41",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -481,10 +479,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12030,
+                    "id": 16323,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "381:7:21",
+                    "src": "389:7:41",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -494,60 +493,59 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "380:19:21"
+              "src": "388:19:41"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12035,
+              "id": 16328,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "415:0:21"
+              "src": "423:0:41"
             },
-            "scope": 12044,
-            "src": "351:119:21",
+            "scope": 16337,
+            "src": "359:119:41",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 12045,
-        "src": "157:316:21"
+        "scope": 16338,
+        "src": "165:316:41"
       }
     ],
-    "src": "0:473:21"
+    "src": "0:481:41"
   },
   "legacyAST": {
     "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFnxPriceDb.sol",
     "exportedSymbols": {
       "IFnxPriceDb": [
-        12015
+        16308
       ],
       "ImportFnxPriceDb": [
-        12044
+        16337
       ]
     },
-    "id": 12045,
+    "id": 16338,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 12006,
+        "id": 16299,
         "literals": [
           "solidity",
           "^",
-          "0.4",
-          ".26"
+          "0.5",
+          ".1"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:21"
+        "src": "0:23:41"
       },
       {
         "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "../modules/Ownable.sol",
-        "id": 12007,
+        "id": 16300,
         "nodeType": "ImportDirective",
-        "scope": 12045,
-        "sourceUnit": 14786,
-        "src": "26:32:21",
+        "scope": 16338,
+        "sourceUnit": 18443,
+        "src": "25:32:41",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -557,9 +555,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 12015,
+        "id": 16308,
         "linearizedBaseContracts": [
-          12015
+          16308
         ],
         "name": "IFnxPriceDb",
         "nodeType": "ContractDefinition",
@@ -567,35 +565,34 @@
           {
             "body": null,
             "documentation": null,
-            "id": 12014,
+            "id": 16307,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "getPrice",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12010,
+              "id": 16303,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12009,
+                  "id": 16302,
                   "name": "symbol",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12014,
-                  "src": "106:13:21",
+                  "scope": 16307,
+                  "src": "105:22:41",
                   "stateVariable": false,
-                  "storageLocation": "default",
+                  "storageLocation": "calldata",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_calldata_ptr",
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 12008,
+                    "id": 16301,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "106:6:21",
+                    "src": "105:6:41",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -605,20 +602,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "105:15:21"
+              "src": "104:24:41"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12013,
+              "id": 16306,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12012,
+                  "id": 16305,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12014,
-                  "src": "143:7:21",
+                  "scope": 16307,
+                  "src": "151:7:41",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -626,10 +622,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 12011,
+                    "id": 16304,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "143:7:21",
+                    "src": "151:7:41",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -639,17 +635,17 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "142:9:21"
+              "src": "150:9:41"
             },
-            "scope": 12015,
-            "src": "88:64:21",
+            "scope": 16308,
+            "src": "87:73:41",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 12045,
-        "src": "60:95:21"
+        "scope": 16338,
+        "src": "59:104:41"
       },
       {
         "baseContracts": [
@@ -657,57 +653,57 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 12016,
+              "id": 16309,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14785,
-              "src": "186:7:21",
+              "referencedDeclaration": 18442,
+              "src": "194:7:41",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14785",
+                "typeIdentifier": "t_contract$_Ownable_$18442",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 12017,
+            "id": 16310,
             "nodeType": "InheritanceSpecifier",
-            "src": "186:7:21"
+            "src": "194:7:41"
           }
         ],
         "contractDependencies": [
-          14785
+          18442
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 12044,
+        "id": 16337,
         "linearizedBaseContracts": [
-          12044,
-          14785
+          16337,
+          18442
         ],
         "name": "ImportFnxPriceDb",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 12019,
+            "id": 16312,
             "name": "_FnxPriceDb",
             "nodeType": "VariableDeclaration",
-            "scope": 12044,
-            "src": "200:32:21",
+            "scope": 16337,
+            "src": "208:32:41",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+              "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
               "typeString": "contract IFnxPriceDb"
             },
             "typeName": {
               "contractScope": null,
-              "id": 12018,
+              "id": 16311,
               "name": "IFnxPriceDb",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12015,
-              "src": "200:11:21",
+              "referencedDeclaration": 16308,
+              "src": "208:11:41",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                 "typeString": "contract IFnxPriceDb"
               }
             },
@@ -716,9 +712,9 @@
           },
           {
             "body": {
-              "id": 12028,
+              "id": 16321,
               "nodeType": "Block",
-              "src": "299:46:21",
+              "src": "307:46:41",
               "statements": [
                 {
                   "expression": {
@@ -726,14 +722,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 12025,
+                        "id": 16318,
                         "name": "_FnxPriceDb",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12019,
-                        "src": "325:11:21",
+                        "referencedDeclaration": 16312,
+                        "src": "333:11:41",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                          "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                           "typeString": "contract IFnxPriceDb"
                         }
                       }
@@ -741,24 +737,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                          "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                           "typeString": "contract IFnxPriceDb"
                         }
                       ],
-                      "id": 12024,
+                      "id": 16317,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "317:7:21",
+                      "src": "325:7:41",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 12026,
+                    "id": 16319,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -766,45 +762,43 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "317:20:21",
+                    "src": "325:20:41",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 12023,
-                  "id": 12027,
+                  "functionReturnParameters": 16316,
+                  "id": 16320,
                   "nodeType": "Return",
-                  "src": "310:27:21"
+                  "src": "318:27:41"
                 }
               ]
             },
             "documentation": null,
-            "id": 12029,
+            "id": 16322,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "getFnxPriceDbAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12020,
+              "id": 16313,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "268:2:21"
+              "src": "276:2:41"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12023,
+              "id": 16316,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12022,
+                  "id": 16315,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12029,
-                  "src": "291:7:21",
+                  "scope": 16322,
+                  "src": "299:7:41",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -812,10 +806,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12021,
+                    "id": 16314,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "291:7:21",
+                    "src": "299:7:41",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -825,38 +820,38 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "290:9:21"
+              "src": "298:9:41"
             },
-            "scope": 12044,
-            "src": "239:106:21",
+            "scope": 16337,
+            "src": "247:106:41",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 12042,
+              "id": 16335,
               "nodeType": "Block",
-              "src": "415:55:21",
+              "src": "423:55:41",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 12040,
+                    "id": 16333,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 12036,
+                      "id": 16329,
                       "name": "_FnxPriceDb",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 12019,
-                      "src": "426:11:21",
+                      "referencedDeclaration": 16312,
+                      "src": "434:11:41",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                        "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                         "typeString": "contract IFnxPriceDb"
                       }
                     },
@@ -867,12 +862,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 12038,
+                          "id": 16331,
                           "name": "priceAddr",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 12031,
-                          "src": "452:9:21",
+                          "referencedDeclaration": 16324,
+                          "src": "460:9:41",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -886,18 +881,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 12037,
+                        "id": 16330,
                         "name": "IFnxPriceDb",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 12015,
-                        "src": "440:11:21",
+                        "referencedDeclaration": 16308,
+                        "src": "448:11:41",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_IFnxPriceDb_$12015_$",
+                          "typeIdentifier": "t_type$_t_contract$_IFnxPriceDb_$16308_$",
                           "typeString": "type(contract IFnxPriceDb)"
                         }
                       },
-                      "id": 12039,
+                      "id": 16332,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -905,63 +900,62 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "440:22:21",
+                      "src": "448:22:41",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                        "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                         "typeString": "contract IFnxPriceDb"
                       }
                     },
-                    "src": "426:36:21",
+                    "src": "434:36:41",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IFnxPriceDb_$12015",
+                      "typeIdentifier": "t_contract$_IFnxPriceDb_$16308",
                       "typeString": "contract IFnxPriceDb"
                     }
                   },
-                  "id": 12041,
+                  "id": 16334,
                   "nodeType": "ExpressionStatement",
-                  "src": "426:36:21"
+                  "src": "434:36:41"
                 }
               ]
             },
             "documentation": null,
-            "id": 12043,
+            "id": 16336,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 12034,
+                "id": 16327,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 12033,
+                  "id": 16326,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14718,
-                  "src": "406:9:21",
+                  "referencedDeclaration": 18375,
+                  "src": "414:9:41",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "406:9:21"
+                "src": "414:9:41"
               }
             ],
             "name": "setFnxPriceDbAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 12032,
+              "id": 16325,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 12031,
+                  "id": 16324,
                   "name": "priceAddr",
                   "nodeType": "VariableDeclaration",
-                  "scope": 12043,
-                  "src": "381:17:21",
+                  "scope": 16336,
+                  "src": "389:17:41",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -969,10 +963,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 12030,
+                    "id": 16323,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "381:7:21",
+                    "src": "389:7:41",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -982,35 +977,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "380:19:21"
+              "src": "388:19:41"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 12035,
+              "id": 16328,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "415:0:21"
+              "src": "423:0:41"
             },
-            "scope": 12044,
-            "src": "351:119:21",
+            "scope": 16337,
+            "src": "359:119:41",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 12045,
-        "src": "157:316:21"
+        "scope": 16338,
+        "src": "165:316:41"
       }
     ],
-    "src": "0:473:21"
+    "src": "0:481:41"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.4.26+commit.4563c3fc.Emscripten.clang"
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-08-14T00:48:40.131Z",
+  "updatedAt": "2020-09-02T10:11:20.815Z",
   "devdoc": {
     "methods": {}
   },

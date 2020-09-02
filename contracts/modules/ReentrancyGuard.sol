@@ -6,7 +6,6 @@ contract ReentrancyGuard {
    * @dev We use a single lock for the whole contract.
    */
   bool private reentrancyLock = false;
-
   /**
    * @dev Prevents a contract from calling itself, directly or indirectly.
    * @notice If you mark a function `nonReentrant`, you should also
