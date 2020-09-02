@@ -7,19 +7,16 @@ contract FNXCoin is IERC20,Erc20Data {
     using SafeMath for uint256;
 
     constructor () public{
-        balances[msg.sender] = 1e40;
-        balances[0xE732e883D03E230B7a5C2891C10222fe0a1fB2CB] = 1e40;
-        balances[0xC864F6c8f8A75C4885F8208964A85A7f517BDECb] = 1e30;
-        balances[0xc5f5f51D7509A42F0476E74878BdA887ce9791bD] = 1e30;
+        initialize();
     }
     function initialize() public{
         name = "FNXCoin";
         symbol = "FNX";
-        _totalSupply = 0;
+        _totalSupply = 4e40;
         balances[msg.sender] = 1e40;
         balances[0xE732e883D03E230B7a5C2891C10222fe0a1fB2CB] = 1e40;
-        balances[0xC864F6c8f8A75C4885F8208964A85A7f517BDECb] = 1e30;
-        balances[0xc5f5f51D7509A42F0476E74878BdA887ce9791bD] = 1e30;
+        balances[0xC864F6c8f8A75C4885F8208964A85A7f517BDECb] = 1e40;
+        balances[0xc5f5f51D7509A42F0476E74878BdA887ce9791bD] = 1e40;
     }
     /**
      * @dev See {IERC20-totalSupply}.

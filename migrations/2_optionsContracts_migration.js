@@ -17,7 +17,7 @@ let FPTCoin = artifacts.require("FPTCoin");
 let FPTProxy = artifacts.require("FPTProxy");
 
 let CollateralPool = artifacts.require("CollateralPool");
-let CollateralProxy = artifacts.require("CollateralProxy");
+let CollProxy = artifacts.require("CollateralProxy");
 
 let collateral0 = "0x0000000000000000000000000000000000000000";
 module.exports = async function(deployer, network,accounts) {
@@ -35,7 +35,7 @@ module.exports = async function(deployer, network,accounts) {
     let minePool = await migrate(deployer,FNXMinePool,MinePoolProxy);
     let CoinInstance = await migrate(deployer,FPTCoin,FPTProxy,MinePoolProxy.address);
 
-    let CollateralPoolInstance = await migrate(deployer,CollateralPool,CollateralProxy);
+    let CollateralPoolInstance = await migrate(deployer,CollateralPool,CollProxy);
 
     let manager = await migrate(deployer,OptionsManagerV2,ManagerProxy,MinePoolProxy.address,FNXOracle.address,OptionsPrice.address,
         OptionsProxy.address,CollateralProxy.address,FPTProxy.address);
