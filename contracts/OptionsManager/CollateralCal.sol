@@ -186,7 +186,7 @@ contract CollateralCal is ManagerData {
             uint256 newRedeem = leftCollateral/tokenNetWorth;
             uint256 newWorth = newRedeem*tokenNetWorth;
             uint256 locked = leftAmount - newRedeem;
-            _FPTCoin.addlockBalance(msg.sender,locked,locked/tokenNetWorth);
+            _FPTCoin.addlockBalance(msg.sender,locked,locked*tokenNetWorth);
             return (newRedeem,newWorth);
         }
         return (leftAmount,leftWorth);
