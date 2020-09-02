@@ -5,7 +5,7 @@ import "../Proxy/baseProxy.sol";
  * @title  Erc20Delegator Contract
 
  */
-contract OptionsProxy is CollateralData,baseProxy{
+contract CollateralProxy is CollateralData,baseProxy{
         /**
      * @dev constructor function , setting contract address.
      *  oracleAddr FNX oracle contract address
