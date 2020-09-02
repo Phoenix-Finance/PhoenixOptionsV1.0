@@ -47,7 +47,7 @@ contract FNXMinePool is MinePoolData {
         if (_totalSupply > 0 && _mineInterval>0){
             uint256 _mineAmount = mineAmount[mineCoin];
             uint256 latestMined = _mineAmount.mul(now-latestSettleTime[mineCoin])/_mineInterval;
-            return totalMinedCoin[mineCoin] + latestMined;
+            return totalMinedCoin[mineCoin].add(latestMined);
         }
         return totalMinedCoin[mineCoin];
     }
@@ -81,6 +81,8 @@ contract FNXMinePool is MinePoolData {
      * @param _mineInterval mineCoin distributied time interval
      */
     function setMineCoinInfo(address mineCoin,uint256 _mineAmount,uint256 _mineInterval)public onlyOwner {
+        require(_mineAmount<1e30,"input mine amount is too large");
+        require(_mineInterval>0,"input mine Interval must larger than zero");
         _mineSettlement(mineCoin);
         mineAmount[mineCoin] = _mineAmount;
         mineInterval[mineCoin] = _mineInterval;
@@ -92,6 +94,7 @@ contract FNXMinePool is MinePoolData {
      * @param _mineAmount mineCoin reward amount
      */
     function setBuyingMineInfo(address mineCoin,uint256 _mineAmount)public onlyOwner {
+        require(_mineAmount<1e30,"input mine amount is too large");
         buyingMineMap[mineCoin] = _mineAmount;
         addWhiteList(mineCoin);
     }
@@ -156,7 +159,7 @@ contract FNXMinePool is MinePoolData {
             address addr = whiteList[i];
             uint256 mineNum = buyingMineMap[addr];
             if (mineNum > 0){
-                uint256 _mineAmount = mineNum.mul(amount)/calDecimals;
+                uint256 _mineAmount = mineNum*amount/calDecimals;
                 minerBalances[addr][account] = minerBalances[addr][account].add(_mineAmount);
                 //totalMinedCoin[addr] = totalMinedCoin[addr].add(_mineAmount);
                 emit BuyingMiner(account,addr,_mineAmount);
@@ -169,6 +172,7 @@ contract FNXMinePool is MinePoolData {
      * @param _mineAmount the distributed amount.
      */
     function setMineAmount(address mineCoin,uint256 _mineAmount)public onlyOwner {
+        require(_mineAmount<1e30,"input mine amount is too large");
         _mineSettlement(mineCoin);
         mineAmount[mineCoin] = _mineAmount;
     }
@@ -178,6 +182,7 @@ contract FNXMinePool is MinePoolData {
      * @param _mineInterval the distributed time interval.
      */
     function setMineInterval(address mineCoin,uint256 _mineInterval)public onlyOwner {
+        require(_mineInterval>0,"input mine Interval must larger than zero");
         _mineSettlement(mineCoin);
         mineInterval[mineCoin] = _mineInterval;
     }
@@ -192,7 +197,7 @@ contract FNXMinePool is MinePoolData {
         uint256 minerAmount = minerBalances[mineCoin][msg.sender];
         require(minerAmount>=amount,"miner balance is insufficient");
 
-        minerBalances[mineCoin][msg.sender] = minerAmount.sub(amount);
+        minerBalances[mineCoin][msg.sender] = minerAmount-amount;
         _redeemMineCoin(mineCoin,msg.sender,amount);
     }
     /**
@@ -232,8 +237,8 @@ contract FNXMinePool is MinePoolData {
         uint256 latestMined = _getLatestMined(mineCoin);
         uint256 _mineInterval = mineInterval[mineCoin];
         if (latestMined>0){
-            totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(latestMined*calDecimals);
-            totalMinedCoin[mineCoin] = totalMinedCoin[mineCoin].add(latestMined);
+            totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(latestMined.mul(calDecimals));
+            totalMinedCoin[mineCoin] = totalMinedCoin[mineCoin]+latestMined;
         }
         if (_mineInterval>0){
             latestSettleTime[mineCoin] = now/_mineInterval*_mineInterval;
@@ -250,7 +255,7 @@ contract FNXMinePool is MinePoolData {
         if (_totalSupply > 0 && _mineInterval>0){
             uint256 _mineAmount = mineAmount[mineCoin];
             uint256 mintTime = (now-latestSettleTime[mineCoin])/_mineInterval;
-            uint256 latestMined = _mineAmount.mul(mintTime);
+            uint256 latestMined = _mineAmount*mintTime;
             return latestMined;
         }
         return 0;
@@ -313,9 +318,9 @@ contract FNXMinePool is MinePoolData {
             minerBalances[mineCoin][account] = minerBalances[mineCoin][account].add(
                     _settlement(mineCoin,account,balanceOf(account),tokenNetWorth));
             if (operators == opBurnCoin){
-                totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].sub(tokenNetWorth*amount);
+                totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].sub(tokenNetWorth.mul(amount));
             }else if (operators==opMintCoin){
-                totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(tokenNetWorth*amount);
+                totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(tokenNetWorth.mul(amount));
             }else if (operators==opTransferCoin){
                 minerOrigins[mineCoin][recipient] = tokenNetWorth;
             }
