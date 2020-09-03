@@ -69,7 +69,7 @@ contract CollateralCal is ManagerData {
                      _optionsPool.calRangeSharedPayment(lastOption,firstOption,lastOption,tmpWhiteList);
         int256[] memory fallBalance = _optionsPool.calculatePhaseOptionsFall(lastOption,newFirst,lastOption,tmpWhiteList);
         for (uint256 i= 0;i<fallBalance.length;i++){
-            fallBalance[i] = int256(sharedBalance[i])-latestShared[i]+fallBalance[i];
+            fallBalance[i] = int256(sharedBalance[i]).sub(latestShared[i]).add(fallBalance[i]);
         }
         setSharedPayment(newNetworth,fallBalance,newFirst);
     }
@@ -295,7 +295,7 @@ contract CollateralCal is ManagerData {
             int256 price = int256(_oracle.getPrice(addr));
             int256 netWorth = getRealBalance(addr);
             if (netWorth != 0){
-                totalNum = totalNum.add(price*netWorth);
+                totalNum = totalNum.add(price.mul(netWorth));
             }
         }
         return totalNum>=0 ? uint256(totalNum) : 0;  
@@ -331,7 +331,7 @@ contract CollateralCal is ManagerData {
                 uint256 price = _oracle.getPrice(addr);
                 balances[i] = getNetWorthBalance(addr);
                 //balances[i] = netWorthBalances[addr];
-                totalPrice = totalPrice.add(price*balances[i]);
+                totalPrice = totalPrice.add(price.mul(balances[i]));
             }
         }
         require(totalPrice>=worth && worth > 0,"payback settlement is insufficient!");
