@@ -17,7 +17,7 @@ contract CollateralPool is TransactionFee{
     function () external payable onlyManager{
 
     }
-    function initialize() public {
+    function initialize() onlyOwner public {
         TransactionFee.initialize();
     }
     /**
