@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./CollateralData.sol";
 import "../Proxy/baseProxy.sol";
 /**

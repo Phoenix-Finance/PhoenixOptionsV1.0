@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 library SafeInt256 {
     function add(int256 x, int256 y) internal pure returns (int256 z) {
         require(((z = x + y) >= x) == (y >= 0), 'SafeInt256: addition overflow');

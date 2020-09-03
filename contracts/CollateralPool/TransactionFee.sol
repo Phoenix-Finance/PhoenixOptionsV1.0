@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 
 import "../modules/SafeMath.sol";
 import "../ERC20/IERC20.sol";
@@ -11,7 +11,7 @@ contract TransactionFee is CollateralData {
     constructor() internal{
         initialize();
     }
-    function initialize() public{
+    function initialize() onlyOwner public{
         FeeRates.push(fraction(0, 1000));
         FeeRates.push(fraction(50, 1000));
         FeeRates.push(fraction(0, 1000));

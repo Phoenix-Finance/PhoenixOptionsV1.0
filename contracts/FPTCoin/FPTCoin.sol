@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./SharedCoin.sol";
 import "../modules/SafeMath.sol";
 
@@ -17,7 +17,7 @@ contract FPTCoin is SharedCoin {
     /**
      * @dev constructor function. set FNX minePool contract address. 
      */ 
-    function initialize() public{
+    function initialize() onlyOwner public{
         SharedCoin.initialize();
     }
 

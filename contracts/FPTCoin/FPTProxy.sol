@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./FPTData.sol";
 import "../ERC20/Erc20BaseProxy.sol";
 

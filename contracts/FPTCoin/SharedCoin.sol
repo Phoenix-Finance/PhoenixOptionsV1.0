@@ -1,10 +1,10 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "../modules/SafeMath.sol";
 
 import "./FPTData.sol";
 contract SharedCoin is FPTData  {
     using SafeMath for uint256;
-    function initialize() public{
+    function initialize() onlyOwner public{
         name = "finnexus pool token";
         symbol = "FPT";
         _totalSupply = 0;

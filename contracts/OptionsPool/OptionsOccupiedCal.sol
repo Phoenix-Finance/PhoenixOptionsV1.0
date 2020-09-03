@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./OptionsBase.sol";
 /**
  * @title Options collateral occupied calculation contract for finnexus proposal v2.

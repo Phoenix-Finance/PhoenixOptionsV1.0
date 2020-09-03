@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./IERC20.sol";
 import "../modules/SafeMath.sol";
 import "./Erc20Data.sol";
@@ -9,7 +9,7 @@ contract FNXCoin is IERC20,Erc20Data {
     constructor () public{
         initialize();
     }
-    function initialize() public{
+    function initialize() onlyOwner public{
         name = "FNXCoin";
         symbol = "FNX";
         _totalSupply = 4e40;

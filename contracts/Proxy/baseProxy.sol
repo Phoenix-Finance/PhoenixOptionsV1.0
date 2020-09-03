@@ -1,12 +1,21 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
+import "../modules/Ownable.sol";
 /**
- * @title  Erc20Delegator Contract
+ * @title  baseProxy Contract
 
  */
-contract baseProxy  {
+contract baseProxy is Ownable {
     address public implementation;
     constructor(address implementation_) public {
         // Creator of the contract is admin during initialization
+        implementation = implementation_; 
+        (bool success,) = implementation_.delegatecall(abi.encodeWithSignature("initialize()"));
+        require(success);
+    }
+    function getImplementation()public view returns(address){
+        return implementation;
+    }
+    function setImplementation(address implementation_)public onlyOwner{
         implementation = implementation_; 
         (bool success,) = implementation_.delegatecall(abi.encodeWithSignature("initialize()"));
         require(success);

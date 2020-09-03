@@ -1,5 +1,6 @@
-pragma solidity ^0.5.1;
-contract Erc20Data{
+pragma solidity =0.5.16;
+import "../modules/Ownable.sol";
+contract Erc20Data is Ownable{
     string public name;
     string public symbol;
     uint8 public constant decimals = 18;

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "../modules/Managerable.sol";
 import "../FNXMinePool/IFNXMinePool.sol";
 import "../ERC20/Erc20Data.sol";

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
     /**
      * @dev Implementation of a Fraction number operation library.
      */

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./OptionsData.sol";
 import "../modules/tuple64.sol";
 /**
@@ -12,7 +12,7 @@ contract OptionsBase is OptionsData {
     constructor () public{
         initialize();
     }
-    function initialize() public {
+    function initialize() onlyOwner public {
         expirationList =  [1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
         underlyingAssets = [1,2];
     }

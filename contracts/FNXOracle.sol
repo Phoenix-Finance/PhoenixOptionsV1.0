@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./interfaces/IFNXOracle.sol";
 import "./modules/SafeMath.sol";
 import "./modules/Operator.sol";

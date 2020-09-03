@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./IERC20.sol";
 import "./Erc20Data.sol";
 import "./Erc20BaseProxy.sol";

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "../modules/SafeMath.sol";
 import "./MinePoolData.sol";
 import "../ERC20/IERC20.sol";
@@ -12,7 +12,7 @@ contract FNXMinePool is MinePoolData {
     constructor () public{
         initialize();
     }
-    function initialize() public{
+    function initialize() onlyOwner public{
     }
     /**
      * @dev default function for foundation input miner coins.

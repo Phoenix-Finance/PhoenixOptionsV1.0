@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "../modules/SafeMath.sol";
 import "./CollateralCal.sol";
 import "../modules/tuple64.sol";
@@ -24,7 +24,7 @@ contract OptionsManagerV2 is CollateralCal {
         _collateralPool = ICollateralPool(collateralPoolAddr);
         _FPTCoin = IFPTCoin(FPTCoinAddr);
     }
-    function initialize() public {
+    function initialize() onlyOwner public {
         
     }
     /**

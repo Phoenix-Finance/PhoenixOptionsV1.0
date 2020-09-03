@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "../modules/Ownable.sol";
 interface IFPTCoin {
     function lockedBalanceOf(address account) external view returns (uint256);
