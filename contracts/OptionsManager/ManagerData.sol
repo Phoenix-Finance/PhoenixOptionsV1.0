@@ -7,19 +7,17 @@ import "../interfaces/IOptionsPrice.sol";
 import "../CollateralPool/ICollateralPool.sol";
 import "../FPTCoin/IFPTCoin.sol";
 import "../modules/Operator.sol";
+import "../modules/ImputRange.sol";
 import "../ERC20/IERC20.sol";
 /**
  * @title collateral calculate module
  * @dev A smart-contract which has operations of collateral and methods of calculate collateral occupation.
  *
  */
-contract ManagerData is ReentrancyGuard,AddressWhiteList,ImportIFPTCoin,ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator,ImportOptionsPrice {
+contract ManagerData is ReentrancyGuard,ImputRange,AddressWhiteList,ImportIFPTCoin,
+                ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator,ImportOptionsPrice {
     // The minimum collateral rate for options. This value is thousandths.
     mapping (address=>uint256) collateralRate;
-        //The maximum input amount limit.
-    uint256 internal maxAmount = 1e30;
-    //The minimum input amount limit.
-    uint256 internal minAmount = 1e9;
 //    uint256 private collateralRate = 5000;
     /**
      * @dev Emitted when `from` added `amount` collateral and minted `tokenAmount` FPTCoin.

@@ -12,13 +12,6 @@ contract FPTProxy is FPTData,Erc20BaseProxy {
         _FnxMinePool = IFNXMinePool(minePoolAddr);
     }
     /**
-     * @dev set FPT burn time limited, only owner can invoke. 
-     *  _timeLimited new burning time limited.
-     */ 
-    function setBurnTimeLimited(uint256 /*_timeLimited*/) public {
-        delegateAndReturn();
-    }
-    /**
      * @dev Retrieve user's start time for burning. 
      *  user user's account.
      */ 

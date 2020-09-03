@@ -77,7 +77,7 @@ contract TransactionFee is CollateralData {
         return result/feeRate.denominator;
     }
     function _getFeeRate(uint256 feeType)internal view returns(fraction storage){
-        require(feeType<FeeRates.length,"fee type is valid!");
+        require(feeType<FeeRates.length,"fee type is invalid!");
         return FeeRates[feeType];
     }
     /**

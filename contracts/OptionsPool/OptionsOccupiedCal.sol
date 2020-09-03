@@ -1,6 +1,5 @@
 pragma solidity ^0.5.1;
 import "./OptionsBase.sol";
-import "../modules/SafeInt256.sol";
 /**
  * @title Options collateral occupied calculation contract for finnexus proposal v2.
  * @dev A Smart-contract for collateral occupied calculation.
@@ -8,8 +7,6 @@ import "../modules/SafeInt256.sol";
  */
 contract OptionsOccupiedCal is OptionsBase {
 
-
-    using SafeInt256 for int256;
     /**
      * @dev retrieve collateral occupied calculation information.
      */    
@@ -72,10 +69,12 @@ contract OptionsOccupiedCal is OptionsBase {
      * @param latestOccpied latest occupied value when operater invoke collateral occupied calculation.
      */  
     function setCollateralPhase(uint256 totalOccupied,uint256 beginOption,int256 latestOccpied) public onlyOperatorIndex(0){
+        require(beginOption <= allOptions.length, "beginOption calculate Error");
         if (beginOption >  occupiedFirstOption){
              occupiedFirstOption = beginOption;
         }
         optionsOccupied = totalOccupied;
+        require(latestOccpied>=-1e40 && latestOccpied<=1e40,"options fall calculate error");
         optionsLatestOccupied -= latestOccpied;
     }
     /**
@@ -83,7 +82,9 @@ contract OptionsOccupiedCal is OptionsBase {
      */ 
     function getTotalOccupiedCollateral() public view returns (uint256) {
         if (optionsLatestOccupied>=0){
-            return optionsOccupied.add(uint256(optionsLatestOccupied));
+            uint256 result = optionsOccupied+uint256(optionsLatestOccupied);
+            require(result>=optionsOccupied,"TotalOccupiedCollateral calculate overflow");
+            return result;
         }else{
             uint256 latestOccupied = uint256(-optionsLatestOccupied);
             if (optionsOccupied>latestOccupied){
@@ -100,7 +101,7 @@ contract OptionsOccupiedCal is OptionsBase {
     function _addOptionsCollateral(OptionsInfo memory info) internal {
         OptionsInfoEx storage infoEx =  optionExtraMap[info.optionID-1];
         uint256 newOccupied = calOptionsCollateral(info,infoEx.underlyingPrice);
-        optionsLatestOccupied = optionsLatestOccupied.add(int256(newOccupied));
+        optionsLatestOccupied = optionsLatestOccupied+int256(newOccupied);
     }
     /**
      * @dev deduct burned option collateral occupied value when user burn option.
@@ -109,8 +110,9 @@ contract OptionsOccupiedCal is OptionsBase {
      * @param underlyingPrice current underlying price.
      */ 
     function _burnOptionsCollateral(OptionsInfo memory info,uint256 amount,uint256 underlyingPrice) internal {
-        uint256 newOccupied = _getOptionsWorth(info.optType,info.strikePrice,underlyingPrice).mul(amount);
-        optionsLatestOccupied = optionsLatestOccupied.sub(int256(newOccupied));
+        uint256 newOccupied = _getOptionsWorth(info.optType,info.strikePrice,underlyingPrice)*amount;
+        require(newOccupied<=1e40,"Option collateral occupied calculate error");
+        optionsLatestOccupied = optionsLatestOccupied-int256(newOccupied);
     }
 
 }

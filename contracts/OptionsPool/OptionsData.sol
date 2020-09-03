@@ -5,7 +5,9 @@ import "../modules/underlyingAssets.sol";
 import "../interfaces/IVolatility.sol";
 import "../interfaces/IOptionsPrice.sol";
 import "../modules/Operator.sol";
-contract OptionsData is UnderlyingAssets,Managerable,ImportOracle,ImportVolatility,ImportOptionsPrice,Operator{
+import "../modules/ImputRange.sol";
+import "../modules/timeLimitation.sol";
+contract OptionsData is UnderlyingAssets,timeLimitation,ImputRange,Managerable,ImportOracle,ImportVolatility,ImportOptionsPrice,Operator{
         // store option info
     struct OptionsInfo {
         uint64     optionID;    //an increasing nubmer id, begin from one.
@@ -18,7 +20,6 @@ contract OptionsData is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
     }
     // store option extra info
     struct OptionsInfoEx{
-        uint256		 createdTime;   //option's created timestamp
         address      settlement;    //user's settlement paying for option. 
         uint256      tokenTimePrice; //option's buying price based on settlement, used for options share calculation
         uint256      underlyingPrice;//underlying price when option is created.
@@ -36,10 +37,6 @@ contract OptionsData is UnderlyingAssets,Managerable,ImportOracle,ImportVolatili
     mapping(address=>uint256[]) internal optionsBalances;
     //expiration whitelist
     uint256[] internal expirationList;
-    //option burn limit time from option's created.
-    uint256 internal burnTimeLimit = 1 hours;
-
-
     
     // first option position which is needed calculate.
     uint256 internal netWorthirstOption;

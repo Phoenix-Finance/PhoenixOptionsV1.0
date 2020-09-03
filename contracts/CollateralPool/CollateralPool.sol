@@ -18,7 +18,7 @@ contract CollateralPool is TransactionFee{
 
     }
     function initialize() public {
-        
+        TransactionFee.initialize();
     }
     /**
      * @dev An interface for add transaction fee.
@@ -180,7 +180,7 @@ contract CollateralPool is TransactionFee{
     function transferPaybackAndFee(address payable recieptor,address settlement,uint256 payback,
             uint256 feeType)public onlyManager{
         _transferPaybackAndFee(recieptor,settlement,payback,feeType);
-        netWorthBalances[settlement] = netWorthBalances[settlement]-int256(payback);
+        netWorthBalances[settlement] = netWorthBalances[settlement].sub(int256(payback));
     }
     /**
      * @dev Operation for transfer user's payback. Only manager contract can invoke this function.

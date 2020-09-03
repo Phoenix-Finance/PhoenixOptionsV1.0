@@ -20,19 +20,6 @@ contract OptionsProxy is OptionsData,baseProxy{
         _volatility = IVolatility(ivAddress);
     }
     /**
-     * @dev get option's burn time limit. 
-     */ 
-    function getBurnTimeLimit()public view returns(uint256){
-        delegateToViewAndReturn();
-    }
-    /**
-     * @dev set option's burn time limit. 
-     *  timeLimit set new option's burn time limit.
-     */ 
-    function setBurnTimeLimit(uint256 /*timeLimit*/)public{
-        delegateAndReturn();
-    }
-    /**
      * @dev retrieve user's options' id. 
      *  user user's account.
      */     
@@ -89,7 +76,7 @@ contract OptionsProxy is OptionsData,baseProxy{
      * @dev retrieve given `optionsId` option's extra information. 
      *  optionsId retrieved option's id.
      */
-    function getOptionsExtraById(uint256 /*optionsId*/)public view returns(uint256,address,uint256,uint256,uint256,uint256,uint256){
+    function getOptionsExtraById(uint256 /*optionsId*/)public view returns(address,uint256,uint256,uint256,uint256,uint256){
         delegateToViewAndReturn();
     }
     /**

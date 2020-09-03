@@ -1,5 +1,4 @@
 pragma solidity ^0.5.1;
-import "../modules/SafeMath.sol";
 import "./OptionsData.sol";
 import "../modules/tuple64.sol";
 /**
@@ -9,7 +8,6 @@ import "../modules/tuple64.sol";
  */
 contract OptionsBase is OptionsData {
     using whiteListUint256 for uint256[];
-    using SafeMath for uint256;
 
     constructor () public{
         initialize();
@@ -17,19 +15,6 @@ contract OptionsBase is OptionsData {
     function initialize() public {
         expirationList =  [1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
         underlyingAssets = [1,2];
-    }
-    /**
-     * @dev get option's burn time limit. 
-     */ 
-    function getBurnTimeLimit()public view returns(uint256){
-        return burnTimeLimit;
-    }
-    /**
-     * @dev set option's burn time limit. 
-     * @param timeLimit set new option's burn time limit.
-     */ 
-    function setBurnTimeLimit(uint256 timeLimit)public onlyOwner{
-        burnTimeLimit = timeLimit;
     }
     /**
      * @dev retrieve user's options' id. 
@@ -45,9 +30,11 @@ contract OptionsBase is OptionsData {
      * @param size retrieve size.
      */ 
     function getUserOptionsID(address user,uint256 from,uint256 size)public view returns(uint256[] memory){
+        require(from <optionsBalances[user].length,"input from is overflow");
+        require(size>0,"input size is zero");
         uint256[] memory userIdAry = new uint256[](size);
         if (from+size>optionsBalances[user].length){
-            size = optionsBalances[user].length.sub(from);
+            size = optionsBalances[user].length-from;
         }
         for (uint256 i= 0;i<size;i++){
             userIdAry[i] = optionsBalances[user][from+i];
@@ -67,25 +54,25 @@ contract OptionsBase is OptionsData {
      */     
     function getOptionInfoList(uint256 from,uint256 size)public view 
                 returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
+        require(from <allOptions.length,"input from is overflow");
+        require(size>0,"input size is zero");
         if (from+size>allOptions.length){
-            size = allOptions.length.sub(from);
+            size = allOptions.length - from;
         }
-        if (size>0){
-            address[] memory ownerArr = new address[](size);
-            uint256[] memory typeAndUnderArr = new uint256[](size);
-            uint256[] memory expArr = new uint256[](size);
-            uint256[] memory priceArr = new uint256[](size);
-            uint256[] memory amountArr = new uint256[](size);
-            for (uint i=0;i<size;i++){
-                OptionsInfo storage info = allOptions[from+i];
-                ownerArr[i] = info.owner;
-                typeAndUnderArr[i] = (info.underlying << 16) + info.optType;
-                expArr[i] = info.expiration;
-                priceArr[i] = info.strikePrice;
-                amountArr[i] = info.amount;
-            }
-            return (ownerArr,typeAndUnderArr,expArr,priceArr,amountArr);
+        address[] memory ownerArr = new address[](size);
+        uint256[] memory typeAndUnderArr = new uint256[](size);
+        uint256[] memory expArr = new uint256[](size);
+        uint256[] memory priceArr = new uint256[](size);
+        uint256[] memory amountArr = new uint256[](size);
+        for (uint i=0;i<size;i++){
+            OptionsInfo storage info = allOptions[from+i];
+            ownerArr[i] = info.owner;
+            typeAndUnderArr[i] = (info.underlying << 16) + info.optType;
+            expArr[i] = info.expiration;
+            priceArr[i] = info.strikePrice;
+            amountArr[i] = info.amount;
         }
+        return (ownerArr,typeAndUnderArr,expArr,priceArr,amountArr);
     }
     /**
      * @dev retrieve given `ids` options' information. 
@@ -94,6 +81,7 @@ contract OptionsBase is OptionsData {
     function getOptionInfoListFromID(uint256[] memory ids)public view 
                 returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
         uint256 size = ids.length;
+        require(size > 0, "input ids array is empty");
         address[] memory ownerArr = new address[](size);
         uint256[] memory typeAndUnderArr = new uint256[](size);
         uint256[] memory expArr = new uint256[](size);
@@ -115,7 +103,7 @@ contract OptionsBase is OptionsData {
      */ 
     function getOptionsLimitTimeById(uint256 optionsId)public view returns(uint256){
         require(optionsId>0 && optionsId <= allOptions.length,"option id is not exist");
-        return optionExtraMap[optionsId-1].createdTime + burnTimeLimit;
+        return getItemTimeLimitation(optionsId);
     }
     /**
      * @dev retrieve given `optionsId` option's information. 
@@ -129,10 +117,10 @@ contract OptionsBase is OptionsData {
      * @dev retrieve given `optionsId` option's extra information. 
      * @param optionsId retrieved option's id.
      */
-    function getOptionsExtraById(uint256 optionsId)public view returns(uint256,address,uint256,uint256,uint256,uint256,uint256){
+    function getOptionsExtraById(uint256 optionsId)public view returns(address,uint256,uint256,uint256,uint256,uint256){
         require(optionsId>0 && optionsId <= allOptions.length,"option id is not exist");
         OptionsInfoEx storage info = optionExtraMap[optionsId];
-        return (info.createdTime,info.settlement,info.tokenTimePrice,info.underlyingPrice,
+        return (info.settlement,info.tokenTimePrice,info.underlyingPrice,
                 info.fullPrice,info.ivNumerator,info.ivDenominator);
     }
     /**
@@ -164,6 +152,7 @@ contract OptionsBase is OptionsData {
         optionsBalances[from].push(optionID+1);
         OptionsInfo memory info = allOptions[optionID];
         setOptionsExtra(info,settlement,optionPrice,strikePrice,underlying);
+        setItemTimeLimitation(optionID+1);
         emit CreateOption(from,optionID+1,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount);
     }
     /**
@@ -179,7 +168,7 @@ contract OptionsBase is OptionsData {
         uint256 expiration = info.expiration - now;
         (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,underlyingPrice,strikePrice);
         uint256 tokenTimePrice = calDecimals/_oracle.getPrice(settlement);
-        optionExtraMap[info.optionID-1]= OptionsInfoEx(now,settlement,tokenTimePrice,underlyingPrice,optionPrice,ivNumerator,ivDenominator);
+        optionExtraMap[info.optionID-1]= OptionsInfoEx(settlement,tokenTimePrice,underlyingPrice,optionPrice,ivNumerator,ivDenominator);
     }
     /**
      * @dev burn an exist option whose id is `id`.
@@ -189,7 +178,6 @@ contract OptionsBase is OptionsData {
     function _burnOptions(address from,uint256 id,uint256 amount)internal{
         OptionsInfo storage info = _getOptionsById(id);
         checkEligible(info);
-        checkBurnable(info.optionID);
         checkOwner(info,from);
         checkSufficient(info,amount);
         info.amount = info.amount-amount;
@@ -209,7 +197,7 @@ contract OptionsBase is OptionsData {
         if (tokenPayback == 0 ){
             return 0;
         } 
-        return tokenPayback.mul(amount);
+        return tokenPayback*amount;
     }
     /**
      * @dev An auxiliary function, calculate option's exercise payback.
@@ -231,13 +219,6 @@ contract OptionsBase is OptionsData {
     function _getOptionsById(uint256 id)internal view returns(OptionsInfo storage){
         require(id>0 && id <= allOptions.length,"option id is not exist");
         return allOptions[id-1];
-    }
-    /**
-     * @dev check option's burned time limited.
-     * @param optionID option's id
-     */
-    function checkBurnable(uint256 optionID)internal view{
-        require(optionExtraMap[optionID-1].createdTime+burnTimeLimit<now,"option lock limitation is not expired");
     }
     /**
      * @dev check whether option is eligible, check option's expiration.
@@ -345,7 +326,8 @@ contract OptionsBase is OptionsData {
         if (option.expiration<=now || option.amount == 0){
             return 0;
         }
-        uint256 totalOccupied = _getOptionsWorth(option.optType,option.strikePrice,underlyingPrice).mul(option.amount);
+        uint256 totalOccupied = _getOptionsWorth(option.optType,option.strikePrice,underlyingPrice)*option.amount;
+        require(totalOccupied<=1e40,"Option collateral occupied calculate error");
         return totalOccupied;
     }
     /**
@@ -366,8 +348,8 @@ contract OptionsBase is OptionsData {
      * @param optionID  option's optionID
      * @param amount  option's amount
      */
-    function getBurnedFullPay(uint256 optionID,uint256 amount) public view returns(address,uint256){
+    function getBurnedFullPay(uint256 optionID,uint256 amount) Smaller(amount) public view returns(address,uint256){
         OptionsInfoEx storage optionEx = optionExtraMap[optionID-1];
-        return (optionEx.settlement,optionEx.fullPrice.mul(optionEx.tokenTimePrice).mul(amount)/calDecimals);
+        return (optionEx.settlement,optionEx.fullPrice*optionEx.tokenTimePrice*amount/calDecimals);
     }
 }

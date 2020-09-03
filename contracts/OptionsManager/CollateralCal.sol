@@ -11,28 +11,8 @@ contract CollateralCal is ManagerData {
     using SafeMath for uint256;
     using SafeInt256 for int256;
 
-    /**
-     * @dev get the valid range of input amount
-     */
-    function getInputAmountRange() public view returns(uint256,uint256) {
-        return (minAmount,maxAmount);
-    }
-    /**
-     * @dev set the valid range of input amount
-     * @param _minAmount the minimum input amount limit
-     * @param _maxAmount the maximum input amount limit
-     */
-    function setInputAmountRange(uint256 _minAmount,uint256 _maxAmount) public onlyOwner{
-        minAmount = _minAmount;
-        maxAmount = _maxAmount;
-    }
-    /**
-     * @dev Determine whether the input amount is within the valid range
-     * @param Amount Test value which is user input
-     */
-    function checkInputAmount(uint256 Amount)internal view{
-        require(maxAmount>=Amount && minAmount<=Amount,"input amount is out of input amount range");
-    }
+
+    
     /**
      * @dev  The foundation operator want to add some coin to netbalance, which can increase the FPTCoin net worth.
      * @param settlement the settlement coin address which the foundation operator want to transfer in this contract address.
@@ -147,8 +127,7 @@ contract CollateralCal is ManagerData {
      * @param tokenAmount the amount of FPTCoin want to redeem.
      * @param collateral The prioritized collateral coin address.
      */
-    function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted public {
-        checkInputAmount(tokenAmount);
+    function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted InRange(tokenAmount) public {
         require(checkAddressRedeemOut(collateral) , "settlement is unsupported token");
         uint256 lockedAmount = _FPTCoin.lockedBalanceOf(msg.sender);
         require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");

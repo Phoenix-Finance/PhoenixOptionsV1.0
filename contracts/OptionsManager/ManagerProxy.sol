@@ -23,21 +23,6 @@ contract ManagerProxy is ManagerData,baseProxy{
         _FPTCoin = IFPTCoin(FPTCoinAddr);
     }
     /**
-     * @dev get the valid range of input amount
-     */
-    function getInputAmountRange() public view returns(uint256,uint256) {
-        delegateToViewAndReturn();
-    }
-    /**
-     * @dev set the valid range of input amount
-     *  _minAmount the minimum input amount limit
-     *  _maxAmount the maximum input amount limit
-     */
-    function setInputAmountRange(uint256 /*_minAmount*/,uint256 /*_maxAmount*/) public{
-        delegateAndReturn();
-    }
-
-    /**
      * @dev  The foundation operator want to add some coin to netbalance, which can increase the FPTCoin net worth.
      *  settlement the settlement coin address which the foundation operator want to transfer in this contract address.
      *  amount the amount of the settlement coin which the foundation operator want to transfer in this contract address.
@@ -52,7 +37,6 @@ contract ManagerProxy is ManagerData,baseProxy{
      */
     function setCollateralRate(address /*collateral*/,uint256 /*colRate*/) public {
         delegateAndReturn();
-
     }
     /**
      * @dev Get the minimum collateral occupation rate.

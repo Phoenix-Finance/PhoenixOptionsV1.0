@@ -13,7 +13,6 @@ contract FNXMinePool is MinePoolData {
         initialize();
     }
     function initialize() public{
-        OwnableInitialize();
     }
     /**
      * @dev default function for foundation input miner coins.

@@ -1,13 +1,11 @@
 pragma solidity ^0.5.1;
 import "./OptionsOccupiedCal.sol";
-import "../modules/SafeInt256.sol";
 /**
  * @title Options net worth calculation contract for finnexus proposal v2.
  * @dev A Smart-contract for net worth calculation.
  *
  */
 contract OptionsNetWorthCal is OptionsOccupiedCal {
-    using SafeInt256 for int256;
     /**
      * @dev retrieve all information for net worth calculation. 
      * @param whiteList collateral address whitelist.
@@ -34,11 +32,13 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
      * @param whiteList eligible collateral address white list.
      */ 
     function setSharedState(uint256 newFirstOption,int256[] memory latestNetWorth,address[] memory whiteList) public onlyManager{
+        require(newFirstOption <= allOptions.length, "newFirstOption calculate Error");
         if (newFirstOption >  netWorthirstOption){
              netWorthirstOption = newFirstOption;
         }
         uint256 len = whiteList.length;
         for (uint256 i = 0;i<len;i++){
+            require(latestNetWorth[i]>=-1e40 && latestNetWorth[i]<=1e40,"latestNetWorth calculate error");
             optionsLatestNetWorth[whiteList[i]] += latestNetWorth[i];
         }
     }
@@ -84,7 +84,8 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
             if (timeValue<optionEx.fullPrice){
                 timeValue = optionEx.fullPrice - timeValue;
                 uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                timeValue = optionEx.tokenTimePrice.mul(timeValue*info.amount)/calDecimals;
+                timeValue = optionEx.tokenTimePrice*timeValue*info.amount/calDecimals;
+                require(timeValue<=1e40,"option time shared value calculate error");
                 totalSharedPayment[index] = totalSharedPayment[index]+timeValue;
             }
         }
@@ -104,6 +105,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
                 OptionsInfoEx storage optionEx = optionExtraMap[begin];
                 uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
                 uint256 timeValue = optionEx.fullPrice*optionEx.tokenTimePrice*info.amount/calDecimals;
+                require(timeValue<=1e40,"option time shared value calculate error");
                 totalExpiredPayment[index] = totalExpiredPayment[index]+int256(timeValue);
             }
         }
@@ -172,7 +174,9 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         uint256 newFall = _getOptionsPayback(info.optType,info.strikePrice,curPrice)*amount;
         OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
         uint256 OriginFall = _getOptionsPayback(info.optType,info.strikePrice,optionEx.underlyingPrice)*amount;
-        return int256(newFall) - int256(OriginFall);
+        int256 curValue = int256(newFall) - int256(OriginFall);
+        require(curValue>=-1e40 && curValue<=1e40,"options fall calculate error");
+        return curValue;
     }
     /*
     function _addNewOptionsNetworth(OptionsInfo memory info)  internal {
@@ -193,7 +197,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         int256 curValue = _calCurtimeCallateralFall(info,amount,underlyingPrice);
         OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
         uint256 timeWorth = optionEx.fullPrice>currentPrice ? optionEx.fullPrice-currentPrice : 0;
-        timeWorth = optionEx.tokenTimePrice.mul(timeWorth*amount)/calDecimals;
+        timeWorth = optionEx.tokenTimePrice*timeWorth*amount/calDecimals;
         curValue = curValue / int256(_oracle.getPrice(optionEx.settlement));
         int256 value = curValue - int256(timeWorth);
         optionsLatestNetWorth[optionEx.settlement] = optionsLatestNetWorth[optionEx.settlement]+value;

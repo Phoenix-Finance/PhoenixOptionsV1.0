@@ -60,7 +60,7 @@ contract OptionsManagerV2 is CollateralCal {
     * @param optType user input option type
     */ 
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
-                uint256 expiration,uint256 amount,uint8 optType) nonReentrant notHalted public payable{
+                uint256 expiration,uint256 amount,uint8 optType) nonReentrant notHalted  public payable{
         _optionsPool.buyOptionCheck(expiration,underlying);
         uint256 ty_ly_exp = tuple64.getTuple(uint256(optType),uint256(underlying),uint256(expiration),0);
         uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
@@ -99,8 +99,7 @@ contract OptionsManagerV2 is CollateralCal {
     * @param optionsId option's ID which was wanted to sell, must owned by user
     * @param amount user input amount of option user want to sell.
     */ 
-    function sellOption(uint256 optionsId,uint256 amount) nonReentrant notHalted public{
-        checkInputAmount(amount);
+    function sellOption(uint256 optionsId,uint256 amount) nonReentrant notHalted InRange(amount) public{
         (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
         expiration = expiration.sub(now);
         uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);
@@ -117,8 +116,7 @@ contract OptionsManagerV2 is CollateralCal {
     * @param optionsId option's ID which was wanted to exercise, must owned by user
     * @param amount user input amount of option user want to exercise.
     */ 
-    function exerciseOption(uint256 optionsId,uint256 amount) nonReentrant notHalted public{
-        checkInputAmount(amount);
+    function exerciseOption(uint256 optionsId,uint256 amount) nonReentrant notHalted InRange(amount) public{
         uint256 allPay = _optionsPool.getExerciseWorth(optionsId,amount);
         require(allPay > 0,"This option cannot exercise");
         (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
