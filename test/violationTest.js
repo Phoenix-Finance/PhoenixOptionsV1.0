@@ -44,6 +44,7 @@ contract('OptionsManagerV2', function (accounts){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
+        await contracts.FPT.setTimeLimitation(100);
         let deposit = new BN(1000*1e6);
         let decemal = new BN(1e12);
         deposit = deposit.mul(decemal);
@@ -69,6 +70,7 @@ contract('OptionsManagerV2', function (accounts){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
+        await contracts.FPT.setTimeLimitation(100);
         await contracts.manager.modifyPermission(collateral0,0xffffffff);
         await testViolation("redeem collateral insufficient test failed",async function(){
             await contracts.manager.redeemCollateral(1000000000000000,collateral0,{from : accounts[1]});    
@@ -104,13 +106,14 @@ contract('OptionsManagerV2', function (accounts){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
+        await contracts.FPT.setTimeLimitation(100);
         let deposit = new BN(1000*1e6);
         let decemal = new BN(1e12);
         deposit = deposit.mul(decemal);
         await contracts.manager.addCollateral(collateral0,deposit,{value : deposit});
         await contracts.manager.modifyPermission(collateral0,0xffffffff);
         await contracts.manager.buyOption(collateral0,1000000000000000,10000e8,1,month,10000000000,1,{value : 1000000000000000}); 
-        let optionID = await optPool.getOptionInfoLength(); 
+        let optionID = await contracts.options.getOptionInfoLength(); 
         await testViolation("sell options violated owner  test failed",async function(){
             await contracts.manager.sellOption(optionID,10000000000,{from : accounts[1]});    
         })

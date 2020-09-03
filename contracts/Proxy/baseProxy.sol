@@ -17,7 +17,7 @@ contract baseProxy is Ownable {
     }
     function setImplementation(address implementation_)public onlyOwner{
         implementation = implementation_; 
-        (bool success,) = implementation_.delegatecall(abi.encodeWithSignature("initialize()"));
+        (bool success,) = implementation_.delegatecall(abi.encodeWithSignature("update()"));
         require(success);
     }
     /**
