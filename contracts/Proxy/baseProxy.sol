@@ -20,22 +20,6 @@ contract baseProxy is Ownable {
         (bool success,) = implementation_.delegatecall(abi.encodeWithSignature("update()"));
         require(success);
     }
-    /**
-     * @notice Internal method to delegate execution to another contract
-     * @dev It returns to the external caller whatever the implementation returns or forwards reverts
-     * @param callee The contract to delegatecall
-     * @param data The raw data to delegatecall
-     * @return The returned bytes from the delegatecall
-     */
-    function delegateTo(address callee, bytes memory data) internal returns (bytes memory) {
-        (bool success, bytes memory returnData) = callee.delegatecall(data);
-        assembly {
-            if eq(success, 0) {
-                revert(add(returnData, 0x20), returndatasize)
-            }
-        }
-        return returnData;
-    }
 
     /**
      * @notice Delegates execution to the implementation contract
@@ -44,7 +28,13 @@ contract baseProxy is Ownable {
      * @return The returned bytes from the delegatecall
      */
     function delegateToImplementation(bytes memory data) public returns (bytes memory) {
-        return delegateTo(implementation, data);
+        (bool success, bytes memory returnData) = implementation.delegatecall(data);
+        assembly {
+            if eq(success, 0) {
+                revert(add(returnData, 0x20), returndatasize)
+            }
+        }
+        return returnData;
     }
 
     /**
