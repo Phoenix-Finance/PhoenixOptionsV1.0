@@ -24,11 +24,11 @@ module.exports = async function(deployer, network,accounts) {
     const FNXOracle = artifacts.require("TestFNXOracle");
     const OptionsPrice = artifacts.require("OptionsPriceTest");
     await deployer.deploy(ImpliedVolatility);
-    return;
     let ivAddress = ImpliedVolatility.address;
     let ivInstance = await ImpliedVolatility.at(ivAddress);
     let oracleInstance = await deployer.deploy(FNXOracle);
     await deployer.deploy(OptionsPrice,ivAddress);
+    return;
     await migrate(deployer,FNXCoin,Erc20Proxy);
     return;
     let optionsPool = await migrate(deployer,OptionsPool,OptionsProxy,FNXOracle.address,OptionsPrice.address,ivAddress);
