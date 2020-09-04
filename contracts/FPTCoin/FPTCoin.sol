@@ -10,8 +10,9 @@ import "../modules/SafeMath.sol";
  */
 contract FPTCoin is SharedCoin {
     using SafeMath for uint256;
-        constructor ()public{
+        constructor (address minePoolAddr)public{
         initialize();
+        _FnxMinePool = IFNXMinePool(minePoolAddr);
     }
 
     /**
