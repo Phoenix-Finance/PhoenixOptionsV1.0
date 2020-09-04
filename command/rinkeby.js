@@ -8,7 +8,7 @@ let OptionsManagerV2 = require("../build/contracts/OptionsManagerV2.json");
 let OptionsPrice = require("../build/contracts/OptionsPrice.json");
 let FNXOracle = require("../build/contracts/FNXOracle.json");
 async function rinkebyQuery(){
-    let manager = await new web3.eth.Contract(OptionsManagerV2.abi,"0x0eab0c80a6819fed0986014d0bd077040fe846f1");
+    let manager = await new web3.eth.Contract(OptionsManagerV2.abi,"0x646b8e7420fc53761522a1b56a33f88db0549213");
     let netWorth = await manager.methods.getTokenNetworth().call();
     console.log("netWorth :",netWorth.toString(10));
     let result = await manager.methods.getTotalCollateral().call();
@@ -17,9 +17,13 @@ async function rinkebyQuery(){
     console.log("OccupiedCollateral :",result.toString(10));
     result = await manager.methods.getLeftCollateral().call();
     console.log("LeftCollateral :",result.toString(10));
-    let oracle = await new web3.eth.Contract(FNXOracle.abi,"0x0574299391bf54e44918d529b4c9ac68237bb07e");
+    result = await manager.methods.getWhiteList().call();
+    console.log("getWhiteList :",result.toString(10));
+    let oracle = await new web3.eth.Contract(FNXOracle.abi,"0x1a7aa04cdcba8773db839a969e7c919f5169d777");
     let btcPrice = await oracle.methods.getUnderlyingPrice(1).call();
     console.log("btcPrice :",btcPrice.toString(10));
+    btcPrice = await oracle.methods.getPrice("0x4738635C82BED8F474D9A078F4E5797fa5d5f460").call();
+    console.log("USDC Price :",btcPrice.toString(10));
     let price = await new web3.eth.Contract(OptionsPrice.abi,"0xa18acb43e276a09a434df162b665ea05cac7efda");
     result = await price.methods.getOptionsPrice(btcPrice,1155837000000,604800,1,0).call();
     console.log("price :",result.toString(10));
