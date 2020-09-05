@@ -57,7 +57,7 @@ contract Operator is Ownable {
      * @dev set all operators by owner. 
      *
      */
-    function setOperator(address[] memory operators)public onlyOwner {
+    function setOperators(address[] memory operators)public onlyOwner {
         _operatorList = operators;
     }
 }

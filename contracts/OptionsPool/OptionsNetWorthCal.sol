@@ -132,7 +132,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         int256[] memory OptionsFallBalances = _calRangeOptionsFall(begin,end,whiteList,prices);
         uint256 whiteListLen = whiteList.length;
         for (uint256 index = 0;index<whiteListLen;index++){
-            OptionsFallBalances[index] = OptionsFallBalances[index]/(int256(_oracle.getPrice(whiteList[index])));
+            OptionsFallBalances[index] = OptionsFallBalances[index]/(int256(oraclePrice(whiteList[index])));
         }
         return OptionsFallBalances;
     }
@@ -181,7 +181,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
     /*
     function _addNewOptionsNetworth(OptionsInfo memory info)  internal {
         OptionsInfoEx storage infoEx =  optionExtraMap[info.optionID-1];
-        uint256 price = _oracle.getPrice(infoEx.settlement);
+        uint256 price = oraclePrice(infoEx.settlement);
         uint256 curValue = _calCurtimeCallateralFall(info,info.amount,infoEx.underlyingPrice)/price;
         optionsLatestNetWorth[infoEx.settlement] = optionsLatestNetWorth[infoEx.settlement].sub(int256(curValue));
     }
@@ -198,7 +198,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
         uint256 timeWorth = optionEx.fullPrice>currentPrice ? optionEx.fullPrice-currentPrice : 0;
         timeWorth = optionEx.tokenTimePrice*timeWorth*amount/calDecimals;
-        curValue = curValue / int256(_oracle.getPrice(optionEx.settlement));
+        curValue = curValue / int256(oraclePrice(optionEx.settlement));
         int256 value = curValue - int256(timeWorth);
         optionsLatestNetWorth[optionEx.settlement] = optionsLatestNetWorth[optionEx.settlement]+value;
     }

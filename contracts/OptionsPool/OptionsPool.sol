@@ -17,6 +17,9 @@ contract OptionsPool is OptionsNetWorthCal {
         _optionsPrice = IOptionsPrice(optionsPriceAddr);
         _volatility = IVolatility(ivAddress);
     }
+    function update() onlyOwner public {
+        
+    }
     /**
      * @dev retrieve all information for collateral occupied and net worth calculation.
      * @param whiteList settlement address whitelist.
@@ -52,7 +55,7 @@ contract OptionsPool is OptionsNetWorthCal {
     function burnOptions(address from,uint256 id,uint256 amount,uint256 optionPrice)public onlyManager Smaller(amount) OutLimitation(id){
         _burnOptions(from,id,amount);
         OptionsInfo memory info = _getOptionsById(id);
-        uint256 currentPrice = _oracle.getUnderlyingPrice(info.underlying);
+        uint256 currentPrice = oracleUnderlyingPrice(info.underlying);
         _burnOptionsCollateral(info,amount,currentPrice);
         _burnOptionsNetworth(info,amount,currentPrice,optionPrice);
     }

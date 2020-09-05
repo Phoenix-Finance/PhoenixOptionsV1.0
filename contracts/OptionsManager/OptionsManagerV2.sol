@@ -27,6 +27,9 @@ contract OptionsManagerV2 is CollateralCal {
     function initialize() onlyOwner public {
         
     }
+    function update() onlyOwner public {
+        
+    }
     /**
     * @dev retrieve input price valid range rate, thousandths.
     */ 
@@ -63,7 +66,7 @@ contract OptionsManagerV2 is CollateralCal {
                 uint256 expiration,uint256 amount,uint8 optType) nonReentrant notHalted  public payable{
         _optionsPool.buyOptionCheck(expiration,underlying);
         uint256 ty_ly_exp = tuple64.getTuple(uint256(optType),uint256(underlying),uint256(expiration),0);
-        uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
+        uint256 underlyingPrice = oracleUnderlyingPrice(underlying);
         checkStrikePrice(strikePrice,underlyingPrice);
         uint256 optionPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType); 
         require(getAvailableCollateral()>=calOptionsOccupied(strikePrice,underlyingPrice,amount,optType),"collateral is insufficient!");
@@ -80,7 +83,7 @@ contract OptionsManagerV2 is CollateralCal {
     function buyOption_sub(address settlement,uint256 settlementAmount,
             uint256 optionPrice,uint256 amount)internal{
         settlementAmount = getPayableAmount(settlement,settlementAmount);
-        uint256 settlePrice = _oracle.getPrice(settlement);
+        uint256 settlePrice = oraclePrice(settlement);
         uint256 allPay = amount*optionPrice;
         uint256 allPayUSd = allPay/1e8;
         allPay = allPay/settlePrice;
@@ -102,7 +105,7 @@ contract OptionsManagerV2 is CollateralCal {
     function sellOption(uint256 optionsId,uint256 amount) nonReentrant notHalted InRange(amount) public{
         (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
         expiration = expiration.sub(now);
-        uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);
+        uint256 currentPrice = oracleUnderlyingPrice(underlying);
         uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
         _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
         uint256 allPay = optPrice*amount;
@@ -121,7 +124,7 @@ contract OptionsManagerV2 is CollateralCal {
         require(allPay > 0,"This option cannot exercise");
         (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
         expiration = expiration.sub(now);
-        uint256 currentPrice = _oracle.getUnderlyingPrice(underlying);
+        uint256 currentPrice = oracleUnderlyingPrice(underlying);
         uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
         _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
         (address settlement,uint256 fullPay) = _optionsPool.getBurnedFullPay(optionsId,amount);

@@ -1,9 +1,7 @@
 pragma solidity =0.5.16;
 import "./interfaces/IFNXOracle.sol";
-import "./modules/SafeMath.sol";
 import "./modules/Operator.sol";
 contract FNXOracle is IFNXOracle,Operator {
-    using SafeMath for uint256;
     mapping(uint256 => uint256) private priceMap;
     /**
       * @notice set price of an asset

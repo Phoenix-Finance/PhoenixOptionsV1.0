@@ -111,7 +111,7 @@ contract CollateralCal is ManagerData {
         amount = getPayableAmount(collateral,amount);
         uint256 fee = _collateralPool.addTransactionFee(collateral,amount,3);
         amount = amount-fee;
-        uint256 price = _oracle.getPrice(collateral);
+        uint256 price = oraclePrice(collateral);
         uint256 userPaying = price*amount;
         uint256 mintAmount = userPaying/getTokenNetworth();
         _collateralPool.addUserPayingUsd(msg.sender,userPaying);
@@ -231,7 +231,7 @@ contract CollateralCal is ManagerData {
             if (checkAddressPermission(tmpWhiteList[i],0x0002)){
                 netWorthBalances[i] = getNetWorthBalance(tmpWhiteList[i]);
             }
-            prices[i] = _oracle.getPrice(tmpWhiteList[i]);
+            prices[i] = oraclePrice(tmpWhiteList[i]);
         }
         (uint256[] memory colBalances,uint256[] memory PremiumBalances) = _collateralPool.getCollateralAndPremiumBalances(account,userTotalWorth,tmpWhiteList,
                 netWorthBalances,prices);
@@ -292,7 +292,7 @@ contract CollateralCal is ManagerData {
         uint whiteListLen = whiteList.length;
         for (uint256 i=0;i<whiteListLen;i++){
             address addr = whiteList[i];
-            int256 price = int256(_oracle.getPrice(addr));
+            int256 price = int256(oraclePrice(addr));
             int256 netWorth = getRealBalance(addr);
             if (netWorth != 0){
                 totalNum = totalNum.add(price.mul(netWorth));
@@ -328,7 +328,7 @@ contract CollateralCal is ManagerData {
         for(;i<whiteLen;i++){
             address addr = whiteList[i];
             if (checkAddressPermission(addr,allowSellOut)){
-                uint256 price = _oracle.getPrice(addr);
+                uint256 price = oraclePrice(addr);
                 balances[i] = getNetWorthBalance(addr);
                 //balances[i] = netWorthBalances[addr];
                 totalPrice = totalPrice.add(price.mul(balances[i]));

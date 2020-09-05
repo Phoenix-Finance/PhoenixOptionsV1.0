@@ -130,7 +130,7 @@ contract OptionsBase is OptionsData {
         uint256 underlyingLen = underlyingAssets.length;
         uint256[] memory prices = new uint256[](underlyingLen);
         for (uint256 i = 0;i<underlyingLen;i++){
-            prices[i] = _oracle.getUnderlyingPrice(underlyingAssets[i]);
+            prices[i] = oracleUnderlyingPrice(underlyingAssets[i]);
         }
         return prices;
     }
@@ -164,10 +164,10 @@ contract OptionsBase is OptionsData {
      * @param underlying option's underlying
      */
     function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice,uint256 strikePrice,uint256 underlying) internal{
-        uint256 underlyingPrice = _oracle.getUnderlyingPrice(underlying);
+        uint256 underlyingPrice = oracleUnderlyingPrice(underlying);
         uint256 expiration = info.expiration - now;
         (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,underlyingPrice,strikePrice);
-        uint256 tokenTimePrice = calDecimals/_oracle.getPrice(settlement);
+        uint256 tokenTimePrice = calDecimals/oraclePrice(settlement);
         optionExtraMap[info.optionID-1]= OptionsInfoEx(settlement,tokenTimePrice,underlyingPrice,optionPrice,ivNumerator,ivDenominator);
     }
     /**
@@ -192,7 +192,7 @@ contract OptionsBase is OptionsData {
         OptionsInfo memory info = _getOptionsById(optionsId);
         checkEligible(info);
         checkSufficient(info,amount);
-        uint256 underlyingPrice = _oracle.getUnderlyingPrice(info.underlying);
+        uint256 underlyingPrice = oracleUnderlyingPrice(info.underlying);
         uint256 tokenPayback = _getOptionsPayback(info.optType,info.strikePrice,underlyingPrice);
         if (tokenPayback == 0 ){
             return 0;
