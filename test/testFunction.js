@@ -31,7 +31,7 @@ exports.migration =  async function (accounts){
     let options = await OptionsProxy.new(pool.address,oracleInstance.address,price.address,ivInstance.address);
     pool = await FNXMinePool.new();
     let poolProxy = await MinePoolProxy.new(pool.address);
-    let fptimpl = await FPTCoin.new();
+    let fptimpl = await FPTCoin.new(poolProxy.address);
     let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address);
 
     let collateral = await CollateralPool.new();

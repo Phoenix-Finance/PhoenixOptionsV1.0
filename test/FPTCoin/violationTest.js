@@ -12,7 +12,7 @@ contract('Erc20Proxy', function (accounts){
         let erc20 = await Erc20Proxy.new(fnx.address);
         let pool = await minePool.new();
         let poolProxy = await minePoolProxy.new(pool.address);
-        let fptimpl = await FPTCoin.new();
+        let fptimpl = await FPTCoin.new(poolProxy.address);
         let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address);
 
         await poolProxy.setManager(fpt.address);
@@ -38,7 +38,7 @@ contract('Erc20Proxy', function (accounts){
         let erc20 = await Erc20Proxy.new(fnx.address);
         let pool = await minePool.new();
         let poolProxy = await minePoolProxy.new(pool.address);
-        let fptimpl = await FPTCoin.new();
+        let fptimpl = await FPTCoin.new(poolProxy.address);
         let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address);
 
         await poolProxy.setManager(fpt.address);
