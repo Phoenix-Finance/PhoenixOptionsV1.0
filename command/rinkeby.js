@@ -7,7 +7,11 @@ let OptionsPool = require("../build/contracts/OptionsPool.json");
 let OptionsManagerV2 = require("../build/contracts/OptionsManagerV2.json");
 let OptionsPrice = require("../build/contracts/OptionsPrice.json");
 let FNXOracle = require("../build/contracts/FNXOracle.json");
+let FPTCoin = require("../build/contracts/FPTCoin.json");
 async function rinkebyQuery(){
+    let fpt = await new web3.eth.Contract(FPTCoin.abi,"0x63104d5963c7cf62125b1def12573c56adfe0343");
+    let times = await fpt.methods.lockedBalanceOf("0xa936B6F2557c096C0052a9A4765963B381D33896").call();
+    console.log("burn limted time : ",times.toString(10));
     let manager = await new web3.eth.Contract(OptionsManagerV2.abi,"0x646b8e7420fc53761522a1b56a33f88db0549213");
     let netWorth = await manager.methods.getTokenNetworth().call();
     console.log("netWorth :",netWorth.toString(10));
