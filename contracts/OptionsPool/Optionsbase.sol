@@ -13,7 +13,7 @@ contract OptionsBase is OptionsData {
         initialize();
     }
     function initialize() onlyOwner public {
-        expirationList =  [1 days,3 days, 7 days, 10 days, 15 days, 30 days,90 days];
+        expirationList =  [1 days,2 days,3 days, 7 days, 10 days, 15 days,20 days, 30 days/*,90 days*/];
         underlyingAssets = [1,2];
     }
     /**

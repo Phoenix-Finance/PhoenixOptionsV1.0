@@ -14,6 +14,8 @@ contract FNXMinePool is MinePoolData {
     }
     function initialize() onlyOwner public{
     }
+    function update() onlyOwner public{
+    }
     /**
      * @dev default function for foundation input miner coins.
      */
@@ -321,6 +323,8 @@ contract FNXMinePool is MinePoolData {
             }else if (operators==opMintCoin){
                 totalMinedWorth[mineCoin] = totalMinedWorth[mineCoin].add(tokenNetWorth.mul(amount));
             }else if (operators==opTransferCoin){
+                minerBalances[mineCoin][recipient] = minerBalances[mineCoin][recipient].add(
+                    _settlement(mineCoin,recipient,balanceOf(recipient),tokenNetWorth));
                 minerOrigins[mineCoin][recipient] = tokenNetWorth;
             }
         }
