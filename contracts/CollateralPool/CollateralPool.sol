@@ -209,20 +209,16 @@ contract CollateralPool is TransactionFee{
         for(; i<ln && redeemWorth>0;i++){
             //address addr = tmpWhiteList[i];
             if (colBalances[i] > 0){
-                uint256 totalWorth = prices[i].mul(colBalances[i]);
-                if (redeemWorth < totalWorth){
-    //                setUserInputCollateral(account,tmpWhiteList[i],
-    //                    getUserInputCollateral(account,tmpWhiteList[i]).mul(totalWorth-redeemWorth).div(totalWorth));
-                    userInputCollateral[account][tmpWhiteList[i]] = userInputCollateral[account][tmpWhiteList[i]].mul(totalWorth-redeemWorth)/totalWorth;
-                    PaybackBalances[i] = redeemWorth/prices[i];
+                uint256 amount = redeemWorth/prices[i];
+                if (amount < colBalances[i]){
                     redeemWorth = 0;
-                    break;
                 }else{
-                    //_collateralPool.setUserInputCollateral(msg.sender,tmpWhiteList[i],0);
-                    userInputCollateral[account][tmpWhiteList[i]] = 0;
-                    PaybackBalances[i] = colBalances[i];
-                    redeemWorth = redeemWorth - totalWorth;
+                    amount = colBalances[i];
+                    redeemWorth = redeemWorth - colBalances[i]*prices[i];
                 }
+                userInputCollateral[account][tmpWhiteList[i]] =userInputCollateral[account][tmpWhiteList[i]].sub(amount);
+                collateralBalances[tmpWhiteList[i]] = collateralBalances[tmpWhiteList[i]].sub(amount);
+                PaybackBalances[i] = amount;
             }
         }
         if (redeemWorth>0) {
