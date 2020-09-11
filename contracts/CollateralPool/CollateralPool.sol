@@ -20,6 +20,8 @@ contract CollateralPool is TransactionFee{
     function initialize() onlyOwner public {
         TransactionFee.initialize();
     }
+    function update() onlyOwner public{
+    }
     /**
      * @dev An interface for add transaction fee.
      *  Only manager contract can invoke this function.
