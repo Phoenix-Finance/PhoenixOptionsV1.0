@@ -25,16 +25,21 @@ async function wanTest(){
     console.log("LeftCollateral :",result.toString(10));
     result = await manager.methods.getWhiteList().call();
     console.log("getWhiteList :",result.toString(10));
-    let oracle = await new web3.eth.Contract(FNXOracle.abi,"0x4d4ce9bf566b39afc4434c877be6255c422ca43b");
+    let oracle = await new web3.eth.Contract(FNXOracle.abi,"0xfc344e9cd3e20dfe497d29df6a072e9afd8f024e");
     let btcPrice = await oracle.methods.getUnderlyingPrice(1).call();
     console.log("btcPrice :",btcPrice.toString(10));
-    btcPrice = await oracle.methods.getPrice("0x4738635C82BED8F474D9A078F4E5797fa5d5f460").call();
-    console.log("USDC Price :",btcPrice.toString(10));
+    let ethPrice = await oracle.methods.getUnderlyingPrice(2).call();
+    console.log("ethPrice :",ethPrice.toString(10));
+    result = await oracle.methods.getPrice("0x8ebff0b39363f40b22a9f7a079a9b9ee1b448a03").call();
+    console.log("fnx price :",result.toString(10));
+    result = await oracle.methods.getPrice(collateral0).call();
+    console.log("wan price :",result.toString(10));
+    // btcPrice = await oracle.methods.getPrice("0x4738635C82BED8F474D9A078F4E5797fa5d5f460").call();
+    // console.log("USDC Price :",btcPrice.toString(10));
     let price = await new web3.eth.Contract(OptionsPrice.abi,"0x3b3f33b83ea9212d8892e8d521aae743076576a8");
     result = await price.methods.getOptionsPrice(btcPrice,1155837000000,604800,1,0).call();
     console.log("price :",result.toString(10));
-    result = await oracle.methods.getPrice("0xdF228001e053641FAd2BD84986413Af3BeD03E0B").call();
-    console.log("fnx price :",result.toString(10));
+
     let Options = await new web3.eth.Contract(OptionsPool.abi,"0xb90a8e8a770d67dd67192cbc2b4994082f438b61");
     result = await Options.methods.getOptionInfoLength().call();
     console.log("getOptionInfoLength :",result.toString(10));
