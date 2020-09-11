@@ -63,7 +63,7 @@ contract OptionsManagerV2 is CollateralCal {
     * @param optType user input option type
     */ 
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
-                uint256 expiration,uint256 amount,uint8 optType) nonReentrant notHalted  public payable{
+                uint256 expiration,uint256 amount,uint8 optType) nonReentrant notHalted InRange(amount) public payable{
         _optionsPool.buyOptionCheck(expiration,underlying);
         uint256 ty_ly_exp = tuple64.getTuple(uint256(optType),uint256(underlying),uint256(expiration),0);
         uint256 underlyingPrice = oracleUnderlyingPrice(underlying);

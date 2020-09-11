@@ -6,7 +6,7 @@ contract ImputRange is Ownable {
     //The maximum input amount limit.
     uint256 private maxAmount = 1e30;
     //The minimum input amount limit.
-    uint256 private minAmount = 1e9;
+    uint256 private minAmount = 1e2;
     
     modifier InRange(uint256 amount) {
         require(maxAmount>=amount && minAmount<=amount,"input amount is out of input amount range");

@@ -16,12 +16,12 @@ contract ImportOracle is Ownable{
     IFNXOracle internal _oracle;
     function oraclePrice(address asset) internal view returns (uint256){
         uint256 price = _oracle.getPrice(asset);
-        require(price >= 100 && price <= 1e24);
+        require(price >= 100 && price <= 1e30);
         return price;
     }
     function oracleUnderlyingPrice(uint256 cToken) internal view returns (uint256){
         uint256 price = _oracle.getUnderlyingPrice(cToken);
-        require(price >= 100 && price <= 1e24);
+        require(price >= 100 && price <= 1e30);
         return price;
     }
     function getOracleAddress() public view returns(address){
