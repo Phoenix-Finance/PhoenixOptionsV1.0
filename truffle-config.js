@@ -18,13 +18,14 @@
  *
  */
 
+
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 // const infuraKey = "fj4jll3k.....";
 //--python="C:\Python\Python37\python.exe"
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 //const HDWalletProvider = require('truffle-hdwallet-provider');
- const HDWalletProvider = require('../wan-hdwallet-provider');
+ //const HDWalletProvider = require('../wan-hdwallet-provider');
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the

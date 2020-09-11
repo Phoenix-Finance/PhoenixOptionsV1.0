@@ -1,7 +1,8 @@
+
 pragma solidity =0.5.16;
 import "../modules/Operator.sol";
 import "../modules/tuple64.sol";
-import "./ArraySave.sol";
+import "./arraySave.sol";
 contract imVolatility32 is Operator {
     uint256 private ValidUntil = 1200;
     uint256 constant private _calDecimal = 1e8;
@@ -81,7 +82,7 @@ contract imVolatility32 is Operator {
         for (;i<end;i++){
             uint256 ivPrice = ArraySave32.getValue(IvMap,saveKey,i*2);
             if (price<=ivPrice){
-                break;                
+                break;
             }
         }
         if (i == end){
@@ -92,7 +93,7 @@ contract imVolatility32 is Operator {
         uint256 highPrice = ArraySave32.getValue(IvMap,saveKey,i*2);
         if (highPrice == price) {
             return ArraySave32.getValue(IvMap,saveKey,i*2+1)*100;
-        }         
+        }
         int iv = insertValue(int256(ArraySave32.getValue(IvMap,saveKey,i*2-2)),int256(highPrice),
             int256(ArraySave32.getValue(IvMap,saveKey,i*2-1)),int256(ArraySave32.getValue(IvMap,saveKey,i*2+1)),int256(price));
         if (iv<=0){
