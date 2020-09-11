@@ -12,7 +12,7 @@ contract('OptionsManagerV2', function (accounts){
         await contracts.FNX.approve(contracts.manager.address,collAmount);
         await contracts.manager.addCollateral(contracts.FNX.address,collAmount);
         let days = 24*60*60;
-        let expiration = [days,3*days, 7*days, 10*days, 15*days, 30*days,90*days];
+        let expiration = [days,2*days,3*days, 7*days, 10*days, 15*days,20*days, 30*days];
         for (var i=0;i<20;i++){
             await contracts.FNX.approve(contracts.manager.address,2000000000000000);
             let strikePrice = 50*i + 900000000000;

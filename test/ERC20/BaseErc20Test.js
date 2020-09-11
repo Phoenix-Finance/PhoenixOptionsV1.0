@@ -1,15 +1,12 @@
-const Erc20Proxy = artifacts.require("Erc20Proxy");
-const FNXCoin = artifacts.require("FNXCoin");
+const FNXCoin = artifacts.require("USDCoin");
 const BN = require("bn.js");
-contract('Erc20Proxy', function (accounts){
-    it('Erc20Proxy test functions', async function (){
-        let fnx = await FNXCoin.new();
-        console.log(fnx.address)
-        let erc20 = await Erc20Proxy.new(fnx.address);
+contract('FNXCoin', function (accounts){
+    it('FNXCoin test functions', async function (){
+        let erc20 = await FNXCoin.new();
         let name = await erc20.name();
-        assert.equal(name,"FNXCoin","name Error");
+        assert.equal(name,"USD Coin","name Error");
         let symbol = await erc20.symbol();
-        assert.equal(symbol,"FNX","symbol Error");
+        assert.equal(symbol,"USDC","symbol Error");
         let decimals = await erc20.decimals();
         assert.equal(decimals,18,"decimals Error");
         let totalSupply = await erc20.totalSupply();
@@ -36,5 +33,8 @@ contract('Erc20Proxy', function (accounts){
         assert.equal(result.toString(10),"0","accounts[2] Error");
         result = await erc20.balanceOf(accounts[4]);
         assert.equal(result.toString(10),"10000000000","accounts[2] Error");
+        let bn = new BN("100000000000000000000");
+        await erc20.mint(accounts[0],bn);
+        await erc20.mint(accounts[1],bn);
     });
 });
