@@ -39,9 +39,9 @@ exports.migration =  async function (accounts){
 
     let managerV2 = await OptionsManagerV2.new(oracleInstance.address,price.address,
         options.address,poolInstance.address,fpt.address);
-    
     let manager = await ManagerProxy.new(managerV2.address,oracleInstance.address,price.address,
         options.address,poolInstance.address,fpt.address)
+    await manager.setValid(false);
     await poolProxy.setManager(fpt.address);
     await fpt.setManager(manager.address);
     await options.setManager(manager.address);

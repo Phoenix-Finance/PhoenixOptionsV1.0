@@ -46,9 +46,11 @@ contract OptionsData is UnderlyingAssets,timeLimitation,ImputRange,Managerable,I
     // first option position which is needed calculate.
     uint256 internal occupiedFirstOption; 
     //latest calcutated Options Occupied value.
-    uint256 internal optionsOccupied;
+    uint256 internal callOccupied;
+    uint256 internal putOccupied;
     //latest Options volatile occupied value when bought or selled options.
-    int256 internal optionsLatestOccupied;
+    int256 internal callLatestOccupied;
+    int256 internal putLatestOccupied;
 
     /**
      * @dev Emitted when `owner` create a new option. 

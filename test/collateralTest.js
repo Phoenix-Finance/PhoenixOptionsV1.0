@@ -226,11 +226,12 @@ async function calculateNetWroth(options,manager,fnx){
         let whiteList = [collateral0,fnx.address];
         optionsLen = await options.getOptionCalRangeAll(whiteList);
         console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
-    
-        let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
-        console.log(result[0].toString(10),result[1].toString(10));
+        //(occupiedFirst,callOccupiedlatest,putOccupiedlatest,netFirst,netLatest,allOptions.length,block.number
+        console.log(optionsLen[0].toString(10),optionsLen[5].toString(10));
+        let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[5],optionsLen[0],optionsLen[5]);
+        console.log(result[0].toString(10),result[1].toString(10),result[2].toString(10));
         let tx = await options.setOccupiedCollateral();
-        result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
+        result =  await options.calRangeSharedPayment(optionsLen[5],optionsLen[3],optionsLen[5],whiteList);
         console.log(result[0][0].toString(10),result[0][1].toString(10));
     
     //                return;

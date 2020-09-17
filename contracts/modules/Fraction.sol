@@ -151,6 +151,10 @@ library Fraction {
         }
         return xNum;
     }
+    function pow(fractionNumber memory _x,fractionNumber memory _y) internal pure returns (fractionNumber memory){
+        _x = mul(ln(_x),_y);
+        return exp(_x);
+    }
     /**
      * @dev fraction exponential operator.
      */

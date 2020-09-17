@@ -118,7 +118,7 @@ contract('OptionsManagerV2', function (accounts){
             await contracts.manager.sellOption(optionID,10000000000,{from : accounts[1]});    
         })
         await testViolation("sell options input amount test failed",async function(){
-            await contracts.manager.sellOption(optionID,100);    
+            await contracts.manager.sellOption(optionID,10);    
         })
         await testViolation("sell options insufficient test failed",async function(){
             await contracts.manager.sellOption(optionID,1000000000000);    
@@ -130,7 +130,7 @@ contract('OptionsManagerV2', function (accounts){
             await contracts.manager.exerciseOption(optionID,10000000000,{from : accounts[1]});    
         })
         await testViolation("exercise options input amount test failed",async function(){
-            await contracts.manager.exerciseOption(optionID,100);    
+            await contracts.manager.exerciseOption(optionID,10);    
         })
         await testViolation("exercise options insufficient test failed",async function(){
             await contracts.manager.exerciseOption(optionID,1000000000000);    

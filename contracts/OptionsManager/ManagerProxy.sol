@@ -213,4 +213,8 @@ contract ManagerProxy is ManagerData,baseProxy{
     function exerciseOption(uint256 /*optionsId*/,uint256 /*amount*/) public{
         delegateAndReturn();
     }
+    function getOptionsPrice(uint256 /*underlyingPrice*/, uint256 /*strikePrice*/, uint256 /*expiration*/,
+                    uint32 /*underlying*/,uint256 /*amount*/,uint8 /*optType*/) public view returns(uint256){
+        delegateToViewAndReturn();
+    }
 }

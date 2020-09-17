@@ -140,7 +140,7 @@ contract OptionsProxy is OptionsData,baseProxy{
         /**
      * @dev retrieve collateral occupied calculation information.
      */    
-    function getOccupiedCalInfo()public view returns(uint256,int256){
+    function getOccupiedCalInfo()public view returns(uint256,int256,int256){
         delegateToViewAndReturn();
     }
     /**
@@ -155,18 +155,33 @@ contract OptionsProxy is OptionsData,baseProxy{
      *  beginOption begin option's poisiton.
      *  endOption end option's poisiton.
      */  
-    function calculatePhaseOccupiedCollateral(uint256 /*lastOption*/,uint256 /*beginOption*/,uint256 /*endOption*/) public view returns(uint256,uint256,bool){
+    function calculatePhaseOccupiedCollateral(uint256 /*lastOption*/,uint256 /*beginOption*/,uint256 /*endOption*/) public view returns(uint256,uint256,uint256,bool){
         delegateToViewAndReturn();
     }
  
     /**
      * @dev set collateral occupied value, only foundation operator can modify database.
-     *  totalOccupied new collateral calculation result.
-     *  beginOption new first valid option's positon.
-     *  latestOccpied latest occupied value when operater invoke collateral occupied calculation.
+     * totalCallOccupied new call options occupied collateral calculation result.
+     * totalPutOccupied new put options occupied collateral calculation result.
+     * beginOption new first valid option's positon.
+     * latestCallOccpied latest call options' occupied value when operater invoke collateral occupied calculation.
+     * latestPutOccpied latest put options' occupied value when operater invoke collateral occupied calculation.
      */  
-    function setCollateralPhase(uint256 /*totalOccupied*/,uint256 /*beginOption*/,int256 /*latestOccpied*/) public{
+    function setCollateralPhase(uint256 /*totalCallOccupied*/,uint256 /*totalPutOccupied*/,
+        uint256 /*beginOption*/,int256 /*latestCallOccpied*/,int256 /*latestPutOccpied*/) public{
         delegateAndReturn();
+    }
+    /**
+     * @dev get call options total collateral occupied value.
+     */ 
+    function getCallTotalOccupiedCollateral() public view returns (uint256) {
+        delegateToViewAndReturn();
+    }
+    /**
+     * @dev get put options total collateral occupied value.
+     */ 
+    function getPutTotalOccupiedCollateral() public view returns (uint256) {
+        delegateToViewAndReturn();
     }
     /**
      * @dev get real total collateral occupied value.
@@ -223,7 +238,7 @@ contract OptionsProxy is OptionsData,baseProxy{
      * @dev retrieve all information for collateral occupied and net worth calculation.
      *  whiteList settlement address whitelist.
      */ 
-    function getOptionCalRangeAll(address[] memory /*whiteList*/)public view returns(uint256,int256,uint256,int256[] memory,uint256,uint256){
+    function getOptionCalRangeAll(address[] memory /*whiteList*/)public view returns(uint256,int256,int256,uint256,int256[] memory,uint256,uint256){
         delegateToViewAndReturn();
     }
     /**

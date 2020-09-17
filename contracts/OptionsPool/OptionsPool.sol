@@ -24,10 +24,10 @@ contract OptionsPool is OptionsNetWorthCal {
      * @dev retrieve all information for collateral occupied and net worth calculation.
      * @param whiteList settlement address whitelist.
      */ 
-    function getOptionCalRangeAll(address[] memory whiteList)public view returns(uint256,int256,uint256,int256[] memory,uint256,uint256){
-        (uint256 occupiedFirst,int256 occupiedlatest) = getOccupiedCalInfo();
+    function getOptionCalRangeAll(address[] memory whiteList)public view returns(uint256,int256,int256,uint256,int256[] memory,uint256,uint256){
+        (uint256 occupiedFirst,int256 callOccupiedlatest,int256 putOccupiedlatest) = getOccupiedCalInfo();
         (uint256 netFirst,int256[] memory netLatest) = getNetWrothCalInfo(whiteList);
-        return (occupiedFirst,occupiedlatest,netFirst,netLatest,allOptions.length,block.number);
+        return (occupiedFirst,callOccupiedlatest,putOccupiedlatest,netFirst,netLatest,allOptions.length,block.number);
     }
     /**
      * @dev create new option,modify collateral occupied and net worth value, only manager contract can invoke this.

@@ -6,6 +6,8 @@ interface IOptionsPool {
     function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 underlyingPrice,
                 uint256 amount)  external;
     function setSharedState(uint256 newFirstOption,int256[] calldata latestNetWorth,address[] calldata whiteList) external;
+    function getCallTotalOccupiedCollateral() external view returns (uint256);
+    function getPutTotalOccupiedCollateral() external view returns (uint256);
     function getTotalOccupiedCollateral() external view returns (uint256);
     function buyOptionCheck(uint256 expiration,uint32 underlying)external view;
     function burnOptions(address from,uint256 id,uint256 amount,uint256 optionPrice)external;

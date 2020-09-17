@@ -151,7 +151,7 @@ contract OptionsBase is OptionsData {
         allOptions.push(OptionsInfo(uint64(optionID+1),from,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount));
         optionsBalances[from].push(optionID+1);
         OptionsInfo memory info = allOptions[optionID];
-        setOptionsExtra(info,settlement,optionPrice,strikePrice,underlying);
+        setOptionsExtra(info,settlement,optionPrice,strikePrice);
         setItemTimeLimitation(optionID+1);
         emit CreateOption(from,optionID+1,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount);
     }
@@ -161,14 +161,15 @@ contract OptionsBase is OptionsData {
      * @param settlement the Coin address which user's paying for
      * @param optionPrice option's paid price
      * @param strikePrice option's strike price
-     * @param underlying option's underlying
      */
-    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice,uint256 strikePrice,uint256 underlying) internal{
-        uint256 underlyingPrice = oracleUnderlyingPrice(underlying);
+    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice,uint256 strikePrice) internal{
+        uint256 underlyingPrice = oracleUnderlyingPrice(info.underlying);
         uint256 expiration = info.expiration - now;
         (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,underlyingPrice,strikePrice);
-        uint256 tokenTimePrice = calDecimals/oraclePrice(settlement);
-        optionExtraMap[info.optionID-1]= OptionsInfoEx(settlement,tokenTimePrice,underlyingPrice,optionPrice,ivNumerator,ivDenominator);
+        uint256 fullPrice = _optionsPrice.getOptionsPrice_iv(underlyingPrice,strikePrice,expiration,ivNumerator,
+                ivDenominator,info.optType);
+        uint256 tokenTimePrice = optionPrice*calDecimals/fullPrice/oraclePrice(settlement);
+        optionExtraMap[info.optionID-1]= OptionsInfoEx(settlement,tokenTimePrice,underlyingPrice,fullPrice,ivNumerator,ivDenominator);
     }
     /**
      * @dev burn an exist option whose id is `id`.

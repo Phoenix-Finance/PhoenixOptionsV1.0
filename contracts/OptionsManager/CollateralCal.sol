@@ -107,12 +107,13 @@ contract CollateralCal is ManagerData {
      * @param collateral The collateral coin address which is in whitelist.
      * @param amount the amount of collateral to deposit.
      */
-    function addCollateral(address collateral,uint256 amount) nonReentrant notHalted public payable {
+    function addCollateral(address collateral,uint256 amount) nonReentrant notHalted  public payable {
         amount = getPayableAmount(collateral,amount);
         uint256 fee = _collateralPool.addTransactionFee(collateral,amount,3);
         amount = amount-fee;
         uint256 price = oraclePrice(collateral);
         uint256 userPaying = price*amount;
+        checkAllowance(msg.sender,(_collateralPool.getUserPayingUsd(msg.sender)+userPaying)/1e8);
         uint256 mintAmount = userPaying/getTokenNetworth();
         _collateralPool.addUserPayingUsd(msg.sender,userPaying);
         _collateralPool.addCollateralBalance(collateral,amount);
@@ -376,12 +377,15 @@ contract CollateralCal is ManagerData {
         uint256 i=0;
         for(;i<whiteLen;i++){
             address addr = whiteList[i];
-             uint256 balance = getNetWorthBalance(addr);
-             totalCollateral = totalCollateral.add(balance);
-             totalRate = totalRate.add(collateralRate[addr].mul(balance));
+            uint256 balance = getNetWorthBalance(addr);
+            if (balance > 0 && collateralRate[addr] > 0){
+                balance = oraclePrice(addr)*balance;
+                totalCollateral = totalCollateral.add(balance);
+                totalRate = totalRate.add(balance/collateralRate[addr]);
+            }
         }
-        if (totalCollateral > 0){
-            return totalRate / totalCollateral;
+        if (totalRate > 0){
+            return totalCollateral/totalRate;
         }else{
             return 5000;
         }

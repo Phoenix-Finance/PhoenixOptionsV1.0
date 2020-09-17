@@ -68,8 +68,7 @@ contract OptionsManagerV2 is CollateralCal {
         uint256 ty_ly_exp = tuple64.getTuple(uint256(optType),uint256(underlying),uint256(expiration),0);
         uint256 underlyingPrice = oracleUnderlyingPrice(underlying);
         checkStrikePrice(strikePrice,underlyingPrice);
-        uint256 optionPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType); 
-        require(getAvailableCollateral()>=calOptionsOccupied(strikePrice,underlyingPrice,amount,optType),"collateral is insufficient!");
+        uint256 optionPrice = getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,amount,optType); 
         _optionsPool.createOptions(msg.sender,settlement,ty_ly_exp,strikePrice,optionPrice,amount);
         buyOption_sub(settlement,settlementAmount,optionPrice,amount);
     }
@@ -131,5 +130,17 @@ contract OptionsManagerV2 is CollateralCal {
         _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
         _paybackWorth(allPay,2);
         emit ExerciseOption(msg.sender,optionsId,amount,allPay);
+    }
+    function getOptionsPrice(uint256 underlyingPrice, uint256 strikePrice, uint256 expiration,
+                    uint32 underlying,uint256 amount,uint8 optType) public view returns(uint256){
+        uint256 buyOccupied = calOptionsOccupied(strikePrice,underlyingPrice,amount,optType);
+        require(getAvailableCollateral()>=buyOccupied,"collateral is insufficient!");
+        uint256 optPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType);
+        uint256 selfOccupied = optType == 0 ? _optionsPool.getCallTotalOccupiedCollateral() : _optionsPool.getPutTotalOccupiedCollateral();
+        selfOccupied = calculateCollateral(selfOccupied) + buyOccupied;
+        uint256 totalOccupied = getOccupiedCollateral() + buyOccupied;
+        uint256 totalCollateral = getUnlockedCollateral();
+        (uint256 ratioNumerator,uint256 ratioDenominator) = _optionsPrice.calOptionsPriceRatio(selfOccupied,totalOccupied,totalCollateral);
+        return optPrice*ratioNumerator/ratioDenominator;
     }
 }
