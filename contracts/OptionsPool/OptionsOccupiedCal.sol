@@ -16,7 +16,7 @@ contract OptionsOccupiedCal is OptionsBase {
     /**
      * @dev calculate collateral occupied value, and modify database, only foundation operator can modify database.
      */  
-    function setOccupiedCollateral() public onlyOperatorIndex(0) {
+    function setOccupiedCollateral() public onlyOperatorIndex(1) {
         int256 latestCallOccupied = callLatestOccupied;
         int256 latestPutOccupied = putLatestOccupied;
         uint256 lastOption = allOptions.length;
@@ -77,7 +77,7 @@ contract OptionsOccupiedCal is OptionsBase {
      * @param latestPutOccpied latest put options' occupied value when operater invoke collateral occupied calculation.
      */  
     function setCollateralPhase(uint256 totalCallOccupied,uint256 totalPutOccupied,uint256 beginOption,
-            int256 latestCallOccpied,int256 latestPutOccpied) public onlyOperatorIndex(0){
+            int256 latestCallOccpied,int256 latestPutOccpied) public onlyOperatorIndex(1){
         require(beginOption <= allOptions.length, "beginOption calculate Error");
         if (beginOption >  occupiedFirstOption){
              occupiedFirstOption = beginOption;

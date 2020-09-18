@@ -31,7 +31,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
      * @param latestNetWorth latest options net worth.
      * @param whiteList eligible collateral address white list.
      */ 
-    function setSharedState(uint256 newFirstOption,int256[] memory latestNetWorth,address[] memory whiteList) public onlyManager{
+    function setSharedState(uint256 newFirstOption,int256[] memory latestNetWorth,address[] memory whiteList) public onlyOperatorIndex(0){
         require(newFirstOption <= allOptions.length, "newFirstOption calculate Error");
         if (newFirstOption >  netWorthirstOption){
              netWorthirstOption = newFirstOption;

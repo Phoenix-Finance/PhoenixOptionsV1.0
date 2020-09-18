@@ -39,7 +39,7 @@ contract('OptionsManagerV2', function (accounts){
     //        console.log(tx);
             await contracts.manager.buyOption(collateral0,200000000000000,9258*1e8,1,month,10000000000,1,{value : 200000000000000});
     //        console.log(tx);
-            await calculateNetWroth(contracts.options,contracts.manager);
+            await calculateNetWroth(contracts);
             for (var j=0;j<5;j++){
                 await contracts.manager.redeemCollateral(4985000000000,result[j]);
                 await contracts.manager.sellOption(j+1,10000000000);
@@ -48,18 +48,18 @@ contract('OptionsManagerV2', function (accounts){
         }
     });
 });
-async function calculateNetWroth(options,OptionsManger){
-    let whiteList = await OptionsManger.getWhiteList();
-    optionsLen = await options.getOptionCalRangeAll(whiteList);
+async function calculateNetWroth(contracts){
+    let whiteList = await contracts.manager.getWhiteList();
+    optionsLen = await contracts.options.getOptionCalRangeAll(whiteList);
     console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
 
-    let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
+    let result =  await contracts.options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
     console.log(result[0].toString(10),result[1].toString(10));
-    let tx = await options.setOccupiedCollateral();
+    let tx = await contracts.options.setOccupiedCollateral();
 //    result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
 //    console.log(result[0][0].toString(10),result[0][1].toString(10));
 
 //                return;q
-    tx = await OptionsManger.calSharedPayment();
+    tx = await contracts.collateral.calSharedPayment(whiteList);
     console.log(tx);
 }

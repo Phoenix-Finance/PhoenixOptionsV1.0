@@ -39,7 +39,7 @@ contract('OptionsProxy', function (accounts){
         await options.addOperator(accounts[0]);
         await options.addOperator(accounts[1]);
         await options.setManager(accounts[0]);
-        await options.setCollateralPhase(10000,10000,0,10000,10000);
+        await options.setCollateralPhase(10000,10000,0,10000,10000,{from : accounts[1]});
         await options.setSharedState(0,[10000],whiteList);
     });
     it('OptionsProxy create Options test functions', async function (){
@@ -62,7 +62,7 @@ contract('OptionsProxy', function (accounts){
         await options.addOperator(accounts[0]);
         await options.addOperator(accounts[1]);
         await options.setManager(accounts[0]);
-        await options.setCollateralPhase(10000,10000,0,10000,10000);
+        await options.setCollateralPhase(10000,10000,0,10000,10000,{from : accounts[1]});
         let whiteList = [collateral0];
         await options.setSharedState(0,[10000],whiteList);
     });

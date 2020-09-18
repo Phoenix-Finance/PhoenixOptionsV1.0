@@ -82,6 +82,6 @@ async function calculateNetWroth(contracts){
 //    console.log(result[0][0].toString(10),result[0][1].toString(10));
 
 //                return;q
-    tx = await contracts.manager.calSharedPayment();
+    tx = await contracts.collateral.calSharedPayment(whiteList);
     console.log(tx);
 }

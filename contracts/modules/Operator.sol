@@ -22,7 +22,7 @@ contract Operator is Ownable {
      *
      */
     modifier onlyOperatorIndex(uint256 index) {
-        require(_operatorList.length>index && _operatorList[index] == msg.sender,"Managerable: caller is not the eligible Operator");
+        require(_operatorList.length>index && _operatorList[index] == msg.sender,"Operator: caller is not the eligible Operator");
         _;
     }
     /**

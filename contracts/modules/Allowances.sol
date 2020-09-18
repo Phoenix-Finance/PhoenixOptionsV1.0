@@ -21,8 +21,8 @@ contract Allowances is Ownable {
     function setValid(bool _bValid) public onlyOwner{
         bValid = _bValid;
     }
-    function checkAllowance(address spender, uint256 amount) internal view{
-        require((!bValid) || allowances[spender] >= amount,"Allowances : user's allowance is unsufficient!");
+    function checkAllowance(address spender, uint256 amount) public view returns(bool){
+        return (!bValid) || allowances[spender] >= amount;
     }
     modifier sufficientAllowance(address spender, uint256 amount){
         require((!bValid) || allowances[spender] >= amount,"Allowances : user's allowance is unsufficient!");

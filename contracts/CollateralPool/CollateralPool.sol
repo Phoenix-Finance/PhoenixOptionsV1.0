@@ -10,6 +10,9 @@ import "./TransactionFee.sol";
 contract CollateralPool is TransactionFee{
     using SafeMath for uint256;
     using SafeInt256 for int256;
+    constructor(address optionsPool)public{
+        _optionsPool = IOptionsPool(optionsPool);
+    }
     /**
      * @dev Transfer colleteral from manager contract to this contract.
      *  Only manager contract can invoke this function.
@@ -49,13 +52,7 @@ contract CollateralPool is TransactionFee{
     function getUserInputCollateral(address user,address collateral)public view returns (uint256){
         return userInputCollateral[user][collateral];
     }
-    /**
-     * @dev Retrieve net worth balance data.
-     * @param collateral input retrieved collateral coin address 
-     */
-    function getNetWorthBalance(address collateral)public view returns (int256){
-        return netWorthBalances[collateral];
-    }
+
     /**
      * @dev Retrieve collateral balance data.
      * @param collateral input retrieved collateral coin address 
@@ -85,7 +82,7 @@ contract CollateralPool is TransactionFee{
      * @param whiteList available colleteral address list.
      * @param newNetworth collateral net worth list.
      */
-    function addNetWorthBalances(address[] memory whiteList,int256[] memory newNetworth)public onlyManager{
+    function addNetWorthBalances(address[] memory whiteList,int256[] memory newNetworth)internal{
         for (uint i=0;i<newNetworth.length;i++){
             netWorthBalances[whiteList[i]] = netWorthBalances[whiteList[i]].add(newNetworth[i]);
         }
@@ -290,5 +287,73 @@ contract CollateralPool is TransactionFee{
         }else{
             return (0,netWorthBalance);
         }
+    }
+        /**
+     * @dev Retrieve the balance of collateral, the auxiliary function for the total collateral calculation. 
+     */
+    function getRealBalance(address settlement)public view returns(int256){
+        int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
+        return netWorthBalances[settlement].add(latestWorth);
+    }
+    function getNetWorthBalance(address settlement)public view returns(uint256){
+        int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
+        int256 netWorth = netWorthBalances[settlement].add(latestWorth);
+        if (netWorth>0){
+            return uint256(netWorth);
+        }
+        return 0;
+    }
+        /**
+     * @dev  The foundation operator want to add some coin to netbalance, which can increase the FPTCoin net worth.
+     * @param settlement the settlement coin address which the foundation operator want to transfer in this contract address.
+     * @param amount the amount of the settlement coin which the foundation operator want to transfer in this contract address.
+     */
+    function addNetBalance(address settlement,uint256 amount) public payable {
+        amount = getPayableAmount(settlement,amount);
+        addNetWorthBalance(settlement,int256(amount));
+//        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
+    }
+        /**
+     * @dev the auxiliary function for getting user's transer
+     */
+    function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
+        uint256 colAmount = 0;
+        if (settlement == address(0)){
+            colAmount = msg.value;
+        }else if (settlementAmount > 0){
+            IERC20 oToken = IERC20(settlement);
+            uint256 preBalance = oToken.balanceOf(address(this));
+            oToken.transferFrom(msg.sender, address(this), settlementAmount);
+            uint256 afterBalance = oToken.balanceOf(address(this));
+            require(afterBalance-preBalance==settlementAmount,"settlement token transfer error!");
+            colAmount = settlementAmount;
+        }
+        return colAmount;
+    }
+        /**
+     * @dev Calculate the collateral pool shared worth.
+     * The foundation operator will invoke this function frequently
+     */
+    function calSharedPayment(address[] memory _whiteList) public onlyOperatorIndex(0) {
+        (uint256 firstOption,int256[] memory latestShared) = _optionsPool.getNetWrothCalInfo(_whiteList);
+        uint256 lastOption = _optionsPool.getOptionInfoLength();
+        (int256[] memory newNetworth,uint256[] memory sharedBalance,uint256 newFirst) =
+                     _optionsPool.calRangeSharedPayment(lastOption,firstOption,lastOption,_whiteList);
+        int256[] memory fallBalance = _optionsPool.calculatePhaseOptionsFall(lastOption,newFirst,lastOption,_whiteList);
+        for (uint256 i= 0;i<fallBalance.length;i++){
+            fallBalance[i] = int256(sharedBalance[i]).sub(latestShared[i]).add(fallBalance[i]);
+        }
+        setSharedPayment(_whiteList,newNetworth,fallBalance,newFirst);
+    }
+    /**
+     * @dev Set the calculation results of the collateral pool shared worth.
+     * The foundation operator will invoke this function frequently
+     * @param newNetworth Current expired options' net worth 
+     * @param sharedBalances All unexpired options' shared balance distributed by time.
+     * @param firstOption The new first unexpired option's index.
+     */
+    function setSharedPayment(address[] memory _whiteList,int256[] memory newNetworth,int256[] memory sharedBalances,uint256 firstOption) public onlyOperatorIndex(0){
+        _optionsPool.setSharedState(firstOption,sharedBalances,_whiteList);
+        addNetWorthBalances(_whiteList,newNetworth);
     }
 }

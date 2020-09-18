@@ -23,14 +23,6 @@ contract ManagerProxy is ManagerData,baseProxy{
         _FPTCoin = IFPTCoin(FPTCoinAddr);
     }
     /**
-     * @dev  The foundation operator want to add some coin to netbalance, which can increase the FPTCoin net worth.
-     *  settlement the settlement coin address which the foundation operator want to transfer in this contract address.
-     *  amount the amount of the settlement coin which the foundation operator want to transfer in this contract address.
-     */
-    function addNetBalance(address /*settlement*/,uint256 /*amount*/) public payable  {
-        delegateAndReturn();
-    }
-    /**
      * @dev  The foundation owner want to set the minimum collateral occupation rate.
      *  collateral collateral coin address
      *  colRate The thousandths of the minimum collateral occupation rate.
@@ -59,23 +51,7 @@ contract ManagerProxy is ManagerData,baseProxy{
     function userInputCollateral(address /*user*/,address /*collateral*/)public view returns (uint256){
         delegateToViewAndReturn();
     }
-    /**
-     * @dev Calculate the collateral pool shared worth.
-     * The foundation operator will invoke this function frequently
-     */
-    function calSharedPayment() public {
-        delegateAndReturn();
-    }
-    /**
-     * @dev Set the calculation results of the collateral pool shared worth.
-     * The foundation operator will invoke this function frequently
-     *  newNetworth Current expired options' net worth 
-     *  sharedBalances All unexpired options' shared balance distributed by time.
-     *  firstOption The new first unexpired option's index.
-     */
-    function setSharedPayment(int256[] memory /*newNetworth*/,int256[] memory /*sharedBalances*/,uint256 /*firstOption*/) public{
-        delegateAndReturn();
-    }
+
     /**
      * @dev Retrieve user's current total worth, priced in USD.
      *  account input retrieve account

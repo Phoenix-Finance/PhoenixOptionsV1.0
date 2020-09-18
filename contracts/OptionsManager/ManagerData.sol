@@ -6,7 +6,7 @@ import "../interfaces/IFNXOracle.sol";
 import "../interfaces/IOptionsPrice.sol";
 import "../CollateralPool/ICollateralPool.sol";
 import "../FPTCoin/IFPTCoin.sol";
-import "../modules/Operator.sol";
+
 import "../modules/ImputRange.sol";
 import "../modules/Allowances.sol";
 import "../ERC20/IERC20.sol";
@@ -16,7 +16,7 @@ import "../ERC20/IERC20.sol";
  *
  */
 contract ManagerData is ReentrancyGuard,ImputRange,AddressWhiteList,Allowances,ImportIFPTCoin,
-                ImportOracle,ImportOptionsPool,ImportCollateralPool,Operator,ImportOptionsPrice {
+                ImportOracle,ImportOptionsPool,ImportCollateralPool,ImportOptionsPrice {
     // The minimum collateral rate for options. This value is thousandths.
     mapping (address=>uint256) collateralRate;
 //    uint256 private collateralRate = 5000;

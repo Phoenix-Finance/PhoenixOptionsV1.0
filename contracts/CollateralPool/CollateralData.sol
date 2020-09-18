@@ -1,12 +1,14 @@
 pragma solidity =0.5.16;
 import "../modules/Managerable.sol";
 import "../modules/AddressWhiteList.sol";
+import "../OptionsPool/IOptionsPool.sol";
+import "../modules/Operator.sol";
 /**
  * @title collateral pool contract with coin and necessary storage data.
  * @dev A smart-contract which stores user's deposited collateral.
  *
  */
-contract CollateralData is AddressWhiteList,Managerable{
+contract CollateralData is AddressWhiteList,Managerable,Operator,ImportOptionsPool{
     struct fraction{
         uint256 numerator;
         uint256 denominator;

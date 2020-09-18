@@ -3,7 +3,7 @@ import "../modules/Ownable.sol";
 interface ICollateralPool {
     function getUserPayingUsd(address user)external view returns (uint256);
     function getUserInputCollateral(address user,address collateral)external view returns (uint256);
-    function getNetWorthBalance(address collateral)external view returns (int256);
+    //function getNetWorthBalance(address collateral)external view returns (int256);
     function getCollateralBalance(address collateral)external view returns (uint256);
 
     //add
@@ -11,7 +11,6 @@ interface ICollateralPool {
     function addUserInputCollateral(address user,address collateral,uint256 amount)external;
     function addNetWorthBalance(address collateral,int256 amount)external;
     function addCollateralBalance(address collateral,uint256 amount)external;
-    function addNetWorthBalances(address[] calldata whiteList,int256[] calldata newNetworth)external;
     //sub
     function subUserPayingUsd(address user,uint256 amount)external;
     function subUserInputCollateral(address user,address collateral,uint256 amount)external;
@@ -30,6 +29,9 @@ interface ICollateralPool {
     function getCollateralAndPremiumBalances(address account,uint256 userTotalWorth,address[] calldata tmpWhiteList,
         uint256[] calldata _RealBalances,uint256[] calldata prices) external view returns(uint256[] memory,uint256[] memory);
     function addTransactionFee(address collateral,uint256 amount,uint256 feeType)external returns (uint256);
+
+    function getRealBalance(address settlement)external view returns(int256);
+    function getNetWorthBalance(address settlement)external view returns(uint256);
 }
 contract ImportCollateralPool is Ownable{
     ICollateralPool internal _collateralPool;

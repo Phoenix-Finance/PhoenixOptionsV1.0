@@ -13,8 +13,9 @@ contract CollateralProxy is CollateralData,baseProxy{
      *  ivAddress implied volatility contract address
      */  
 
-    constructor(address implementation_)
+    constructor(address implementation_,address optionsPool)
          baseProxy(implementation_) public  {
+        _optionsPool = IOptionsPool(optionsPool);
     }
         /**
      * @dev Transfer colleteral from manager contract to this contract.
@@ -78,13 +79,6 @@ contract CollateralProxy is CollateralData,baseProxy{
         delegateToViewAndReturn();
     }
     /**
-     * @dev Retrieve net worth balance data.
-     *  collateral input retrieved collateral coin address 
-     */
-    function getNetWorthBalance(address /*collateral*/)public view returns (int256){
-        delegateToViewAndReturn();
-    }
-    /**
      * @dev Retrieve collateral balance data.
      *  collateral input retrieved collateral coin address 
      */
@@ -106,14 +100,6 @@ contract CollateralProxy is CollateralData,baseProxy{
      *  amount the input collateral amount.
      */
     function addUserInputCollateral(address /*user*/,address /*collateral*/,uint256 /*amount*/)public{
-        delegateAndReturn();
-    }
-    /**
-     * @dev Opterator net worth balance data. Only manager contract can modify database.
-     *  whiteList available colleteral address list.
-     *  newNetworth collateral net worth list.
-     */
-    function addNetWorthBalances(address[] memory /*whiteList*/,int256[] memory /*newNetworth*/)public{
         delegateAndReturn();
     }
     /**
@@ -245,7 +231,38 @@ contract CollateralProxy is CollateralData,baseProxy{
     function getCollateralAndPremiumBalances(address /*account*/,uint256 /*userTotalWorth*/,address[] memory /*tmpWhiteList*/,
         uint256[] memory /*_RealBalances*/,uint256[] memory /*prices*/) public view returns(uint256[] memory,uint256[] memory){
             delegateToViewAndReturn();
-
     } 
+    function getRealBalance(address /*settlement*/)public view returns(int256){
+        delegateToViewAndReturn();
+    }
+    function getNetWorthBalance(address /*settlement*/)public view returns(uint256){
+        delegateToViewAndReturn();
+    }
+    /**
+     * @dev  The foundation operator want to add some coin to netbalance, which can increase the FPTCoin net worth.
+     *  settlement the settlement coin address which the foundation operator want to transfer in this contract address.
+     *  amount the amount of the settlement coin which the foundation operator want to transfer in this contract address.
+     */
+    function addNetBalance(address /*settlement*/,uint256 /*amount*/) public payable{
+        delegateAndReturn();
+    }
+    /**
+     * @dev Calculate the collateral pool shared worth.
+     * The foundation operator will invoke this function frequently
+     */
+    function calSharedPayment(address[] memory /*_whiteList*/) public{
+        delegateAndReturn();
+    }
+    /**
+     * @dev Set the calculation results of the collateral pool shared worth.
+     * The foundation operator will invoke this function frequently
+     *  newNetworth Current expired options' net worth 
+     *  sharedBalances All unexpired options' shared balance distributed by time.
+     *  firstOption The new first unexpired option's index.
+     */
+    function setSharedPayment(address[] memory /*_whiteList*/,int256[] memory /*newNetworth*/,
+            int256[] memory /*sharedBalances*/,uint256 /*firstOption*/) public{
+        delegateAndReturn();
+    }
 
 }

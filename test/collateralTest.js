@@ -151,7 +151,7 @@ contract('OptionsManagerV2', function (accounts){
         console.log(result.toString(10));
         result = await contracts.manager.getTokenNetworth();
         console.log("3-----------------------------------",result.toString(10));
-        await calculateNetWroth(contracts.options,contracts.manager,contracts.FNX);
+        await calculateNetWroth(contracts.options,contracts.collateral,contracts.FNX);
         result = await contracts.options.getTotalOccupiedCollateral();
         console.log(result.toString(10));
         result = await contracts.manager.getTotalCollateral();
@@ -167,7 +167,7 @@ contract('OptionsManagerV2', function (accounts){
         }
         await logBalance(contracts.FNX,contracts.collateral.address);
         await contracts.manager.redeemCollateral(498500000000000,collateral0);
-        await calculateNetWroth(contracts.options,contracts.manager,contracts.FNX);
+        await calculateNetWroth(contracts.options,contracts.collateral,contracts.FNX);
         await logBalance(contracts.FNX,contracts.collateral.address);
         result = await contracts.options.getTotalOccupiedCollateral();
         console.log(result.toString(10));
@@ -222,7 +222,7 @@ async function logBalance(fnx,addr){
         let fnxBalance = await fnx.balanceOf(addr);
         console.log("fnx : ",addr,fnxBalance.toString(10));
 }
-async function calculateNetWroth(options,manager,fnx){
+async function calculateNetWroth(options,collateral,fnx){
         let whiteList = [collateral0,fnx.address];
         optionsLen = await options.getOptionCalRangeAll(whiteList);
         console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
@@ -235,6 +235,6 @@ async function calculateNetWroth(options,manager,fnx){
         console.log(result[0][0].toString(10),result[0][1].toString(10));
     
     //                return;
-        tx = await manager.calSharedPayment();
+        tx = await collateral.calSharedPayment(whiteList);
     //    console.log(tx);
     }

@@ -12,13 +12,21 @@ contract ImputRange is Ownable {
         require(maxAmount>=amount && minAmount<=amount,"input amount is out of input amount range");
         _;
     }
-/**
+    /**
      * @dev Determine whether the input amount is within the valid range
      * @param Amount Test value which is user input
      */
-    function checkInputAmount(uint256 Amount)internal view{
-        require(maxAmount>=Amount && minAmount<=Amount,"input amount is out of input amount range");
+    function isInputAmountInRange(uint256 Amount)public view returns (bool){
+        return(maxAmount>=Amount && minAmount<=Amount);
     }
+    /*
+    function isInputAmountSmaller(uint256 Amount)public view returns (bool){
+        return maxAmount>=amount;
+    }
+    function isInputAmountLarger(uint256 Amount)public view returns (bool){
+        return minAmount<=amount;
+    }
+    */
     modifier Smaller(uint256 amount) {
         require(maxAmount>=amount,"input amount is larger than maximium");
         _;

@@ -11,18 +11,6 @@ contract CollateralCal is ManagerData {
     using SafeMath for uint256;
     using SafeInt256 for int256;
 
-
-    
-    /**
-     * @dev  The foundation operator want to add some coin to netbalance, which can increase the FPTCoin net worth.
-     * @param settlement the settlement coin address which the foundation operator want to transfer in this contract address.
-     * @param amount the amount of the settlement coin which the foundation operator want to transfer in this contract address.
-     */
-    function addNetBalance(address settlement,uint256 amount) public payable onlyOperatorIndex(1) {
-        amount = getPayableAmount(settlement,amount);
-        _collateralPool.addNetWorthBalance(settlement,int256(amount));
-//        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
-    }
     /**
      * @dev  The foundation owner want to set the minimum collateral occupation rate.
      * @param collateral collateral coin address
@@ -57,33 +45,7 @@ contract CollateralCal is ManagerData {
         return _collateralPool.getUserInputCollateral(user,collateral);
         //return userInputCollateral[user][collateral];
     }
-    /**
-     * @dev Calculate the collateral pool shared worth.
-     * The foundation operator will invoke this function frequently
-     */
-    function calSharedPayment() public onlyOperatorIndex(0) {
-        address[] memory tmpWhiteList = whiteList;
-        (uint256 firstOption,int256[] memory latestShared) = _optionsPool.getNetWrothCalInfo(tmpWhiteList);
-        uint256 lastOption = _optionsPool.getOptionInfoLength();
-        (int256[] memory newNetworth,uint256[] memory sharedBalance,uint256 newFirst) =
-                     _optionsPool.calRangeSharedPayment(lastOption,firstOption,lastOption,tmpWhiteList);
-        int256[] memory fallBalance = _optionsPool.calculatePhaseOptionsFall(lastOption,newFirst,lastOption,tmpWhiteList);
-        for (uint256 i= 0;i<fallBalance.length;i++){
-            fallBalance[i] = int256(sharedBalance[i]).sub(latestShared[i]).add(fallBalance[i]);
-        }
-        setSharedPayment(newNetworth,fallBalance,newFirst);
-    }
-    /**
-     * @dev Set the calculation results of the collateral pool shared worth.
-     * The foundation operator will invoke this function frequently
-     * @param newNetworth Current expired options' net worth 
-     * @param sharedBalances All unexpired options' shared balance distributed by time.
-     * @param firstOption The new first unexpired option's index.
-     */
-    function setSharedPayment(int256[] memory newNetworth,int256[] memory sharedBalances,uint256 firstOption) public onlyOperatorIndex(0){
-        _optionsPool.setSharedState(firstOption,sharedBalances,whiteList);
-        _collateralPool.addNetWorthBalances(whiteList,newNetworth);
-    }
+
     /**
      * @dev Retrieve user's current total worth, priced in USD.
      * @param account input retrieve account
@@ -129,7 +91,7 @@ contract CollateralCal is ManagerData {
      * @param collateral The prioritized collateral coin address.
      */
     function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted InRange(tokenAmount) public {
-        require(checkAddressRedeemOut(collateral) , "settlement is unsupported token");
+        require(checkAddressPermission(collateral,allowRedeemCollateral) , "settlement is unsupported token");
         uint256 lockedAmount = _FPTCoin.lockedBalanceOf(msg.sender);
         require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
@@ -305,18 +267,10 @@ contract CollateralCal is ManagerData {
      * @dev Retrieve the balance of collateral, the auxiliary function for the total collateral calculation. 
      */
     function getRealBalance(address settlement)public view returns(int256){
-        int256 netWorth = _collateralPool.getNetWorthBalance(settlement);
-        int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
-        return netWorth.add(latestWorth);
+        return _collateralPool.getRealBalance(settlement);
     }
     function getNetWorthBalance(address settlement)public view returns(uint256){
-        int256 netWorth = _collateralPool.getNetWorthBalance(settlement);
-        int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
-        netWorth = netWorth.add(latestWorth);
-        if (netWorth>0){
-            return uint256(netWorth);
-        }
-        return 0;
+        return _collateralPool.getNetWorthBalance(settlement);
     }
     /**
      * @dev the auxiliary function for payback. 
@@ -328,7 +282,7 @@ contract CollateralCal is ManagerData {
         uint256 i=0;
         for(;i<whiteLen;i++){
             address addr = whiteList[i];
-            if (checkAddressPermission(addr,allowSellOut)){
+            if (checkAddressPermission(addr,allowSellOptions)){
                 uint256 price = oraclePrice(addr);
                 balances[i] = getNetWorthBalance(addr);
                 //balances[i] = netWorthBalances[addr];
@@ -348,7 +302,7 @@ contract CollateralCal is ManagerData {
      * @dev the auxiliary function for getting user's transer
      */
     function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
-        require(checkAddressPayIn(settlement) , "settlement is unsupported token");
+        require(checkAddressPermission(settlement,allowBuyOptions) , "settlement is unsupported token");
         uint256 colAmount = 0;
         if (settlement == address(0)){
             colAmount = msg.value;
@@ -363,7 +317,7 @@ contract CollateralCal is ManagerData {
             colAmount = settlementAmount;
             oToken.transfer(address(_collateralPool),settlementAmount);
         }
-        checkInputAmount(colAmount);
+        require(isInputAmountInRange(colAmount),"input amount is out of input amount range");
         return colAmount;
     }
     /**

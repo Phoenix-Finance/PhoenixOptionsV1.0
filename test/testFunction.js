@@ -34,8 +34,8 @@ exports.migration =  async function (accounts){
     let fptimpl = await FPTCoin.new(poolProxy.address);
     let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address);
 
-    let collateral = await CollateralPool.new();
-    let poolInstance = await CollateralProxy.new(collateral.address);
+    let collateral = await CollateralPool.new(options.address);
+    let poolInstance = await CollateralProxy.new(collateral.address,options.address);
 
     let managerV2 = await OptionsManagerV2.new(oracleInstance.address,price.address,
         options.address,poolInstance.address,fpt.address);
@@ -48,8 +48,9 @@ exports.migration =  async function (accounts){
     await poolInstance.setManager(manager.address);
     await ivInstance.addOperator(accounts[0]);
     await oracleInstance.addOperator(accounts[0]);
+    await options.addOperator(poolInstance.address);
     await options.addOperator(accounts[0]);
-    await manager.addOperator(accounts[0]);
+    await poolInstance.addOperator(accounts[0]);
     await options.setTimeLimitation(0);
     await fpt.setTimeLimitation(0);
     return {

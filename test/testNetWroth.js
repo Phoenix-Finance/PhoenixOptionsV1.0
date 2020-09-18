@@ -16,7 +16,8 @@ contract('OptionsManagerV2', function (accounts){
         await logNetWroth(2,contracts);
         await contracts.manager.addCollateral(collateral0,amount,{value : amount});
         await logNetWroth(3,contracts);
-        tx = await contracts.manager.calSharedPayment();
+        let whiteList = await contracts.manager.getWhiteList();
+        tx = await contracts.collateral.calSharedPayment(whiteList);
         curtime = Date.now();
         tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
         await logNetWroth(4,contracts);
@@ -126,6 +127,6 @@ async function calculateNetWroth(contracts,fnx){
     console.log(result[0][0].toString(10),result[0][1].toString(10));
 
 //                return;
-    tx = await contracts.manager.calSharedPayment();
+    tx = await contracts.collateral.calSharedPayment(whiteList);
 //    console.log(tx);
 }
