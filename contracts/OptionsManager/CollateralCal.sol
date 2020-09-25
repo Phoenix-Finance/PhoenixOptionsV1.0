@@ -75,7 +75,8 @@ contract CollateralCal is ManagerData {
         amount = amount-fee;
         uint256 price = oraclePrice(collateral);
         uint256 userPaying = price*amount;
-        checkAllowance(msg.sender,(_collateralPool.getUserPayingUsd(msg.sender)+userPaying)/1e8);
+        require(checkAllowance(msg.sender,(_collateralPool.getUserPayingUsd(msg.sender)+userPaying)/1e8),
+            "Allowances : user's allowance is unsufficient!");
         uint256 mintAmount = userPaying/getTokenNetworth();
         _collateralPool.addUserPayingUsd(msg.sender,userPaying);
         _collateralPool.addCollateralBalance(collateral,amount);

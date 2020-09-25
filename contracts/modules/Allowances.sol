@@ -22,10 +22,10 @@ contract Allowances is Ownable {
         bValid = _bValid;
     }
     function checkAllowance(address spender, uint256 amount) public view returns(bool){
-        return (!bValid) || allowances[spender] >= amount;
+        return (!bValid) || (allowances[spender] >= amount);
     }
     modifier sufficientAllowance(address spender, uint256 amount){
-        require((!bValid) || allowances[spender] >= amount,"Allowances : user's allowance is unsufficient!");
+        require((!bValid) || (allowances[spender] >= amount),"Allowances : user's allowance is unsufficient!");
         _;
     }
 }

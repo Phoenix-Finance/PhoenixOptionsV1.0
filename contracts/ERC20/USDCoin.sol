@@ -6,5 +6,6 @@ contract USDCoin is FNXCoin {
     constructor () public{
         name = "USD Coin";
         symbol = "USDC";
+        decimals = 6;
     }
 }

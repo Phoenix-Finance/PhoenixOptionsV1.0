@@ -3,7 +3,7 @@ import "../modules/Ownable.sol";
 contract Erc20Data is Ownable{
     string public name;
     string public symbol;
-    uint8 public constant decimals = 18;
+    uint8 public decimals = 18;
     
 
     mapping (address => uint256) internal balances;
