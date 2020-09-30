@@ -17,7 +17,9 @@ contract Allowances is Ownable {
     function approve(address spender, uint256 amount) public onlyOwner{
         allowances[spender] = amount;
     }
-
+    function allowance(address spender) public view returns (uint256) {
+        return allowances[spender];
+    }
     function setValid(bool _bValid) public onlyOwner{
         bValid = _bValid;
     }
