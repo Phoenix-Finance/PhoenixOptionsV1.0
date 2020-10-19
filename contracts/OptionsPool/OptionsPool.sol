@@ -35,14 +35,14 @@ contract OptionsPool is OptionsNetWorthCal {
      * @param settlement user's input settlement coin.
      * @param type_ly_exp tuple64 for option type,underlying,expiration.
      * @param strikePrice user's input new option's strike price.
-     * @param optionPrice current new option's price, calculated by options price contract.
+     * @param priceRate current new option's price, calculated by options price contract.
      * @param amount user's input new option's amount.
      */ 
-    function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 optionPrice,
-                uint256 amount) onlyManager  Smaller(amount) public {
-        _createOptions(from,settlement,type_ly_exp,strikePrice,optionPrice,amount);
-        OptionsInfo memory info = _getOptionsById(allOptions.length);
-        _addOptionsCollateral(info);
+    function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 priceRate,
+                uint256 amount) onlyManager  Smaller(amount) public returns (uint256){
+        uint256 price = _createOptions(from,settlement,type_ly_exp,strikePrice,priceRate,amount);
+        _addOptionsCollateral(allOptions.length);
+        return price;
 //        _addNewOptionsNetworth(info);
     }
     /**

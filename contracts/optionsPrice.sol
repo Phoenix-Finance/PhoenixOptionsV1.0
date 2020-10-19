@@ -61,8 +61,8 @@ contract OptionsPrice is ImportVolatility{
      * @param optType option's type, 0 for CALL, 2 for PUT.
      */
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint32 underlying,uint8 optType)public view returns (uint256){
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(underlying,optType,expiration,currentPrice,strikePrice);
-        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
+        uint256 ivNumerator = _volatility.calculateIv(underlying,optType,expiration,currentPrice,strikePrice);
+        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),1e8);
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
         }else if (optType == 1){
@@ -77,12 +77,11 @@ contract OptionsPrice is ImportVolatility{
      * @param strikePrice option's strike price.
      * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
      * @param ivNumerator user input iv numerator.
-     * @param ivDenominator user input iv denominator.
      * @param optType option's type, 0 for CALL, 2 for PUT.
      */
     function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
-            uint256 ivNumerator,uint256 ivDenominator,uint8 optType)public view returns (uint256){
-        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
+            uint256 ivNumerator,uint8 optType)public view returns (uint256){
+        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),1e8);
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
         }else if (optType == 1){

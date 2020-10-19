@@ -1,5 +1,5 @@
 const BN = require("bn.js");
-let month = 30;
+let month = 30*86400;
 let collateral0 = "0x0000000000000000000000000000000000000000";
 let {migration ,createAndAddErc20,AddCollateral0} = require("./testFunction.js");
 let curtime;
@@ -8,7 +8,7 @@ contract('OptionsManagerV2', function (accounts){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
-        await contracts.price.setExpirationZoom(1000);
+        //await contracts.price.setExpirationZoom(1000);
         contracts.options.addExpiration(month);
         let amount = 1e14;
         await logNetWroth(1,contracts);
@@ -53,7 +53,7 @@ contract('OptionsManagerV2', function (accounts){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
-        await contracts.price.setExpirationZoom(1000);
+        //await contracts.price.setExpirationZoom(1000);
         contracts.options.addExpiration(month);
         contracts.options.addExpiration(month);
         let Index = await contracts.options.getOptionInfoLength();

@@ -82,12 +82,12 @@ contract ImpliedVolatility is Operator {
      * @param currentPrice underlying current price
      * @param strikePrice option's strike price
      */ 
-    function calculateIv(uint32 underlying,uint8 /*optType*/,uint256 expiration,uint256 currentPrice,uint256 strikePrice)public view returns (uint256,uint256){
+    function calculateIv(uint32 underlying,uint8 /*optType*/,uint256 expiration,uint256 currentPrice,uint256 strikePrice)public view returns (uint256){
         uint256 iv = calATMIv(underlying,expiration);
         if (currentPrice == strikePrice){
-            return (iv,_calDecimal);
+            return iv;
         }
-        return (calImpliedVolatility(underlying,iv,currentPrice,strikePrice),_calDecimal);
+        return calImpliedVolatility(underlying,iv,currentPrice,strikePrice);
     }
     /**
      * @dev calculate option's atm iv. 

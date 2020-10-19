@@ -257,7 +257,7 @@ contract CollateralCal is ManagerData {
         for (uint256 i=0;i<whiteListLen;i++){
             address addr = whiteList[i];
             int256 price = int256(oraclePrice(addr));
-            int256 netWorth = getRealBalance(addr);
+            int256 netWorth = _collateralPool.getRealBalance(addr);
             if (netWorth != 0){
                 totalNum = totalNum.add(price.mul(netWorth));
             }

@@ -8,7 +8,7 @@ contract('FNXCoin', function (accounts){
         let symbol = await erc20.symbol();
         assert.equal(symbol,"USDC","symbol Error");
         let decimals = await erc20.decimals();
-        assert.equal(decimals,18,"decimals Error");
+        assert.equal(decimals,6,"decimals Error");
         let totalSupply = await erc20.totalSupply();
         let total = "10000000000000000000000000000000";
         assert.equal(totalSupply.toString(10),total,"totalSupply Error");

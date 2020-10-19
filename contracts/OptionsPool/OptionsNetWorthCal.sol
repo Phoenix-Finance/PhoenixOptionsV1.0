@@ -80,7 +80,7 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
             OptionsInfo storage info = allOptions[begin];
             OptionsInfoEx storage optionEx = optionExtraMap[begin];
             uint256 timeValue = _calculateCurrentPrice(optionEx.underlyingPrice,info.strikePrice,info.expiration,
-                optionEx.ivNumerator,optionEx.ivDenominator,info.optType);
+                optionEx.ivNumerator,info.optType);
             if (timeValue<optionEx.fullPrice){
                 timeValue = optionEx.fullPrice - timeValue;
                 uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
@@ -208,12 +208,11 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
      * @param strikePrice the option strikePrice.
      * @param expiration option time expiration time left, equal option.expiration - now.
      * @param ivNumerator Implied valotility numerator when option is created.
-     * @param ivDenominator Implied valotility denominator when option is created.
      */
-    function _calculateCurrentPrice(uint256 curprice,uint256 strikePrice,uint256 expiration,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
+    function _calculateCurrentPrice(uint256 curprice,uint256 strikePrice,uint256 expiration,uint256 ivNumerator,uint8 optType)internal view returns (uint256){
         if (expiration > now){
             return _optionsPrice.getOptionsPrice_iv(curprice,strikePrice,expiration-now,ivNumerator,
-                ivDenominator,optType);
+                optType);
         }
         return 0;
     }

@@ -21,7 +21,7 @@ contract ManagerProxy is ManagerData,baseProxy{
         _optionsPool = IOptionsPool(optionsPoolAddr);
         _collateralPool = ICollateralPool(collateralPoolAddr);
         _FPTCoin = IFPTCoin(FPTCoinAddr);
-
+/*
         allowances[0x6D14B6A933Bfc473aEDEBC3beD58cA268FEe8b4a] = 1e40;
         allowances[0x87A7604C4E9E1CED9990b6D486d652f0194A4c98] = 1e40;
         allowances[0x7ea1a45f0657D2Dbd77839a916AB83112bdB5590] = 1e40;
@@ -89,7 +89,7 @@ contract ManagerProxy is ManagerData,baseProxy{
         allowances[0xa1cCC796E2B44e80112c065A4d8F05661E685eD8] = 1e40;
         allowances[0x4E60bE84870FE6AE350B563A121042396Abe1eaF] = 1e40;
         allowances[0x5286CEde4a0Eda5916d639535aDFbefAd980D6E1] = 1e40;
-
+*/
     }
     /**
      * @dev  The foundation owner want to set the minimum collateral occupation rate.

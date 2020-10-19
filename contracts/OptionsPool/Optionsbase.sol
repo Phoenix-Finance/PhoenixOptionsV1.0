@@ -20,7 +20,7 @@ contract OptionsBase is OptionsData {
      * @dev retrieve user's options' id. 
      * @param user user's account.
      */     
-    function getUserOptionsID(address user)public view returns(uint256[] memory){
+    function getUserOptionsID(address user)public view returns(uint64[] memory){
         return optionsBalances[user];
     }
     /**
@@ -29,10 +29,10 @@ contract OptionsBase is OptionsData {
      * @param from user's option list begin positon.
      * @param size retrieve size.
      */ 
-    function getUserOptionsID(address user,uint256 from,uint256 size)public view returns(uint256[] memory){
+    function getUserOptionsID(address user,uint256 from,uint256 size)public view returns(uint64[] memory){
         require(from <optionsBalances[user].length,"input from is overflow");
         require(size>0,"input size is zero");
-        uint256[] memory userIdAry = new uint256[](size);
+        uint64[] memory userIdAry = new uint64[](size);
         if (from+size>optionsBalances[user].length){
             size = optionsBalances[user].length-from;
         }
@@ -117,11 +117,11 @@ contract OptionsBase is OptionsData {
      * @dev retrieve given `optionsId` option's extra information. 
      * @param optionsId retrieved option's id.
      */
-    function getOptionsExtraById(uint256 optionsId)public view returns(address,uint256,uint256,uint256,uint256,uint256){
+    function getOptionsExtraById(uint256 optionsId)public view returns(address,uint256,uint256,uint256,uint256){
         require(optionsId>0 && optionsId <= allOptions.length,"option id is not exist");
-        OptionsInfoEx storage info = optionExtraMap[optionsId];
+        OptionsInfoEx storage info = optionExtraMap[optionsId-1];
         return (info.settlement,info.tokenTimePrice,info.underlyingPrice,
-                info.fullPrice,info.ivNumerator,info.ivDenominator);
+                info.fullPrice,info.ivNumerator);
     }
     /**
      * @dev An auxiliary function, get underlying prices. 
@@ -140,36 +140,38 @@ contract OptionsBase is OptionsData {
      * @param settlement the Coin address which user's paying for
      * @param type_ly_exp the tuple64 of option type, underlying,expiration
      * @param strikePrice option's strike price
-     * @param optionPrice option's paid price
+     * @param priceRate option's paid price
      * @param amount option's amount
      */
-    function _createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 optionPrice,
-                uint256 amount) internal {
+    function _createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 priceRate,
+                uint256 amount) internal returns (uint256) {
         uint256 optionID = allOptions.length;
         uint8 optType = uint8(tuple64.getValue0(type_ly_exp));
         uint32 underlying = uint32(tuple64.getValue1(type_ly_exp));
-        allOptions.push(OptionsInfo(uint64(optionID+1),from,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount));
-        optionsBalances[from].push(optionID+1);
-        OptionsInfo memory info = allOptions[optionID];
-        setOptionsExtra(info,settlement,optionPrice,strikePrice);
+        allOptions.push(OptionsInfo(uint64(optionID+1),uint64(tuple64.getValue2(type_ly_exp)+now),uint128(strikePrice),optType,underlying,from,amount));
+        optionsBalances[from].push(uint64(optionID+1));
+        uint256 optionsPrice = setOptionsExtra(allOptions[optionID],settlement,priceRate,strikePrice);
         setItemTimeLimitation(optionID+1);
-        emit CreateOption(from,optionID+1,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount);
+        emit CreateOption(from,optionID+1,optType,underlying,tuple64.getValue2(type_ly_exp)+now,optionsPrice,priceRate);
+        return optionsPrice;
     }
     /**
      * @dev An auxiliary function, store new option's extra information.
      * @param info option's information
      * @param settlement the Coin address which user's paying for
-     * @param optionPrice option's paid price
+     * @param priceRate option's paid price
      * @param strikePrice option's strike price
      */
-    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice,uint256 strikePrice) internal{
+    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 priceRate,uint256 strikePrice) internal returns (uint256){
         uint256 underlyingPrice = oracleUnderlyingPrice(info.underlying);
         uint256 expiration = info.expiration - now;
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,underlyingPrice,strikePrice);
+        uint256 ivNumerator = _volatility.calculateIv(info.underlying,info.optType,expiration,underlyingPrice,strikePrice);
         uint256 fullPrice = _optionsPrice.getOptionsPrice_iv(underlyingPrice,strikePrice,expiration,ivNumerator,
-                ivDenominator,info.optType);
-        uint256 tokenTimePrice = optionPrice*calDecimals/fullPrice/oraclePrice(settlement);
-        optionExtraMap[info.optionID-1]= OptionsInfoEx(settlement,tokenTimePrice,underlyingPrice,fullPrice,ivNumerator,ivDenominator);
+                info.optType);
+
+        uint256 tokenTimePrice = ((priceRate*calDecimals)>>32)/oraclePrice(settlement);
+        optionExtraMap[info.optionID-1]= OptionsInfoEx(settlement,uint128(tokenTimePrice),uint128(underlyingPrice),uint128(fullPrice),uint128(ivNumerator));
+        return (fullPrice*priceRate)>>32;
     }
     /**
      * @dev burn an exist option whose id is `id`.
