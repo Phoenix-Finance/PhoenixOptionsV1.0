@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "../optionsPrice.sol";
 contract OptionsPriceTest is OptionsPrice{
     uint256 expirationZoom = 1;
@@ -31,13 +31,7 @@ contract OptionsPriceTest is OptionsPrice{
      */
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint32 underlying,uint8 optType)public view returns (uint256){
         expiration = expiration * expirationZoom;
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(underlying,optType,expiration,currentPrice,strikePrice);
-        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
-        if (optType == 0) {
-            return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
-        }else{
-            return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
-        }
+        return OptionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
     }
     /**
      * @dev calculate option's price using B_S formulas with user input iv.
@@ -51,11 +45,6 @@ contract OptionsPriceTest is OptionsPrice{
     function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
             uint256 ivNumerator,uint256 ivDenominator,uint8 optType)public view returns (uint256){
                 expiration = expiration * expirationZoom;
-        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
-        if (optType == 0) {
-            return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
-        }else{
-            return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
-        }
+        return OptionsPrice.getOptionsPrice_iv(currentPrice,strikePrice,expiration,ivNumerator,ivDenominator,optType);
     }
 }

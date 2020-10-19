@@ -21,4 +21,14 @@ contract('OptionsPrice', function (accounts){
         }
 
     });
+    it('OptionsPrice calOptionsPriceRatio test', async function (){
+        let priceInstance = await OptionsPrice.deployed();
+        for (var i=1000;i<=10000;i+=1000){
+            for (var j=10000;j<=100000;j+=10000){
+                let result = await priceInstance.calOptionsPriceRatio(i,10000,j);
+                console.log(i,j,result[0].toString(10),result[1].toString(10));
+            }
+        }
+
+    });
 });

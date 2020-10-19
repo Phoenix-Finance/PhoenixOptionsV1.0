@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./interfaces/IFnxPriceDb.sol";
 contract oracleBridge is ImportFnxPriceDb {
     mapping (address=>string) private assetsMap;

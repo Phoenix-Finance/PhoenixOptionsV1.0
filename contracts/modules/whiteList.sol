@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
     /**
      * @dev Implementation of a whitelist which filters a eligible uint32.
      */

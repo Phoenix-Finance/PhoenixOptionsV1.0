@@ -1,0 +1,40 @@
+const FNXCoin = artifacts.require("USDCoin");
+const BN = require("bn.js");
+contract('FNXCoin', function (accounts){
+    it('FNXCoin test functions', async function (){
+        let erc20 = await FNXCoin.new();
+        let name = await erc20.name();
+        assert.equal(name,"USD Coin","name Error");
+        let symbol = await erc20.symbol();
+        assert.equal(symbol,"USDC","symbol Error");
+        let decimals = await erc20.decimals();
+        assert.equal(decimals,18,"decimals Error");
+        let totalSupply = await erc20.totalSupply();
+        let total = "10000000000000000000000000000000";
+        assert.equal(totalSupply.toString(10),total,"totalSupply Error");
+        await erc20.approve(accounts[2],10000000000);
+        let result = await erc20.allowance(accounts[0],accounts[2]);
+        assert.equal(result,10000000000,"approve Error");
+        await erc20.transferFrom(accounts[0],accounts[3],10000000000,{from:accounts[2]});
+        result = await erc20.allowance(accounts[0],accounts[2]);
+        console.log(result.toString(10))
+        result = await erc20.balanceOf(accounts[0]);
+        assert.equal(result.toString(10),"999999999999999999990000000000","accounts[0] Error");
+        result = await erc20.balanceOf(accounts[3]);
+        assert.equal(result.toString(10),"10000000000","accounts[3] Error");
+        result = await erc20.balanceOf(accounts[2]);
+        assert.equal(result.toString(10),"0","accounts[2] Error");
+        await erc20.transfer(accounts[4],10000000000);
+        result = await erc20.balanceOf(accounts[0]);
+        assert.equal(result.toString(10),"999999999999999999980000000000","accounts[0] Error");
+        result = await erc20.balanceOf(accounts[3]);
+        assert.equal(result.toString(10),"10000000000","accounts[3] Error");
+        result = await erc20.balanceOf(accounts[2]);
+        assert.equal(result.toString(10),"0","accounts[2] Error");
+        result = await erc20.balanceOf(accounts[4]);
+        assert.equal(result.toString(10),"10000000000","accounts[2] Error");
+        let bn = new BN("100000000000000000000");
+        await erc20.mint(accounts[0],bn);
+        await erc20.mint(accounts[1],bn);
+    });
+});

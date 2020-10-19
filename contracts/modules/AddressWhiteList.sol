@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./Halt.sol";
 import "./whiteList.sol";
     /**
@@ -8,9 +8,11 @@ contract AddressWhiteList is Halt {
 
     using whiteListAddress for address[];
     uint256 constant internal allPermission = 0xffffffff;
-    uint256 constant internal allowPayIn = 0x0001;
-    uint256 constant internal allowRedeemOut = 0x0002;
-    uint256 constant internal allowSellOut = 0x0004;
+    uint256 constant internal allowBuyOptions = 1;
+    uint256 constant internal allowSellOptions = 1<<1;
+    uint256 constant internal allowExerciseOptions = 1<<2;
+    uint256 constant internal allowAddCollateral = 1<<3;
+    uint256 constant internal allowRedeemCollateral = 1<<4;
     // The eligible adress list
     address[] internal whiteList;
     mapping(address => uint256) internal addressPermission;
@@ -30,6 +32,7 @@ contract AddressWhiteList is Halt {
      * @param removeAddress revoked address.
      */
     function removeWhiteList(address removeAddress)public onlyOwner returns (bool){
+        addressPermission[removeAddress] = 0;
         return whiteList.removeWhiteListAddress(removeAddress);
     }
     /**
@@ -45,13 +48,7 @@ contract AddressWhiteList is Halt {
     function isEligibleAddress(address tmpAddress) public view returns (bool){
         return whiteList.isEligibleAddress(tmpAddress);
     }
-    function checkAddressPayIn(address tmpAddress) public view returns (bool){
-        return isEligibleAddress(tmpAddress) && ((addressPermission[tmpAddress]&allowPayIn) == allowPayIn);
-    }
-    function checkAddressRedeemOut(address tmpAddress) public view returns (bool){
-        return isEligibleAddress(tmpAddress) && ((addressPermission[tmpAddress]&allowRedeemOut) == allowRedeemOut);
-    }
-    function checkAddressPermission(address tmpAddress,uint256 state) internal view returns (bool){
+    function checkAddressPermission(address tmpAddress,uint256 state) public view returns (bool){
         return  (addressPermission[tmpAddress]&state) == state;
     }
 }

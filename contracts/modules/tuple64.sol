@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 library tuple64 {
     // add whiteList
     function getValue0(uint256 input) internal pure returns (uint256){

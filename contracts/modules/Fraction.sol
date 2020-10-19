@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
     /**
      * @dev Implementation of a Fraction number operation library.
      */
@@ -150,6 +150,10 @@ library Fraction {
             xNum.numerator = xNum.denominator - xNum.numerator;
         }
         return xNum;
+    }
+    function pow(fractionNumber memory _x,fractionNumber memory _y) internal pure returns (fractionNumber memory){
+        _x = mul(ln(_x),_y);
+        return exp(_x);
     }
     /**
      * @dev fraction exponential operator.

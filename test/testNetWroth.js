@@ -1,105 +1,97 @@
-const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
-const OptionsPool = artifacts.require("OptionsPoolTest");
-const OptionsPrice = artifacts.require("OptionsPriceTest");
-let CollateralPool = artifacts.require("CollateralPool");
-let FNXCoin = artifacts.require("FNXCoin");
 const BN = require("bn.js");
 let month = 30;
 let collateral0 = "0x0000000000000000000000000000000000000000";
-let testFunc = require("./testFunction.js")
-let FNXMinePool = artifacts.require("FNXMinePool");
+let {migration ,createAndAddErc20,AddCollateral0} = require("./testFunction.js");
 let curtime;
 contract('OptionsManagerV2', function (accounts){
     it('OptionsManagerV2 cal networth', async function (){
-        let OptionsManger = await OptionsManagerV2.deployed();
-        let collateralInstance = await CollateralPool.deployed();
-        let options = await OptionsPool.deployed();
-        let fnx = await FNXCoin.deployed();
-        let priceInstance = await OptionsPrice.deployed();
-        await priceInstance.setExpirationZoom(1000);
-        options.addExpiration(month);
+        let contracts = await migration(accounts);
+        await AddCollateral0(contracts);
+        await createAndAddErc20(contracts);
+        await contracts.price.setExpirationZoom(1000);
+        contracts.options.addExpiration(month);
         let amount = 1e14;
-        await logNetWroth(1,options,OptionsManger);
-        await OptionsManger.addCollateral(collateral0,amount,{value : amount});
-        await logNetWroth(2,options,OptionsManger);
-        await OptionsManger.addCollateral(collateral0,amount,{value : amount});
-        await logNetWroth(3,options,OptionsManger);
-        tx = await OptionsManger.calSharedPayment();
+        await logNetWroth(1,contracts);
+        await contracts.manager.addCollateral(collateral0,amount,{value : amount});
+        await logNetWroth(2,contracts);
+        await contracts.manager.addCollateral(collateral0,amount,{value : amount});
+        await logNetWroth(3,contracts);
+        let whiteList = await contracts.manager.getWhiteList();
+        tx = await contracts.collateral.calSharedPayment(whiteList);
         curtime = Date.now();
-        tx = await OptionsManger.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
-        await logNetWroth(4,options,OptionsManger);
-        tx = await OptionsManger.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
+        tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
+        await logNetWroth(4,contracts);
+        tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
 //        console.log(tx);
-        tx = await OptionsManger.buyOption(collateral0,200000000000000,8000e8,1,month,10000000000,0,{value : 200000000000000});
-        tx = await OptionsManger.buyOption(collateral0,200000000000000,8000e8,1,month,20000000000,0,{from:accounts[1],value : 200000000000000});
+        tx = await contracts.manager.buyOption(collateral0,200000000000000,8000e8,1,month,10000000000,0,{value : 200000000000000});
+        tx = await contracts.manager.buyOption(collateral0,200000000000000,8000e8,1,month,20000000000,0,{from:accounts[1],value : 200000000000000});
 //        console.log(tx);
-        await logNetWroth(5,options,OptionsManger);
-        await calculateNetWroth(options,OptionsManger,fnx);
-        await logNetWroth(6,options,OptionsManger);
+        await logNetWroth(5,contracts);
+        await calculateNetWroth(contracts,contracts.FNX);
+        await logNetWroth(6,contracts);
         for (var i=0;i<50;i++){
-            await options.addExpiration(month);
+            await contracts.options.addExpiration(month);
         }
-        await calculateNetWroth(options,OptionsManger,fnx);
-        await logNetWroth(7,options,OptionsManger);
-        tx = await OptionsManger.sellOption(1,10000000000);
-        await logNetWroth(8,options,OptionsManger);
-        tx = await OptionsManger.sellOption(2,10000000000);
-        await logNetWroth(9,options,OptionsManger);
-        tx = await OptionsManger.sellOption(3,10000000000);
-        await logNetWroth(10,options,OptionsManger);
+        await calculateNetWroth(contracts,contracts.FNX);
+        await logNetWroth(7,contracts);
+        tx = await contracts.manager.sellOption(1,10000000000);
+        await logNetWroth(8,contracts);
+        tx = await contracts.manager.sellOption(2,10000000000);
+        await logNetWroth(9,contracts);
+        tx = await contracts.manager.sellOption(3,10000000000);
+        await logNetWroth(10,contracts);
         console.log("-----------------------------------------");
-        await calculateNetWroth(options,OptionsManger,fnx);
-        await logNetWroth(11,options,OptionsManger);
+        await calculateNetWroth(contracts,contracts.FNX);
+        await logNetWroth(11,contracts);
         for (var i=0;i<100;i++){
-            await options.addExpiration(month);
+            await contracts.options.addExpiration(month);
         }
-        await calculateNetWroth(options,OptionsManger,fnx);
-        await logNetWroth(12,options,OptionsManger);
+        await calculateNetWroth(contracts,contracts.FNX);
+        await logNetWroth(12,contracts);
     });
     it('OptionsManagerV2 exercise networth', async function (){
-        let priceInstance = await OptionsPrice.deployed();
-        let OptionsManger = await OptionsManagerV2.deployed();
-        let collateralInstance = await CollateralPool.deployed();
-        let options = await OptionsPool.deployed();
-        let fnx = await FNXCoin.deployed();
-        options.addExpiration(month);
-        let Index = await options.getOptionInfoLength();
+        let contracts = await migration(accounts);
+        await AddCollateral0(contracts);
+        await createAndAddErc20(contracts);
+        await contracts.price.setExpirationZoom(1000);
+        contracts.options.addExpiration(month);
+        contracts.options.addExpiration(month);
+        let Index = await contracts.options.getOptionInfoLength();
         Index = Index.toNumber();
         let amount = 1e14;
-        await OptionsManger.addCollateral(collateral0,amount,{value : amount});
-        await logNetWroth(21,options,OptionsManger);
-        await OptionsManger.addCollateral(collateral0,amount,{value : amount});
-        await logNetWroth(22,options,OptionsManger);
+        await contracts.manager.addCollateral(collateral0,amount,{value : amount});
+        await logNetWroth(21,contracts);
+        await contracts.manager.addCollateral(collateral0,amount,{value : amount});
+        await logNetWroth(22,contracts);
        
-        tx = await OptionsManger.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
+        tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
 //        console.log(tx);
-        tx = await OptionsManger.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
+        tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
 //        console.log(tx);
-        tx = await OptionsManger.buyOption(collateral0,200000000000000,8000e8,1,month,10000000000,0,{value : 200000000000000});
-        tx = await OptionsManger.buyOption(collateral0,200000000000000,8000e8,1,month,20000000000,0,{from:accounts[1],value : 200000000000000});
+        tx = await contracts.manager.buyOption(collateral0,200000000000000,8000e8,1,month,10000000000,0,{value : 200000000000000});
+        tx = await contracts.manager.buyOption(collateral0,200000000000000,8000e8,1,month,20000000000,0,{from:accounts[1],value : 200000000000000});
 //        console.log(tx);
-        await logNetWroth(23,options,OptionsManger);
-        await calculateNetWroth(options,OptionsManger,fnx);
-        await logNetWroth(24,options,OptionsManger);
+        await logNetWroth(23,contracts);
+        await calculateNetWroth(contracts,contracts.FNX);
+        await logNetWroth(24,contracts);
         for (var i=0;i<50;i++){
-            await options.addExpiration(month);
+            await contracts.options.addExpiration(month);
         }
-        await calculateNetWroth(options,OptionsManger,fnx);
-        await logNetWroth(25,options,OptionsManger);
-        tx = await OptionsManger.exerciseOption(Index+1,10000000000);
-        await logNetWroth(26,options,OptionsManger);
-        tx = await OptionsManger.exerciseOption(Index+2,10000000000);
-        await logNetWroth(27,options,OptionsManger);
-        tx = await OptionsManger.exerciseOption(Index+3,10000000000);
-        await logNetWroth(28,options,OptionsManger);
-        await calculateNetWroth(options,OptionsManger,fnx);
-        await logNetWroth(29,options,OptionsManger);
+        await calculateNetWroth(contracts,contracts.FNX);
+        await logNetWroth(25,contracts);
+        tx = await contracts.manager.exerciseOption(Index+1,10000000000);
+        await logNetWroth(26,contracts);
+        tx = await contracts.manager.exerciseOption(Index+2,10000000000);
+        await logNetWroth(27,contracts);
+        tx = await contracts.manager.exerciseOption(Index+3,10000000000);
+        await logNetWroth(28,contracts);
+        await calculateNetWroth(contracts,contracts.FNX);
+        await logNetWroth(29,contracts);
         for (var i=0;i<100;i++){
-            await options.addExpiration(month);
+            await contracts.options.addExpiration(month);
         }
-        await calculateNetWroth(options,OptionsManger,fnx);
-        await logNetWroth(30,options,OptionsManger);
-        await priceInstance.setExpirationZoom(1);
+        await calculateNetWroth(contracts,contracts.FNX);
+        await logNetWroth(30,contracts);
     });
 });
 async function logBalance(fnx,addr){
@@ -108,33 +100,33 @@ async function logBalance(fnx,addr){
         let fnxBalance = await fnx.balanceOf(addr);
         console.log("fnx : ",addr,fnxBalance.toString(10));
 }
-async function logNetWroth(id,options,OptionsManger){
+async function logNetWroth(id,contracts){
     console.log(id,Date.now()-curtime)
-    let result = await OptionsManger.getTotalCollateral();
+    let result = await contracts.manager.getTotalCollateral();
     console.log(id,"TotalCollateral : ",result.toString(10));
-    result = await options.getNetWrothLatestWorth(collateral0);
+    result = await contracts.options.getNetWrothLatestWorth(collateral0);
     console.log(id,"LatestWorth : ",result.toString(10));
-    result = await options.getTotalOccupiedCollateral();
+    result = await contracts.options.getTotalOccupiedCollateral();
     console.log(id,"TotalOccupied : ",result.toString(10));
-    result = await OptionsManger.getOccupiedCollateral();
+    result = await contracts.manager.getOccupiedCollateral();
     console.log(id,"TotalOccupied*5 : ",result.toString(10));
-    result = await OptionsManger.getLeftCollateral();
+    result = await contracts.manager.getLeftCollateral();
     console.log(id,"LeftCollateral : ",result.toString(10));
-    result = await OptionsManger.getTokenNetworth();
+    result = await contracts.manager.getTokenNetworth();
     console.log(id,"Networth : ",result.toString(10));
 }
-async function calculateNetWroth(options,OptionsManger,fnx){
+async function calculateNetWroth(contracts,fnx){
     let whiteList = [collateral0,fnx.address];
-    optionsLen = await options.getOptionCalRangeAll(whiteList);
+    optionsLen = await contracts.options.getOptionCalRangeAll(whiteList);
     console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
 
-    let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
+    let result =  await contracts.options.calculatePhaseOccupiedCollateral(optionsLen[5],optionsLen[0],optionsLen[5]);
     console.log(result[0].toString(10),result[1].toString(10));
-    let tx = await options.setOccupiedCollateral();
-    result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
+    let tx = await contracts.options.setOccupiedCollateral();
+    result =  await contracts.options.calRangeSharedPayment(optionsLen[5],optionsLen[3],optionsLen[5],whiteList);
     console.log(result[0][0].toString(10),result[0][1].toString(10));
 
 //                return;
-    tx = await OptionsManger.calSharedPayment();
+    tx = await contracts.collateral.calSharedPayment(whiteList);
 //    console.log(tx);
 }

@@ -1,65 +1,52 @@
-const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
-const OptionsPool = artifacts.require("OptionsPoolTest");
-const FPTCoin = artifacts.require("FPTCoin");
-const OptionsPrice = artifacts.require("OptionsPrice");
-let CollateralPool = artifacts.require("CollateralPool");
-let FNXCoin = artifacts.require("FNXCoin");
 const BN = require("bn.js");
 let month = 30*60*60*24;
-let testFunc = require("./testFunction.js")
-let FNXMinePool = artifacts.require("FNXMinePool");
+let {migration ,createAndAddErc20,AddCollateral0} = require("./testFunction.js");
 contract('OptionsManagerV2', function (accounts){
     it('OptionsManagerV2 redeem collateral', async function (){
-        let OptionsManger = await OptionsManagerV2.deployed();
-        let collateralInstance = await CollateralPool.deployed();
-        let options = await OptionsPool.deployed();
-        let fnx = await FNXCoin.deployed();
-        await options.addUnderlyingAsset(1);
-        let minePool = await FNXMinePool.deployed();
-//        console.log(tx);
-//        return;
-        await OptionsManger.removeWhiteList(collateral0);
-//        await OptionsManger.setCollateralRate(fnx.addres,5000);
-        await fnx.approve(OptionsManger.address,10000000000000);
-        await OptionsManger.addCollateral(fnx.address,10000000000000);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
+        let contracts = await migration(accounts);
+        await createAndAddErc20(contracts);
+
+//        await contracts.manager.setCollateralRate(fnx.addres,5000);
+        await contracts.FNX.approve(contracts.manager.address,10000000000000);
+        await contracts.manager.addCollateral(contracts.FNX.address,10000000000000);
+        await logBalance(contracts.FNX,contracts.collateral.address);
+        await logBalance(contracts.FNX,accounts[0]);
         for (var i=0;i<10;i++){
-                await OptionsManger.addWhiteList(fnx.address);
+                await contracts.manager.addWhiteList(contracts.FNX.address);
         }
-        await OptionsManger.redeemCollateral(500000000000000,fnx.address);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        await fnx.approve(OptionsManger.address,10000000000000);
-        await OptionsManger.addCollateral(fnx.address,10000000000000);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
+        await contracts.manager.redeemCollateral(500000000000000,contracts.FNX.address);
+        await logBalance(contracts.FNX,contracts.collateral.address);
+        await logBalance(contracts.FNX,accounts[0]);
+        await contracts.FNX.approve(contracts.manager.address,10000000000000);
+        await contracts.manager.addCollateral(contracts.FNX.address,10000000000000);
+        await logBalance(contracts.FNX,contracts.collateral.address);
+        await logBalance(contracts.FNX,accounts[0]);
         for (var i=0;i<10;i++){
-                await OptionsManger.addWhiteList(fnx.address);
+                await contracts.manager.addWhiteList(contracts.FNX.address);
         }
-        await OptionsManger.redeemCollateral(500000000000000,fnx.address);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        await fnx.approve(OptionsManger.address,10000000000000);
-        await OptionsManger.addCollateral(fnx.address,10000000000000);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
+        await contracts.manager.redeemCollateral(500000000000000,contracts.FNX.address);
+        await logBalance(contracts.FNX,contracts.collateral.address);
+        await logBalance(contracts.FNX,accounts[0]);
+        await contracts.FNX.approve(contracts.manager.address,10000000000000);
+        await contracts.manager.addCollateral(contracts.FNX.address,10000000000000);
+        await logBalance(contracts.FNX,contracts.collateral.address);
+        await logBalance(contracts.FNX,accounts[0]);
         for (var i=0;i<10;i++){
-                await OptionsManger.addWhiteList(fnx.address);
+                await contracts.manager.addWhiteList(contracts.FNX.address);
         }
-        await OptionsManger.redeemCollateral(500000000000000,fnx.address);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
-        await fnx.approve(OptionsManger.address,10000000000000);
-        await OptionsManger.addCollateral(fnx.address,10000000000000);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
+        await contracts.manager.redeemCollateral(500000000000000,contracts.FNX.address);
+        await logBalance(contracts.FNX,contracts.collateral.address);
+        await logBalance(contracts.FNX,accounts[0]);
+        await contracts.FNX.approve(contracts.manager.address,10000000000000);
+        await contracts.manager.addCollateral(contracts.FNX.address,10000000000000);
+        await logBalance(contracts.FNX,contracts.collateral.address);
+        await logBalance(contracts.FNX,accounts[0]);
         for (var i=0;i<10;i++){
-                await OptionsManger.addWhiteList(fnx.address);
+                await contracts.manager.addWhiteList(contracts.FNX.address);
         }
-        await OptionsManger.redeemCollateral(500000000000000,fnx.address);
-        await logBalance(fnx,collateralInstance.address);
-        await logBalance(fnx,accounts[0]);
+        await contracts.manager.redeemCollateral(500000000000000,contracts.FNX.address);
+        await logBalance(contracts.FNX,contracts.collateral.address);
+        await logBalance(contracts.FNX,accounts[0]);
         
     });
 

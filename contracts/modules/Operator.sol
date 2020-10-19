@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import './Ownable.sol';
 import "./whiteList.sol";
 /**
@@ -22,7 +22,7 @@ contract Operator is Ownable {
      *
      */
     modifier onlyOperatorIndex(uint256 index) {
-        require(_operatorList.length>index && _operatorList[index] == msg.sender,"Managerable: caller is not the eligible Operator");
+        require(_operatorList.length>index && _operatorList[index] == msg.sender,"Operator: caller is not the eligible Operator");
         _;
     }
     /**
@@ -57,7 +57,7 @@ contract Operator is Ownable {
      * @dev set all operators by owner. 
      *
      */
-    function setOperator(address[] memory operators)public onlyOwner {
+    function setOperators(address[] memory operators)public onlyOwner {
         _operatorList = operators;
     }
 }

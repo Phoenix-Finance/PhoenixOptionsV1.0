@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 library ArraySave{
     struct saveMap{
         mapping(uint256 => uint256) sMap;

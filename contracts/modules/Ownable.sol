@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -10,14 +10,14 @@ pragma solidity ^0.5.1;
  * the owner.
  */
 contract Ownable {
-    address private _owner;
+    address internal _owner;
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor () internal {
+    constructor() internal {
         _owner = msg.sender;
         emit OwnershipTransferred(address(0), _owner);
     }

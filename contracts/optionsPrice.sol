@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 
 import "./modules/Ownable.sol";
 import "./modules/Fraction.sol";
@@ -16,6 +16,8 @@ contract OptionsPrice is ImportVolatility{
     int256 constant internal YearSqrt = 561569230;
     // rate in B-S formulas.
     Fraction.fractionNumber internal rate = Fraction.fractionNumber(0,1000);
+
+    Fraction.fractionNumber internal ratioR2 = Fraction.fractionNumber(4,1);
     /**
      * @dev constructor function , setting contract address.
      * @param ivContract implied volatility contract address
@@ -37,6 +39,19 @@ contract OptionsPrice is ImportVolatility{
         rate.numerator = numerator;
         rate.denominator = denominator;
     }
+        /**
+     * @dev get options price ratio for R2
+     */
+    function getRatioR2()public view returns(int256,int256){
+        return (ratioR2.numerator,ratioR2.denominator);
+    }
+    /**
+     * @dev set options price ratio for R2
+     */
+    function setRatioR2(int256 numerator,int256 denominator)public onlyOwner{
+        ratioR2.numerator = numerator;
+        ratioR2.denominator = denominator;
+    }
     /**
      * @dev calculate option's price using B_S formulas
      * @param currentPrice current underlying price.
@@ -50,7 +65,7 @@ contract OptionsPrice is ImportVolatility{
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
-        }else if(optType == 1){
+        }else if (optType == 1){
             return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
         }else{
             require(optType<2," Must input 0 for call option or 1 for put option");
@@ -70,7 +85,7 @@ contract OptionsPrice is ImportVolatility{
         Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
-        }else if(optType == 1){
+        }else if (optType == 1){
             return putOptionsPrice(currentPrice,strikePrice,expiration,rate,_iv);
         }else{
             require(optType<2," Must input 0 for call option or 1 for put option");
@@ -151,5 +166,17 @@ contract OptionsPrice is ImportVolatility{
             d1 = d1.sub(d2.div(r.exp()));
         }
         return uint256(d1.numerator/d1.denominator);
+    }
+    function calOptionsPriceRatio(uint256 selfOccupied,uint256 totalOccupied,uint256 totalCollateral) public view returns (uint256,uint256){
+        //r1 + 0.5
+        if (selfOccupied*2<=totalOccupied){
+            return(1,1);
+        }
+        //r1 + 0.5
+        Fraction.fractionNumber memory r1 = Fraction.fractionNumber(int256(selfOccupied*2+totalOccupied),int256(totalOccupied*2));
+        Fraction.fractionNumber memory r2 = Fraction.fractionNumber(int256(totalOccupied),int256(totalCollateral)).mul(ratioR2);
+        //pow(r1,r2)
+        r1 = r1.pow(r2);
+        return (uint256(r1.numerator),uint256(r1.denominator));
     }
 }

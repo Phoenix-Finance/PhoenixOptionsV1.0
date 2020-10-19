@@ -1,4 +1,4 @@
-pragma solidity ^0.5.1;
+pragma solidity =0.5.16;
 import "./modules/Operator.sol";
 import "./modules/Fraction.sol";
 /**
@@ -77,12 +77,12 @@ contract ImpliedVolatility is Operator {
     /**
      * @dev Interface, calculate option's iv. 
      * @param underlying underlying ID.,1 for BTC, 2 for ETH
-     * @param optType option's type.,0 for CALL, 1 for PUT
+     * optType option's type.,0 for CALL, 1 for PUT
      * @param expiration Option's expiration, left time to now.
      * @param currentPrice underlying current price
      * @param strikePrice option's strike price
      */ 
-    function calculateIv(uint32 underlying,uint8 optType,uint256 expiration,uint256 currentPrice,uint256 strikePrice)public view returns (uint256,uint256){
+    function calculateIv(uint32 underlying,uint8 /*optType*/,uint256 expiration,uint256 currentPrice,uint256 strikePrice)public view returns (uint256,uint256){
         uint256 iv = calATMIv(underlying,expiration);
         if (currentPrice == strikePrice){
             return (iv,_calDecimal);

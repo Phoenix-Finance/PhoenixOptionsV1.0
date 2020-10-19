@@ -5,14 +5,17 @@
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "account",
           "type": "address"
         },
         {
+          "internalType": "address",
           "name": "recieptor",
           "type": "address"
         },
         {
+          "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
         }
@@ -27,10 +30,12 @@
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "account",
           "type": "address"
         },
         {
+          "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
         }
@@ -45,10 +50,12 @@
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "account",
           "type": "address"
         },
         {
+          "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
         }
@@ -63,10 +70,12 @@
       "constant": false,
       "inputs": [
         {
+          "internalType": "address",
           "name": "account",
           "type": "address"
         },
         {
+          "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
         }
@@ -78,45 +87,45 @@
       "type": "function"
     }
   ],
-  "metadata": "",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"addMinerBalance\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"burnMinerCoin\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mintMinerCoin\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"recieptor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferMinerCoin\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/IFNXMinePool.sol\":\"IFNXMinePool\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/IFNXMinePool.sol\":{\"keccak256\":\"0x01cf071d772e6d7088431b65c64dacf2100e526a9dfbd20d68994e4874ec5e2d\",\"urls\":[\"bzz-raw://69b920487ed3cb5556e9725229392a212040bf2715f41ba93823172ec8716d5f\",\"dweb:/ipfs/QmTA4zWFPRPFZwKG3k8cDPwu7xry3gCkPEaHrQ6ih2MbTC\"]},\"/home/jqg/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x283d39388b6a114767746e38a205a4bfaaeb401c4863a7eb17fa107684d7845b\",\"urls\":[\"bzz-raw://716829652ea09ecaf4fca47af0d4edb145db6f25548c0710ccb83f39e4b9bea8\",\"dweb:/ipfs/QmWDKty8932txnmo4JLiCVfvDHyLqHik2W1NYeXBFQMzYs\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.26;\r\nimport \"../modules/Ownable.sol\";\r\ninterface IFNXMinePool {\r\n    function transferMinerCoin(address account,address recieptor,uint256 amount)external;\r\n    function mintMinerCoin(address account,uint256 amount) external;\r\n    function burnMinerCoin(address account,uint256 amount) external;\r\n    function addMinerBalance(address account,uint256 amount) external;\r\n}\r\ncontract ImportFNXMinePool is Ownable{\r\n    IFNXMinePool internal _FnxMinePool;\r\n    function getFNXMinePoolAddress() public view returns(address){\r\n        return address(_FnxMinePool);\r\n    }\r\n    function setFNXMinePoolAddress(address fnxMinePool)public onlyOwner{\r\n        _FnxMinePool = IFNXMinePool(fnxMinePool);\r\n    }\r\n}",
-  "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\interfaces\\IFNXMinePool.sol",
+  "source": "pragma solidity =0.5.16;\nimport \"../modules/Ownable.sol\";\ninterface IFNXMinePool {\n    function transferMinerCoin(address account,address recieptor,uint256 amount)external;\n    function mintMinerCoin(address account,uint256 amount) external;\n    function burnMinerCoin(address account,uint256 amount) external;\n    function addMinerBalance(address account,uint256 amount) external;\n}\ncontract ImportFNXMinePool is Ownable{\n    IFNXMinePool internal _FnxMinePool;\n    function getFNXMinePoolAddress() public view returns(address){\n        return address(_FnxMinePool);\n    }\n    function setFNXMinePoolAddress(address fnxMinePool)public onlyOwner{\n        _FnxMinePool = IFNXMinePool(fnxMinePool);\n    }\n}",
+  "sourcePath": "/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/IFNXMinePool.sol",
   "ast": {
-    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFNXMinePool.sol",
+    "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/IFNXMinePool.sol",
     "exportedSymbols": {
       "IFNXMinePool": [
-        11791
+        4198
       ],
       "ImportFNXMinePool": [
-        11820
+        4227
       ]
     },
-    "id": 11821,
+    "id": 4228,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 11759,
+        "id": 4166,
         "literals": [
           "solidity",
-          "^",
-          "0.4",
-          ".26"
+          "=",
+          "0.5",
+          ".16"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:18"
+        "src": "0:24:12"
       },
       {
-        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
+        "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "../modules/Ownable.sol",
-        "id": 11760,
+        "id": 4167,
         "nodeType": "ImportDirective",
-        "scope": 11821,
-        "sourceUnit": 14786,
-        "src": "26:32:18",
+        "scope": 4228,
+        "sourceUnit": 16940,
+        "src": "25:32:12",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -126,9 +135,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 11791,
+        "id": 4198,
         "linearizedBaseContracts": [
-          11791
+          4198
         ],
         "name": "IFNXMinePool",
         "nodeType": "ContractDefinition",
@@ -136,24 +145,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 11769,
+            "id": 4176,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "transferMinerCoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11767,
+              "id": 4174,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11762,
+                  "id": 4169,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11769,
-                  "src": "117:15:18",
+                  "scope": 4176,
+                  "src": "114:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -161,10 +169,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11761,
+                    "id": 4168,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "117:7:18",
+                    "src": "114:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -175,11 +184,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11764,
+                  "id": 4171,
                   "name": "recieptor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11769,
-                  "src": "133:17:18",
+                  "scope": 4176,
+                  "src": "130:17:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -187,10 +196,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11763,
+                    "id": 4170,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "133:7:18",
+                    "src": "130:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -201,11 +211,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11766,
+                  "id": 4173,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11769,
-                  "src": "151:14:18",
+                  "scope": 4176,
+                  "src": "148:14:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -213,10 +223,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11765,
+                    "id": 4172,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "151:7:18",
+                    "src": "148:7:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -226,17 +236,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "116:50:18"
+              "src": "113:50:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11768,
+              "id": 4175,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "174:0:18"
+              "src": "171:0:12"
             },
-            "scope": 11791,
-            "src": "90:85:18",
+            "scope": 4198,
+            "src": "87:85:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -244,24 +253,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 11776,
+            "id": 4183,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "mintMinerCoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11774,
+              "id": 4181,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11771,
+                  "id": 4178,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11776,
-                  "src": "204:15:18",
+                  "scope": 4183,
+                  "src": "200:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -269,10 +277,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11770,
+                    "id": 4177,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "204:7:18",
+                    "src": "200:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -283,11 +292,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11773,
+                  "id": 4180,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11776,
-                  "src": "220:14:18",
+                  "scope": 4183,
+                  "src": "216:14:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -295,10 +304,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11772,
+                    "id": 4179,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "220:7:18",
+                    "src": "216:7:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -308,17 +317,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "203:32:18"
+              "src": "199:32:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11775,
+              "id": 4182,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "244:0:18"
+              "src": "240:0:12"
             },
-            "scope": 11791,
-            "src": "181:64:18",
+            "scope": 4198,
+            "src": "177:64:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -326,24 +334,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 11783,
+            "id": 4190,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "burnMinerCoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11781,
+              "id": 4188,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11778,
+                  "id": 4185,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11783,
-                  "src": "274:15:18",
+                  "scope": 4190,
+                  "src": "269:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -351,10 +358,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11777,
+                    "id": 4184,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "274:7:18",
+                    "src": "269:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -365,11 +373,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11780,
+                  "id": 4187,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11783,
-                  "src": "290:14:18",
+                  "scope": 4190,
+                  "src": "285:14:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -377,10 +385,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11779,
+                    "id": 4186,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "290:7:18",
+                    "src": "285:7:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -390,17 +398,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "273:32:18"
+              "src": "268:32:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11782,
+              "id": 4189,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "314:0:18"
+              "src": "309:0:12"
             },
-            "scope": 11791,
-            "src": "251:64:18",
+            "scope": 4198,
+            "src": "246:64:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -408,24 +415,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 11790,
+            "id": 4197,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "addMinerBalance",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11788,
+              "id": 4195,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11785,
+                  "id": 4192,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11790,
-                  "src": "346:15:18",
+                  "scope": 4197,
+                  "src": "340:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -433,10 +439,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11784,
+                    "id": 4191,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "346:7:18",
+                    "src": "340:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -447,11 +454,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11787,
+                  "id": 4194,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11790,
-                  "src": "362:14:18",
+                  "scope": 4197,
+                  "src": "356:14:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -459,10 +466,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11786,
+                    "id": 4193,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "362:7:18",
+                    "src": "356:7:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -472,24 +479,23 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "345:32:18"
+              "src": "339:32:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11789,
+              "id": 4196,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "386:0:18"
+              "src": "380:0:12"
             },
-            "scope": 11791,
-            "src": "321:66:18",
+            "scope": 4198,
+            "src": "315:66:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 11821,
-        "src": "60:330:18"
+        "scope": 4228,
+        "src": "58:325:12"
       },
       {
         "baseContracts": [
@@ -497,57 +503,57 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 11792,
+              "id": 4199,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14785,
-              "src": "422:7:18",
+              "referencedDeclaration": 16939,
+              "src": "414:7:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14785",
+                "typeIdentifier": "t_contract$_Ownable_$16939",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 11793,
+            "id": 4200,
             "nodeType": "InheritanceSpecifier",
-            "src": "422:7:18"
+            "src": "414:7:12"
           }
         ],
         "contractDependencies": [
-          14785
+          16939
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 11820,
+        "id": 4227,
         "linearizedBaseContracts": [
-          11820,
-          14785
+          4227,
+          16939
         ],
         "name": "ImportFNXMinePool",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 11795,
+            "id": 4202,
             "name": "_FnxMinePool",
             "nodeType": "VariableDeclaration",
-            "scope": 11820,
-            "src": "436:34:18",
+            "scope": 4227,
+            "src": "427:34:12",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+              "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
               "typeString": "contract IFNXMinePool"
             },
             "typeName": {
               "contractScope": null,
-              "id": 11794,
+              "id": 4201,
               "name": "IFNXMinePool",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11791,
-              "src": "436:12:18",
+              "referencedDeclaration": 4198,
+              "src": "427:12:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                 "typeString": "contract IFNXMinePool"
               }
             },
@@ -556,9 +562,9 @@
           },
           {
             "body": {
-              "id": 11804,
+              "id": 4211,
               "nodeType": "Block",
-              "src": "538:47:18",
+              "src": "528:45:12",
               "statements": [
                 {
                   "expression": {
@@ -566,14 +572,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11801,
+                        "id": 4208,
                         "name": "_FnxMinePool",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11795,
-                        "src": "564:12:18",
+                        "referencedDeclaration": 4202,
+                        "src": "553:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                           "typeString": "contract IFNXMinePool"
                         }
                       }
@@ -581,24 +587,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                           "typeString": "contract IFNXMinePool"
                         }
                       ],
-                      "id": 11800,
+                      "id": 4207,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "556:7:18",
+                      "src": "545:7:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 11802,
+                    "id": 4209,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -606,45 +612,43 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "556:21:18",
+                    "src": "545:21:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 11799,
-                  "id": 11803,
+                  "functionReturnParameters": 4206,
+                  "id": 4210,
                   "nodeType": "Return",
-                  "src": "549:28:18"
+                  "src": "538:28:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 11805,
+            "id": 4212,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "getFNXMinePoolAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11796,
+              "id": 4203,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "507:2:18"
+              "src": "497:2:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11799,
+              "id": 4206,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11798,
+                  "id": 4205,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11805,
-                  "src": "530:7:18",
+                  "scope": 4212,
+                  "src": "520:7:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -652,10 +656,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11797,
+                    "id": 4204,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "530:7:18",
+                    "src": "520:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -665,38 +670,38 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "529:9:18"
+              "src": "519:9:12"
             },
-            "scope": 11820,
-            "src": "477:108:18",
+            "scope": 4227,
+            "src": "467:106:12",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 11818,
+              "id": 4225,
               "nodeType": "Block",
-              "src": "658:59:18",
+              "src": "645:57:12",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 11816,
+                    "id": 4223,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 11812,
+                      "id": 4219,
                       "name": "_FnxMinePool",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11795,
-                      "src": "669:12:18",
+                      "referencedDeclaration": 4202,
+                      "src": "655:12:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                        "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                         "typeString": "contract IFNXMinePool"
                       }
                     },
@@ -707,12 +712,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 11814,
+                          "id": 4221,
                           "name": "fnxMinePool",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 11807,
-                          "src": "697:11:18",
+                          "referencedDeclaration": 4214,
+                          "src": "683:11:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -726,18 +731,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 11813,
+                        "id": 4220,
                         "name": "IFNXMinePool",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11791,
-                        "src": "684:12:18",
+                        "referencedDeclaration": 4198,
+                        "src": "670:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_IFNXMinePool_$11791_$",
+                          "typeIdentifier": "t_type$_t_contract$_IFNXMinePool_$4198_$",
                           "typeString": "type(contract IFNXMinePool)"
                         }
                       },
-                      "id": 11815,
+                      "id": 4222,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -745,63 +750,62 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "684:25:18",
+                      "src": "670:25:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                        "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                         "typeString": "contract IFNXMinePool"
                       }
                     },
-                    "src": "669:40:18",
+                    "src": "655:40:12",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                      "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                       "typeString": "contract IFNXMinePool"
                     }
                   },
-                  "id": 11817,
+                  "id": 4224,
                   "nodeType": "ExpressionStatement",
-                  "src": "669:40:18"
+                  "src": "655:40:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 11819,
+            "id": 4226,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 11810,
+                "id": 4217,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 11809,
+                  "id": 4216,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14718,
-                  "src": "649:9:18",
+                  "referencedDeclaration": 16872,
+                  "src": "636:9:12",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "649:9:18"
+                "src": "636:9:12"
               }
             ],
             "name": "setFNXMinePoolAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11808,
+              "id": 4215,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11807,
+                  "id": 4214,
                   "name": "fnxMinePool",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11819,
-                  "src": "622:19:18",
+                  "scope": 4226,
+                  "src": "609:19:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -809,10 +813,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11806,
+                    "id": 4213,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "622:7:18",
+                    "src": "609:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -822,60 +827,59 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "621:21:18"
+              "src": "608:21:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11811,
+              "id": 4218,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "658:0:18"
+              "src": "645:0:12"
             },
-            "scope": 11820,
-            "src": "591:126:18",
+            "scope": 4227,
+            "src": "578:124:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 11821,
-        "src": "392:328:18"
+        "scope": 4228,
+        "src": "384:320:12"
       }
     ],
-    "src": "0:720:18"
+    "src": "0:704:12"
   },
   "legacyAST": {
-    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/interfaces/IFNXMinePool.sol",
+    "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/IFNXMinePool.sol",
     "exportedSymbols": {
       "IFNXMinePool": [
-        11791
+        4198
       ],
       "ImportFNXMinePool": [
-        11820
+        4227
       ]
     },
-    "id": 11821,
+    "id": 4228,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 11759,
+        "id": 4166,
         "literals": [
           "solidity",
-          "^",
-          "0.4",
-          ".26"
+          "=",
+          "0.5",
+          ".16"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:18"
+        "src": "0:24:12"
       },
       {
-        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol",
+        "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/modules/Ownable.sol",
         "file": "../modules/Ownable.sol",
-        "id": 11760,
+        "id": 4167,
         "nodeType": "ImportDirective",
-        "scope": 11821,
-        "sourceUnit": 14786,
-        "src": "26:32:18",
+        "scope": 4228,
+        "sourceUnit": 16940,
+        "src": "25:32:12",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -885,9 +889,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 11791,
+        "id": 4198,
         "linearizedBaseContracts": [
-          11791
+          4198
         ],
         "name": "IFNXMinePool",
         "nodeType": "ContractDefinition",
@@ -895,24 +899,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 11769,
+            "id": 4176,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "transferMinerCoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11767,
+              "id": 4174,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11762,
+                  "id": 4169,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11769,
-                  "src": "117:15:18",
+                  "scope": 4176,
+                  "src": "114:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -920,10 +923,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11761,
+                    "id": 4168,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "117:7:18",
+                    "src": "114:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -934,11 +938,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11764,
+                  "id": 4171,
                   "name": "recieptor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11769,
-                  "src": "133:17:18",
+                  "scope": 4176,
+                  "src": "130:17:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -946,10 +950,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11763,
+                    "id": 4170,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "133:7:18",
+                    "src": "130:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -960,11 +965,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11766,
+                  "id": 4173,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11769,
-                  "src": "151:14:18",
+                  "scope": 4176,
+                  "src": "148:14:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -972,10 +977,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11765,
+                    "id": 4172,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "151:7:18",
+                    "src": "148:7:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -985,17 +990,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "116:50:18"
+              "src": "113:50:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11768,
+              "id": 4175,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "174:0:18"
+              "src": "171:0:12"
             },
-            "scope": 11791,
-            "src": "90:85:18",
+            "scope": 4198,
+            "src": "87:85:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -1003,24 +1007,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 11776,
+            "id": 4183,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "mintMinerCoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11774,
+              "id": 4181,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11771,
+                  "id": 4178,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11776,
-                  "src": "204:15:18",
+                  "scope": 4183,
+                  "src": "200:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1028,10 +1031,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11770,
+                    "id": 4177,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "204:7:18",
+                    "src": "200:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1042,11 +1046,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11773,
+                  "id": 4180,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11776,
-                  "src": "220:14:18",
+                  "scope": 4183,
+                  "src": "216:14:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1054,10 +1058,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11772,
+                    "id": 4179,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "220:7:18",
+                    "src": "216:7:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1067,17 +1071,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "203:32:18"
+              "src": "199:32:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11775,
+              "id": 4182,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "244:0:18"
+              "src": "240:0:12"
             },
-            "scope": 11791,
-            "src": "181:64:18",
+            "scope": 4198,
+            "src": "177:64:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -1085,24 +1088,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 11783,
+            "id": 4190,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "burnMinerCoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11781,
+              "id": 4188,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11778,
+                  "id": 4185,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11783,
-                  "src": "274:15:18",
+                  "scope": 4190,
+                  "src": "269:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1110,10 +1112,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11777,
+                    "id": 4184,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "274:7:18",
+                    "src": "269:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1124,11 +1127,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11780,
+                  "id": 4187,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11783,
-                  "src": "290:14:18",
+                  "scope": 4190,
+                  "src": "285:14:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1136,10 +1139,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11779,
+                    "id": 4186,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "290:7:18",
+                    "src": "285:7:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1149,17 +1152,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "273:32:18"
+              "src": "268:32:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11782,
+              "id": 4189,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "314:0:18"
+              "src": "309:0:12"
             },
-            "scope": 11791,
-            "src": "251:64:18",
+            "scope": 4198,
+            "src": "246:64:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -1167,24 +1169,23 @@
           {
             "body": null,
             "documentation": null,
-            "id": 11790,
+            "id": 4197,
             "implemented": false,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "addMinerBalance",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11788,
+              "id": 4195,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11785,
+                  "id": 4192,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11790,
-                  "src": "346:15:18",
+                  "scope": 4197,
+                  "src": "340:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1192,10 +1193,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11784,
+                    "id": 4191,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "346:7:18",
+                    "src": "340:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1206,11 +1208,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11787,
+                  "id": 4194,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11790,
-                  "src": "362:14:18",
+                  "scope": 4197,
+                  "src": "356:14:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1218,10 +1220,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11786,
+                    "id": 4193,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "362:7:18",
+                    "src": "356:7:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1231,24 +1233,23 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "345:32:18"
+              "src": "339:32:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11789,
+              "id": 4196,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "386:0:18"
+              "src": "380:0:12"
             },
-            "scope": 11791,
-            "src": "321:66:18",
+            "scope": 4198,
+            "src": "315:66:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 11821,
-        "src": "60:330:18"
+        "scope": 4228,
+        "src": "58:325:12"
       },
       {
         "baseContracts": [
@@ -1256,57 +1257,57 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 11792,
+              "id": 4199,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14785,
-              "src": "422:7:18",
+              "referencedDeclaration": 16939,
+              "src": "414:7:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14785",
+                "typeIdentifier": "t_contract$_Ownable_$16939",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 11793,
+            "id": 4200,
             "nodeType": "InheritanceSpecifier",
-            "src": "422:7:18"
+            "src": "414:7:12"
           }
         ],
         "contractDependencies": [
-          14785
+          16939
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 11820,
+        "id": 4227,
         "linearizedBaseContracts": [
-          11820,
-          14785
+          4227,
+          16939
         ],
         "name": "ImportFNXMinePool",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 11795,
+            "id": 4202,
             "name": "_FnxMinePool",
             "nodeType": "VariableDeclaration",
-            "scope": 11820,
-            "src": "436:34:18",
+            "scope": 4227,
+            "src": "427:34:12",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+              "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
               "typeString": "contract IFNXMinePool"
             },
             "typeName": {
               "contractScope": null,
-              "id": 11794,
+              "id": 4201,
               "name": "IFNXMinePool",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11791,
-              "src": "436:12:18",
+              "referencedDeclaration": 4198,
+              "src": "427:12:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                 "typeString": "contract IFNXMinePool"
               }
             },
@@ -1315,9 +1316,9 @@
           },
           {
             "body": {
-              "id": 11804,
+              "id": 4211,
               "nodeType": "Block",
-              "src": "538:47:18",
+              "src": "528:45:12",
               "statements": [
                 {
                   "expression": {
@@ -1325,14 +1326,14 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11801,
+                        "id": 4208,
                         "name": "_FnxMinePool",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11795,
-                        "src": "564:12:18",
+                        "referencedDeclaration": 4202,
+                        "src": "553:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                           "typeString": "contract IFNXMinePool"
                         }
                       }
@@ -1340,24 +1341,24 @@
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                          "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                           "typeString": "contract IFNXMinePool"
                         }
                       ],
-                      "id": 11800,
+                      "id": 4207,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "556:7:18",
+                      "src": "545:7:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": "address"
                     },
-                    "id": 11802,
+                    "id": 4209,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1365,45 +1366,43 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "556:21:18",
+                    "src": "545:21:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 11799,
-                  "id": 11803,
+                  "functionReturnParameters": 4206,
+                  "id": 4210,
                   "nodeType": "Return",
-                  "src": "549:28:18"
+                  "src": "538:28:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 11805,
+            "id": 4212,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "getFNXMinePoolAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11796,
+              "id": 4203,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "507:2:18"
+              "src": "497:2:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11799,
+              "id": 4206,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11798,
+                  "id": 4205,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11805,
-                  "src": "530:7:18",
+                  "scope": 4212,
+                  "src": "520:7:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1411,10 +1410,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11797,
+                    "id": 4204,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "530:7:18",
+                    "src": "520:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1424,38 +1424,38 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "529:9:18"
+              "src": "519:9:12"
             },
-            "scope": 11820,
-            "src": "477:108:18",
+            "scope": 4227,
+            "src": "467:106:12",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 11818,
+              "id": 4225,
               "nodeType": "Block",
-              "src": "658:59:18",
+              "src": "645:57:12",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 11816,
+                    "id": 4223,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 11812,
+                      "id": 4219,
                       "name": "_FnxMinePool",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11795,
-                      "src": "669:12:18",
+                      "referencedDeclaration": 4202,
+                      "src": "655:12:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                        "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                         "typeString": "contract IFNXMinePool"
                       }
                     },
@@ -1466,12 +1466,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 11814,
+                          "id": 4221,
                           "name": "fnxMinePool",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 11807,
-                          "src": "697:11:18",
+                          "referencedDeclaration": 4214,
+                          "src": "683:11:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -1485,18 +1485,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 11813,
+                        "id": 4220,
                         "name": "IFNXMinePool",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11791,
-                        "src": "684:12:18",
+                        "referencedDeclaration": 4198,
+                        "src": "670:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_IFNXMinePool_$11791_$",
+                          "typeIdentifier": "t_type$_t_contract$_IFNXMinePool_$4198_$",
                           "typeString": "type(contract IFNXMinePool)"
                         }
                       },
-                      "id": 11815,
+                      "id": 4222,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1504,63 +1504,62 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "684:25:18",
+                      "src": "670:25:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                        "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                         "typeString": "contract IFNXMinePool"
                       }
                     },
-                    "src": "669:40:18",
+                    "src": "655:40:12",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IFNXMinePool_$11791",
+                      "typeIdentifier": "t_contract$_IFNXMinePool_$4198",
                       "typeString": "contract IFNXMinePool"
                     }
                   },
-                  "id": 11817,
+                  "id": 4224,
                   "nodeType": "ExpressionStatement",
-                  "src": "669:40:18"
+                  "src": "655:40:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 11819,
+            "id": 4226,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 11810,
+                "id": 4217,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 11809,
+                  "id": 4216,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14718,
-                  "src": "649:9:18",
+                  "referencedDeclaration": 16872,
+                  "src": "636:9:12",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "649:9:18"
+                "src": "636:9:12"
               }
             ],
             "name": "setFNXMinePoolAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11808,
+              "id": 4215,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11807,
+                  "id": 4214,
                   "name": "fnxMinePool",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11819,
-                  "src": "622:19:18",
+                  "scope": 4226,
+                  "src": "609:19:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1568,10 +1567,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11806,
+                    "id": 4213,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "622:7:18",
+                    "src": "609:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1581,35 +1581,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "621:21:18"
+              "src": "608:21:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 11811,
+              "id": 4218,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "658:0:18"
+              "src": "645:0:12"
             },
-            "scope": 11820,
-            "src": "591:126:18",
+            "scope": 4227,
+            "src": "578:124:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 11821,
-        "src": "392:328:18"
+        "scope": 4228,
+        "src": "384:320:12"
       }
     ],
-    "src": "0:720:18"
+    "src": "0:704:12"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.4.26+commit.4563c3fc.Emscripten.clang"
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.1.0",
-  "updatedAt": "2020-08-14T00:48:40.120Z",
+  "schemaVersion": "3.2.4",
+  "updatedAt": "2020-09-09T03:13:04.196Z",
   "devdoc": {
     "methods": {}
   },
