@@ -13,6 +13,7 @@ contract OptionsPriceNew is ImportVolatility{
     uint256 constant internal Year = 365 days;
     int256 constant public FIXED_ONE = 1 << 32; // 0x100000000
     uint256 internal ratioR2 = 4<<32;
+    
     /**
      * @dev constructor function , setting contract address.
      */  
