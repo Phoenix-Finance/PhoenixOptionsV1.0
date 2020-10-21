@@ -304,27 +304,54 @@ contract CollateralCal is ManagerData {
      */
     function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
         require(checkAddressPermission(settlement,allowBuyOptions) , "settlement is unsupported token");
-        uint256 colAmount = 0;
         if (settlement == address(0)){
-            colAmount = msg.value;
+            settlementAmount = msg.value;
             address payable poolAddr = address(uint160(address(_collateralPool)));
-            poolAddr.transfer(msg.value);
+            poolAddr.transfer(settlementAmount);
         }else if (settlementAmount > 0){
             IERC20 oToken = IERC20(settlement);
             uint256 preBalance = oToken.balanceOf(address(this));
             oToken.transferFrom(msg.sender, address(this), settlementAmount);
             uint256 afterBalance = oToken.balanceOf(address(this));
             require(afterBalance-preBalance==settlementAmount,"settlement token transfer error!");
-            colAmount = settlementAmount;
             oToken.transfer(address(_collateralPool),settlementAmount);
         }
-        require(isInputAmountInRange(colAmount),"input amount is out of input amount range");
-        return colAmount;
+        require(isInputAmountInRange(settlementAmount),"input amount is out of input amount range");
+        return settlementAmount;
     }
     /**
      * @dev collateral occupation rate calculation
      *      collateral occupation rate = sum(collateral Rate * collateral balance) / sum(collateral balance)
      */
+    function getCollateralAndRate()internal view returns (uint256,uint256){
+        int256 totalNum = 0;
+        uint256 totalCollateral = 0;
+        uint256 totalRate = 0;
+        uint whiteListLen = whiteList.length;
+        for (uint256 i=0;i<whiteListLen;i++){
+            address addr = whiteList[i];
+            int256 balance = _collateralPool.getRealBalance(addr);
+            if (balance != 0){
+                balance = balance*(int256(oraclePrice(addr)));
+                if (balance > 0 && collateralRate[addr] > 0){
+                    totalNum = totalNum.add(balance);
+                    totalCollateral = totalCollateral.add(uint256(balance));
+                    totalRate = totalRate.add(uint256(balance)/collateralRate[addr]);
+                } 
+            }
+        }
+        if (totalRate > 0){
+            totalRate = totalCollateral/totalRate;
+        }else{
+            totalRate = 5000;
+        }
+        return (totalNum>=0 ? uint256(totalNum) : 0,totalRate);  
+    }
+    /**
+     * @dev collateral occupation rate calculation
+     *      collateral occupation rate = sum(collateral Rate * collateral balance) / sum(collateral balance)
+     */
+
     function calculateCollateralRate()public view returns (uint256){
         uint256 totalCollateral = 0;
         uint256 totalRate = 0;

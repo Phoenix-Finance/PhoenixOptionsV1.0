@@ -16,18 +16,18 @@ contract('OptionsManagerV2', function (accounts){
             for (var j=0;j<5;j++){
                 contracts.manager.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
                 contracts.manager.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
-                contracts.manager.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
-                contracts.manager.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
-                contracts.manager.buyOption(collateral0,1000000000000000,9150*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                contracts.manager.buyOption(collateral0,1000000000000000,8250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                contracts.manager.buyOption(collateral0,1000000000000000,9257*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                contracts.manager.buyOption(collateral0,1000000000000000,9251*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                contracts.manager.buyOption(collateral0,1000000000000000,11250*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                contracts.manager.buyOption(collateral0,1000000000000000,9253*1e8,1,month,10000000000,0,{value : 1000000000000000});
-                contracts.manager.buyOption(collateral0,1000000000000000,9260*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                // contracts.manager.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
+                // contracts.manager.addCollateral(collateral0,1000000000000000,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,9150*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,8250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,9257*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,9251*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,11250*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,9253*1e8,1,month,10000000000,0,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,9260*1e8,1,month,10000000000,0,{value : 1000000000000000});
 
-                contracts.manager.buyOption(collateral0,1000000000000000,11050*1e8,1,month,10000000000,1,{value : 1000000000000000});
-                contracts.manager.buyOption(collateral0,1000000000000000,9056*1e8,1,month,10000000000,1,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,11050*1e8,1,month,10000000000,1,{value : 1000000000000000});
+                // contracts.manager.buyOption(collateral0,1000000000000000,9056*1e8,1,month,10000000000,1,{value : 1000000000000000});
         //        console.log(tx);
                 await contracts.manager.buyOption(collateral0,200000000000000,9258*1e8,1,month,10000000000,1,{value : 200000000000000});
         //        console.log(tx);
@@ -36,8 +36,7 @@ contract('OptionsManagerV2', function (accounts){
             return;
         }
      });
-});
-contract('OptionsManagerV2', function (accounts){
+     return;
     it('OptionsManagerV2 buy options Price test', async function (){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
@@ -73,8 +72,9 @@ contract('OptionsManagerV2', function (accounts){
 async function calculateNetWroth(contracts){
     let whiteList = [collateral0,contracts.FNX.address];
     optionsLen = await contracts.options.getOptionCalRangeAll(whiteList);
-    console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
-
+    console.log(optionsLen[0].toString(10),optionsLen[1].toString(10));
+//    console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
+    return;
     let result =  await contracts.options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
     console.log(result[0].toString(10),result[1].toString(10));
     let tx = await contracts.options.setOccupiedCollateral();

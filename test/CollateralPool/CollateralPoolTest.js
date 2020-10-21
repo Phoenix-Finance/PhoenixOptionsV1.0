@@ -4,7 +4,7 @@ let OptionsPool = artifacts.require("OptionsPool");
 let OptionsProxy = artifacts.require("OptionsProxy");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 const FNXOracle = artifacts.require("TestFNXOracle");
-const OptionsPrice = artifacts.require("OptionsPriceTest");
+const OptionsPrice = artifacts.require("OptionsPrice");
 
 let collateral0 = "0x0000000000000000000000000000000000000000";
 const BN = require("bn.js");

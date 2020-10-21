@@ -89,9 +89,7 @@ contract OptionsOccupiedCal is OptionsBase {
         callLatestOccupied -= latestCallOccpied;
         putLatestOccupied -= latestPutOccpied;
     }
-    function getAllOccupiedCollateral() public view returns (uint256,uint256){
-        return (getCallTotalOccupiedCollateral(),getPutTotalOccupiedCollateral());
-    }
+
     /**
      * @dev get call options total collateral occupied value.
      */ 
@@ -138,8 +136,8 @@ contract OptionsOccupiedCal is OptionsBase {
      */ 
     function _addOptionsCollateral(uint256 optionID) internal {
         OptionsInfo memory info = allOptions[optionID-1];
-        OptionsInfoEx storage infoEx =  optionExtraMap[optionID-1];
-        uint256 newOccupied = calOptionsCollateral(info,infoEx.underlyingPrice);
+//        OptionsInfoEx storage infoEx =  optionExtraMap[optionID-1];
+        uint256 newOccupied = calOptionsCollateral(info,getOptionUnderlyingPrice(info));
         if (info.optType == 0){
             callLatestOccupied += int256(newOccupied);
         }else{
@@ -153,7 +151,7 @@ contract OptionsOccupiedCal is OptionsBase {
      * @param underlyingPrice current underlying price.
      */ 
     function _burnOptionsCollateral(OptionsInfo memory info,uint256 amount,uint256 underlyingPrice) internal {
-        uint256 newOccupied = _getOptionsWorth(info.optType,info.strikePrice,underlyingPrice)*amount;
+        uint256 newOccupied = _getOptionsWorth(info.optType,getOptionStrikePrice(info),underlyingPrice)*amount;
         require(newOccupied<=1e40,"Option collateral occupied calculate error");
         if (info.optType == 0){
             callLatestOccupied -= int256(newOccupied);

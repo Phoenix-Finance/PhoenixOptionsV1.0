@@ -51,7 +51,7 @@ contract('Erc20Proxy', function (accounts){
         await fpt.mint(accounts[0],10000000000);
         await fpt.mint(accounts[1],10000000000);
         await fpt.mint(accounts[2],10000000000);
-        await fpt.setTimeLimitation(2);
+        await fpt.setTimeLimitation(4);
         await testViolation("burn time is unexpired",async function(){
             await fpt.burn(accounts[0],5000000000);   
         });

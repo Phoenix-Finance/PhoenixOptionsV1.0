@@ -317,18 +317,16 @@ contract CollateralPool is TransactionFee{
      * @dev the auxiliary function for getting user's transer
      */
     function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
-        uint256 colAmount = 0;
         if (settlement == address(0)){
-            colAmount = msg.value;
+            settlementAmount = msg.value;
         }else if (settlementAmount > 0){
             IERC20 oToken = IERC20(settlement);
             uint256 preBalance = oToken.balanceOf(address(this));
             oToken.transferFrom(msg.sender, address(this), settlementAmount);
             uint256 afterBalance = oToken.balanceOf(address(this));
             require(afterBalance-preBalance==settlementAmount,"settlement token transfer error!");
-            colAmount = settlementAmount;
         }
-        return colAmount;
+        return settlementAmount;
     }
         /**
      * @dev Calculate the collateral pool shared worth.

@@ -1,6 +1,6 @@
 const BN = require("bn.js");
 
-const ImpliedVolatility = artifacts.require("ImpliedVolatilityNew");
+const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 
 let FNXCoin = artifacts.require("FNXCoin");
 let Erc20Proxy = artifacts.require("Erc20Proxy");
@@ -21,7 +21,7 @@ let FPTProxy = artifacts.require("FPTProxy");
 let CollateralPool = artifacts.require("CollateralPool");
 let CollateralProxy = artifacts.require("CollateralProxy");
 const FNXOracle = artifacts.require("TestFNXOracle");
-const OptionsPrice = artifacts.require("OptionsPriceNew");
+const OptionsPrice = artifacts.require("OptionsPrice");
 
 let collateral0 = "0x0000000000000000000000000000000000000000";
 exports.migration =  async function (accounts){

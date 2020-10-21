@@ -22,7 +22,7 @@ let CollProxy = artifacts.require("CollateralProxy");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 module.exports = async function(deployer, network,accounts) {
     const FNXOracle = artifacts.require("TestFNXOracle");
-    const OptionsPrice = artifacts.require("OptionsPriceTest");
+    const OptionsPrice = artifacts.require("OptionsPrice");
     await deployer.deploy(ImpliedVolatility);
     let ivAddress = ImpliedVolatility.address;
     let ivInstance = await ImpliedVolatility.at(ivAddress);

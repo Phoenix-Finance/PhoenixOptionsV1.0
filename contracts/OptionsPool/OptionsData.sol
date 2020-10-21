@@ -8,24 +8,25 @@ import "../modules/Operator.sol";
 import "../modules/ImputRange.sol";
 import "../modules/timeLimitation.sol";
 contract OptionsData is UnderlyingAssets,timeLimitation,ImputRange,Managerable,ImportOracle,ImportVolatility,ImportOptionsPrice,Operator{
+
         // store option info
     struct OptionsInfo {
         uint64     optionID;    //an increasing nubmer id, begin from one.
-        uint64		expiration; // Expiration timestamp
-        uint128     strikePrice;    //strike price
+        address     owner;      // option's owner
         uint8   	optType;    //0 for call, 1 for put
         uint32		underlying; // underlying ID, 1 for BTC,2 for ETH
-        address     owner;      // option's owner
-        uint256     amount;         // mint amount
+        uint256		expiration; // Expiration timestamp//64+32+160 expiration + underlyingPrice rate + settlement
+        uint256     strikePrice;    //timePrice(<<128)    strike price			
+        uint256     amount;         // amount(<<128)	fullPrice(<<64)	ivNumerator
     }
     // store option extra info
     struct OptionsInfoEx{
         address      settlement;    //user's settlement paying for option. 
-        uint128      tokenTimePrice; //option's buying price based on settlement, used for options share calculation
-        uint128      underlyingPrice;//underlying price when option is created.
-        uint128      fullPrice;      //option's buying price.
-        uint128      ivNumerator;   // option's iv numerator when option is created.
-//        uint256      ivDenominator;// option's iv denominator when option is created.
+        uint256      tokenTimePrice; //option's buying price based on settlement, used for options share calculation
+        uint256      underlyingPrice;//underlying price when option is created.
+        uint256      fullPrice;      //option's buying price.
+        uint256      ivNumerator;   // option's iv numerator when option is created.
+        uint256      ivDenominator;// option's iv denominator when option is created.
     }
     //all options information list
     OptionsInfo[] internal allOptions;
@@ -34,7 +35,7 @@ contract OptionsData is UnderlyingAssets,timeLimitation,ImputRange,Managerable,I
     // option share value calculation's decimal
     uint256 constant internal calDecimals = 1e18;
     //user options balances
-    mapping(address=>uint64[]) internal optionsBalances;
+    mapping(address=>uint256[]) internal optionsBalances;
     //expiration whitelist
     uint256[] internal expirationList;
     
@@ -67,4 +68,34 @@ contract OptionsData is UnderlyingAssets,timeLimitation,ImputRange,Managerable,I
      * @dev Emitted when `owner` burn `amount` his option which id is `optionID`. 
      */    
     event BurnOption(address indexed owner,uint256 indexed optionID,uint amount);
+    event DebugEvent(uint256 id,uint256 value1,uint256 value2);
 }
+/*
+contract OptionsDataV2 is OptionsData{
+        // store option info
+    struct OptionsInfoV2 {
+        uint64     optionID;    //an increasing nubmer id, begin from one.
+        uint64		expiration; // Expiration timestamp
+        uint128     strikePrice;    //strike price
+        uint8   	optType;    //0 for call, 1 for put
+        uint32		underlying; // underlying ID, 1 for BTC,2 for ETH
+        address     owner;      // option's owner
+        uint256     amount;         // mint amount
+    }
+    // store option extra info
+    struct OptionsInfoExV2 {
+        address      settlement;    //user's settlement paying for option. 
+        uint128      tokenTimePrice; //option's buying price based on settlement, used for options share calculation
+        uint128      underlyingPrice;//underlying price when option is created.
+        uint128      fullPrice;      //option's buying price.
+        uint128      ivNumerator;   // option's iv numerator when option is created.
+//        uint256      ivDenominator;// option's iv denominator when option is created.
+    }
+        //all options information list
+    OptionsInfoV2[] internal allOptionsV2;
+    // all option's extra information map
+    mapping(uint256=>OptionsInfoExV2) internal optionExtraMapV2;
+        //user options balances
+//    mapping(address=>uint64[]) internal optionsBalancesV2;
+}
+*/

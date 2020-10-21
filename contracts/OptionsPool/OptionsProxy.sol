@@ -23,7 +23,7 @@ contract OptionsProxy is OptionsData,baseProxy{
      * @dev retrieve user's options' id. 
      *  user user's account.
      */     
-    function getUserOptionsID(address /*user*/)public view returns(uint64[] memory){
+    function getUserOptionsID(address /*user*/)public view returns(uint256[] memory){
         delegateToViewAndReturn();
     }
     /**
@@ -32,7 +32,7 @@ contract OptionsProxy is OptionsData,baseProxy{
      *  from user's option list begin positon.
      *  size retrieve size.
      */ 
-    function getUserOptionsID(address /*user*/,uint256 /*from*/,uint256 /*size*/)public view returns(uint64[] memory){
+    function getUserOptionsID(address /*user*/,uint256 /*from*/,uint256 /*size*/)public view returns(uint256[] memory){
         delegateToViewAndReturn();
     }
     /**
@@ -171,9 +171,6 @@ contract OptionsProxy is OptionsData,baseProxy{
         uint256 /*beginOption*/,int256 /*latestCallOccpied*/,int256 /*latestPutOccpied*/) public{
         delegateAndReturn();
     }
-    function getAllOccupiedCollateral() public view returns (uint256,uint256){
-        delegateToViewAndReturn();
-    }
     /**
      * @dev get call options total collateral occupied value.
      */ 
@@ -254,7 +251,7 @@ contract OptionsProxy is OptionsData,baseProxy{
      *  amount user's input new option's amount.
      */ 
     function createOptions(address /*from*/,address /*settlement*/,uint256 /*type_ly_exp*/,uint256 /*strikePrice*/,uint256 /*optionPrice*/,
-                uint256 /*amount*/) public returns (uint256) {
+                uint256 /*amount*/) public {
         delegateAndReturn();
     }
     /**

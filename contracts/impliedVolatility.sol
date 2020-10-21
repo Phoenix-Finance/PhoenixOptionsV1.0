@@ -1,13 +1,12 @@
 pragma solidity =0.5.16;
 import "./modules/Operator.sol";
-import "./modules/Fraction.sol";
+import "./modules/SmallNumbers.sol";
 /**
  * @title Options Implied volatility calculation.
  * @dev A Smart-contract to calculate options Implied volatility.
  *
  */
 contract ImpliedVolatility is Operator {
-    using Fraction for Fraction.fractionNumber;
     //Implied volatility decimal, is same with oracle's price' decimal. 
     uint256 constant private _calDecimal = 1e8;
     // A constant day time
@@ -21,30 +20,30 @@ contract ImpliedVolatility is Operator {
     mapping(uint32=>int256) internal paramD;
     mapping(uint32=>int256) internal paramE;
     // Formulas param ATM Iv Rate, sort by time
-    mapping(uint32=>uint256[]) internal ATMIvRate;
+    mapping(uint32=>uint64[]) internal ATMIvRate;
 
     constructor () public{
         ATMIv0[1] = 48730000;
         ATMIv0[2] = 48730000;
-        paramA[1] = -4993746098;
-        paramA[2] = -4993746098;
-        paramB[1] = 50e8;
-        paramB[2] = 50e8;
-        paramC[1] = -5000000;
-        paramC[2] = -5000000;
-        paramD[1] = 5000000;
-        paramD[2] = 5000000;
-        paramE[1] = 1e8;
-        paramE[2] = 1e8;
-        ATMIvRate[1] = [100000000,108673486,114091831,118099266,121304357,123987570,126302447,128342590,130169459,131825674,
-                        133342048,134741615,136042061,137257272,138398362,139474367,140492736,141459690,142380473,143259556,
-                        144100775,144907453,145682485,146428411,147147471,147841650,148512720,149162263,149791703,150402325,
-                        150995291,151571657,152132385,152678354,153210371,153729176,154235451,154729824,155212878,155685153,
-                        156147150,156599335,157042144,157475981,157901226,158318235,158727342,159128859,159523081,159910286,
-                        160290735,160664676,161032340,161393950,161749714,162099831,162444489,162783866,163118133,163447450,
-                        163771973,164091847,164407212,164718203,165024947,165327566,165626177,165920890,166211815,166499052,
-                        166782701,167062855,167339606,167613041,167883244,168150294,168414270,168675246,168933294,169188484,
-                        169440882,169690552,169937557,170181957,170423810,170663172,170900097,171134638,171366845,171596767];
+        paramA[1] = -214479761754;
+        paramA[2] = -214479761754;
+        paramB[1] = 214748364800;
+        paramB[2] = 214748364800;
+        paramC[1] = -214748365;
+        paramC[2] = -214748365;
+        paramD[1] = 214748365;
+        paramD[2] = 214748365;
+        paramE[1] = 4294967296;
+        paramE[2] = 4294967296;
+        ATMIvRate[1] = [4294967296,4667490694,4900206836,5072324858,5209982467,5325225602,5424648794,5512272257,5590735710,5661869580,
+                        5726997367,5787108313,5842962022,5895154961,5944164400,5990378433,6034117070,6075647403,6115194762,6152951059,
+                        6189081143,6223727697,6257015079,6289052356,6319935737,6349750530,6378572747,6406470416,6433504677,6459730682,
+                        6485198365,6509953083,6534036167,6557485384,6580335345,6602617845,6624362167,6645595339,6666342365,6686626424,
+                        6706469040,6725890245,6744908708,6763541863,6781806011,6799716421,6817287416,6834532448,6851464169,6868094495,
+                        6884434659,6900495269,6916286348,6931817377,6947097338,6962134747,6976937683,6991513820,7005870457,7020014534,
+                        7033952666,7047691153,7061236008,7074592969,7087767518,7100764896,7113590116,7126247978,7138743079,7151079827,
+                        7163262447,7175294996,7187181369,7198925308,7210530411,7222000137,7233337816,7244546654,7255629739,7266590047,
+                        7277430448,7288153711,7298762505,7309259411,7319646919,7329927438,7340103293,7350176736,7360149944,7370025023];
          ATMIvRate[2] =  ATMIvRate[1];
     }
     /**
@@ -71,7 +70,7 @@ contract ImpliedVolatility is Operator {
      * @dev set implied volatility surface Formulas param IvRate. 
      * @param underlying underlying ID.,1 for BTC, 2 for ETH
      */ 
-    function SetATMIvRate(uint32 underlying,uint256[] memory IvRate)public onlyOwner{
+    function SetATMIvRate(uint32 underlying,uint64[] memory IvRate)public onlyOwner{
         ATMIvRate[underlying] = IvRate;
     }
     /**
@@ -115,18 +114,14 @@ contract ImpliedVolatility is Operator {
      * @param strikePrice option's strike price
      */ 
     function calImpliedVolatility(uint32 underlying,uint256 _ATMIv,uint256 currentPrice,uint256 strikePrice)internal view returns(uint256){
-        int256 intDecimal = int256(_calDecimal);
-        Fraction.fractionNumber memory ln = calImpliedVolLn(underlying,currentPrice,strikePrice);
+        int256 ln = calImpliedVolLn(underlying,currentPrice,strikePrice);
         //ln*ln+e
-        Fraction.fractionNumber memory lnSqrt = ln.mul(ln).add(Fraction.fractionNumber(paramE[underlying],intDecimal)); 
-        uint256 sqrtNum = uint256(lnSqrt.numerator*intDecimal*intDecimal/lnSqrt.denominator);
-        sqrtNum = Fraction.sqrt(sqrtNum);  
+        uint256 lnSqrt = uint256(((ln*ln)>>32) + paramE[underlying]);
+        lnSqrt = SmallNumbers.sqrt(lnSqrt);
         //ln*c+sqrt
-        ln.numerator = ln.numerator*paramC[underlying]+ln.denominator*int256(sqrtNum);
-        //ln = ln.add(Fraction.fractionNumber(int256(sqrtNum),1));
-        ln = ln.mul(Fraction.fractionNumber(paramB[underlying],1));
-        sqrtNum = uint256(ln.numerator/ln.denominator)+_ATMIv*_ATMIv+uint256(paramA[underlying])*_calDecimal;
-        return Fraction.sqrt(sqrtNum);
+        ln = ((ln*paramC[underlying])>>32) + int256(lnSqrt);
+        ln = (ln* paramB[underlying] + int256(_ATMIv*_ATMIv))>>32;
+        return SmallNumbers.sqrt(uint256(ln+paramA[underlying]));
     }
     /**
      * @dev An auxiliary function, calculate ln price. 
@@ -135,12 +130,14 @@ contract ImpliedVolatility is Operator {
      * @param strikePrice option's strike price
      */ 
     //ln(k) - ln(s) + d
-    function calImpliedVolLn(uint32 underlying,uint256 currentPrice,uint256 strikePrice)internal view returns(Fraction.fractionNumber memory){
+    function calImpliedVolLn(uint32 underlying,uint256 currentPrice,uint256 strikePrice)internal view returns(int256){
         if (currentPrice == strikePrice){
-            return Fraction.fractionNumber(paramD[underlying],int256(_calDecimal));
+            return paramD[underlying];
+        }else if (currentPrice > strikePrice){
+            return int256(SmallNumbers.fixedLoge((currentPrice<<32)/strikePrice))+paramD[underlying];
+        }else{
+            return -int256(SmallNumbers.fixedLoge((strikePrice<<32)/currentPrice))+paramD[underlying];
         }
-        Fraction.fractionNumber memory ln = Fraction.ln(currentPrice).sub(Fraction.ln(strikePrice));
-        return ln.add(Fraction.fractionNumber(paramD[underlying],int256(_calDecimal)));
     }
     /**
      * @dev An auxiliary function, Linear interpolation. 

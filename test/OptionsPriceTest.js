@@ -1,12 +1,13 @@
-let OptionsPrice = artifacts.require("OptionsPriceNew");
+let OptionsPrice = artifacts.require("OptionsPrice");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 let month = 30*60*60*24;
 let day = 60*60*24;
 let testFunc = require("./testFunction.js")
 contract('OptionsPrice', function (accounts){
     it('OptionsPrice Call options', async function (){
-        let priceInstance = await OptionsPrice.new();
-        let iv = await ImpliedVolatility.deployed();
+        let iv = await ImpliedVolatility.new();
+        let priceInstance = await OptionsPrice.new(iv.address);
+
         for (var i=1000;i<10000;i+=1000){
             for (j=1000;j<10000;j+=1000){
 //                let result = await iv.calculateIv(1,0,day,i*1e8, j*1e8);
@@ -22,11 +23,13 @@ contract('OptionsPrice', function (accounts){
 
     });
     it('OptionsPrice calOptionsPriceRatio test', async function (){
-        let priceInstance = await OptionsPrice.new();
+        let iv = await ImpliedVolatility.new();
+        let priceInstance = await OptionsPrice.new(iv.address);
+
         for (var i=1000;i<=10000;i+=1000){
             for (var j=10000;j<=100000;j+=10000){
                 let result = await priceInstance.calOptionsPriceRatio(i,10000,j);
-                console.log(i,j,result[0].toString(10),result[1].toString(10));
+                console.log(i,j,result.toString(10));
             }
         }
 

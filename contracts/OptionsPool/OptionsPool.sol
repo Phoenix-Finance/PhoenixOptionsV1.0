@@ -18,7 +18,7 @@ contract OptionsPool is OptionsNetWorthCal {
         _volatility = IVolatility(ivAddress);
     }
     function update() onlyOwner public {
-        
+
     }
     /**
      * @dev retrieve all information for collateral occupied and net worth calculation.
@@ -33,16 +33,16 @@ contract OptionsPool is OptionsNetWorthCal {
      * @dev create new option,modify collateral occupied and net worth value, only manager contract can invoke this.
      * @param from user's address.
      * @param settlement user's input settlement coin.
-     * @param type_ly_exp tuple64 for option type,underlying,expiration.
-     * @param strikePrice user's input new option's strike price.
-     * @param priceRate current new option's price, calculated by options price contract.
-     * @param amount user's input new option's amount.
+     * @param type_ly_strike tuple64 for option type,underlying,expiration.
+     * @param exp_option_underlying user's input new option's strike price.
+     * @param timePrice_rate current new option's price, calculated by options price contract.
+     * @param amount_fullPrice user's input new option's amount.
      */ 
-    function createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 priceRate,
-                uint256 amount) onlyManager  Smaller(amount) public returns (uint256){
-        uint256 price = _createOptions(from,settlement,type_ly_exp,strikePrice,priceRate,amount);
+    function createOptions(address from,address settlement,uint256 type_ly_strike,uint256 exp_option_underlying,uint256 timePrice_rate,
+                uint256 amount_fullPrice) onlyManager public{
+        _createOptions(from,settlement,type_ly_strike,exp_option_underlying,timePrice_rate,amount_fullPrice);
         _addOptionsCollateral(allOptions.length);
-        return price;
+//        return price;
 //        _addNewOptionsNetworth(info);
     }
     /**
@@ -53,8 +53,8 @@ contract OptionsPool is OptionsNetWorthCal {
      * @param optionPrice current new option's price, calculated by options price contract.
      */ 
     function burnOptions(address from,uint256 id,uint256 amount,uint256 optionPrice)public onlyManager Smaller(amount) OutLimitation(id){
-        _burnOptions(from,id,amount);
         OptionsInfo memory info = _getOptionsById(id);
+        _burnOptions(from,info,amount);
         uint256 currentPrice = oracleUnderlyingPrice(info.underlying);
         _burnOptionsCollateral(info,amount,currentPrice);
         _burnOptionsNetworth(info,amount,currentPrice,optionPrice);

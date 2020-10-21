@@ -1,4 +1,4 @@
-const ImpliedVolatility = artifacts.require("ImpliedVolatilityNew");
+const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 let testFunc = require("./testFunction.js");
 const BN = require("bn.js");
 let daySeconds = 24*3600;
