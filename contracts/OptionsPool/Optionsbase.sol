@@ -158,7 +158,7 @@ contract OptionsBase is OptionsData {
                 (uint256(settlement)<<96)+((timePrice_rate>>128)<<64)+expiration+now,(timePrice_rate<<128) + (type_ly_strike>>128),
                 (amount_fullPrice<<64)+ivNumerator));
         optionsBalances[from].push(optionID);
-        OptionsInfo memory option = allOptions[optionID-1];
+//        OptionsInfo memory option = allOptions[optionID-1];
 //        setOptionsExtra(allOptions[optionID],settlement,priceAndRate,underlyingAndStrike,amount >>128);
         setItemTimeLimitation(optionID);
         emit CreateOption(from,optionID,uint8(type_ly_strike),uint32(type_ly_strike>>64),expiration+now,
