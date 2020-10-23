@@ -91,7 +91,7 @@ contract OptionsManagerV2 is CollateralCal {
         uint256 settlePrice = amount >>128;
         amount = uint256(uint128(amount));
         uint256 allPay = amount*optionPrice;
-//        uint256 allPayUSd = allPay/1e8;
+        uint256 allPayUSd = allPay/1e8;
         allPay = allPay/settlePrice;
         uint256 fee = _collateralPool.addTransactionFee(settlement,allPay,0);
         require(settlementAmount>=allPay+fee,"settlement asset is insufficient!");
@@ -100,7 +100,7 @@ contract OptionsManagerV2 is CollateralCal {
             _collateralPool.transferPayback(msg.sender,settlement,settlementAmount);
         }
         uint256 id =_optionsPool.getOptionInfoLength();
-//        _FPTCoin.addMinerBalance(msg.sender,allPayUSd);
+        _FPTCoin.addMinerBalance(msg.sender,allPayUSd);
         emit BuyOption(msg.sender,settlement,id,optionPrice,allPay,amount); 
     }
     /**
