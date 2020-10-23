@@ -217,7 +217,7 @@ contract CollateralPool is TransactionFee{
                     redeemWorth = redeemWorth - colBalances[i]*prices[i];
                 }
                 PaybackBalances[i] = amount;
-                amount = amount * userInputCollateral[account][tmpWhiteList[i]]/getNetWorthBalance(tmpWhiteList[i]);
+                amount = amount * userInputCollateral[account][tmpWhiteList[i]]/colBalances[i];
                 userInputCollateral[account][tmpWhiteList[i]] =userInputCollateral[account][tmpWhiteList[i]].sub(amount);
                 collateralBalances[tmpWhiteList[i]] = collateralBalances[tmpWhiteList[i]].sub(amount);
 
