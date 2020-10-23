@@ -313,7 +313,8 @@ contract CollateralPool is TransactionFee{
      */
     function addNetBalance(address settlement,uint256 amount) public payable {
         amount = getPayableAmount(settlement,amount);
-        addNetWorthBalance(settlement,int256(amount));
+        netWorthBalances[collateral] = netWorthBalances[collateral].add(int256(amount));
+        //addNetWorthBalance(settlement,int256(amount));
 //        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
     }
         /**
