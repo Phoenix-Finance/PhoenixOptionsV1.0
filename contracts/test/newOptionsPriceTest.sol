@@ -1,6 +1,6 @@
 pragma solidity =0.5.16;
-import "../OptionsPriceOld.sol";
-import "../OptionsPrice.sol";
+import "../optionsPriceOld.sol";
+import "../optionsPrice.sol";
 
 contract newOptionsPriceTest {
     uint256 private test1;
