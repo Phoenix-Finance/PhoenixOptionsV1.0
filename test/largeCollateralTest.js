@@ -20,6 +20,7 @@ contract('OptionsManagerV2', function (accounts){
                 amount = new BN("100000000000000000000");
                 let amount1 = new BN("2000000000000000000");
                 await contracts.manager.addCollateral(collateral0,amount,{from:accounts[1],value:amount});
+
                 await contracts.manager.buyOption(collateral0,amount,9000e8,1,month,amount1,0,{value : amount});
                 await contracts.manager.buyOption(collateral0,amount,9000e8,1,month,amount1,1,{value : amount});
                 await contracts.manager.buyOption(collateral0,amount,9000e8,2,month,amount1,0,{value : amount});
@@ -37,8 +38,15 @@ contract('OptionsManagerV2', function (accounts){
                 }
                 await calculateNetWroth(contracts,contracts.FNX,contracts.USDC);
                 amount = new BN("500000000000000000000000000");
+
+                let balanceBefore = await web3.utils.fromWei(web3.utils.toHex(web3.eth.getBalance(accounts[1])));
                 await contracts.manager.redeemCollateral(amount,contracts.FNX.address);
+                let balanceAfter = await web3.utils.fromWei(web3.utils.toHex(web3.eth.getBalance(accounts[1])));
+                let diff = balanceAfter - balanceBefore;
+
+                console.log("balance diff=" + diff);
         });
+
     return;
     it('OptionsManagerV2 add large collateral', async function (){
         let contracts = await migration(accounts);
