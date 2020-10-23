@@ -3,6 +3,7 @@ const BN = require("bn.js");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 
 let FNXCoin = artifacts.require("FNXCoin");
+let USDCoin = artifacts.require("USDCoin");
 let Erc20Proxy = artifacts.require("Erc20Proxy");
 
 let OptionsPool = artifacts.require("OptionsPool");
@@ -71,6 +72,14 @@ exports.createAndAddErc20 =  async function (contracts){
     await contracts.mine.setBuyingMineInfo(erc20.address,300000000);
     await contracts.manager.setCollateralRate(erc20.address,5000);
     contracts.FNX = erc20;
+}
+exports.createAndAddUSDC =  async function (contracts){
+    let usdc = await USDCoin.new();
+    let erc20 = await Erc20Proxy.new(usdc.address);
+//    await contracts.mine.setMineCoinInfo(erc20.address,500000000000000,2);
+//    await contracts.mine.setBuyingMineInfo(erc20.address,300000000);
+    await contracts.manager.setCollateralRate(erc20.address,1200);
+    contracts.USDC = erc20;
 }
 exports.AddCollateral0 =  async function (contracts){
     await contracts.mine.setMineCoinInfo(collateral0,500000000000,2);
