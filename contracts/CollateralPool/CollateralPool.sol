@@ -228,7 +228,10 @@ contract CollateralPool is TransactionFee{
             for (i=0; i<ln;i++){
                 amount = amount.add(PremiumBalances[i]*prices[i]);
             }
-            require(amount >= redeemWorth ,"redeem collateral is insufficient");
+//            require(amount >= redeemWorth ,"redeem collateral is insufficient");
+            if (amount<redeemWorth){
+                amount = redeemWorth;
+            }
             for (i=0; i<ln;i++){
                 PaybackBalances[i] = PaybackBalances[i].add(PremiumBalances[i].mul(redeemWorth)/amount);
             }
