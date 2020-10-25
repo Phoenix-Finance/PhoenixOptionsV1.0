@@ -32,7 +32,7 @@ contract('OptionsManagerV2', function (accounts){
                 await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,2,month,amount1,0);
                 await contracts.FNX.approve(contracts.manager.address,amount);
                 await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,2,month,amount1,1);
-                for (var i=0;i<500;i++){
+                for (var i=0;i<50;i++){
                         await contracts.manager.addWhiteList(contracts.FNX.address);
                 }
                 await calculateNetWroth(contracts,contracts.FNX,contracts.USDC);
@@ -57,6 +57,12 @@ contract('OptionsManagerV2', function (accounts){
                 col = await contracts.collateral.getCollateralBalance(contracts.FNX.address);
                 console.log("collateral1",col.toString());
                 await contracts.manager.redeemCollateral(result,contracts.FNX.address);
+                for (var i=0;i<50;i++){
+                        await contracts.manager.addWhiteList(contracts.FNX.address);
+                }
+                await calculateNetWroth(contracts,contracts.FNX,contracts.USDC);
+                let result1 = await contracts.FPT.lockedBalanceOf(accounts[0]);
+                await contracts.manager.redeemCollateral(result.add(result1),contracts.FNX.address);
         });
         return;
         it('OptionsManagerV2 add large collateral', async function (){

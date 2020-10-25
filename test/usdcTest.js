@@ -18,44 +18,46 @@ contract('OptionsManagerV2', function (accounts) {
         await createAndAddUSDC(contracts);
         await contracts.price.setExpirationZoom(1000);
         contracts.options.addExpiration(month);
-        await contracts.FPT.setTimeLimitation(3);
+        await contracts.FPT.setTimeLimitation(0);
     });
 
     it('USDC input and redeem', async function () {
         await contracts.USDC.approve(contracts.manager.address, usdcAmount);
         let preBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
-        let preBalanceContract =await  contracts.USDC.balanceOf(contracts.manager.address);
+        let preBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
         await contracts.USDC.approve(contracts.manager.address, usdcAmount);
         let tx = await contracts.manager.addCollateral(contracts.USDC.address, usdcAmount);
         assert.equal(tx.receipt.status,true);
         let afterBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
-        let afterBalanceContract =await  contracts.USDC.balanceOf(contracts.manager.address);
-        let diffUser = preBalanceUser0 - afterBalanceUser0;
-        let diffContract = afterBalanceContract - preBalanceContract;
-        assert.equal(diffUser,usdcAmount);
-        assert.equal(diffUser,diffContract);
+        let afterBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
+        let diffUser = preBalanceUser0.sub(afterBalanceUser0);
+        let diffContract = afterBalanceContract.sub(preBalanceContract);
+        assert.equal(diffUser.toNumber(),usdcAmount,"user usdc balance error");
+        assert.equal(diffUser.toNumber(),diffContract.toNumber(),"manager usdc balance error");
 
+        /*
         preBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
-        preBalanceContract =await  contracts.USDC.balanceOf(contracts.manager.address);
+        preBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
         await contracts.USDC.approve(contracts.manager.address, optamount);
-        await contracts.manager.buyOption(contracts.USDC.address, payamount, 9000e8, 1, month, optamount, 0);
+        await contracts.manager.buyOption(contracts.USDC.address, optamount, 9000e8, 1, month, optamount, 0);
         afterBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
-        afterBalanceContract =await  contracts.USDC.balanceOf(contracts.manager.address);
-        diffUser = preBalanceUser0 - afterBalanceUser0;
-        diffContract = afterBalanceContract - preBalanceContract;
-        assert.equal(diffUser,optamount);
-        assert.equal(diffUser,diffContract);
-
+        afterBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
+        diffUser = preBalanceUser0.sub(afterBalanceUser0);
+        diffContract = afterBalanceContract.sub(preBalanceContract);
+        assert.equal(diffUser.toNumber(),optamount);
+        assert.equal(diffUser.toNumber(),diffContract.toNumber());
+*/
 
         preBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
-        preBalanceContract =await  contracts.USDC.balanceOf(contracts.manager.address);
-        await contracts.manager.redeemCollateral(amount,contracts.FNX.address);
+        preBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
+        let result = await contracts.FPT.balanceOf(accounts[0]);
+        await contracts.manager.redeemCollateral(result,contracts.FNX.address);
         afterBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
-         afterBalanceContract =await  contracts.USDC.balanceOf(contracts.manager.address);
-        diffUser = preBalanceUser0 - afterBalanceUser0;
-        diffContract = afterBalanceContract - preBalanceContract;
-        assert.equal(diffUser,usdcAmount);
-        assert.equal(diffUser,diffContract);
+        afterBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
+        diffUser = afterBalanceUser0.sub(preBalanceUser0);
+        diffContract = preBalanceContract.sub(afterBalanceContract);
+        assert.equal(diffUser.toNumber(),usdcAmount,"user redeem usdc balance error");
+        assert.equal(diffUser.toNumber(),diffContract.toNumber(),"manager redeem usdc balance error");
 
     })
 
