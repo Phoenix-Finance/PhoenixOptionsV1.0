@@ -48,6 +48,8 @@ contract('OptionsManagerV2', function (accounts) {
         assert.equal(diffUser.toNumber(),usdcAmount,"user redeem usdc balance error");
         assert.equal(diffUser.toNumber(),diffContract.toNumber(),"manager redeem usdc balance error");
 
+        result = await contracts.FPT.balanceOf(accounts[0]);
+        assert.equal(result,0,"the rest balance is not zero")
     })
 
     it('FNX input and redeem', async function () {
@@ -75,6 +77,8 @@ contract('OptionsManagerV2', function (accounts) {
         assert.equal(diffUser.toString(10),FNXAmount.toString(10),"user redeem FNX balance error");
         assert.equal(diffUser.toString(10),diffContract.toString(10),"manager redeem FNX balance error");
 
+        result = await contracts.FPT.balanceOf(accounts[0]);
+        assert.equal(result,0,"the rest balance is not zero")
     })
 
     it('ETH input and redeem', async function () {
@@ -120,5 +124,8 @@ contract('OptionsManagerV2', function (accounts) {
         console.log("contract lose" + diffContract.toString(10));
         assert(diffUser+0.2>web3.utils.fromWei(ethAmount, "ether"),true,"user eth balance error");
         assert.equal(diffContract.toString(10), web3.utils.fromWei(ethAmount, "ether"),"contract ETH balance error");
+
+        result = await contracts.FPT.balanceOf(accounts[0]);
+        assert.equal(result,0,"the rest balance is not zero")
     })
 })
