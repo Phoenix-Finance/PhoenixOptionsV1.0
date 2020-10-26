@@ -205,36 +205,39 @@ contract CollateralPool is TransactionFee{
         uint256 ln = tmpWhiteList.length;
         uint256[] memory PaybackBalances = new uint256[](ln);
         uint256 i=0;
+        uint256 amount;
         for(; i<ln && redeemWorth>0;i++){
             //address addr = tmpWhiteList[i];
             if (colBalances[i] > 0){
-                uint256 amount = redeemWorth/prices[i];
+                amount = redeemWorth/prices[i];
                 if (amount < colBalances[i]){
                     redeemWorth = 0;
                 }else{
                     amount = colBalances[i];
                     redeemWorth = redeemWorth - colBalances[i]*prices[i];
                 }
+                PaybackBalances[i] = amount;
+                amount = amount * userInputCollateral[account][tmpWhiteList[i]]/colBalances[i];
                 userInputCollateral[account][tmpWhiteList[i]] =userInputCollateral[account][tmpWhiteList[i]].sub(amount);
                 collateralBalances[tmpWhiteList[i]] = collateralBalances[tmpWhiteList[i]].sub(amount);
-                PaybackBalances[i] = amount;
+
             }
         }
         if (redeemWorth>0) {
-           uint256 totalWorth = 0;
+           amount = 0;
             for (i=0; i<ln;i++){
-                totalWorth = totalWorth.add(PremiumBalances[i]*prices[i]);
+                amount = amount.add(PremiumBalances[i]*prices[i]);
             }
-            require(totalWorth >= redeemWorth ,"redeem collateral is insufficient");
+//            require(amount >= redeemWorth ,"redeem collateral is insufficient");
+            if (amount<redeemWorth){
+                amount = redeemWorth;
+            }
             for (i=0; i<ln;i++){
-                PaybackBalances[i] = PaybackBalances[i].add(PremiumBalances[i].mul(redeemWorth)/totalWorth);
+                PaybackBalances[i] = PaybackBalances[i].add(PremiumBalances[i].mul(redeemWorth)/amount);
             }
         }
         for (i=0;i<ln;i++){ 
             transferPaybackAndFee(account,tmpWhiteList[i],PaybackBalances[i],redeemColFee);
-//            addr = whiteList[i];
-//            netWorthBalances[addr] = netWorthBalances[addr].sub(PaybackBalances[i]);
-//            _transferPaybackAndFee(msg.sender,addr,PaybackBalances[i],redeemColFee);
         } 
     }
     /**
@@ -310,8 +313,7 @@ contract CollateralPool is TransactionFee{
      */
     function addNetBalance(address settlement,uint256 amount) public payable {
         amount = getPayableAmount(settlement,amount);
-        addNetWorthBalance(settlement,int256(amount));
-//        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
+        netWorthBalances[settlement] = netWorthBalances[settlement].add(int256(amount));
     }
         /**
      * @dev the auxiliary function for getting user's transer
