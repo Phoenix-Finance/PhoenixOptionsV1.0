@@ -84,10 +84,10 @@ contract TestFNXOracle is FNXOracle {
     }
 
     function setFakePrice(uint256 assetPrice,uint256 underlyingPrice,uint256 buyPrice,uint256 sellPrice) public {
-        uint256 fakeSellOptionPrice = sellPrice;
-        uint256 fakeBuyOptionPrice = buyPrice;
-        uint256 fakeUnderlyingPrice = underlyingPrice;
-        uint256 fakeAssetPrice = assetPrice;
+        fakeSellOptionPrice = sellPrice;
+        fakeBuyOptionPrice = buyPrice;
+        fakeUnderlyingPrice = underlyingPrice;
+        fakeAssetPrice = assetPrice;
     }
 
 }

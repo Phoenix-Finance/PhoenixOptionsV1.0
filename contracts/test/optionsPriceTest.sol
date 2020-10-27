@@ -11,8 +11,12 @@ contract OptionsPriceTest is OptionsPrice{
      * @param underlying option's underlying id, 1 for BTC, 2 for ETH.
      * @param optType option's type, 0 for CALL, 2 for PUT.
      */
+    uint256 fakeOptionPrice = 0;
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint32 underlying,uint8 optType)public view returns (uint256){
         expiration = expiration * 4000;
+        if(fakeOptionPrice>0) {
+            return fakeOptionPrice;
+        }
         return OptionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
     }
     /**
@@ -29,5 +33,8 @@ contract OptionsPriceTest is OptionsPrice{
         return OptionsPrice.getOptionsPrice_iv(currentPrice,strikePrice,expiration,ivNumerator,optType);
     }
 
+    function setOptionsPrice(uint256 optionPrice) public {
+        fakeOptionPrice = optionPrice;
+    }
 
 }
