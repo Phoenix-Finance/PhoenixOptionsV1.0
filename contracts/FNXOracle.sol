@@ -2,7 +2,7 @@ pragma solidity =0.5.16;
 import "./interfaces/IFNXOracle.sol";
 import "./modules/Operator.sol";
 contract FNXOracle is IFNXOracle,Operator {
-    mapping(uint256 => uint256) private priceMap;
+    mapping(uint256 => uint256) internal priceMap;
     /**
       * @notice set price of an asset
       * @dev function to set price for an asset
@@ -94,7 +94,17 @@ contract FNXOracle is IFNXOracle,Operator {
     function getUnderlyingPrice(uint256 underlying) public view returns (uint256) {
         return _getPriceInfo(underlying);
     }
-
+    function getAssetAndUnderlyingPrice(address asset,uint256 underlying) public view returns (uint256,uint256) {
+        return (_getPriceInfo(uint256(asset)),_getPriceInfo(underlying));
+    }
+    function getPrices(uint256[]memory assets) public view returns (uint256[]memory) {
+        uint256 len = assets.length;
+        uint256[] memory prices = new uint256[](len);
+        for (uint i=0;i<len;i++){
+            prices[i] = _getPriceInfo(assets[i]);
+        }
+        return prices;
+    }
     function getSellOptionsPrice(address oToken) public view returns (uint256) {
         uint256 key = uint256(oToken)*10+1;
         return _getPriceInfo(key);

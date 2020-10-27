@@ -63,20 +63,16 @@ contract OptionsManagerV2 is CollateralCal {
     * @param optType user input option type
     */ 
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
-                uint256 expiration,uint256 amount,uint8 optType) nonReentrant notHalted InRange(amount) public payable{
-        _optionsPool.buyOptionCheck(expiration,underlying);
-        uint256 type_ly_strike = optType+(uint256(underlying)<<64)+(strikePrice<<128);
-        uint256 underlyingPrice = oracleUnderlyingPrice(underlying);
+                uint32 expiration,uint256 amount,uint8 optType) nonReentrant notHalted InRange(amount) public payable{
+
+        uint256 type_ly_expiration = optType+(uint256(underlying)<<64)+(uint256(expiration)<<128);
+        (uint256 settlePrice,uint256 underlyingPrice) = oracleAssetAndUnderlyingPrice(settlement,underlying);
         checkStrikePrice(strikePrice,underlyingPrice);
         uint256 optRate = _getOptionsPriceRate(underlyingPrice,strikePrice,amount,optType);
-        uint256 optPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType);
-        expiration = (underlyingPrice<<128)+(((optPrice*optRate)>>32)<<64)+expiration;
-        underlyingPrice = (((underlyingPrice<<28)/strikePrice)<<128);
-        strikePrice = oraclePrice(settlement);
-        underlyingPrice = underlyingPrice+(strikePrice<<32)/optRate;
-        _optionsPool.createOptions(msg.sender,settlement,type_ly_strike,expiration,underlyingPrice,(amount<<64)+optPrice);
+        uint256 optPrice = _optionsPool.createOptions(msg.sender,settlement,type_ly_expiration,
+            uint128(strikePrice),uint128(underlyingPrice),uint128(amount),uint128((settlePrice<<32)/optRate));
         optPrice = (optPrice*optRate)>>32;
-        buyOption_sub(settlement,settlementAmount,optPrice,(strikePrice<<128)+amount);
+        buyOption_sub(settlement,settlementAmount,optPrice,settlePrice,amount);
     }
     /**
     * @dev subfunction of buy option.
@@ -86,22 +82,15 @@ contract OptionsManagerV2 is CollateralCal {
     * @param amount user input amount of new option user want to buy.
     */ 
     function buyOption_sub(address settlement,uint256 settlementAmount,
-            uint256 optionPrice,uint256 amount)internal{
+            uint256 optionPrice,uint256 settlePrice,uint256 amount)internal{
         settlementAmount = getPayableAmount(settlement,settlementAmount);
-        uint256 settlePrice = amount >>128;
         amount = uint256(uint128(amount));
         uint256 allPay = amount*optionPrice;
         uint256 allPayUSd = allPay/1e8;
         allPay = allPay/settlePrice;
-        uint256 fee = _collateralPool.addTransactionFee(settlement,allPay,0);
-        require(settlementAmount>=allPay+fee,"settlement asset is insufficient!");
-        settlementAmount = settlementAmount-(allPay+fee);
-        if (settlementAmount > 0){
-            _collateralPool.transferPayback(msg.sender,settlement,settlementAmount);
-        }
-        uint256 id =_optionsPool.getOptionInfoLength();
+        _collateralPool.buyOptionsPayfor(msg.sender,settlement,settlementAmount,allPay);
         _FPTCoin.addMinerBalance(msg.sender,allPayUSd);
-        emit BuyOption(msg.sender,settlement,id,optionPrice,allPay,amount); 
+        emit BuyOption(msg.sender,settlement,optionPrice,allPay,amount); 
     }
     /**
     * @dev User sell option.
@@ -141,14 +130,8 @@ contract OptionsManagerV2 is CollateralCal {
     }
     function getOptionsPrice(uint256 underlyingPrice, uint256 strikePrice, uint256 expiration,
                     uint32 underlying,uint256 amount,uint8 optType) public view returns(uint256){  
-        uint256 buyOccupied = calOptionsOccupied(strikePrice,underlyingPrice,amount,optType);
-        require(getAvailableCollateral()>=buyOccupied,"collateral is insufficient!");
+        uint256 ratio = _getOptionsPriceRate(underlyingPrice,strikePrice,amount,optType);
         uint256 optPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType);
-        uint256 selfOccupied = optType == 0 ? _optionsPool.getCallTotalOccupiedCollateral() : _optionsPool.getPutTotalOccupiedCollateral();
-        selfOccupied = calculateCollateral(selfOccupied) + buyOccupied;
-        uint256 totalOccupied = getOccupiedCollateral() + buyOccupied;
-        uint256 totalCollateral = getUnlockedCollateral();
-        uint256 ratio = _optionsPrice.calOptionsPriceRatio(selfOccupied,totalOccupied,totalCollateral);
         return (optPrice*ratio)>>32;
     }
     function _getOptionsPriceRate(uint256 underlyingPrice, uint256 strikePrice,uint256 amount,uint8 optType) internal view returns(uint256){
@@ -157,8 +140,7 @@ contract OptionsManagerV2 is CollateralCal {
         require(totalCollateral>=lockedWorth,"collateral is insufficient!");
         totalCollateral = totalCollateral - lockedWorth;
         uint256 buyOccupied = ((optType == 0) == (strikePrice>underlyingPrice)) ? strikePrice*amount:underlyingPrice*amount;
-        uint256 callCollateral = _optionsPool.getCallTotalOccupiedCollateral();
-        uint256 putCollateral = _optionsPool.getPutTotalOccupiedCollateral();
+        (uint256 callCollateral,uint256 putCollateral) = _optionsPool.getAllTotalOccupiedCollateral();
         uint256 totalOccupied = (callCollateral + putCollateral + buyOccupied)*rate/1000;
         buyOccupied = ((optType == 0 ? callCollateral : putCollateral) + buyOccupied)*rate/1000;
         require(totalCollateral>=totalOccupied,"collateral is insufficient!");

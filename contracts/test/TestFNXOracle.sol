@@ -2,6 +2,23 @@ pragma solidity =0.5.16;
 import "../FNXOracle.sol";
 
 contract TestFNXOracle is FNXOracle {
+    constructor () public{
+        priceMap[1] = 9250*1e8;
+        priceMap[2] = 9250*1e8;
+    }
+    function getPrices(uint256[]memory assets) public view returns (uint256[]memory) {
+        uint256 len = assets.length;
+        uint256[] memory prices = FNXOracle.getPrices(assets);
+        for (uint i=0;i<len;i){
+            if (prices[i] == 0){
+                prices[i] = 50e8;
+            }
+        }
+        return prices;
+    }
+    function getAssetAndUnderlyingPrice(address asset,uint256 underlying) public view returns (uint256,uint256) {
+        return (getPrice(asset),getUnderlyingPrice(underlying));
+    }
     /**
   * @notice retrieves price of an asset
   * @dev function to get price for an asset

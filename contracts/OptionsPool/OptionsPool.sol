@@ -32,17 +32,23 @@ contract OptionsPool is OptionsNetWorthCal {
     /**
      * @dev create new option,modify collateral occupied and net worth value, only manager contract can invoke this.
      * @param from user's address.
-     * @param settlement user's input settlement coin.
-     * @param type_ly_strike tuple64 for option type,underlying,expiration.
-     * @param exp_option_underlying user's input new option's strike price.
-     * @param timePrice_rate current new option's price, calculated by options price contract.
-     * @param amount_fullPrice user's input new option's amount.
+     * @param type_ly_expiration tuple64 for option type,underlying,expiration.
+     * @param strikePrice user's input new option's strike price.
+     * @param underlyingPrice current new option's price, calculated by options price contract.
+     * @param amount user's input new option's amount.
      */ 
-    function createOptions(address from,address settlement,uint256 type_ly_strike,uint256 exp_option_underlying,uint256 timePrice_rate,
-                uint256 amount_fullPrice) onlyManager public{
-        _createOptions(from,settlement,type_ly_strike,exp_option_underlying,timePrice_rate,amount_fullPrice);
-        _addOptionsCollateral(allOptions.length);
-//        return price;
+    function createOptions(address from,address settlement,uint256 type_ly_expiration,
+        uint128 strikePrice,uint128 underlyingPrice,uint128 amount,uint128 settlePrice) onlyManager public returns(uint256){
+        uint256 price = _createOptions(from,settlement,type_ly_expiration,strikePrice,underlyingPrice,amount,settlePrice);
+        uint256 totalOccupied = _getOptionsWorth(uint8(type_ly_expiration),strikePrice,underlyingPrice)*amount;
+        require(totalOccupied<=1e40,"Option collateral occupied calculate error");
+        if (uint8(type_ly_expiration) == 0){
+            callLatestOccupied += int256(totalOccupied);
+        }else{
+            putLatestOccupied += int256(totalOccupied);
+        }
+        //_addOptionsCollateral(allOptions.length);
+        return price;
 //        _addNewOptionsNetworth(info);
     }
     /**
@@ -54,9 +60,13 @@ contract OptionsPool is OptionsNetWorthCal {
      */ 
     function burnOptions(address from,uint256 id,uint256 amount,uint256 optionPrice)public onlyManager Smaller(amount) OutLimitation(id){
         OptionsInfo memory info = _getOptionsById(id);
-        _burnOptions(from,info,amount);
+        _burnOptions(from,id,info,amount);
         uint256 currentPrice = oracleUnderlyingPrice(info.underlying);
         _burnOptionsCollateral(info,amount,currentPrice);
         _burnOptionsNetworth(info,amount,currentPrice,optionPrice);
     }
+        modifier OutLimitation(uint256 id) {
+        require(allOptions[id-1].createTime+limitation<now,"Time limitation is not expired!");
+        _;
+    }   
 }

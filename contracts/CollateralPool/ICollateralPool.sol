@@ -23,6 +23,7 @@ interface ICollateralPool {
     function setCollateralBalance(address collateral,uint256 amount)external;
     function transferPaybackAndFee(address recieptor,address settlement,uint256 payback,uint256 feeType)external;
 
+    function buyOptionsPayfor(address payable recieptor,address settlement,uint256 settlementAmount,uint256 allPay)external;
     function transferPayback(address recieptor,address settlement,uint256 payback)external;
     function transferPaybackBalances(address account,uint256 redeemWorth,address[] calldata tmpWhiteList,uint256[] calldata colBalances,
         uint256[] calldata PremiumBalances,uint256[] calldata prices)external;

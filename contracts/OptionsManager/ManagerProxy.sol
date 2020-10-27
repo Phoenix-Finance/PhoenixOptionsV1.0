@@ -239,7 +239,7 @@ contract ManagerProxy is ManagerData,baseProxy{
     *  optType user input option type
     */ 
     function buyOption(address /*settlement*/,uint256 /*settlementAmount*/, uint256 /*strikePrice*/,uint32 /*underlying*/,
-                uint256 /*expiration*/,uint256 /*amount*/,uint8 /*optType*/) public payable{
+                uint32 /*expiration*/,uint256 /*amount*/,uint8 /*optType*/) public payable{
         delegateAndReturn();
     }
     /**

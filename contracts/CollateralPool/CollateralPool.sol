@@ -181,6 +181,19 @@ contract CollateralPool is TransactionFee{
         _transferPaybackAndFee(recieptor,settlement,payback,feeType);
         netWorthBalances[settlement] = netWorthBalances[settlement].sub(int256(payback));
     }
+        /**
+     * @dev Operation for transfer user's payback. Only manager contract can invoke this function.
+     * @param recieptor the recieptor account.
+     * @param allPay the payback amount
+     */
+    function buyOptionsPayfor(address payable recieptor,address settlement,uint256 settlementAmount,uint256 allPay)public onlyManager{
+        uint256 fee = addTransactionFee(settlement,allPay,0);
+        require(settlementAmount>=allPay+fee,"settlement asset is insufficient!");
+        settlementAmount = settlementAmount-(allPay+fee);
+        if (settlementAmount > 0){
+            _transferPayback(recieptor,settlement,settlementAmount);
+        }
+    }
     /**
      * @dev Operation for transfer user's payback. Only manager contract can invoke this function.
      * @param recieptor the recieptor account.

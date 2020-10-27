@@ -195,6 +195,9 @@ contract CollateralProxy is CollateralData,baseProxy{
             uint256 /*feeType*/)public{
         delegateAndReturn();
     }
+    function buyOptionsPayfor(address payable /*recieptor*/,address /*settlement*/,uint256 /*settlementAmount*/,uint256 /*allPay*/)public onlyManager{
+        delegateAndReturn();
+    }
     /**
      * @dev Operation for transfer user's payback. Only manager contract can invoke this function.
      *  recieptor the recieptor account.

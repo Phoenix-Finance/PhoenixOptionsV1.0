@@ -78,12 +78,12 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         (begin,newFirstOption) = getFirstOption(begin, netWorthirstOption,end); 
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
-            uint256 timeValue = _calculateCurrentPrice(getOptionUnderlyingPrice(info),getOptionStrikePrice(info),getOptionExpiration(info),
-                info.amount&0xFFFFFFFFFFFFFFFF,info.optType);
-            if (timeValue<getOptionFullPrice(info)){
-                timeValue = getOptionFullPrice(info) - timeValue;
-                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,address(info.expiration>>96));
-                timeValue = timeValue*(info.amount>>128)/(info.strikePrice>>128);
+            uint256 timeValue = _calculateCurrentPrice((info.strikePrice*info.priceRate)>>28,info.optionsPrice,
+                info.createTime+info.expiration,info.iv,info.optType);
+            if (timeValue<info.optionsPrice){
+                timeValue = info.optionsPrice - timeValue;
+                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,info.settlement);
+                timeValue = timeValue*info.amount/info.settlePrice;
                 require(timeValue<=1e40,"option time shared value calculate error");
                 totalSharedPayment[index] = totalSharedPayment[index]+timeValue;
             }
@@ -100,10 +100,10 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         int256[] memory totalExpiredPayment = new int256[](whiteList.length);
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
-            uint256 amount = info.amount>>128;
+            uint256 amount = info.amount;
             if (amount>0){
-                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,address(info.expiration>>96));
-                uint256 timeValue = getOptionFullPrice(info)*amount/(info.strikePrice>>128);
+                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,info.settlement);
+                uint256 timeValue = info.optionsPrice*amount/info.settlePrice;
                 require(timeValue<=1e40,"option time shared value calculate error");
                 totalExpiredPayment[index] = totalExpiredPayment[index]+int256(timeValue);
             }
@@ -147,14 +147,14 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         int256[] memory OptionsFallBalances = new int256[](whiteList.length);
         for (;begin<lastOption;begin++){
             OptionsInfo storage info = allOptions[begin];
-            uint256 amount = info.amount>>128;
-            if(getOptionExpiration(info)<now || amount == 0){
+            uint256 amount = info.amount;
+            if(info.createTime + info.expiration<now || amount == 0){
                 continue;
             }
             uint256 index = _getEligibleUnderlyingIndex(info.underlying);
             int256 curValue = _calCurtimeCallateralFall(info,amount,prices[index]);
             if (curValue != 0){
-                index = whiteListAddress._getEligibleIndexAddress(whiteList,address(info.expiration>>96));
+                index = whiteListAddress._getEligibleIndexAddress(whiteList,info.settlement);
                 OptionsFallBalances[index] = OptionsFallBalances[index]-curValue;
             }
         }
@@ -167,11 +167,11 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
      * @param curPrice current underlying price.
      */
     function _calCurtimeCallateralFall(OptionsInfo memory info,uint256 amount,uint256 curPrice) internal view returns(int256){
-        if (getOptionExpiration(info)<=now || amount == 0){
+        if (info.createTime + info.expiration<=now || amount == 0){
             return 0;
         }
-        uint256 newFall = _getOptionsPayback(info.optType,getOptionStrikePrice(info),curPrice)*amount;
-        uint256 OriginFall = _getOptionsPayback(info.optType,getOptionStrikePrice(info),getOptionUnderlyingPrice(info))*amount;
+        uint256 newFall = _getOptionsPayback(info.optType,info.optionsPrice,curPrice)*amount;
+        uint256 OriginFall = _getOptionsPayback(info.optType,info.optionsPrice,(info.strikePrice*info.priceRate)>>28)*amount;
         int256 curValue = int256(newFall) - int256(OriginFall);
         require(curValue>=-1e40 && curValue<=1e40,"options fall calculate error");
         return curValue;
@@ -179,9 +179,9 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
     /*
     function _addNewOptionsNetworth(OptionsInfo memory info)  internal {
         OptionsInfoEx storage infoEx =  optionExtraMap[info.optionID-1];
-        uint256 price = oraclePrice(getOptionUnderlyingPrice(info));
-        uint256 curValue = _calCurtimeCallateralFall(info,getOptionAmount(info),getOptionUnderlyingPrice(info))/price;
-        optionsLatestNetWorth[getOptionUnderlyingPrice(info)] = optionsLatestNetWorth[getOptionUnderlyingPrice(info)].sub(int256(curValue));
+        uint256 price = oraclePrice(info.underlying);
+        uint256 curValue = _calCurtimeCallateralFall(info,getOptionAmount(info),(info.strikePrice*info.priceRate)>>28)/price;
+        optionsLatestNetWorth[nfo.underlying] = optionsLatestNetWorth[nfo.underlying].sub(int256(curValue));
     }
     */
     /**
@@ -193,9 +193,9 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
      */
     function _burnOptionsNetworth(OptionsInfo memory info,uint256 amount,uint256 underlyingPrice,uint256 currentPrice) internal {
         int256 curValue = _calCurtimeCallateralFall(info,amount,underlyingPrice);
-        uint256 timeWorth = getOptionFullPrice(info)>currentPrice ? getOptionFullPrice(info)-currentPrice : 0;
-        timeWorth = timeWorth*amount/(info.strikePrice>>128);
-        address settlement = address(info.expiration>>96);
+        uint256 timeWorth = info.optionsPrice>currentPrice ? info.optionsPrice-currentPrice : 0;
+        timeWorth = timeWorth*amount/info.settlePrice;
+        address settlement = info.settlement;
         curValue = curValue / int256(oraclePrice(settlement));
         int256 value = curValue - int256(timeWorth);
         optionsLatestNetWorth[settlement] = optionsLatestNetWorth[settlement]+value;
