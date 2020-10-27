@@ -40,9 +40,13 @@ contract('OptionsManagerV2', function (accounts) {
         }
 
         contracts.oracle.setFakePrice(PRICETHREE,PRICETHREE,PRICETHREE,PRICETHREE);
+        let underlyingPrice = await contracts.oracle.getUnderlyingPrice(1);
         for (var i=0;i<20;i++){
-            let tx = await contracts.manager.exerciseOption(i+1,100000000000);
-            assert.equal(tx.receipt.status,true);
+            let strikePrice = 50*i + 900000000000;
+            if (strikePrice>underlyingPrice){
+                let tx = await contracts.manager.exerciseOption(i+1,100000000000);
+                assert.equal(tx.receipt.status,true);
+            }
         }
     })
 /*
