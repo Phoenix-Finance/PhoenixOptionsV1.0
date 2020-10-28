@@ -28,12 +28,15 @@ contract OptionsPriceTest is OptionsPrice{
      * @param optType option's type, 0 for CALL, 2 for PUT.
      */
     function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
-            uint256 ivNumerator,uint8 optType)public pure returns (uint256){
-                expiration = expiration * 4000;
+            uint256 ivNumerator,uint8 optType)public view returns (uint256){
+        expiration = expiration * 4000;
+        if(fakeOptionPrice>0) {
+            return fakeOptionPrice;
+        }
         return OptionsPrice.getOptionsPrice_iv(currentPrice,strikePrice,expiration,ivNumerator,optType);
     }
 
-    function setOptionsPrice(uint256 optionPrice) public {
+    function setOptionsPrice(uint256 optionPrice) public{
         fakeOptionPrice = optionPrice;
     }
 

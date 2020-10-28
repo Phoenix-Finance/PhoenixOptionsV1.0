@@ -48,7 +48,7 @@ contract OptionsPrice is ImportVolatility{
      * @param optType option's type, 0 for CALL, 2 for PUT.
      */
     function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
-            uint256 _iv,uint8 optType)public pure returns (uint256){
+            uint256 _iv,uint8 optType)public view returns (uint256){
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,_iv);
         }else if (optType == 1){
