@@ -33,18 +33,13 @@ contract('OptionsManagerV2', function (accounts) {
         let expiration = [days,2*days,3*days, 7*days, 10*days, 15*days,20*days, 30*days];
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
         let i =0 ;
-        //for (var i=0;i<20;i++){
         await contracts.FNX.approve(contracts.manager.address,2000000000000000);
         let strikePrice = PRICETWO;
-        let tx = await contracts.manager.buyOption(contracts.FNX.address,1000000000000000,strikePrice,1,expiration[i%expiration.length],100000000000,1);
+        let tx = await contracts.manager.buyOption(contracts.FNX.address,1000000000000000,strikePrice,1,expiration[0],100000000000,1);
         assert.equal(tx.receipt.status,true);
-        //}
 
-
-        //for (var i=0;i<20;i++){
-         contracts.oracle.setFakeUnderlyingPrice(PRICEONE);
-         tx = await contracts.manager.exerciseOption(1,100000000000);
-         assert.equal(tx.receipt.status,true);
-        //}
+        contracts.oracle.setFakeUnderlyingPrice(PRICEONE);
+        tx = await contracts.manager.exerciseOption(1,100000000000);
+        assert.equal(tx.receipt.status,true);
     })
 })
