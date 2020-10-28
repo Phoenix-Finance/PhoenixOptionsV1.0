@@ -119,7 +119,7 @@ contract OptionsProxy is OptionsData,baseProxy{
     /**
      * @dev Implementation of getting the eligible expirationList.
      */
-    function getExpirationList()public view returns (uint256[] memory){
+    function getExpirationList()public view returns (uint32[] memory){
         delegateToViewAndReturn();
     }
     /**
@@ -273,5 +273,9 @@ contract OptionsProxy is OptionsData,baseProxy{
      */ 
     function burnOptions(address /*from*/,uint256 /*id*/,uint256 /*amount*/,uint256 /*optionPrice*/)public{
         delegateAndReturn();
+    }
+    function getUserAllOptionInfo(address /*user*/)public view 
+        returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
+        delegateToViewAndReturn();
     }
 }

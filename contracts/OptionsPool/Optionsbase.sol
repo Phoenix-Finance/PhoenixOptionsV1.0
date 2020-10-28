@@ -53,6 +53,15 @@ contract OptionsBase is OptionsData {
     function getOptionInfoLength()public view returns (uint256){
         return allOptions.length;
     }
+    function getOptionInfo(uint64 id)internal view returns(address,uint256,uint256,uint256,uint256){
+        OptionsInfo memory info = allOptions[id-1];
+        return (info.owner,
+            (uint256(id) << 128)+(uint256(info.underlying) << 64) + info.optType,
+            (uint256(info.createTime+limitation) << 128)+(uint256(info.createTime) << 64)+info.createTime+info.expiration,
+            info.strikePrice,
+            info.amount);
+            
+    }
     /**
      * @dev retrieve `size` number of options' information. 
      * @param from all option list begin positon.
@@ -67,46 +76,43 @@ contract OptionsBase is OptionsData {
             size = allLen - from;
         }
         address[] memory ownerArr = new address[](size);
-        uint256[] memory typeAndUnderArr = new uint256[](size);
-        uint256[] memory expArr = new uint256[](size);
+        uint256[] memory type_underlying_id = new uint256[](size);
+        uint256[] memory exp_create_limit = new uint256[](size);
         uint256[] memory priceArr = new uint256[](size);
         uint256[] memory amountArr = new uint256[](size);
         for (uint i=0;i<size;i++){
-            uint256 index = from+i; 
-            OptionsInfo storage info = allOptions[index];
-            ownerArr[i] = info.owner;
-            typeAndUnderArr[i] = (info.underlying << 16) + info.optType;
-            expArr[i] = info.createTime+info.expiration;
-            priceArr[i] = info.strikePrice;
-            amountArr[i] = info.amount;
+            (ownerArr[i],type_underlying_id[i],exp_create_limit[i],priceArr[i],amountArr[i]) = 
+                getOptionInfo(uint64(from+i+1));
         }
-        return (ownerArr,typeAndUnderArr,expArr,priceArr,amountArr);
+        return (ownerArr,type_underlying_id,exp_create_limit,priceArr,amountArr);
     }
+
     /**
      * @dev retrieve given `ids` options' information. 
      * @param ids retrieved options' id.
      */   
-    function getOptionInfoListFromID(uint256[] memory ids)public view 
+    function getOptionInfoListFromID(uint64[] memory ids)public view 
                 returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
         uint256 size = ids.length;
         require(size > 0, "input ids array is empty");
-        uint256 allLen = allOptions.length;
         address[] memory ownerArr = new address[](size);
-        uint256[] memory typeAndUnderArr = new uint256[](size);
-        uint256[] memory expArr = new uint256[](size);
+        uint256[] memory type_underlying_id = new uint256[](size);
+        uint256[] memory exp_create_limit = new uint256[](size);
         uint256[] memory priceArr = new uint256[](size);
         uint256[] memory amountArr = new uint256[](size);
         for (uint i=0;i<size;i++){
-            uint256 index = ids[i]-1; 
-            require(index < allLen, "input ids array is empty");
-            OptionsInfo storage info = allOptions[index];
-            ownerArr[i] = info.owner;
-            typeAndUnderArr[i] = (info.underlying << 16) + info.optType;
-            expArr[i] = info.createTime+info.expiration;
-            priceArr[i] = info.strikePrice;
-            amountArr[i] = info.amount;
+            (ownerArr[i],type_underlying_id[i],exp_create_limit[i],priceArr[i],amountArr[i]) = 
+                getOptionInfo(ids[i]);
         }
-        return (ownerArr,typeAndUnderArr,expArr,priceArr,amountArr);
+        return (ownerArr,type_underlying_id,exp_create_limit,priceArr,amountArr);
+    }
+        /**
+     * @dev retrieve given `ids` options' information. 
+     * @param user retrieved user's address.
+     */   
+    function getUserAllOptionInfo(address user)public view 
+                returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
+        return getOptionInfoListFromID(optionsBalances[user]);
     }
     /**
      * @dev retrieve given `optionsId` option's burned limit timestamp. 
@@ -208,7 +214,7 @@ contract OptionsBase is OptionsData {
         require(info.createTime+info.expiration>now,"option is expired");
         require(info.owner == from,"caller is not the options owner");
         require(info.amount >= amount,"option amount is insufficient");
-        allOptions[id].amount = info.amount-uint128(amount);
+        allOptions[id-1].amount = info.amount-uint128(amount);
         emit BurnOption(from,id,amount);
     }
     /**

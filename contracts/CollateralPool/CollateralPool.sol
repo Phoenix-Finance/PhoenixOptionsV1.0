@@ -33,7 +33,7 @@ contract CollateralPool is TransactionFee{
      * @param feeType transaction fee type. see TransactionFee contract
      */
     function addTransactionFee(address collateral,uint256 amount,uint256 feeType)public onlyManager returns (uint256) {
-        uint256 fee = calculateFee(feeType,amount);
+        uint256 fee = FeeRates[feeType]*amount;
         _addTransactionFee(collateral,fee);
         return fee;
     }
@@ -303,6 +303,15 @@ contract CollateralPool is TransactionFee{
         }else{
             return (0,netWorthBalance);
         }
+    }
+    function getAllRealBalance(address[] memory whiteList)public view returns(int256[] memory){
+        uint256 len = whiteList.length;
+        int256[] memory realBalances = new int256[](len); 
+        for (uint i = 0;i<len;i++){
+            int256 latestWorth = _optionsPool.getNetWrothLatestWorth(whiteList[i]);
+            realBalances[i] = netWorthBalances[whiteList[i]].add(latestWorth);
+        }
+        return realBalances;
     }
         /**
      * @dev Retrieve the balance of collateral, the auxiliary function for the total collateral calculation. 

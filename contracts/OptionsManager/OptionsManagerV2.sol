@@ -158,4 +158,26 @@ contract OptionsManagerV2 is CollateralCal {
         return ((r1*r1*r1)>>64)+4294967296;
     //        return SmallNumbers.pow(r1,r2);
     }
+        // totalCollateral,OccupiedCollateral,lockedCollateral,unlockedCollateral,LeftCollateral,AvailableCollateral
+    function getALLCollateralinfo(address user)public view 
+        returns(uint256[] memory,int256[] memory,uint32[] memory,uint32[] memory){
+        uint256[] memory values = new uint256[](13); 
+        values[0] = getTotalCollateral();
+        values[1] = getOccupiedCollateral();
+        values[2] = _FPTCoin.getTotalLockedWorth();
+        values[3] = safeSubCollateral(values[0],values[2]);
+        values[4] = safeSubCollateral(values[0],values[1]);
+        values[5] = safeSubCollateral(values[3],values[1]);
+        values[6] = getTokenNetworth();
+        values[7] = getUserPayingUsd(user);
+        values[8] = _FPTCoin.totalSupply();
+        values[9] = _FPTCoin.balanceOf(user);
+        values[10] = calculateCollateralRate();
+
+        (values[11],values[12]) = getPriceRateRange();
+        return (values,
+                _collateralPool.getAllRealBalance(whiteList),
+                _collateralPool.getFeeRateAll(),
+                _optionsPool.getExpirationList());
+    }
 }

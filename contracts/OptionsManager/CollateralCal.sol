@@ -201,6 +201,7 @@ contract CollateralCal is ManagerData {
                 netWorthBalances,prices);
         return (colBalances,PremiumBalances,prices);
     } 
+
     /**
      * @dev Retrieve the occupied collateral worth, multiplied by minimum collateral rate, priced in USD. 
      */
@@ -263,6 +264,9 @@ contract CollateralCal is ManagerData {
             }
         }
         return totalNum>=0 ? uint256(totalNum) : 0;  
+    }
+    function getAllRealBalance()public view returns(int256[] memory){
+        return _collateralPool.getAllRealBalance(whiteList);
     }
     /**
      * @dev Retrieve the balance of collateral, the auxiliary function for the total collateral calculation. 

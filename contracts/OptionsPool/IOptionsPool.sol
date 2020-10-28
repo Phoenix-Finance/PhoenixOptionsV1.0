@@ -3,6 +3,7 @@ import "../modules/Ownable.sol";
 interface IOptionsPool {
 //    function getOptionBalances(address user) external view returns(uint256[]);
 
+    function getExpirationList()external view returns (uint32[] memory);
     function createOptions(address from,address settlement,uint256 type_ly_expiration,
         uint128 strikePrice,uint128 underlyingPrice,uint128 amount,uint128 settlePrice) external returns(uint256);
     function setSharedState(uint256 newFirstOption,int256[] calldata latestNetWorth,address[] calldata whiteList) external;

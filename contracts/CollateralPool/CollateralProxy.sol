@@ -24,7 +24,10 @@ contract CollateralProxy is CollateralData,baseProxy{
     function () external payable onlyManager{
 
     }
-    function getFeeRate(uint256 /*feeType*/)public view returns (uint256,uint256){
+    function getFeeRateAll()public view returns (uint32[] memory){
+        delegateToViewAndReturn();
+    }
+    function getFeeRate(uint256 /*feeType*/)public view returns (uint32){
         delegateToViewAndReturn();
     }
     /**
@@ -235,6 +238,9 @@ contract CollateralProxy is CollateralData,baseProxy{
         uint256[] memory /*_RealBalances*/,uint256[] memory /*prices*/) public view returns(uint256[] memory,uint256[] memory){
             delegateToViewAndReturn();
     } 
+    function getAllRealBalance(address[] memory /*whiteList*/)public view returns(int256[] memory){
+        delegateToViewAndReturn();
+    }
     function getRealBalance(address /*settlement*/)public view returns(int256){
         delegateToViewAndReturn();
     }

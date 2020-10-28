@@ -262,4 +262,8 @@ contract ManagerProxy is ManagerData,baseProxy{
                     uint32 /*underlying*/,uint256 /*amount*/,uint8 /*optType*/) public view returns(uint256){
         delegateToViewAndReturn();
     }
+    function getALLCollateralinfo(address /*user*/)public view 
+        returns(uint256[] memory,int256[] memory,uint32[] memory,uint32[] memory){
+        delegateToViewAndReturn();
+    }
 }

@@ -12,27 +12,26 @@ contract TransactionFee is CollateralData {
         initialize();
     }
     function initialize() onlyOwner public{
-        FeeRates.push(fraction(0, 1000));
-        FeeRates.push(fraction(50, 1000));
-        FeeRates.push(fraction(0, 1000));
-        FeeRates.push(fraction(0, 1000));
-        FeeRates.push(fraction(0, 1000));
+        FeeRates.push(0);
+        FeeRates.push(50);
+        FeeRates.push(0);
+        FeeRates.push(0);
+        FeeRates.push(0);
     }
-    function getFeeRate(uint256 feeType)public view returns (uint256,uint256){
-        fraction storage feeRate = _getFeeRate(feeType);
-        return (feeRate.numerator,feeRate.denominator);
+    function getFeeRateAll()public view returns (uint32[] memory){
+        return FeeRates;
+    }
+    function getFeeRate(uint256 feeType)public view returns (uint32){
+        return FeeRates[feeType];
     }
     /**
      * @dev set the rate of trasaction fee.
      * @param feeType the transaction fee type
-     * @param numerator the numerator of transaction fee .
-     * @param denominator thedenominator of transaction fee.
-     * transaction fee = numerator/denominator;
+     * @param thousandth the numerator of transaction fee .
+     * transaction fee = thousandth/1000;
      */   
-    function setTransactionFee(uint256 feeType,uint256 numerator,uint256 denominator)public onlyOwner{
-        fraction storage rate = _getFeeRate(feeType);
-        rate.numerator = numerator;
-        rate.denominator = denominator;
+    function setTransactionFee(uint256 feeType,uint32 thousandth)public onlyOwner{
+        FeeRates[feeType] = thousandth;
     }
 
     function getFeeBalance(address settlement)public view returns(uint256){
@@ -72,13 +71,7 @@ contract TransactionFee is CollateralData {
         }
     }
     function calculateFee(uint256 feeType,uint256 amount)public view returns (uint256){
-        fraction storage feeRate = _getFeeRate(feeType);
-        uint256 result = feeRate.numerator.mul(amount);
-        return result/feeRate.denominator;
-    }
-    function _getFeeRate(uint256 feeType)internal view returns(fraction storage){
-        require(feeType<FeeRates.length,"fee type is invalid!");
-        return FeeRates[feeType];
+        return FeeRates[feeType]*amount;
     }
     /**
       * @dev  transfer settlement payback amount;
@@ -90,7 +83,7 @@ contract TransactionFee is CollateralData {
         if (payback == 0){
             return;
         }
-        uint256 fee = calculateFee(feeType,payback);
+        uint256 fee = FeeRates[feeType]*payback;
         _transferPayback(recieptor,settlement,payback-fee);
         _addTransactionFee(settlement,fee);
     }
