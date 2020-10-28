@@ -154,9 +154,7 @@ contract('OptionsManagerV2', function (accounts) {
     })
 
     it('1060 FNX buy and exercise up option for BTC', async function () {
-
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
-        let i =0 ;
         await contracts.FNX.approve(contracts.manager.address,payamount);
         let strikePrice = PRICETWO;
         let tx = await contracts.manager.buyOption(contracts.FNX.address,payamount,strikePrice,BTC_ID,expiration[0],optamount,OPTION_UP);

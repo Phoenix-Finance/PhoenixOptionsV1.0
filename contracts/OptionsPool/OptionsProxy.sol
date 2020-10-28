@@ -106,14 +106,14 @@ contract OptionsProxy is OptionsData,baseProxy{
      * @dev Implementation of add an eligible expiration into the expirationList.
      *  expiration new eligible expiration.
      */
-    function addExpiration(uint256 /*expiration*/)public{
+    function addExpiration(uint32 /*expiration*/)public{
         delegateAndReturn();
     }
     /**
      * @dev Implementation of revoke an invalid expiration from the expirationList.
      *  removeExpiration revoked expiration.
      */
-    function removeExpirationList(uint256 /*removeExpiration*/)public returns(bool) {
+    function removeExpirationList(uint32 /*removeExpiration*/)public returns(bool) {
         delegateAndReturn();
     }
     /**

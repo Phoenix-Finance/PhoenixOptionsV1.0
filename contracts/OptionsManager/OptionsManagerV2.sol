@@ -152,7 +152,7 @@ contract OptionsManagerV2 is CollateralCal {
             return 4294967296;
         }
         uint256 r1 = (selfOccupied<<32)/totalOccupied+2147483648;
-        uint256 r2 = totalOccupied/totalCollateral;
+        uint256 r2 = (totalOccupied<<32)/totalCollateral;
         //r1*r2*1.5
         r1 = (r1*r2*3/2)>>32;
         return ((r1*r1*r1)>>64)+4294967296;

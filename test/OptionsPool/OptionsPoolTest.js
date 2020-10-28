@@ -50,16 +50,9 @@ contract('OptionsProxy', function (accounts){
         let options = await OptionsProxy.new(pool.address,oracle.address,price.address,iv.address);
         await options.setManager(accounts[0]);
         let bn = new BN("10000000000000001",16);
-        let bn1 = new BN(925000000000);
+        let bn1 = new BN(86400);
         bn = bn.add(bn1.shln(128));
-        let underlyingPrice = new BN(925000000000);
-        let optionPrice = new BN(92500000000);
-        underlyingPrice = underlyingPrice.shln(128).add(optionPrice.shln(64)).add(new BN(86400))
-        bn1= new BN(1);
-        bn1 = bn1.shln(156).add(new BN(50e8));
-        let Amount = new BN(10000000000);
-        Amount = Amount.shln(64).add(optionPrice);
-        await options.createOptions(accounts[0],collateral0,bn,underlyingPrice,bn1,Amount);
+        await options.createOptions(accounts[0],collateral0,bn,92500000000,925000000000,10000000000,50e8);
         let result = await options.getOptionsById(1);
         console.log(result);
         result = await options.getOptionsExtraById(1);

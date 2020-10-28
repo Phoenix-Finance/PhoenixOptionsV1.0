@@ -21,19 +21,17 @@ contract('CollateralPool', function (accounts){
         for (var i=0;i<5;i++){
             let result = await pool.getFeeRate(i);
             if (i == 1){
-                assert.equal(result[0],50,"getFeeRate Error");
+                assert.equal(result,50,"getFeeRate Error");
             }else{
-                assert.equal(result[0],0,"getFeeRate Error");
+                assert.equal(result,0,"getFeeRate Error");
             }
-            assert.equal(result[1],1000,"getFeeRate Error");
         }
         for (var i=0;i<5;i++){
-            await pool.setTransactionFee(i,i+1,(i+1)*1000);
+            await pool.setTransactionFee(i,i+1);
             let result = await pool.getFeeRate(i);
-            assert.equal(result[0],i+1,"getFeeRate Error");
-            assert.equal(result[1],(i+1)*1000,"getFeeRate Error");
+            assert.equal(result,i+1,"getFeeRate Error");
             result = await pool.calculateFee(i,10000);
-            assert.equal(result,10,"calculateFee Error");
+            assert.equal(result,(i+1)*10,"calculateFee Error");
         }
         let result = await pool.getFeeBalance(collateral0);
         assert.equal(result,0,"getFeeBalance Error");

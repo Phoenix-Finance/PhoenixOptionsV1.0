@@ -71,7 +71,7 @@ contract TransactionFee is CollateralData {
         }
     }
     function calculateFee(uint256 feeType,uint256 amount)public view returns (uint256){
-        return FeeRates[feeType]*amount;
+        return FeeRates[feeType]*amount/1000;
     }
     /**
       * @dev  transfer settlement payback amount;
@@ -83,7 +83,7 @@ contract TransactionFee is CollateralData {
         if (payback == 0){
             return;
         }
-        uint256 fee = FeeRates[feeType]*payback;
+        uint256 fee = FeeRates[feeType]*payback/1000;
         _transferPayback(recieptor,settlement,payback-fee);
         _addTransactionFee(settlement,fee);
     }

@@ -18,6 +18,7 @@ contract('OptionsManagerV2', function (accounts) {
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
         await createAndAddUSDC(contracts);
+        contracts.FPT.setTimeLimitation(0);
     });
 
     it('USDC input and redeem', async function () {
@@ -34,7 +35,9 @@ contract('OptionsManagerV2', function (accounts) {
         assert.equal(diffUser.toNumber(),usdcAmount,"user usdc balance error");
         assert.equal(diffUser.toNumber(),diffContract.toNumber(),"manager usdc balance error");
 
-
+        for (var i=0;i<30;i++){
+            await  contracts.FNX.balanceOf(contracts.collateral.address);
+        }
         preBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
         preBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
         let result = await contracts.FPT.balanceOf(accounts[0]);
@@ -67,6 +70,9 @@ contract('OptionsManagerV2', function (accounts) {
         preBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
         preBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
         let result = await contracts.FPT.balanceOf(accounts[0]);
+        for (var i=0;i<30;i++){
+            await  contracts.FNX.balanceOf(contracts.collateral.address);
+        }
         await contracts.manager.redeemCollateral(result,contracts.FNX.address);
         afterBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
         afterBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
@@ -109,6 +115,9 @@ contract('OptionsManagerV2', function (accounts) {
         preBalanceContract = web3.utils.fromWei(preBalanceContract, "ether");
 
         let result = await contracts.FPT.balanceOf(accounts[0]);
+        for (var i=0;i<30;i++){
+            await  contracts.FNX.balanceOf(contracts.collateral.address);
+        }
         tx = await contracts.manager.redeemCollateral(result,contracts.FNX.address);
         assert.equal(tx.receipt.status,true);
         afterBalanceUser0 =await web3.eth.getBalance(accounts[0]);
