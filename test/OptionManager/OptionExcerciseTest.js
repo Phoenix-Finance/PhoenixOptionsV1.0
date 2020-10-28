@@ -8,6 +8,7 @@ let PRICEONE= 1e8;
 let PRICETWO = 2e8;
 let PRICETHREE = 3e8;
 let PRICEFOUR = 4e8;
+let SHIFTVALUE = 5e7;
 contract('OptionsManagerV2', function (accounts) {
     let contracts;
     let ethAmount = new BN("10000000000000000000");
@@ -38,7 +39,9 @@ contract('OptionsManagerV2', function (accounts) {
         let tx = await contracts.manager.buyOption(contracts.FNX.address,1000000000000000,strikePrice,1,expiration[0],100000000000,1);
         assert.equal(tx.receipt.status,true);
 
+
         contracts.oracle.setFakeUnderlyingPrice(PRICEONE);
+        contracts.price.setOptionsPrice(PRICEONE + SHIFTVALUE);
         tx = await contracts.manager.exerciseOption(1,100000000000);
         assert.equal(tx.receipt.status,true);
     })

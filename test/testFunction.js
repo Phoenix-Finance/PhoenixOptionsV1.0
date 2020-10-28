@@ -21,7 +21,7 @@ let FPTProxy = artifacts.require("FPTProxy");
 let CollateralPool = artifacts.require("CollateralPool");
 let CollateralProxy = artifacts.require("CollateralProxy");
 const FNXOracle = artifacts.require("TestFNXOracle");
-const OptionsPrice = artifacts.require("OptionsPrice");
+const OptionsPrice = artifacts.require("OptionsPriceTest");
 
 let collateral0 = "0x0000000000000000000000000000000000000000";
 exports.migration =  async function (accounts){
