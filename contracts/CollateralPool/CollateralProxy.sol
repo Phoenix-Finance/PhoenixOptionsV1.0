@@ -37,7 +37,7 @@ contract CollateralProxy is CollateralData,baseProxy{
      *  denominator thedenominator of transaction fee.
      * transaction fee = numerator/denominator;
      */   
-    function setTransactionFee(uint256 /*feeType*/,uint256 /*numerator*/,uint256 /*denominator*/)public{
+    function setTransactionFee(uint256 /*feeType*/,uint32 /*thousandth*/)public{
         delegateAndReturn();
     }
 

@@ -39,7 +39,9 @@ contract('OptionsManagerV2', function (accounts) {
         let tx = await contracts.manager.buyOption(contracts.FNX.address,1000000000000000,strikePrice,1,expiration[0],100000000000,1);
         assert.equal(tx.receipt.status,true);
 
-
+        for (var i=0;i<30;i++){
+            await  contracts.FNX.balanceOf(contracts.collateral.address);
+        }
         contracts.oracle.setFakeUnderlyingPrice(PRICEONE);
         contracts.price.setOptionsPrice(PRICEONE + SHIFTVALUE);
         tx = await contracts.manager.exerciseOption(1,100000000000);

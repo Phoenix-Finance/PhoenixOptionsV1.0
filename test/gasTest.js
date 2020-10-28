@@ -35,6 +35,12 @@ contract('OptionsManagerV2', function (accounts){
         let iv = await contracts.iv.calculateIv(2,0,month,9250e8,9153e8);
         assert(Math.abs(result[4].toNumber()-iv.toNumber())<1e6,"options iv error");
         result = await contracts.manager.getALLCollateralinfo(accounts[0]);
+        for (var i=0;i<Object.keys(result).length;i++){
+            for(var j=0;j<Object.keys(result[i]).length;j++){
+                console.log(result[i][j].toString());
+            }
+        }
+        result = await contracts.options.getUserAllOptionInfo(accounts[0]);
         console.log(result);
     });
     it('OptionsManagerV2 buy options gas fee by fnx', async function (){
@@ -69,6 +75,12 @@ contract('OptionsManagerV2', function (accounts){
         let iv = await contracts.iv.calculateIv(1,1,month,9250e8,9153e8);
         assert(Math.abs(result[4].toNumber()-iv.toNumber())<1e6,"options iv error");
         result = await contracts.manager.getALLCollateralinfo(accounts[0]);
+        for (var i=0;i<Object.keys(result).length;i++){
+            for(var j=0;j<Object.keys(result[i]).length;j++){
+                console.log(result[i][j].toString());
+            }
+        }
+        result = await contracts.options.getUserAllOptionInfo(accounts[0]);
         console.log(result);
     });
 

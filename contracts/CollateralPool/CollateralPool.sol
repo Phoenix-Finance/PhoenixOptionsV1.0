@@ -33,7 +33,7 @@ contract CollateralPool is TransactionFee{
      * @param feeType transaction fee type. see TransactionFee contract
      */
     function addTransactionFee(address collateral,uint256 amount,uint256 feeType)public onlyManager returns (uint256) {
-        uint256 fee = FeeRates[feeType]*amount;
+        uint256 fee = FeeRates[feeType]*amount/1000;
         _addTransactionFee(collateral,fee);
         return fee;
     }
