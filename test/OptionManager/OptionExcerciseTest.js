@@ -40,14 +40,36 @@ contract('OptionsManagerV2', function (accounts) {
         let i =0 ;
         await contracts.FNX.approve(contracts.manager.address,payamount);
         let strikePrice = PRICETWO;
+
+        let preBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
+        let preBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
+
         let tx = await contracts.manager.buyOption(contracts.FNX.address,payamount,strikePrice,ETH_ID,expiration[0],optamount,OPTION_DOWN);
         assert.equal(tx.receipt.status,true);
         optionid++;
+
+        let afterBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
+        let afterBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
+        let diffUser = preBalanceUser0.sub(afterBalanceUser0);
+        let diffContract = afterBalanceContract.sub(preBalanceContract);
+        assert.equal(diffUser.toNumber()>0,true,"user usdc balance error");
+        assert.equal(diffContract.toNumber()>0,true,"manager usdc balance error");
+
+
+        preBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
+        preBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
 
         contracts.oracle.setFakeUnderlyingPrice(PRICEONE);
         contracts.price.setOptionsPrice(PRICEONE + SHIFTVALUE);
         tx = await contracts.manager.exerciseOption(optionid,optamount);
         assert.equal(tx.receipt.status,true);
+
+        afterBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
+        afterBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
+        diffUser = afterBalanceUser0.sub(preBalanceUser0);
+        diffContract = preBalanceContract.sub(afterBalanceContract);
+        assert.equal(diffUser.toNumber()>0,true,"user redeem usdc balance error");
+        assert.equal(diffContract.toNumber()>0,true,"manager redeem usdc balance error");
 
     })
 
