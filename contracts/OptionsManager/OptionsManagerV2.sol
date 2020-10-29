@@ -64,11 +64,11 @@ contract OptionsManagerV2 is CollateralCal {
     */ 
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
                 uint32 expiration,uint256 amount,uint8 optType) nonReentrant notHalted InRange(amount) public payable{
-
         uint256 type_ly_expiration = optType+(uint256(underlying)<<64)+(uint256(expiration)<<128);
         (uint256 settlePrice,uint256 underlyingPrice) = oracleAssetAndUnderlyingPrice(settlement,underlying);
         checkStrikePrice(strikePrice,underlyingPrice);
         uint256 optRate = _getOptionsPriceRate(underlyingPrice,strikePrice,amount,optType);
+
         uint256 optPrice = _optionsPool.createOptions(msg.sender,settlement,type_ly_expiration,
             uint128(strikePrice),uint128(underlyingPrice),uint128(amount),uint128((settlePrice<<32)/optRate));
         optPrice = (optPrice*optRate)>>32;
@@ -98,16 +98,17 @@ contract OptionsManagerV2 is CollateralCal {
     * @param amount user input amount of option user want to sell.
     */ 
     function sellOption(uint256 optionsId,uint256 amount) nonReentrant notHalted InRange(amount) public{
-        (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
-        expiration = expiration.sub(now);
-        uint256 currentPrice = oracleUnderlyingPrice(underlying);
-        uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
-        _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
-        uint256 allPay = optPrice*amount;
-        (address settlement,uint256 fullPay) = _optionsPool.getBurnedFullPay(optionsId,amount);
-        _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
-        _paybackWorth(allPay,1);
-        emit SellOption(msg.sender,optionsId,amount,allPay);
+        require(false,"sellOption is not supported");
+        // (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
+        // expiration = expiration.sub(now);
+        // uint256 currentPrice = oracleUnderlyingPrice(underlying);
+        // uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
+        // _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
+        // uint256 allPay = optPrice*amount;
+        // (address settlement,uint256 fullPay) = _optionsPool.getBurnedFullPay(optionsId,amount);
+        // _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
+        // _paybackWorth(allPay,1);
+        // emit SellOption(msg.sender,optionsId,amount,allPay);
     }
     /**
     * @dev User exercise option.

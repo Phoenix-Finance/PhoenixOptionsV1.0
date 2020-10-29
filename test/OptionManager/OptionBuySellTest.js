@@ -24,7 +24,16 @@ contract('OptionsManagerV2', function (accounts) {
         await createAndAddErc20(contracts);
         await createAndAddUSDC(contracts);
     });
-
+    it('USDC input and redeem', async function () {
+        let collAmount = new BN("1000000000000000000000000",10);
+        await contracts.oracle.setPrice(contracts.USDC.address,new BN("100000000000000000000"));
+        await contracts.oracle.setUnderlyingPrice(1,13268e8);
+        await contracts.USDC.approve(contracts.manager.address,0x174876e800);
+        await contracts.manager.addCollateral(contracts.USDC.address,0x174876e800);
+        await contracts.USDC.approve(contracts.manager.address,10000000000);
+        await contracts.manager.buyOption(contracts.USDC.address,10000000000,13200e8,1,86400,1000,0);
+     })
+     return;
     it('FNX buy and exercise', async function () {
         let collAmount = new BN("1000000000000000000000000",10);
         await contracts.FNX.approve(contracts.manager.address,collAmount);

@@ -44,8 +44,8 @@ contract('OptionsPool', function (accounts){
             
             info1 = optionInfos[i];
             let sellAmount = info1.amount/2;
-            console.log("sellOption :",info1.optionId,sellAmount)
-            await contracts.manager.sellOption(info1.optionId,sellAmount);
+            // console.log("sellOption :",info1.optionId,sellAmount)
+            // await contracts.manager.sellOption(info1.optionId,sellAmount);
             info1.amount -= sellAmount;
         }
         let totalCollateral = new BN(0);

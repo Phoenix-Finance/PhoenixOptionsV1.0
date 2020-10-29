@@ -7,7 +7,7 @@ import './Ownable.sol';
  */
 contract Allowances is Ownable {
     mapping (address => uint256) internal allowances;
-    bool internal bValid = true;
+    bool internal bValid = false;
     /**
      *
      * Requirements:

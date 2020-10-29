@@ -42,12 +42,12 @@ contract('OptionsManagerV2', function (accounts){
         }
         await calculateNetWroth(contracts,contracts.FNX);
         await logNetWroth(7,contracts);
-        tx = await contracts.manager.sellOption(1,10000000000);
-        await logNetWroth(8,contracts);
-        tx = await contracts.manager.sellOption(2,10000000000);
-        await logNetWroth(9,contracts);
-        tx = await contracts.manager.sellOption(3,10000000000);
-        await logNetWroth(10,contracts);
+        // tx = await contracts.manager.sellOption(1,10000000000);
+        // await logNetWroth(8,contracts);
+        // tx = await contracts.manager.sellOption(2,10000000000);
+        // await logNetWroth(9,contracts);
+        // tx = await contracts.manager.sellOption(3,10000000000);
+        // await logNetWroth(10,contracts);
         console.log("-----------------------------------------");
         await calculateNetWroth(contracts,contracts.FNX);
         await logNetWroth(11,contracts);
