@@ -48,7 +48,7 @@ contract('OptionsManagerV2', function (accounts) {
         contracts.price.setOptionsPrice(PRICETHREE);
         let isExcept = false;
         try {
-            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(100));
+            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(1));
             assert.equal(tx.receipt.status, false);
         } catch (e) {
             console.log(e.toString());
@@ -58,8 +58,8 @@ contract('OptionsManagerV2', function (accounts) {
         assert(isExcept,true,"should happend exception");
 
     })
-/*
-    it('1010 USDC buy and exercise down option for ETH', async function () {
+
+    it('2010 USDC buy and exercise down option for ETH', async function () {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
         await contracts.USDC.approve(contracts.manager.address,payamount);
@@ -70,12 +70,20 @@ contract('OptionsManagerV2', function (accounts) {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICEONE);
         contracts.price.setOptionsPrice(PRICEONE + SHIFTVALUE);
-        tx = await contracts.manager.exerciseOption(optionid,optamount);
-        assert.equal(tx.receipt.status,true);
 
+        let isExcept = false;
+        try {
+            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(1));
+            assert.equal(tx.receipt.status, true);
+        }
+        catch (e){
+                console.log(e.toString());
+                isExcept = true;
+        }
+        assert(isExcept,true,"should happend exception");
     })
 
-    it('1020 FNX buy and exercise up option for ETH', async function () {
+    it('2020 FNX buy and exercise up option for ETH', async function () {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
         let i =0 ;
@@ -87,12 +95,21 @@ contract('OptionsManagerV2', function (accounts) {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO + SHIFTVALUE);
         contracts.price.setOptionsPrice(PRICETHREE);
-        tx = await contracts.manager.exerciseOption(optionid,optamount);
-        assert.equal(tx.receipt.status,true);
+
+        let isExcept = false;
+        try {
+            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(1));
+            assert.equal(tx.receipt.status, true);
+        }
+        catch (e){
+            console.log(e.toString());
+            isExcept = true;
+        }
+        assert(isExcept,true,"should happend exception");
 
     })
 
-    it('1030 USDC buy and exercise for ETH', async function () {
+    it('2030 USDC buy and exercise for ETH', async function () {
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
         await contracts.USDC.approve(contracts.manager.address,payamount);
         let strikePrice = PRICETWO;
@@ -102,11 +119,20 @@ contract('OptionsManagerV2', function (accounts) {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO + SHIFTVALUE);
         contracts.price.setOptionsPrice(PRICETHREE);
-        tx = await contracts.manager.exerciseOption(optionid,optamount);
-        assert.equal(tx.receipt.status,true);
+
+        let isExcept = false;
+        try {
+            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(1));
+            assert.equal(tx.receipt.status, true);
+        }
+        catch (e){
+            console.log(e.toString());
+            isExcept = true;
+        }
+        assert(isExcept,true,"should happend exception");
     })
 
-    it('1040 FNX buy and exercise down option for BTC', async function () {
+    it('2040 FNX buy and exercise down option for BTC', async function () {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
         let i =0 ;
@@ -118,12 +144,20 @@ contract('OptionsManagerV2', function (accounts) {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICEONE);
         contracts.price.setOptionsPrice(PRICEONE + SHIFTVALUE);
-        tx = await contracts.manager.exerciseOption(optionid,optamount);
-        assert.equal(tx.receipt.status,true);
+        let isExcept = false;
+        try {
+            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(1));
+            assert.equal(tx.receipt.status, true);
+        }
+        catch (e){
+            console.log(e.toString());
+            isExcept = true;
+        }
+        assert(isExcept,true,"should happend exception");
 
     })
 
-    it('1050 USDC buy and exercise down option for BTC', async function () {
+    it('2050 USDC buy and exercise down option for BTC', async function () {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
         await contracts.USDC.approve(contracts.manager.address,payamount);
@@ -134,12 +168,20 @@ contract('OptionsManagerV2', function (accounts) {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICEONE);
         contracts.price.setOptionsPrice(PRICEONE + SHIFTVALUE);
-        tx = await contracts.manager.exerciseOption(optionid,optamount);
-        assert.equal(tx.receipt.status,true);
+        let isExcept = false;
+        try {
+            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(1));
+            assert.equal(tx.receipt.status, true);
+        }
+        catch (e){
+            console.log(e.toString());
+            isExcept = true;
+        }
+        assert(isExcept,true,"should happend exception");
 
     })
 
-    it('1060 FNX buy and exercise up option for BTC', async function () {
+    it('2060 FNX buy and exercise up option for BTC', async function () {
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
         await contracts.FNX.approve(contracts.manager.address,payamount);
         let strikePrice = PRICETWO;
@@ -149,12 +191,20 @@ contract('OptionsManagerV2', function (accounts) {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO + SHIFTVALUE);
         contracts.price.setOptionsPrice(PRICETHREE);
-        tx = await contracts.manager.exerciseOption(optionid,optamount);
-        assert.equal(tx.receipt.status,true);
+        let isExcept = false;
+        try {
+            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(1));
+            assert.equal(tx.receipt.status, true);
+        }
+        catch (e){
+            console.log(e.toString());
+            isExcept = true;
+        }
+        assert(isExcept,true,"should happend exception");
 
     })
 
-    it('1070 USDC buy and exercise for BTC', async function () {
+    it('2070 USDC buy and exercise for BTC', async function () {
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO);
         await contracts.USDC.approve(contracts.manager.address,payamount);
         let strikePrice = PRICETWO;
@@ -164,8 +214,17 @@ contract('OptionsManagerV2', function (accounts) {
 
         contracts.oracle.setFakeUnderlyingPrice(PRICETWO + SHIFTVALUE);
         contracts.price.setOptionsPrice(PRICETHREE);
-        tx = await contracts.manager.exerciseOption(optionid,optamount);
-        assert.equal(tx.receipt.status,true);
+
+        let isExcept = false;
+        try {
+            tx = await contracts.manager.exerciseOption(optionid, optamount.addn(1));
+            assert.equal(tx.receipt.status, true);
+        }
+        catch (e){
+            console.log(e.toString());
+            isExcept = true;
+        }
+        assert(isExcept,true,"should happend exception");
     })
-*/
+
 })
