@@ -95,7 +95,8 @@ contract OptionsPrice is ImportVolatility{
         d1 = (FIXED_ONE - d1)*int256(currentPrice);
         d2 = (FIXED_ONE - d2)*int256(strikePrice);
         d1 = d2 - d1;
-        return (d1>0) ? uint256(d1>>32) : 0;
+        int256 minPrice = int256(currentPrice)*12884902;
+        return (d1>minPrice) ? uint256(d1>>32) : currentPrice*3/1000;
     }
     /**
      * @dev An auxiliary function, calculate call option price using B_S formulas.
@@ -111,18 +112,19 @@ contract OptionsPrice is ImportVolatility{
         d1 = SmallNumbers.normsDist(d1);
         d2 = SmallNumbers.normsDist(d2);
         d1 = d1*int256(currentPrice)-d2*int256(strikePrice);
-        return (d1>0) ? uint256(d1>>32) : 0;
+        int256 minPrice = int256(currentPrice)*12884902;
+        return (d1>minPrice) ? uint256(d1>>32) : currentPrice*3/1000;
     }
     function calOptionsPriceRatio(uint256 selfOccupied,uint256 totalOccupied,uint256 totalCollateral) public pure returns (uint256){
         //r1 + 0.5
         if (selfOccupied*2<=totalOccupied){
             return 4294967296;
         }
-        uint256 r1 = (selfOccupied<<32)/totalOccupied+2147483648;
-        uint256 r2 = (totalOccupied<<32)/totalCollateral;
+        uint256 r1 = (selfOccupied<<32)/totalOccupied-2147483648;
+        uint256 r2 = (totalOccupied<<32)/totalCollateral*2;
         //r1*r2*1.5
-        r1 = (r1*r2*3/2)>>32;
-        return ((r1*r1*r1)>>64)+4294967296;
+        r1 = (r1*r2)>>32;
+        return ((r1*r1*r1)>>64)*3+4294967296;
 //        return SmallNumbers.pow(r1,r2);
     }
 }

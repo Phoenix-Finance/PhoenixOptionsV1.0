@@ -152,12 +152,12 @@ contract OptionsManagerV2 is CollateralCal {
         if (selfOccupied*2<=totalOccupied){
             return 4294967296;
         }
-        uint256 r1 = (selfOccupied<<32)/totalOccupied+2147483648;
-        uint256 r2 = (totalOccupied<<32)/totalCollateral;
+        uint256 r1 = (selfOccupied<<32)/totalOccupied-2147483648;
+        uint256 r2 = (totalOccupied<<32)/totalCollateral*2;
         //r1*r2*1.5
-        r1 = (r1*r2*3/2)>>32;
-        return ((r1*r1*r1)>>64)+4294967296;
-    //        return SmallNumbers.pow(r1,r2);
+        r1 = (r1*r2)>>32;
+        return ((r1*r1*r1)>>64)*3+4294967296;
+//        return SmallNumbers.pow(r1,r2);
     }
         // totalCollateral,OccupiedCollateral,lockedCollateral,unlockedCollateral,LeftCollateral,AvailableCollateral
     function getALLCollateralinfo(address user)public view 
