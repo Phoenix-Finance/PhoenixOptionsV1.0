@@ -10,9 +10,10 @@ import "../modules/SafeMath.sol";
  */
 contract FPTCoin is SharedCoin {
     using SafeMath for uint256;
-        constructor (address minePoolAddr)public{
+        constructor (address minePoolAddr,string memory tokenName)public{
         initialize();
         _FnxMinePool = IFNXMinePool(minePoolAddr);
+        name = tokenName;
     }
 
     /**
@@ -21,7 +22,9 @@ contract FPTCoin is SharedCoin {
     function initialize() onlyOwner public{
         SharedCoin.initialize();
     }
-
+    function update() onlyOwner public{
+        name = "FPT-C";
+    }
     /**
      * @dev Retrieve user's start time for burning. 
      * @param user user's account.

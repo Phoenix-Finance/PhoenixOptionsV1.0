@@ -8,8 +8,9 @@ import "../ERC20/Erc20BaseProxy.sol";
  *
  */
 contract FPTProxy is FPTData,Erc20BaseProxy {
-    constructor (address implementation_,address minePoolAddr) Erc20BaseProxy(implementation_) public{
+    constructor (address implementation_,address minePoolAddr,string memory tokenName) Erc20BaseProxy(implementation_) public{
         _FnxMinePool = IFNXMinePool(minePoolAddr);
+        name = tokenName;
     }
     /**
      * @dev Retrieve user's start time for burning. 

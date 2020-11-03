@@ -40,13 +40,16 @@ contract ImpliedVolatility is Operator {
         ATMIv0[2] = 48730000;
         ivParamMap[2] = ivParam(-38611755991,38654705664,-214748365,214748365,4294967296);
         ATMIvRate[2] =  ATMIvRate[1];
-        ATMIv0[3] = 48730000;
+        //mkr
+        ATMIv0[3] = 150000000;
         ivParamMap[3] = ivParam(-38611755991,38654705664,-214748365,214748365,4294967296);
         ATMIvRate[3] =  ATMIvRate[1];
-        ATMIv0[4] = 48730000;
+        //snx
+        ATMIv0[4] = 200000000;
         ivParamMap[4] = ivParam(-38611755991,38654705664,-214748365,214748365,4294967296);
         ATMIvRate[4] =  ATMIvRate[1];
-        ATMIv0[5] = 48730000;
+        //link
+        ATMIv0[5] = 180000000;
         ivParamMap[5] = ivParam(-38611755991,38654705664,-214748365,214748365,4294967296);
         ATMIvRate[5] =  ATMIvRate[1];
     }
@@ -57,6 +60,9 @@ contract ImpliedVolatility is Operator {
      */ 
     function SetAtmIv(uint32 underlying,uint256 _Iv0)public onlyOperatorIndex(0){
         ATMIv0[underlying] = _Iv0;
+    }
+    function getAtmIv(uint32 underlying)public view returns(uint256){
+        return ATMIv0[underlying];
     }
     /**
      * @dev set implied volatility surface Formulas param. 
@@ -82,6 +88,9 @@ contract ImpliedVolatility is Operator {
      * @param strikePrice option's strike price
      */ 
     function calculateIv(uint32 underlying,uint8 /*optType*/,uint256 expiration,uint256 currentPrice,uint256 strikePrice)public view returns (uint256){
+        if (underlying>2){
+            return (ATMIv0[underlying]<<32)/_calDecimal;
+        }
         uint256 iv = calATMIv(underlying,expiration);
         if (currentPrice == strikePrice){
             return iv;
@@ -97,7 +106,7 @@ contract ImpliedVolatility is Operator {
         uint256 index = expiration/DaySecond;
         
         if (index == 0){
-            return ATMIv0[underlying];
+            return (ATMIv0[underlying]<<32)/_calDecimal;
         }
         uint256 len = ATMIvRate[underlying].length;
         if (index>=len){

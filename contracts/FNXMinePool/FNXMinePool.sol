@@ -95,7 +95,7 @@ contract FNXMinePool is MinePoolData {
      * @param _mineAmount mineCoin reward amount
      */
     function setBuyingMineInfo(address mineCoin,uint256 _mineAmount)public onlyOwner {
-        require(_mineAmount<1e30,"input mine amount is too large");
+//        require(_mineAmount<1e30,"input mine amount is too large");
         buyingMineMap[mineCoin] = _mineAmount;
         addWhiteList(mineCoin);
     }
@@ -160,7 +160,9 @@ contract FNXMinePool is MinePoolData {
             address addr = whiteList[i];
             uint256 mineNum = buyingMineMap[addr];
             if (mineNum > 0){
-                uint256 _mineAmount = mineNum*amount/calDecimals;
+                uint128 mineRate = uint128(mineNum);
+                uint128 mineAdd = uint128(mineNum>>128);
+                uint256 _mineAmount = mineRate*amount/calDecimals + mineAdd;
                 minerBalances[addr][account] = minerBalances[addr][account].add(_mineAmount);
                 //totalMinedCoin[addr] = totalMinedCoin[addr].add(_mineAmount);
                 emit BuyingMiner(account,addr,_mineAmount);
