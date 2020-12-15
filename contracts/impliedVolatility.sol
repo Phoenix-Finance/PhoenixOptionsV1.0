@@ -140,7 +140,7 @@ contract ImpliedVolatility is Operator {
      * @param strikePrice option's strike price
      */ 
     //ln(k) - ln(s) + d
-    function calImpliedVolLn(uint32 underlying,uint256 currentPrice,uint256 strikePrice,int48 paramd)internal view returns(int256){
+    function calImpliedVolLn(uint32 underlying,uint256 currentPrice,uint256 strikePrice,int48 paramd)internal pure returns(int256){
         if (currentPrice == strikePrice){
             return paramd;
         }else if (currentPrice > strikePrice){
