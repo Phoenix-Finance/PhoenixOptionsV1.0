@@ -40,6 +40,7 @@ contract OptionsManagerV2 is CollateralCal {
     * @dev set input price valid range rate, thousandths.
     */ 
     function setPriceRateRange(uint256 _minPriceRate,uint256 _maxPriceRate) public onlyOwner{
+        require(_minPriceRate<_maxPriceRate,"minimum Price rate must be smaller than maximum price rate");
         minPriceRate = _minPriceRate;
         maxPriceRate = _maxPriceRate;
     }
@@ -122,7 +123,6 @@ contract OptionsManagerV2 is CollateralCal {
         expiration = expiration.sub(now);
         uint256 currentPrice = oracleUnderlyingPrice(underlying);
         uint256 optPrice = _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
-        _optionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
         _optionsPool.burnOptions(msg.sender,optionsId,amount,optPrice);
         (address settlement,uint256 fullPay) = _optionsPool.getBurnedFullPay(optionsId,amount);
         _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
@@ -131,6 +131,7 @@ contract OptionsManagerV2 is CollateralCal {
     }
     function getOptionsPrice(uint256 underlyingPrice, uint256 strikePrice, uint256 expiration,
                     uint32 underlying,uint256 amount,uint8 optType) public view returns(uint256){  
+        require(underlyingPrice<1e40 && strikePrice < 1e40 && expiration < 1e30 && amount < 1e40 , "Input number is too large");
         uint256 ratio = _getOptionsPriceRate(underlyingPrice,strikePrice,amount,optType);
         uint256 optPrice = _optionsPrice.getOptionsPrice(underlyingPrice,strikePrice,expiration,underlying,optType);
         return (optPrice*ratio)>>32;
