@@ -14,6 +14,7 @@ contract FPTCoin is SharedCoin {
         initialize();
         _FnxMinePool = IFNXMinePool(minePoolAddr);
         name = tokenName;
+        symbol = tokenName;
     }
 
     /**

@@ -12,9 +12,9 @@ contract TransactionFee is CollateralData {
         initialize();
     }
     function initialize() onlyOwner public{
-        FeeRates.push(0);
         FeeRates.push(50);
         FeeRates.push(0);
+        FeeRates.push(50);
         FeeRates.push(0);
         FeeRates.push(0);
     }

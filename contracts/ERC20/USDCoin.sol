@@ -4,8 +4,8 @@ import "./FNXCoin.sol";
 contract USDCoin is FNXCoin {
 
     constructor () public{
-        name = "USD Coin";
-        symbol = "USDC";
+        name = "USDT Coin";
+        symbol = "USDT";
         decimals = 6;
     }
 }

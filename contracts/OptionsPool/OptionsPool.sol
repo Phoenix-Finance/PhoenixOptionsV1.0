@@ -17,9 +17,6 @@ contract OptionsPool is OptionsNetWorthCal {
         _optionsPrice = IOptionsPrice(optionsPriceAddr);
         _volatility = IVolatility(ivAddress);
     }
-    function update() onlyOwner public {
-
-    }
     /**
      * @dev retrieve all information for collateral occupied and net worth calculation.
      * @param whiteList settlement address whitelist.

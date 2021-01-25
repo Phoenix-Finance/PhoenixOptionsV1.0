@@ -66,7 +66,6 @@ contract OptionsData is UnderlyingAssets,ImputRange,Managerable,ImportOracle,Imp
      * @dev Emitted when `owner` burn `amount` his option which id is `optionID`. 
      */    
     event BurnOption(address indexed owner,uint256 indexed optionID,uint amount);
-    event DebugEvent(uint256 id,uint256 value1,uint256 value2);
 }
 /*
 contract OptionsDataV2 is OptionsData{
