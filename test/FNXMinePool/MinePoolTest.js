@@ -8,13 +8,38 @@ const FPTCoin = artifacts.require("FPTCoin");
 const BN = require("bn.js");
 contract('FNXMinePool', function (accounts){
 
+    it('FNXMinePool buying mine functions', async function (){
+        let fnx = await FNXCoin.new();
+        let erc20 = await Erc20Proxy.new(fnx.address);
+        let pool = await minePool.new();
+        let poolProxy = await minePoolProxy.new(pool.address);
+        let fptimpl = await FPTCoin.new(poolProxy.address,"FPT-A");
+        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address,"FPT-A");
+        await poolProxy.setManager(fpt.address);
+        let amount = new BN("10000000000000000000000");
+        await erc20.transfer(poolProxy.address,amount);
+        await poolProxy.send(amount);
+        let result = await erc20.balanceOf(poolProxy.address);
+        assert.equal(result.toString(10),"10000000000000000000000","erc20 balance error");
+        result = await web3.eth.getBalance(poolProxy.address);
+        assert.equal(result.toString(10),"10000000000000000000000","ether balance error");
+        await poolProxy.setMineCoinInfo(collateral0,10000000000,3000);
+        await poolProxy.setMineCoinInfo(erc20.address,11000000000,3100);
+        let mineAdd = new BN(10000);
+        mineAdd = mineAdd.shln(128).add(new BN(1000000000));
+        await poolProxy.setBuyingMineInfo(collateral0,mineAdd)
+        await fpt.setManager(accounts[0]);
+        await fpt.addMinerBalance(accounts[1],200000000000000);
+        result = await poolProxy.getMinerBalance(accounts[1],collateral0);
+        assert.equal(result.toNumber(),210000,"getMinerBalance error");
+    });
     it('FNXMinePool set functions', async function (){
         let fnx = await FNXCoin.new();
         let erc20 = await Erc20Proxy.new(fnx.address);
         let pool = await minePool.new();
         let poolProxy = await minePoolProxy.new(pool.address);
-        let fptimpl = await FPTCoin.new(poolProxy.address);
-        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address);
+        let fptimpl = await FPTCoin.new(poolProxy.address,"FPT-A");
+        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address,"FPT-A");
         await poolProxy.setManager(fpt.address);
         let amount = new BN("10000000000000000000000");
         await erc20.transfer(poolProxy.address,amount);
@@ -71,8 +96,8 @@ contract('FNXMinePool', function (accounts){
         let erc20 = await Erc20Proxy.new(fnx.address);
         let pool = await minePool.new();
         let poolProxy = await minePoolProxy.new(pool.address);
-        let fptimpl = await FPTCoin.new(poolProxy.address);
-        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address);
+        let fptimpl = await FPTCoin.new(poolProxy.address,"FPT-A");
+        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address,"FPT-A");
         await poolProxy.setManager(fpt.address);
         await fpt.setManager(accounts[0]);
         let amount = new BN("10000000000000000000000");

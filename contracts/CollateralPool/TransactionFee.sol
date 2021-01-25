@@ -3,6 +3,7 @@ pragma solidity =0.5.16;
 import "../modules/SafeMath.sol";
 import "../ERC20/IERC20.sol";
 import "./CollateralData.sol";
+import "../ERC20/safeErc20.sol";
     /**
      * @dev Implementation of a transaction fee manager.
      */
@@ -53,7 +54,8 @@ contract TransactionFee is CollateralData {
         }else{
             IERC20 currencyToken = IERC20(currency);
             uint256 preBalance = currencyToken.balanceOf(address(this));
-            currencyToken.transfer(msg.sender,fee);
+            SafeERC20.safeTransfer(currencyToken,msg.sender,fee);
+//            currencyToken.transfer(msg.sender,fee);
             uint256 afterBalance = currencyToken.balanceOf(address(this));
             require(preBalance - afterBalance == fee,"settlement token transfer error!");
         }
@@ -102,7 +104,8 @@ contract TransactionFee is CollateralData {
         }else{
             IERC20 collateralToken = IERC20(settlement);
             uint256 preBalance = collateralToken.balanceOf(address(this));
-            collateralToken.transfer(recieptor,payback);
+            SafeERC20.safeTransfer(collateralToken,recieptor,payback);
+            //collateralToken.transfer(recieptor,payback);
             uint256 afterBalance = collateralToken.balanceOf(address(this));
             require(preBalance - afterBalance == payback,"settlement token transfer error!");
         }

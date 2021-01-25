@@ -15,7 +15,10 @@ contract('OptionsManagerV2', function (accounts){
         await contracts.USDC.approve(contracts.manager.address,10000000000000);
         await contracts.manager.addCollateral(contracts.USDC.address,10000000000000);
         await contracts.manager.addCollateral(collateral0,10000000000000,{value:10000000000000});
-        let tx = await contracts.manager.buyOption(collateral0,10000000000000,9153*1e8,2,month,100000000,0,{value:10000000000000});
+        let price1 = await contracts.manager.getOptionsPrice(9250*1e8,9153*1e8,month,3,0,0);
+        console.log(price1.toNumber())
+        return
+        let tx = await contracts.manager.buyOption(collateral0,10000000000000,9153*1e8,3,month,100000000,0,{value:10000000000000});
         console.log(tx.receipt.gasUsed);
         let curTime = new Date().getTime()/1000+month;
         let result = await contracts.options.getOptionsById(1);

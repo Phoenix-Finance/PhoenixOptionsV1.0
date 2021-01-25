@@ -84,7 +84,6 @@ contract('OptionsManagerV2', function (accounts) {
         result = await contracts.FPT.balanceOf(accounts[0]);
         assert.equal(result,0,"the rest balance is not zero")
     })
-
     it('ETH input and redeem', async function () {
 
         let preBalanceUser0 =await  web3.eth.getBalance(accounts[0]);

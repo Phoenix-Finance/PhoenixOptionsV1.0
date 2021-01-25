@@ -2,6 +2,7 @@ pragma solidity =0.5.16;
 import "../modules/SafeMath.sol";
 import "./MinePoolData.sol";
 import "../ERC20/IERC20.sol";
+import "../ERC20/safeErc20.sol";
 /**
  * @title FPTCoin mine pool, which manager contract is FPTCoin.
  * @dev A smart-contract which distribute some mine coins by FPTCoin balance.
@@ -33,7 +34,8 @@ contract FNXMinePool is MinePoolData {
         }else{
             IERC20 token = IERC20(mineCoin);
             uint256 preBalance = token.balanceOf(address(this));
-            token.transfer(msg.sender,amount);
+            SafeERC20.safeTransfer(token,msg.sender,amount);
+            //token.transfer(msg.sender,amount);
             uint256 afterBalance = token.balanceOf(address(this));
             require(preBalance - afterBalance == amount,"settlement token transfer error!");
         }
@@ -218,7 +220,8 @@ contract FNXMinePool is MinePoolData {
         }else{
             IERC20 minerToken = IERC20(mineCoin);
             uint256 preBalance = minerToken.balanceOf(address(this));
-            minerToken.transfer(recieptor,amount);
+            SafeERC20.safeTransfer(minerToken,recieptor,amount);
+//            minerToken.transfer(recieptor,amount);
             uint256 afterBalance = minerToken.balanceOf(address(this));
             require(preBalance - afterBalance == amount,"settlement token transfer error!");
         }

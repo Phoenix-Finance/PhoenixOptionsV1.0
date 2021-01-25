@@ -2,6 +2,7 @@ pragma solidity =0.5.16;
 import "../modules/SafeMath.sol";
 import "../modules/SafeInt256.sol";
 import "./ManagerData.sol";
+import "../ERC20/safeErc20.sol";
 /**
  * @title collateral calculate module
  * @dev A smart-contract which has operations of collateral and methods of calculate collateral occupation.
@@ -303,6 +304,7 @@ contract CollateralCal is ManagerData {
             //_transferPaybackAndFee(msg.sender,addr,_payBack,feeType);
         } 
     }
+
     /**
      * @dev the auxiliary function for getting user's transer
      */
@@ -315,7 +317,8 @@ contract CollateralCal is ManagerData {
         }else if (settlementAmount > 0){
             IERC20 oToken = IERC20(settlement);
             uint256 preBalance = oToken.balanceOf(address(_collateralPool));
-            oToken.transferFrom(msg.sender, address(_collateralPool), settlementAmount);
+            SafeERC20.safeTransferFrom(oToken,msg.sender, address(_collateralPool), settlementAmount);
+//            oToken.transferFrom(msg.sender, address(_collateralPool), settlementAmount);
             uint256 afterBalance = oToken.balanceOf(address(_collateralPool));
             require(afterBalance-preBalance==settlementAmount,"settlement token transfer error!");
         }
