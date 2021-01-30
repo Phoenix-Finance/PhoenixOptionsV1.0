@@ -18,6 +18,9 @@ contract('OptionsManagerV2', function (accounts){
             let strikePrice = 50*i + 900000000000;
             await contracts.manager.buyOption(contracts.FNX.address,1000000000000000,strikePrice,1,expiration[i%expiration.length],
                 100000000000,1);
+                let tx = await contracts.manager.buyOption(contracts.FNX.address,1000000000000000,strikePrice,1,expiration[i%expiration.length],
+                100000000000,1);
+                console.log(tx.receipt.gasUsed);
         }
         // for (var i=0;i<20;i++){
         //     await contracts.manager.sellOption(i+1,100000000000);

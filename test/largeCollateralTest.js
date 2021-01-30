@@ -1,8 +1,115 @@
 const BN = require("bn.js");
-let month = 30*60*60*24;
+let month = 10;
 let collateral0 = "0x0000000000000000000000000000000000000000";
-let {migration ,createAndAddErc20,AddCollateral0} = require("./testFunction.js");
+let {migration ,createAndAddErc20,createAndAddUSDC,AddCollateral0} = require("./testFunction.js");
 contract('OptionsManagerV2', function (accounts){
+        it('OptionsManagerV2 add large collateral', async function (){
+                let contracts = await migration(accounts);
+                await AddCollateral0(contracts);
+                await createAndAddErc20(contracts);
+                await createAndAddUSDC(contracts);
+                await contracts.price.setExpirationZoom(1000);
+                contracts.options.addExpiration(month);
+                await contracts.FPT.setTimeLimitation(3);
+                let amount = new BN("10000000000000000000000");
+                //await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.addCollateral(collateral0,amount,{value:amount});
+                await contracts.USDC.approve(contracts.manager.address,10000000000);
+                await contracts.manager.addCollateral(contracts.USDC.address,10000000000);
+                amount = new BN("100000000000000000000");
+                let amount1 = new BN("2000000000000000000");
+                await contracts.manager.addCollateral(collateral0,amount,{from:accounts[1],value:amount});
+
+                await contracts.manager.buyOption(collateral0,amount,9000e8,1,month,amount1,0,{value : amount});
+                await contracts.manager.buyOption(collateral0,amount,9000e8,1,month,amount1,1,{value : amount});
+                await contracts.manager.buyOption(collateral0,amount,9000e8,2,month,amount1,0,{value : amount});
+                await contracts.manager.buyOption(collateral0,amount,9000e8,2,month,amount1,1,{value : amount});
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,1,month,amount1,0);
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,1,month,amount1,1);
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,2,month,amount1,0);
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,2,month,amount1,1);
+                for (var i=0;i<50;i++){
+                        await contracts.manager.addWhiteList(contracts.FNX.address);
+                }
+                await calculateNetWroth(contracts,contracts.FNX,contracts.USDC);
+                let col = await contracts.collateral.getCollateralBalance(collateral0);
+                console.log("collateral0",col.toString());
+                col = await contracts.collateral.getCollateralBalance(contracts.FNX.address);
+                console.log("collateral0",col.toString());
+                let result = await contracts.FPT.balanceOf(accounts[0]);
+                console.log(11111111111111111,result.toString());
+                amount = new BN("500000000000000000000000");
+                let balanceBefore = await web3.eth.getBalance(accounts[0]);
+                console.log(balanceBefore.toString());
+                await contracts.manager.redeemCollateral(amount,contracts.FNX.address);
+                let balanceAfter = await web3.eth.getBalance(accounts[0]);
+                console.log(balanceAfter.toString());
+                let diff = balanceAfter - balanceBefore;
+                console.log("balance diff=" + diff);
+                result = await contracts.FPT.balanceOf(accounts[0]);
+                console.log(222222222222222,result.toString());
+                col = await contracts.collateral.getCollateralBalance(collateral0);
+                console.log("collateral1",col.toString());
+                col = await contracts.collateral.getCollateralBalance(contracts.FNX.address);
+                console.log("collateral1",col.toString());
+                await contracts.manager.redeemCollateral(result,contracts.FNX.address);
+                for (var i=0;i<50;i++){
+                        await contracts.manager.addWhiteList(contracts.FNX.address);
+                }
+                await calculateNetWroth(contracts,contracts.FNX,contracts.USDC);
+                let result1 = await contracts.FPT.lockedBalanceOf(accounts[0]);
+                await contracts.manager.redeemCollateral(result.add(result1),contracts.FNX.address);
+        });
+        return;
+        it('OptionsManagerV2 add large collateral', async function (){
+                let contracts = await migration(accounts);
+                await AddCollateral0(contracts);
+                await createAndAddErc20(contracts);
+                await createAndAddUSDC(contracts);
+                await contracts.price.setExpirationZoom(1000);
+                contracts.options.addExpiration(month);
+                await contracts.FPT.setTimeLimitation(3);
+                await web3.eth.sendTransaction({from:accounts[0],to:contracts.mine.address,value:9e18});
+                let amount = new BN("10000000000000000000000000");
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.addCollateral(contracts.FNX.address,amount);
+                await contracts.USDC.approve(contracts.manager.address,10000000000);
+                await contracts.manager.addCollateral(contracts.USDC.address,10000000000);
+                amount = new BN("100000000000000000000");
+                let amount1 = new BN("2000000000000000000");
+                await contracts.manager.addCollateral(collateral0,amount,{from:accounts[1],value:amount});
+
+                await contracts.manager.buyOption(collateral0,amount,9000e8,1,month,amount1,0,{value : amount});
+                await contracts.manager.buyOption(collateral0,amount,9000e8,1,month,amount1,1,{value : amount});
+                await contracts.manager.buyOption(collateral0,amount,9000e8,2,month,amount1,0,{value : amount});
+                await contracts.manager.buyOption(collateral0,amount,9000e8,2,month,amount1,1,{value : amount});
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,1,month,amount1,0);
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,1,month,amount1,1);
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,2,month,amount1,0);
+                await contracts.FNX.approve(contracts.manager.address,amount);
+                await contracts.manager.buyOption(contracts.FNX.address,amount,9000e8,2,month,amount1,1);
+                for (var i=0;i<500;i++){
+                        await contracts.manager.addWhiteList(contracts.FNX.address);
+                }
+                await calculateNetWroth(contracts,contracts.FNX,contracts.USDC);
+                amount = new BN("500000000000000000000000000");
+
+                let balanceBefore = await web3.utils.fromWei(web3.utils.toHex(web3.eth.getBalance(accounts[1])));
+                await contracts.manager.redeemCollateral(amount,contracts.FNX.address);
+                let balanceAfter = await web3.utils.fromWei(web3.utils.toHex(web3.eth.getBalance(accounts[1])));
+                let diff = balanceAfter - balanceBefore;
+
+                console.log("balance diff=" + diff);
+        });
+
+    return;
     it('OptionsManagerV2 add large collateral', async function (){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
@@ -11,7 +118,7 @@ contract('OptionsManagerV2', function (accounts){
         await contracts.FNX.transfer(contracts.mine.address,new BN("100000000000000000000",10));
 //        console.log(tx);
 //        return;
-        await contracts.manager.addWhiteList(contracts.FNX.address);
+//        await contracts.manager.addWhiteList(contracts.FNX.address);
         let amount = new BN(1);
         amount = amount.ushln(99);
         await contracts.FNX.approve(contracts.manager.address,amount);
@@ -152,18 +259,18 @@ async function logBalance(fnx,addr){
         let fnxBalance = await fnx.balanceOf(addr);
         console.log("fnx : ",addr,fnxBalance.toString(10));
 }
-async function calculateNetWroth(options,collateral,fnx){
-        let whiteList = [collateral0,fnx.address];
-        optionsLen = await options.getOptionCalRangeAll(whiteList);
+async function calculateNetWroth(contracts,fnx,usdc){
+        let whiteList = [collateral0,fnx.address,usdc.address];
+        optionsLen = await contracts.options.getOptionCalRangeAll(whiteList);
         console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
     
-        let result =  await options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
+        let result =  await contracts.options.calculatePhaseOccupiedCollateral(optionsLen[5],optionsLen[0],optionsLen[5]);
         console.log(result[0].toString(10),result[1].toString(10));
-        let tx = await options.setOccupiedCollateral();
-        result =  await options.calRangeSharedPayment(optionsLen[4],optionsLen[2],optionsLen[4],whiteList);
+        let tx = await contracts.options.setOccupiedCollateral();
+        result =  await contracts.options.calRangeSharedPayment(optionsLen[5],optionsLen[3],optionsLen[5],whiteList);
         console.log(result[0][0].toString(10),result[0][1].toString(10));
     
     //                return;
-        tx = await collateral.calSharedPayment(whiteList);
+        tx = await contracts.collateral.calSharedPayment(whiteList);
     //    console.log(tx);
     }

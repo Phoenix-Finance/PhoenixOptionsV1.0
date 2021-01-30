@@ -95,13 +95,12 @@ contract CollateralCal is ManagerData {
     function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted InRange(tokenAmount) public {
         require(checkAddressPermission(collateral,allowRedeemCollateral) , "settlement is unsupported token");
         uint256 lockedAmount = _FPTCoin.lockedBalanceOf(msg.sender);
-        require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");
+        require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"FPT Coin balance is insufficient!");
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
         uint256 leftCollateral = getLeftCollateral();
         (uint256 burnAmount,uint256 redeemWorth) = _FPTCoin.redeemLockedCollateral(msg.sender,tokenAmount,leftCollateral);
-        tokenAmount -= burnAmount;
-        burnAmount = 0;
-        if (tokenAmount > 0){
+        //tokenAmount -= burnAmount;
+        if (tokenAmount > burnAmount){
             leftCollateral -= redeemWorth;
             
             if (lockedAmount > 0){
@@ -112,6 +111,8 @@ contract CollateralCal is ManagerData {
                 burnAmount = newRedeem;
                 redeemWorth += newWorth;
             }
+        }else{
+            burnAmount = 0;
         }
         _redeemCollateralWorth(collateral,redeemWorth,userTotalWorth);
         if (burnAmount>0){

@@ -98,8 +98,8 @@ contract OptionsManagerV2 is CollateralCal {
     * @param optionsId option's ID which was wanted to sell, must owned by user
     * @param amount user input amount of option user want to sell.
     */ 
-    function sellOption(uint256 optionsId,uint256 amount) nonReentrant notHalted InRange(amount) public{
-        require(false,"sellOption is not supported");
+    //function sellOption(uint256 /*optionsId*/,uint256 amount) nonReentrant notHalted InRange(amount) public{
+        //require(false,"sellOption is not supported");
         // (,,uint8 optType,uint32 underlying,uint256 expiration,uint256 strikePrice,) = _optionsPool.getOptionsById(optionsId);
         // expiration = expiration.sub(now);
         // uint256 currentPrice = oracleUnderlyingPrice(underlying);
@@ -110,7 +110,7 @@ contract OptionsManagerV2 is CollateralCal {
         // _collateralPool.addNetWorthBalance(settlement,int256(fullPay));
         // _paybackWorth(allPay,1);
         // emit SellOption(msg.sender,optionsId,amount,allPay);
-    }
+    //}
     /**
     * @dev User exercise option.
     * @param optionsId option's ID which was wanted to exercise, must owned by user

@@ -124,7 +124,7 @@ contract ImpliedVolatility is Operator {
      */ 
     function calImpliedVolatility(uint32 underlying,uint256 _ATMIv,uint256 currentPrice,uint256 strikePrice)internal view returns(uint256){
         ivParam memory param = ivParamMap[underlying];
-        int256 ln = calImpliedVolLn(underlying,currentPrice,strikePrice,param.d);
+        int256 ln = calImpliedVolLn(currentPrice,strikePrice,param.d);
         //ln*ln+e
         uint256 lnSqrt = uint256(((ln*ln)>>32) + param.e);
         lnSqrt = SmallNumbers.sqrt(lnSqrt);
@@ -135,15 +135,14 @@ contract ImpliedVolatility is Operator {
     }
     /**
      * @dev An auxiliary function, calculate ln price. 
-     * @param underlying underlying ID.,1 for BTC, 2 for ETH
      * @param currentPrice underlying current price
      * @param strikePrice option's strike price
      */ 
     //ln(k) - ln(s) + d
-    function calImpliedVolLn(uint32 underlying,uint256 currentPrice,uint256 strikePrice,int48 paramd)internal pure returns(int256){
+    function calImpliedVolLn(uint256 currentPrice,uint256 strikePrice,int48 paramd)internal pure returns(int256){
         if (currentPrice == strikePrice){
             return paramd;
-        }else if (currentPrice > strikePrice){
+        }else if (currentPrice > strikePrice){	
             return int256(SmallNumbers.fixedLoge((currentPrice<<32)/strikePrice))+paramd;
         }else{
             return -int256(SmallNumbers.fixedLoge((strikePrice<<32)/currentPrice))+paramd;
