@@ -82,14 +82,17 @@ module.exports = {
 
   // Set default mocha options here, use special reporters etc.
   mocha: {
-//    reporter: 'eth-gas-reporter'
+
+    // reporter: 'eth-gas-reporter'
     // timeout: 100000
+
+     timeout: 900000
   },
 
   // Configure your compilers
   compilers: {
     solc: {
-      evmVersion: "byzantium",
+//      evmVersion: "byzantium",
        version: "0.5.16",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
        settings: {          // See the solidity docs for advice about optimization and evmVersion
