@@ -9,7 +9,7 @@ contract testSmallNumbers {
         test1 = SmallNumbers.exp(value);
         emit DebugEvent(msg.sender,test1,test2);
     } 
-    function testNormSDist(int256 value) public view returns (int256){
+    function testNormSDist(int256 value) public pure returns (int256){
         return SmallNumbers.normsDist(value);
     } 
 }
