@@ -80,9 +80,7 @@ contract CollateralCal is ManagerData {
             "Allowances : user's allowance is unsufficient!");
         uint256 mintAmount = userPaying/getTokenNetworth();
         _collateralPool.addUserPayingUsd(msg.sender,userPaying);
-        _collateralPool.addCollateralBalance(collateral,amount);
         _collateralPool.addUserInputCollateral(msg.sender,collateral,amount);
-         _collateralPool.addNetWorthBalance(collateral,int256(amount));
         emit AddCollateral(msg.sender,collateral,amount,mintAmount);
         _FPTCoin.mint(msg.sender,mintAmount);
     }

@@ -76,6 +76,8 @@ contract CollateralPool is TransactionFee{
      */
     function addUserInputCollateral(address user,address collateral,uint256 amount)public onlyManager{
         userInputCollateral[user][collateral] = userInputCollateral[user][collateral].add(amount);
+        collateralBalances[collateral] = collateralBalances[collateral].add(amount);
+        netWorthBalances[collateral] = netWorthBalances[collateral].add(int256(amount));
     }
     /**
      * @dev Opterator net worth balance data. Only manager contract can modify database.
