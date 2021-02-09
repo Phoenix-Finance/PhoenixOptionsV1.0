@@ -19,14 +19,6 @@ contract('CollateralPool', function (accounts){
         let collateral = await CollateralPool.new(options.address);
         let pool = await CollateralProxy.new(collateral.address,options.address);
         for (var i=0;i<5;i++){
-            let result = await pool.getFeeRate(i);
-            if (i == 1){
-                assert.equal(result,50,"getFeeRate Error");
-            }else{
-                assert.equal(result,0,"getFeeRate Error");
-            }
-        }
-        for (var i=0;i<5;i++){
             await pool.setTransactionFee(i,i+1);
             let result = await pool.getFeeRate(i);
             assert.equal(result,i+1,"getFeeRate Error");

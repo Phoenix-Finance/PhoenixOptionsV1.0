@@ -11,6 +11,7 @@ contract FPTProxy is FPTData,Erc20BaseProxy {
     constructor (address implementation_,address minePoolAddr,string memory tokenName) Erc20BaseProxy(implementation_) public{
         _FnxMinePool = IFNXMinePool(minePoolAddr);
         name = tokenName;
+        symbol = tokenName;
     }
     /**
      * @dev Retrieve user's start time for burning. 

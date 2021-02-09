@@ -5,8 +5,6 @@ import "./FPTData.sol";
 contract SharedCoin is FPTData  {
     using SafeMath for uint256;
     function initialize() onlyOwner public{
-        name = "finnexus pool token";
-        symbol = "FPT";
         _totalSupply = 0;
     }
     /**

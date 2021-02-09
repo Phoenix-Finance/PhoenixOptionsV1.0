@@ -67,9 +67,9 @@ exports.migration =  async function (accounts){
     }
 }
 exports.createAndAddErc20 =  async function (contracts){
- //   let fnx = await TetherToken.new(new BN("10000000000000000000000000000"),"USDT","USDT",6);
-//    let erc20 = await Erc20Proxy.new(fnx.address);
-    let erc20 = await IERC20.at("0x42090c3bBa634698440b11DB6fDeff0Ac357c353");
+   let fnx = await FNXCoin.new();
+    let erc20 = await Erc20Proxy.new(fnx.address);
+//    let erc20 = await IERC20.at("0x42090c3bBa634698440b11DB6fDeff0Ac357c353");
     await contracts.mine.setMineCoinInfo(erc20.address,500000000000000,2);
     await contracts.mine.setBuyingMineInfo(erc20.address,300000000);
     await contracts.manager.setCollateralRate(erc20.address,5000);

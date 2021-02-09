@@ -4,7 +4,7 @@ const Erc20Proxy = artifacts.require("Erc20Proxy");
 const FNXCoin = artifacts.require("FNXCoin");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 const FPTProxy = artifacts.require("FPTProxy");
-const FPTCoin = artifacts.require("FPTCoin");
+const FPTCoin = artifacts.require("FPTCoinUpgrade");
 const BN = require("bn.js");
 contract('Erc20Proxy', function (accounts){
     it('FPTProxy Erc20 violation test functions', async function (){

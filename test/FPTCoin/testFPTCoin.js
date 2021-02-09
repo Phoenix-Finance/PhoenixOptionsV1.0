@@ -4,7 +4,7 @@ const Erc20Proxy = artifacts.require("Erc20Proxy");
 const FNXCoin = artifacts.require("FNXCoin");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 const FPTProxy = artifacts.require("FPTProxy");
-const FPTCoin = artifacts.require("FPTCoin");
+const FPTCoin = artifacts.require("FPTCoinUpgrade");
 const BN = require("bn.js");
 contract('FPTProxy', function (accounts){
     it('FPTProxy Erc20 test functions', async function (){
@@ -18,9 +18,9 @@ contract('FPTProxy', function (accounts){
         await poolProxy.setMineCoinInfo(collateral0,1000000,2);
         await poolProxy.setMineCoinInfo(erc20.address,2000000,2);
         let name = await fpt.name();
-        assert.equal(name,"finnexus pool token","name Error");
+        assert.equal(name,"FPT-A","name Error");
         let symbol = await fpt.symbol();
-        assert.equal(symbol,"FPT","symbol Error");
+        assert.equal(symbol,"FPT-A","symbol Error");
         let decimals = await fpt.decimals();
         assert.equal(decimals,18,"decimals Error");
         let totalSupply = await fpt.totalSupply();

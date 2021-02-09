@@ -90,7 +90,7 @@ contract OptionsManagerV2 is CollateralCal {
         uint256 allPayUSd = allPay/1e8;
         allPay = allPay/settlePrice;
         _collateralPool.buyOptionsPayfor(msg.sender,settlement,settlementAmount,allPay);
-        _FPTCoin.addMinerBalance(msg.sender,allPayUSd);
+        //_FPTCoin.addMinerBalance(msg.sender,allPayUSd);
         emit BuyOption(msg.sender,settlement,optionPrice,allPay,amount); 
     }
     /**
