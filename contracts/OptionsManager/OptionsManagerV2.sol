@@ -64,7 +64,8 @@ contract OptionsManagerV2 is CollateralCal {
     * @param optType user input option type
     */ 
     function buyOption(address settlement,uint256 settlementAmount, uint256 strikePrice,uint32 underlying,
-                uint32 expiration,uint256 amount,uint8 optType) nonReentrant notHalted InRange(amount) public payable{
+                uint32 expiration,uint256 amount,uint8 optType) nonReentrant notHalted
+                 InRange(amount) public payable{
         uint256 type_ly_expiration = optType+(uint256(underlying)<<64)+(uint256(expiration)<<128);
         (uint256 settlePrice,uint256 underlyingPrice) = oracleAssetAndUnderlyingPrice(settlement,underlying);
         checkStrikePrice(strikePrice,underlyingPrice);
@@ -83,7 +84,8 @@ contract OptionsManagerV2 is CollateralCal {
     * @param amount user input amount of new option user want to buy.
     */ 
     function buyOption_sub(address settlement,uint256 settlementAmount,
-            uint256 optionPrice,uint256 settlePrice,uint256 amount)internal{
+            uint256 optionPrice,uint256 settlePrice,uint256 amount) 
+            addressPermissionAllowed(settlement,allowBuyOptions) internal{
         settlementAmount = getPayableAmount(settlement,settlementAmount);
         amount = uint256(uint128(amount));
         uint256 allPay = amount*optionPrice;

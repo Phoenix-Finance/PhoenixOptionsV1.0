@@ -70,7 +70,8 @@ contract CollateralCal is ManagerData {
      * @param collateral The collateral coin address which is in whitelist.
      * @param amount the amount of collateral to deposit.
      */
-    function addCollateral(address collateral,uint256 amount) nonReentrant notHalted  public payable {
+    function addCollateral(address collateral,uint256 amount) nonReentrant notHalted
+                 addressPermissionAllowed(collateral,allowAddCollateral)  public payable {
         amount = getPayableAmount(collateral,amount);
         uint256 fee = _collateralPool.addTransactionFee(collateral,amount,3);
         amount = amount-fee;
@@ -90,8 +91,8 @@ contract CollateralCal is ManagerData {
      * @param tokenAmount the amount of FPTCoin want to redeem.
      * @param collateral The prioritized collateral coin address.
      */
-    function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted InRange(tokenAmount) public {
-        require(checkAddressPermission(collateral,allowRedeemCollateral) , "settlement is unsupported token");
+    function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted
+        addressPermissionAllowed(collateral,allowRedeemCollateral) InRange(tokenAmount) public {
         uint256 lockedAmount = _FPTCoin.lockedBalanceOf(msg.sender);
         require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
@@ -307,7 +308,7 @@ contract CollateralCal is ManagerData {
      * @dev the auxiliary function for getting user's transer
      */
     function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
-        require(checkAddressPermission(settlement,allowBuyOptions) , "settlement is unsupported token");
+//        require(checkAddressPermission(settlement,allowBuyOptions) , "settlement is unsupported token");
         if (settlement == address(0)){
             settlementAmount = msg.value;
             address payable poolAddr = address(uint160(address(_collateralPool)));
