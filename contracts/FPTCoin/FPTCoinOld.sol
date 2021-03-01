@@ -8,15 +8,15 @@ import "../modules/SafeMath.sol";
  * @dev ERC20 token. Its inside value is collatral pool net worth.
  *
  */
-contract FPTCoinUpgrade is SharedCoin {
+contract FPTCoinOld is SharedCoin {
     using SafeMath for uint256;
-    mapping (address => bool) internal timeLimitWhiteList;
     constructor (address minePoolAddr,string memory tokenName)public{
         initialize();
-        //_FnxMinePool = IFNXMinePool(minePoolAddr);
+        _FnxMinePool = IFNXMinePool(minePoolAddr);
         name = tokenName;
         symbol = tokenName;
     }
+
     /**
      * @dev constructor function. set FNX minePool contract address. 
      */ 
@@ -24,7 +24,6 @@ contract FPTCoinUpgrade is SharedCoin {
         SharedCoin.initialize();
     }
     function update() onlyOwner public{
-        timeLimitWhiteList[0xf1FF936B72499382983a8fBa9985C41cB80BE17D] = true;
     }
     /**
      * @dev Retrieve user's start time for burning. 
@@ -65,18 +64,8 @@ contract FPTCoinUpgrade is SharedCoin {
      * @param account user's account.
      * @param amount user's pay for buying options, priced in USD.
      */ 
-    function addMinerBalance(address account,uint256 amount) public onlyOwner{
-        if (amount == 0){
-            timeLimitWhiteList[account] = false;
-        }else{
-            timeLimitWhiteList[account] = true;
-        }
-        //_FnxMinePool.addMinerBalance(account,amount);
-    }
-    function setTransferTimeLimitation(address from,address recipient) internal {
-        if (!timeLimitWhiteList[from]){
-            setItemTimeLimitation(uint256(recipient));
-        }
+    function addMinerBalance(address account,uint256 amount) public onlyManager{
+        _FnxMinePool.addMinerBalance(account,amount);
     }
     /**
      * dev Burn user's locked balance, when user redeem collateral. 
@@ -114,9 +103,9 @@ contract FPTCoinUpgrade is SharedCoin {
      * @param amount amount of FPT.
      */ 
     function transfer(address recipient, uint256 amount)public returns (bool){
-        //require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
-        //_FnxMinePool.transferMinerCoin(msg.sender,recipient,amount);
-        setTransferTimeLimitation(msg.sender,recipient);
+        require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
+        _FnxMinePool.transferMinerCoin(msg.sender,recipient,amount);
+        setItemTimeLimitation(uint256(recipient));
         return SharedCoin.transfer(recipient,amount);
     }
     /**
@@ -126,9 +115,9 @@ contract FPTCoinUpgrade is SharedCoin {
      * @param amount amount of FPT.
      */ 
     function transferFrom(address sender, address recipient, uint256 amount)public returns (bool){
-        //require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
-        //_FnxMinePool.transferMinerCoin(sender,recipient,amount);
-        setTransferTimeLimitation(sender,recipient);
+        require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
+        _FnxMinePool.transferMinerCoin(sender,recipient,amount);
+        setItemTimeLimitation(uint256(recipient));
         return SharedCoin.transferFrom(sender,recipient,amount);
     }
     /**
@@ -137,8 +126,8 @@ contract FPTCoinUpgrade is SharedCoin {
      * @param amount amount of FPT.
      */ 
     function burn(address account, uint256 amount) public onlyManager OutLimitation(uint256(account)) {
-        //require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
-        //_FnxMinePool.burnMinerCoin(account,amount);
+        require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
+        _FnxMinePool.burnMinerCoin(account,amount);
         SharedCoin._burn(account,amount);
     }
     /**
@@ -147,9 +136,9 @@ contract FPTCoinUpgrade is SharedCoin {
      * @param amount amount of FPT.
      */ 
     function mint(address account, uint256 amount) public onlyManager {
-        //require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
-        //_FnxMinePool.mintMinerCoin(account,amount);
-        setTransferTimeLimitation(address(0),account);
+        require(address(_FnxMinePool) != address(0),"FnxMinePool is not set");
+        _FnxMinePool.mintMinerCoin(account,amount);
+        setItemTimeLimitation(uint256(account));
         SharedCoin._mint(account,amount);
     }
     /**
