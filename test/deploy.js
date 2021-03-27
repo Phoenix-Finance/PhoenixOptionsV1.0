@@ -24,6 +24,7 @@ let CollateralPool = artifacts.require("CollateralPool");
 let CollateralProxy = artifacts.require("CollateralProxy");
 const FNXOracle = artifacts.require("TestFNXOracle");
 const OptionsPrice = artifacts.require("OptionsPriceTest");
+let collateral0 = "0x0000000000000000000000000000000000000000";
 contract('OptionsManagerV2', function (accounts){
     it('deploy All contracts', async function (){
         let ivInstance = await ImpliedVolatility.new();
@@ -94,7 +95,8 @@ contract('OptionsManagerV2', function (accounts){
         console.log("FNX : ",erc20.address)
         await managerB.setCollateralRate(erc20.address,5000);
         await oracleInstance.setPrice(erc20.address,28000000);
-
+        await managerB.setCollateralRate(collateral0,5000);
+        await oracleInstance.setPrice(collateral0,78000000);
         let usdc = await USDCoin.new();
         erc20 = await Erc20Proxy.new(usdc.address);
         console.log("USDC : ",erc20.address)
