@@ -155,30 +155,14 @@
           "internalType": "address",
           "name": "tmpAddress",
           "type": "address"
-        }
-      ],
-      "name": "checkAddressPayIn",
-      "outputs": [
+        },
         {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
+          "internalType": "uint256",
+          "name": "state",
+          "type": "uint256"
         }
       ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "tmpAddress",
-          "type": "address"
-        }
-      ],
-      "name": "checkAddressRedeemOut",
+      "name": "checkAddressPermission",
       "outputs": [
         {
           "internalType": "bool",
@@ -367,25 +351,25 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"BurnMiner\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"mineCoin\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"BuyingMiner\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"MintMiner\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"mineCoin\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"RedeemMineCoin\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"TranserMiner\",\"type\":\"event\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"addAddress\",\"type\":\"address\"}],\"name\":\"addWhiteList\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"tmpAddress\",\"type\":\"address\"}],\"name\":\"checkAddressPayIn\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"tmpAddress\",\"type\":\"address\"}],\"name\":\"checkAddressRedeemOut\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getManager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getWhiteList\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"tmpAddress\",\"type\":\"address\"}],\"name\":\"isEligibleAddress\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"addAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"permission\",\"type\":\"uint256\"}],\"name\":\"modifyPermission\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"removeAddress\",\"type\":\"address\"}],\"name\":\"removeWhiteList\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bool\",\"name\":\"halt\",\"type\":\"bool\"}],\"name\":\"setHalt\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"managerAddress\",\"type\":\"address\"}],\"name\":\"setManager\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"A smart-contract which distribute some mine coins by FPTCoin balance. \",\"methods\":{\"addWhiteList(address)\":{\"details\":\"Implementation of add an eligible address into the whitelist.\",\"params\":{\"addAddress\":\"new eligible address.\"}},\"getManager()\":{\"details\":\"get manager address.      \"},\"getWhiteList()\":{\"details\":\"Implementation of getting the eligible whitelist.\"},\"isEligibleAddress(address)\":{\"details\":\"Implementation of testing whether the input address is eligible.\",\"params\":{\"tmpAddress\":\"input address for testing.\"}},\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"removeWhiteList(address)\":{\"details\":\"Implementation of revoke an invalid address from the whitelist.\",\"params\":{\"removeAddress\":\"revoked address.\"}},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"setManager(address)\":{\"details\":\"set manager by owner.      \"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"title\":\"FPTCoin mine pool, which manager contract is FPTCoin.\"},\"userdoc\":{\"methods\":{\"setHalt(bool)\":{\"notice\":\"function Emergency situation that requires contribution period to stop or not.\"}}}},\"settings\":{\"compilationTarget\":{\"/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol\":\"MinePoolData\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol\":{\"keccak256\":\"0x32a39ba0c8817b7bf6d0895dce6265acedf7e62a6dad288ab783ebda6cc2c1d8\",\"urls\":[\"bzz-raw://9996c2ebef521fb7c8f823a38628c9f07e091f0670571d54ec3b151a54008f58\",\"dweb:/ipfs/QmWXsaAMBX3RDTxiPV2k3FFFXNPqrrdk3vp9jUrf9CtFmE\"]},\"/home/jqg/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol\":{\"keccak256\":\"0xa1abb937abe834cb723cdbf9b379544671f5d992797097a0c9c126c226b531ab\",\"urls\":[\"bzz-raw://b0bc9b1e60474055e7823f5c250b58240bd7bff8d5dab06b56a142ac9975b436\",\"dweb:/ipfs/QmRy11erH9VkbvdKA8jdDUz843ofDeYJRskJyvHKVG1r3e\"]},\"/home/jqg/FinnexusOptions_V2/contracts/modules/Halt.sol\":{\"keccak256\":\"0xec7f07eddf2d48f8ca3a0fc08fee6443067179607ce4011ba054883b53b7b179\",\"urls\":[\"bzz-raw://90b38398b4a181fd5e1b70799aec2d24df314ba24ec82ed768fee9693c762592\",\"dweb:/ipfs/QmNttDJiP7ZxUYWFTHiwgbcQ3MWftqS8d9uq8iGX3ZNpRv\"]},\"/home/jqg/FinnexusOptions_V2/contracts/modules/Managerable.sol\":{\"keccak256\":\"0xf7b9a72aa8926002a1fb556eb634a8113082f4926134d56abbc938ed7bca6fc9\",\"urls\":[\"bzz-raw://24b28968f8904f1e500297ebdb89232f7f89407e8986060a37f42f09300347e6\",\"dweb:/ipfs/QmQTR7LU6TYiiFAC32K9hiTdmvLWyifJSgwfrCs4EJxLpG\"]},\"/home/jqg/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0x283d39388b6a114767746e38a205a4bfaaeb401c4863a7eb17fa107684d7845b\",\"urls\":[\"bzz-raw://716829652ea09ecaf4fca47af0d4edb145db6f25548c0710ccb83f39e4b9bea8\",\"dweb:/ipfs/QmWDKty8932txnmo4JLiCVfvDHyLqHik2W1NYeXBFQMzYs\"]},\"/home/jqg/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol\":{\"keccak256\":\"0x20f4f3c2a5c27de31241140a1008f13ba35a96fbb9c5b14c669a2abb1029e345\",\"urls\":[\"bzz-raw://3eb6b4abcc952bd289aa1c7f86407d7f58b7b7a04ce056b4fc2115595ec2907c\",\"dweb:/ipfs/QmbEzC6iS4x3fY645pWZmgumnLg2dLFyVd5tLjyzdSyJRP\"]},\"/home/jqg/FinnexusOptions_V2/contracts/modules/whiteList.sol\":{\"keccak256\":\"0xa65f8f43b4fb334aab9ad0a3693f1c0f6ba5d4f68291975a02b4f94d7a772ff3\",\"urls\":[\"bzz-raw://a017d4ac3b703fb17684b6852f0375855468a0deba95fa9cf7b963138ac7e268\",\"dweb:/ipfs/QmeDXC8uqdeJEPHGPNz6ZRqyxvAZ27CCM34MHT7sp6rL39\"]}},\"version\":1}",
-  "bytecode": "0x608060408190526001805460a060020a60ff02191690556004805460ff1916905560008054600160a060020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610b03806100716000396000f3fe608060405234801561001057600080fd5b5060043610610107576000357c010000000000000000000000000000000000000000000000000000000090048063bdac4bf6116100a9578063d500958411610083578063d500958414610298578063e7cd4a04146102a0578063f2fde38b146102c6578063f4954387146102ec57610107565b8063bdac4bf614610220578063c219043b14610246578063d0ebdbe71461027257610107565b8063715018a6116100e5578063715018a6146101c4578063817bf86d146101ce5780638da5cb5b146101f45780638f32d59b1461021857610107565b8063059621d71461010c57806309a9d76c146101465780632042e5c21461019e575b600080fd5b6101326004803603602081101561012257600080fd5b5035600160a060020a031661030b565b604080519115158252519081900360200190f35b61014e610343565b60408051602080825283518183015283519192839290830191858101910280838360005b8381101561018a578181015183820152602001610172565b505050509050019250505060405180910390f35b610132600480360360208110156101b457600080fd5b5035600160a060020a03166103a6565b6101cc610403565b005b610132600480360360208110156101e457600080fd5b5035600160a060020a03166104a4565b6101fc610513565b60408051600160a060020a039092168252519081900360200190f35b610132610522565b6101326004803603602081101561023657600080fd5b5035600160a060020a0316610533565b6101cc6004803603604081101561025c57600080fd5b50600160a060020a038135169060200135610567565b6101cc6004803603602081101561028857600080fd5b5035600160a060020a03166105cd565b6101fc610646565b6101cc600480360360208110156102b657600080fd5b5035600160a060020a0316610655565b6101cc600480360360208110156102dc57600080fd5b5035600160a060020a03166106d0565b6101cc6004803603602081101561030257600080fd5b50351515610726565b6000610316826104a4565b801561033d5750600160a060020a0382166000908152600360205260409020546002908116145b92915050565b6060600280548060200260200160405190810160405280929190818152602001828054801561039b57602002820191906000526020600020905b8154600160a060020a0316815260019091019060200180831161037d575b505050505090505b90565b60006103b0610522565b6103f2576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b61033d60028363ffffffff6107b016565b61040b610522565b61044d576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600061033d82600280548060200260200160405190810160405280929190818152602001828054801561050057602002820191906000526020600020905b8154600160a060020a031681526001909101906020018083116104e2575b505050505061089e90919063ffffffff16565b600054600160a060020a031690565b600054600160a060020a0316331490565b600061053e826104a4565b801561033d575050600160a060020a031660009081526003602052604090205460019081161490565b61056f610522565b6105b1576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b600160a060020a03909116600090815260036020526040902055565b6105d5610522565b610617576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b61065d610522565b61069f576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b6106b060028263ffffffff6108ed16565b600160a060020a0316600090815260036020526040902063ffffffff9055565b6106d8610522565b61071a576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b61072381610991565b50565b61072e610522565b610770576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b60018054911515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019909216919091179055565b8154600090815b818110156107fd5783600160a060020a03168582815481106107d557fe5b600091825260209091200154600160a060020a031614156107f5576107fd565b6001016107b7565b81811015610893576001820381146108775784600183038154811061081e57fe5b9060005260206000200160009054906101000a9004600160a060020a031685828154811061084857fe5b9060005260206000200160006101000a815481600160a060020a030219169083600160a060020a031602179055505b8454610887866000198301610a41565b5060019250505061033d565b506000949350505050565b8151600090815b818110156108935783600160a060020a03168582815181106108c357fe5b6020026020010151600160a060020a031614156108e55760019250505061033d565b6001016108a5565b6109508280548060200260200160405190810160405280929190818152602001828054801561094557602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610927575b50505050508261089e565b61098d57815460018101835560008381526020902001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5050565b600160a060020a0381166109d95760405160e560020a62461bcd028152600401808060200182810382526026815260200180610a896026913960400191505060405180910390fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b815481835581811115610a6557600083815260209020610a65918101908301610a6a565b505050565b6103a391905b80821115610a845760008155600101610a70565b509056fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f20616464726573734f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a265627a7a72315820295cd10ec8d1ea4ffbccccaf5b83b717e2ce5157f7405dff811c290d5f5ae48e64736f6c63430005100032",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b5060043610610107576000357c010000000000000000000000000000000000000000000000000000000090048063bdac4bf6116100a9578063d500958411610083578063d500958414610298578063e7cd4a04146102a0578063f2fde38b146102c6578063f4954387146102ec57610107565b8063bdac4bf614610220578063c219043b14610246578063d0ebdbe71461027257610107565b8063715018a6116100e5578063715018a6146101c4578063817bf86d146101ce5780638da5cb5b146101f45780638f32d59b1461021857610107565b8063059621d71461010c57806309a9d76c146101465780632042e5c21461019e575b600080fd5b6101326004803603602081101561012257600080fd5b5035600160a060020a031661030b565b604080519115158252519081900360200190f35b61014e610343565b60408051602080825283518183015283519192839290830191858101910280838360005b8381101561018a578181015183820152602001610172565b505050509050019250505060405180910390f35b610132600480360360208110156101b457600080fd5b5035600160a060020a03166103a6565b6101cc610403565b005b610132600480360360208110156101e457600080fd5b5035600160a060020a03166104a4565b6101fc610513565b60408051600160a060020a039092168252519081900360200190f35b610132610522565b6101326004803603602081101561023657600080fd5b5035600160a060020a0316610533565b6101cc6004803603604081101561025c57600080fd5b50600160a060020a038135169060200135610567565b6101cc6004803603602081101561028857600080fd5b5035600160a060020a03166105cd565b6101fc610646565b6101cc600480360360208110156102b657600080fd5b5035600160a060020a0316610655565b6101cc600480360360208110156102dc57600080fd5b5035600160a060020a03166106d0565b6101cc6004803603602081101561030257600080fd5b50351515610726565b6000610316826104a4565b801561033d5750600160a060020a0382166000908152600360205260409020546002908116145b92915050565b6060600280548060200260200160405190810160405280929190818152602001828054801561039b57602002820191906000526020600020905b8154600160a060020a0316815260019091019060200180831161037d575b505050505090505b90565b60006103b0610522565b6103f2576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b61033d60028363ffffffff6107b016565b61040b610522565b61044d576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600061033d82600280548060200260200160405190810160405280929190818152602001828054801561050057602002820191906000526020600020905b8154600160a060020a031681526001909101906020018083116104e2575b505050505061089e90919063ffffffff16565b600054600160a060020a031690565b600054600160a060020a0316331490565b600061053e826104a4565b801561033d575050600160a060020a031660009081526003602052604090205460019081161490565b61056f610522565b6105b1576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b600160a060020a03909116600090815260036020526040902055565b6105d5610522565b610617576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b61065d610522565b61069f576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b6106b060028263ffffffff6108ed16565b600160a060020a0316600090815260036020526040902063ffffffff9055565b6106d8610522565b61071a576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b61072381610991565b50565b61072e610522565b610770576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610aaf833981519152604482015290519081900360640190fd5b60018054911515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019909216919091179055565b8154600090815b818110156107fd5783600160a060020a03168582815481106107d557fe5b600091825260209091200154600160a060020a031614156107f5576107fd565b6001016107b7565b81811015610893576001820381146108775784600183038154811061081e57fe5b9060005260206000200160009054906101000a9004600160a060020a031685828154811061084857fe5b9060005260206000200160006101000a815481600160a060020a030219169083600160a060020a031602179055505b8454610887866000198301610a41565b5060019250505061033d565b506000949350505050565b8151600090815b818110156108935783600160a060020a03168582815181106108c357fe5b6020026020010151600160a060020a031614156108e55760019250505061033d565b6001016108a5565b6109508280548060200260200160405190810160405280929190818152602001828054801561094557602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610927575b50505050508261089e565b61098d57815460018101835560008381526020902001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5050565b600160a060020a0381166109d95760405160e560020a62461bcd028152600401808060200182810382526026815260200180610a896026913960400191505060405180910390fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b815481835581811115610a6557600083815260209020610a65918101908301610a6a565b505050565b6103a391905b80821115610a845760008155600101610a70565b509056fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f20616464726573734f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a265627a7a72315820295cd10ec8d1ea4ffbccccaf5b83b717e2ce5157f7405dff811c290d5f5ae48e64736f6c63430005100032",
-  "sourceMap": "298:2016:13:-;;;;;86:27:45;;;-1:-1:-1;;;;;;86:27:45;;;123:35:50;;;-1:-1:-1;;123:35:50;;;108:5:45;659:19:49;;-1:-1:-1;;;;;;659:19:49;668:10;659:19;;;;-1:-1:-1;;;;;726:6:49;;693:40;;108:5:45;;693:40:49;298:2016:13;;;;;;",
-  "deployedSourceMap": "298:2016:13:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;298:2016:13;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1991:200:43;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1991:200:43;-1:-1:-1;;;;;1991:200:43;;:::i;:::-;;;;;;;;;;;;;;;;;;1409:94;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:100:-1;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;1409:94:43;;;;;;;;;;;;;;;;;1177:149;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1177:149:43;-1:-1:-1;;;;;1177:149:43;;:::i;1599:137:49:-;;;:::i;:::-;;1657:136:43;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1657:136:43;-1:-1:-1;;;;;1657:136:43;;:::i;816:77:49:-;;;:::i;:::-;;;;-1:-1:-1;;;;;816:77:49;;;;;;;;;;;;;;1167:90;;;:::i;1798:188:43:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1798:188:43;-1:-1:-1;;;;;1798:188:43;;:::i;896:139::-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;896:139:43;;;;;;;;:::i;432:122:47:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;432:122:47;-1:-1:-1;;;;;432:122:47;;:::i;616:90::-;;;:::i;721:170:43:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;721:170:43;-1:-1:-1;;;;;721:170:43;;:::i;1885:107:49:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1885:107:49;-1:-1:-1;;;;;1885:107:49;;:::i;437:97:45:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;437:97:45;;;;:::i;1991:200:43:-;2063:4;2085:29;2103:10;2085:17;:29::i;:::-;:99;;;;-1:-1:-1;;;;;;2120:29:43;;;;;;:17;:29;;;;;;393:6;2120:44;;;2119:64;2085:99;2078:106;1991:200;-1:-1:-1;;1991:200:43:o;1409:94::-;1453:16;1487:9;1480:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1480:16:43;;;;;;;;;;;;;;;;;;;;;;;1409:94;;:::o;1177:149::-;1250:4;1020:9:49;:7;:9::i;:::-;1012:54;;;;;-1:-1:-1;;;;;1012:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:49;;;;;;;;;;;;;;;1272:47:43;:9;1305:13;1272:47;:32;:47;:::i;1599:137:49:-;1020:9;:7;:9::i;:::-;1012:54;;;;;-1:-1:-1;;;;;1012:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:49;;;;;;;;;;;;;;;1697:1;1681:6;;1660:40;;-1:-1:-1;;;;;1681:6:49;;;;1660:40;;1697:1;;1660:40;1727:1;1710:19;;-1:-1:-1;;1710:19:49;;;1599:137::o;1657:136:43:-;1725:4;1747:39;1775:10;1747:9;:27;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1747:27:43;;;;;;;;;;;;;;;;;;;;;;;:39;;;;:::i;816:77:49:-;854:7;880:6;-1:-1:-1;;;;;880:6:49;816:77;:::o;1167:90::-;1207:4;1244:6;-1:-1:-1;;;;;1244:6:49;1230:10;:20;;1167:90::o;1798:188:43:-;1866:4;1888:29;1906:10;1888:17;:29::i;:::-;:91;;;;-1:-1:-1;;;;;;;1923:29:43;;;;;:17;:29;;;;;;338:6;1923:40;;;1922:56;;1798:188::o;896:139::-;1020:9:49;:7;:9::i;:::-;1012:54;;;;;-1:-1:-1;;;;;1012:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:49;;;;;;;;;;;;;;;-1:-1:-1;;;;;986:29:43;;;;;;;:17;:29;;;;;:42;896:139::o;432:122:47:-;1020:9:49;:7;:9::i;:::-;1012:54;;;;;-1:-1:-1;;;;;1012:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:49;;;;;;;;;;;;;;;515:15:47;:32;;-1:-1:-1;;515:32:47;-1:-1:-1;;;;;515:32:47;;;;;;;;;;432:122::o;616:90::-;684:15;;-1:-1:-1;;;;;684:15:47;616:90;:::o;721:170:43:-;1020:9:49;:7;:9::i;:::-;1012:54;;;;;-1:-1:-1;;;;;1012:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:49;;;;;;;;;;;;;;;788:41:43;:9;818:10;788:41;:29;:41;:::i;:::-;-1:-1:-1;;;;;839:29:43;;;;;:17;:29;;;;;283:10;839:45;;721:170::o;1885:107:49:-;1020:9;:7;:9::i;:::-;1012:54;;;;;-1:-1:-1;;;;;1012:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:49;;;;;;;;;;;;;;;1957:28;1976:8;1957:18;:28::i;:::-;1885:107;:::o;437:97:45:-;1020:9:49;:7;:9::i;:::-;1012:54;;;;;-1:-1:-1;;;;;1012:54:49;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1012:54:49;;;;;;;;;;;;;;;514:6:45;:13;;;;;;;-1:-1:-1;;514:13:45;;;;;;;;;437:97::o;3252:462:56:-;3373:16;;3343:4;;;3420:88;3428:3;3426:1;:5;3420:88;;;3470:4;-1:-1:-1;;;;;3454:20:56;:9;3464:1;3454:12;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3454:12:56;:20;3450:47;;;3492:5;;3450:47;3432:3;;3420:88;;;3523:3;3521:1;:5;3517:169;;;3552:1;3548:3;:5;3545:1;:8;3541:78;;3588:9;3602:1;3598:3;:5;3588:16;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3588:16:56;3573:9;3583:1;3573:12;;;;;;;;;;;;;;;;:31;;;;;-1:-1:-1;;;;;3573:31:56;;;;;-1:-1:-1;;;;;3573:31:56;;;;;;3541:78;3632:18;;;:9;-1:-1:-1;;3632:18:56;;;:::i;:::-;;3671:4;3664:11;;;;;;3517:169;-1:-1:-1;3702:5:56;;3252:462;-1:-1:-1;;;;3252:462:56:o;3719:279::-;3839:16;;3810:4;;;3865:105;3884:3;3882:1;:5;3865:105;;;3926:4;-1:-1:-1;;;;;3910:20:56;:9;3920:1;3910:12;;;;;;;;;;;;;;-1:-1:-1;;;;;3910:20:56;;3906:53;;;3955:4;3948:11;;;;;;3906:53;3888:3;;3865:105;;3068:179;3162:33;3180:9;3162:33;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3162:33:56;;;;;;;;;;;;;;;;;;;;;3190:4;3162:17;:33::i;:::-;3157:84;;27:10:-1;;39:1;23:18;;45:23;;-1:-1;3210:20:56;;;;;;;;;-1:-1:-1;;3210:20:56;-1:-1:-1;;;;;3210:20:56;;;;;3157:84;3068:179;;:::o;2093:225:49:-;-1:-1:-1;;;;;2166:22:49;;2158:73;;;;-1:-1:-1;;;;;2158:73:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2267:6;;;2246:38;;-1:-1:-1;;;;;2246:38:49;;;;2267:6;;;2246:38;;;2294:6;:17;;-1:-1:-1;;2294:17:49;-1:-1:-1;;;;;2294:17:49;;;;;;;;;;2093:225::o;298:2016:13:-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;",
-  "source": "pragma solidity =0.5.16;\nimport \"../modules/Managerable.sol\";\nimport \"../modules/AddressWhiteList.sol\";\nimport \"../modules/ReentrancyGuard.sol\";\n/**\n * @title FPTCoin mine pool, which manager contract is FPTCoin.\n * @dev A smart-contract which distribute some mine coins by FPTCoin balance.\n *\n */\ncontract MinePoolData is Managerable,AddressWhiteList,ReentrancyGuard {\n    //Special decimals for calculation\n    uint256 constant calDecimals = 1e18;\n    // miner's balance\n    // map mineCoin => user => balance\n    mapping(address=>mapping(address=>uint256)) internal minerBalances;\n    // miner's origins, specially used for mine distribution\n    // map mineCoin => user => balance\n    mapping(address=>mapping(address=>uint256)) internal minerOrigins;\n    \n    // mine coins total worth, specially used for mine distribution\n    mapping(address=>uint256) internal totalMinedWorth;\n    // total distributed mine coin amount\n    mapping(address=>uint256) internal totalMinedCoin;\n    // latest time to settlement\n    mapping(address=>uint256) internal latestSettleTime;\n    //distributed mine amount\n    mapping(address=>uint256) internal mineAmount;\n    //distributed time interval\n    mapping(address=>uint256) internal mineInterval;\n    //distributed mine coin amount for buy options user.\n    mapping(address=>uint256) internal buyingMineMap;\n    // user's Opterator indicator \n    uint256 constant internal opBurnCoin = 1;\n    uint256 constant internal opMintCoin = 2;\n    uint256 constant internal opTransferCoin = 3;\n    /**\n     * @dev Emitted when `account` mint `amount` miner shares.\n     */\n    event MintMiner(address indexed account,uint256 amount);\n    /**\n     * @dev Emitted when `account` burn `amount` miner shares.\n     */\n    event BurnMiner(address indexed account,uint256 amount);\n    /**\n     * @dev Emitted when `from` redeem `value` mineCoins.\n     */\n    event RedeemMineCoin(address indexed from, address indexed mineCoin, uint256 value);\n    /**\n     * @dev Emitted when `from` transfer to `to` `amount` mineCoins.\n     */\n    event TranserMiner(address indexed from, address indexed to, uint256 amount);\n    /**\n     * @dev Emitted when `account` buying options get `amount` mineCoins.\n     */\n    event BuyingMiner(address indexed account,address indexed mineCoin,uint256 amount);\n}",
-  "sourcePath": "/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"BurnMiner\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"mineCoin\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"BuyingMiner\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"MintMiner\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"mineCoin\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"RedeemMineCoin\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"TranserMiner\",\"type\":\"event\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"addAddress\",\"type\":\"address\"}],\"name\":\"addWhiteList\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"tmpAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"state\",\"type\":\"uint256\"}],\"name\":\"checkAddressPermission\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getManager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getWhiteList\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"address\",\"name\":\"tmpAddress\",\"type\":\"address\"}],\"name\":\"isEligibleAddress\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"addAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"permission\",\"type\":\"uint256\"}],\"name\":\"modifyPermission\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"removeAddress\",\"type\":\"address\"}],\"name\":\"removeWhiteList\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bool\",\"name\":\"halt\",\"type\":\"bool\"}],\"name\":\"setHalt\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"managerAddress\",\"type\":\"address\"}],\"name\":\"setManager\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"A smart-contract which distribute some mine coins by FPTCoin balance.  \",\"methods\":{\"addWhiteList(address)\":{\"details\":\"Implementation of add an eligible address into the whitelist.\",\"params\":{\"addAddress\":\"new eligible address.\"}},\"getManager()\":{\"details\":\"get manager address.       \"},\"getWhiteList()\":{\"details\":\"Implementation of getting the eligible whitelist.\"},\"isEligibleAddress(address)\":{\"details\":\"Implementation of testing whether the input address is eligible.\",\"params\":{\"tmpAddress\":\"input address for testing.\"}},\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"removeWhiteList(address)\":{\"details\":\"Implementation of revoke an invalid address from the whitelist.\",\"params\":{\"removeAddress\":\"revoked address.\"}},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"setManager(address)\":{\"details\":\"set manager by owner.       \"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"title\":\"FPTCoin mine pool, which manager contract is FPTCoin.\"},\"userdoc\":{\"methods\":{\"setHalt(bool)\":{\"notice\":\"function Emergency situation that requires contribution period to stop or not.\"}}}},\"settings\":{\"compilationTarget\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol\":\"MinePoolData\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/work/solidity/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol\":{\"keccak256\":\"0x36ef7c26c9b9854cd4b5d15ba113f71398c17d7a7f0ac877251cb049fed0c669\",\"urls\":[\"bzz-raw://82e75129785b3da17aff05405e6d38ab3c92a3338e89930ec053f7063e5b5ce6\",\"dweb:/ipfs/QmSm7j9wrm9Lze1XzNwrbSUHMZvgfM6JFtTUHABxyL7KDn\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol\":{\"keccak256\":\"0xc3f975fab9ff689a2d8b4f607ff1d2bd51f76b0809126e102b2416a299ee0f1d\",\"urls\":[\"bzz-raw://64616fe17a12de3d4cb4907701b70c391451eb149f9357c5afb517548969650f\",\"dweb:/ipfs/QmaMxjGHBUzkCGXxYmGuj6vs13UY89LU5gp4KvRqybmpSo\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Halt.sol\":{\"keccak256\":\"0x4decad501065bc7cac2133a68b8c1103ee4888b90318bed58706c47afe9c0c05\",\"urls\":[\"bzz-raw://bdb78b06241ec0d18a75acbd7c90ecb0bc3f1f21ddf4467e563b8ed1ba672271\",\"dweb:/ipfs/Qmc4hqMpXR32k5K1ygra9NDNgG3kFRexQ67DrDpsiMcuMF\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Managerable.sol\":{\"keccak256\":\"0xd8820b7a31edb67707507056fe78b0d9549e4590b07d7b6579cf741e8035b985\",\"urls\":[\"bzz-raw://9f32c923cb961fdc12f7e01dda7ccbc2b9039fbd1af1488a34b7b6c3722f9ea8\",\"dweb:/ipfs/QmPYMKviy8kPpQMvJNM7eFefLhEGCZYtbGbFZabe1w5te1\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/Ownable.sol\":{\"keccak256\":\"0xbee80fd7a5d8bfc985dfb69ab47d582835fbf1e3352598e9c75ee931d8201b5d\",\"urls\":[\"bzz-raw://e388e11e0172712bf10327ddee6df03aeebeda1218734aadb40b1d2a46567d8d\",\"dweb:/ipfs/QmXn5T5gAAZmNKWvXNV9YkuDv7h5ppvdYwACUT5yD7ycxD\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol\":{\"keccak256\":\"0x94e5c19b5d35ad0ff09a2e94616c24ced8f28c2e988be99a74d839b9d2036a6a\",\"urls\":[\"bzz-raw://ce65b1d27f18165385dc990738335da3e6acd1c144f3c82c0b85e8835dc9d404\",\"dweb:/ipfs/QmQnXdScAx2W1RXHWQiMchqGSzoEeKwCLFBqQ3hibQMYoX\"]},\"/C/work/solidity/FinnexusOptions_V2/contracts/modules/whiteList.sol\":{\"keccak256\":\"0xee77d1cc061ccd42d2bc2a904e53b3f610b0bbb10e834ed282c1caeb2f733136\",\"urls\":[\"bzz-raw://4289394bc305d2f100e48e9a8021643d99a3b83893b7aa09daf211181547186a\",\"dweb:/ipfs/QmTLs9Kxsadyzk5LNJh63gvAusekSXN4C1pE7jedaCBDoW\"]}},\"version\":1}",
+  "bytecode": "0x608060408190526001805460a060020a60ff02191690556004805460ff1916905560008054600160a060020a0319163317808255600160a060020a0316917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a3610a9c806100716000396000f3fe608060405234801561001057600080fd5b50600436106100ec576000357c0100000000000000000000000000000000000000000000000000000000900480638f32d59b116100a9578063d500958411610083578063d50095841461025d578063e7cd4a0414610265578063f2fde38b1461028b578063f4954387146102b1576100ec565b80638f32d59b14610203578063c219043b1461020b578063d0ebdbe714610237576100ec565b806309a9d76c146100f15780632042e5c2146101495780634cbf630214610183578063715018a6146101af578063817bf86d146101b95780638da5cb5b146101df575b600080fd5b6100f96102d0565b60408051602080825283518183015283519192839290830191858101910280838360005b8381101561013557818101518382015260200161011d565b505050509050019250505060405180910390f35b61016f6004803603602081101561015f57600080fd5b5035600160a060020a0316610333565b604080519115158252519081900360200190f35b61016f6004803603604081101561019957600080fd5b50600160a060020a0381351690602001356103af565b6101b76103d0565b005b61016f600480360360208110156101cf57600080fd5b5035600160a060020a0316610471565b6101e76104e0565b60408051600160a060020a039092168252519081900360200190f35b61016f6104ef565b6101b76004803603604081101561022157600080fd5b50600160a060020a038135169060200135610500565b6101b76004803603602081101561024d57600080fd5b5035600160a060020a0316610566565b6101e76105df565b6101b76004803603602081101561027b57600080fd5b5035600160a060020a03166105ee565b6101b7600480360360208110156102a157600080fd5b5035600160a060020a0316610669565b6101b7600480360360208110156102c757600080fd5b503515156106bf565b6060600280548060200260200160405190810160405280929190818152602001828054801561032857602002820191906000526020600020905b8154600160a060020a0316815260019091019060200180831161030a575b505050505090505b90565b600061033d6104ef565b61037f576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b600160a060020a0382166000908152600360205260408120556103a960028363ffffffff61074916565b92915050565b600160a060020a039190911660009081526003602052604090205481161490565b6103d86104ef565b61041a576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b60006103a98260028054806020026020016040519081016040528092919081815260200182805480156104cd57602002820191906000526020600020905b8154600160a060020a031681526001909101906020018083116104af575b505050505061083790919063ffffffff16565b600054600160a060020a031690565b600054600160a060020a0316331490565b6105086104ef565b61054a576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b600160a060020a03909116600090815260036020526040902055565b61056e6104ef565b6105b0576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b6105f66104ef565b610638576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b61064960028263ffffffff61088616565b600160a060020a0316600090815260036020526040902063ffffffff9055565b6106716104ef565b6106b3576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b6106bc8161092a565b50565b6106c76104ef565b610709576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b60018054911515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019909216919091179055565b8154600090815b818110156107965783600160a060020a031685828154811061076e57fe5b600091825260209091200154600160a060020a0316141561078e57610796565b600101610750565b8181101561082c57600182038114610810578460018303815481106107b757fe5b9060005260206000200160009054906101000a9004600160a060020a03168582815481106107e157fe5b9060005260206000200160006101000a815481600160a060020a030219169083600160a060020a031602179055505b84546108208660001983016109da565b506001925050506103a9565b506000949350505050565b8151600090815b8181101561082c5783600160a060020a031685828151811061085c57fe5b6020026020010151600160a060020a0316141561087e576001925050506103a9565b60010161083e565b6108e9828054806020026020016040519081016040528092919081815260200182805480156108de57602002820191906000526020600020905b8154600160a060020a031681526001909101906020018083116108c0575b505050505082610837565b61092657815460018101835560008381526020902001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5050565b600160a060020a0381166109725760405160e560020a62461bcd028152600401808060200182810382526026815260200180610a226026913960400191505060405180910390fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b8154818355818111156109fe576000838152602090206109fe918101908301610a03565b505050565b61033091905b80821115610a1d5760008155600101610a09565b509056fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f20616464726573734f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a265627a7a723158207f3eb91544b99e6b9bb5471f6c68d3baa9550166121fe6f738202c272f10cf0a64736f6c63430005100032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100ec576000357c0100000000000000000000000000000000000000000000000000000000900480638f32d59b116100a9578063d500958411610083578063d50095841461025d578063e7cd4a0414610265578063f2fde38b1461028b578063f4954387146102b1576100ec565b80638f32d59b14610203578063c219043b1461020b578063d0ebdbe714610237576100ec565b806309a9d76c146100f15780632042e5c2146101495780634cbf630214610183578063715018a6146101af578063817bf86d146101b95780638da5cb5b146101df575b600080fd5b6100f96102d0565b60408051602080825283518183015283519192839290830191858101910280838360005b8381101561013557818101518382015260200161011d565b505050509050019250505060405180910390f35b61016f6004803603602081101561015f57600080fd5b5035600160a060020a0316610333565b604080519115158252519081900360200190f35b61016f6004803603604081101561019957600080fd5b50600160a060020a0381351690602001356103af565b6101b76103d0565b005b61016f600480360360208110156101cf57600080fd5b5035600160a060020a0316610471565b6101e76104e0565b60408051600160a060020a039092168252519081900360200190f35b61016f6104ef565b6101b76004803603604081101561022157600080fd5b50600160a060020a038135169060200135610500565b6101b76004803603602081101561024d57600080fd5b5035600160a060020a0316610566565b6101e76105df565b6101b76004803603602081101561027b57600080fd5b5035600160a060020a03166105ee565b6101b7600480360360208110156102a157600080fd5b5035600160a060020a0316610669565b6101b7600480360360208110156102c757600080fd5b503515156106bf565b6060600280548060200260200160405190810160405280929190818152602001828054801561032857602002820191906000526020600020905b8154600160a060020a0316815260019091019060200180831161030a575b505050505090505b90565b600061033d6104ef565b61037f576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b600160a060020a0382166000908152600360205260408120556103a960028363ffffffff61074916565b92915050565b600160a060020a039190911660009081526003602052604090205481161490565b6103d86104ef565b61041a576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b60008054604051600160a060020a03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a36000805473ffffffffffffffffffffffffffffffffffffffff19169055565b60006103a98260028054806020026020016040519081016040528092919081815260200182805480156104cd57602002820191906000526020600020905b8154600160a060020a031681526001909101906020018083116104af575b505050505061083790919063ffffffff16565b600054600160a060020a031690565b600054600160a060020a0316331490565b6105086104ef565b61054a576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b600160a060020a03909116600090815260036020526040902055565b61056e6104ef565b6105b0576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600154600160a060020a031690565b6105f66104ef565b610638576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b61064960028263ffffffff61088616565b600160a060020a0316600090815260036020526040902063ffffffff9055565b6106716104ef565b6106b3576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b6106bc8161092a565b50565b6106c76104ef565b610709576040805160e560020a62461bcd0281526020600482018190526024820152600080516020610a48833981519152604482015290519081900360640190fd5b60018054911515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019909216919091179055565b8154600090815b818110156107965783600160a060020a031685828154811061076e57fe5b600091825260209091200154600160a060020a0316141561078e57610796565b600101610750565b8181101561082c57600182038114610810578460018303815481106107b757fe5b9060005260206000200160009054906101000a9004600160a060020a03168582815481106107e157fe5b9060005260206000200160006101000a815481600160a060020a030219169083600160a060020a031602179055505b84546108208660001983016109da565b506001925050506103a9565b506000949350505050565b8151600090815b8181101561082c5783600160a060020a031685828151811061085c57fe5b6020026020010151600160a060020a0316141561087e576001925050506103a9565b60010161083e565b6108e9828054806020026020016040519081016040528092919081815260200182805480156108de57602002820191906000526020600020905b8154600160a060020a031681526001909101906020018083116108c0575b505050505082610837565b61092657815460018101835560008381526020902001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5050565b600160a060020a0381166109725760405160e560020a62461bcd028152600401808060200182810382526026815260200180610a226026913960400191505060405180910390fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b8154818355818111156109fe576000838152602090206109fe918101908301610a03565b505050565b61033091905b80821115610a1d5760008155600101610a09565b509056fe4f776e61626c653a206e6577206f776e657220697320746865207a65726f20616464726573734f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572a265627a7a723158207f3eb91544b99e6b9bb5471f6c68d3baa9550166121fe6f738202c272f10cf0a64736f6c63430005100032",
+  "sourceMap": "307:2062:13:-;;;;;91:27:49;;;-1:-1:-1;;;;;;91:27:49;;;130:35:54;;;-1:-1:-1;;130:35:54;;;113:5:49;679:19:53;;-1:-1:-1;;;;;;679:19:53;688:10;679:19;;;;-1:-1:-1;;;;;747:6:53;;714:40;;113:5:49;;714:40:53;307:2062:13;;;;;;",
+  "deployedSourceMap": "307:2062:13:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;307:2062:13;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1618:96:46;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:100:-1;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;1618:96:46;;;;;;;;;;;;;;;;;1333:198;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1333:198:46;-1:-1:-1;;;;;1333:198:46;;:::i;:::-;;;;;;;;;;;;;;;;;;2017:165;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;2017:165:46;;;;;;;;:::i;1652:140:53:-;;;:::i;:::-;;1873:138:46;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1873:138:46;-1:-1:-1;;;;;1873:138:46;;:::i;843:79:53:-;;;:::i;:::-;;;;-1:-1:-1;;;;;843:79:53;;;;;;;;;;;;;;1209:92;;;:::i;1045:141:46:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;;;;;;1045:141:46;;;;;;;;:::i;449:127:51:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;449:127:51;-1:-1:-1;;;;;449:127:51;;:::i;643:92::-;;;:::i;866:173:46:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;866:173:46;-1:-1:-1;;;;;866:173:46;;:::i;1947:109:53:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1947:109:53;-1:-1:-1;;;;;1947:109:53;;:::i;456:102:49:-;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;456:102:49;;;;:::i;1618:96:46:-;1662:16;1697:9;1690:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1690:16:46;;;;;;;;;;;;;;;;;;;;;;;1618:96;;:::o;1333:198::-;1406:4;1055:9:53;:7;:9::i;:::-;1047:54;;;;;-1:-1:-1;;;;;1047:54:53;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1047:54:53;;;;;;;;;;;;;;;-1:-1:-1;;;;;1422:32:46;;1457:1;1422:32;;;:17;:32;;;;;:36;1476:47;:9;1440:13;1476:47;:32;:47;:::i;:::-;1469:54;1333:198;-1:-1:-1;;1333:198:46:o;2017:165::-;-1:-1:-1;;;;;2129:29:46;;;;2104:4;2129:29;;;:17;:29;;;;;;:35;;2128:46;;2017:165::o;1652:140:53:-;1055:9;:7;:9::i;:::-;1047:54;;;;;-1:-1:-1;;;;;1047:54:53;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1047:54:53;;;;;;;;;;;;;;;1751:1;1735:6;;1714:40;;-1:-1:-1;;;;;1735:6:53;;;;1714:40;;1751:1;;1714:40;1782:1;1765:19;;-1:-1:-1;;1765:19:53;;;1652:140::o;1873:138:46:-;1941:4;1964:39;1992:10;1964:9;:27;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1964:27:46;;;;;;;;;;;;;;;;;;;;;;;:39;;;;:::i;843:79:53:-;881:7;908:6;-1:-1:-1;;;;;908:6:53;843:79;:::o;1209:92::-;1249:4;1287:6;-1:-1:-1;;;;;1287:6:53;1273:10;:20;;1209:92::o;1045:141:46:-;1055:9:53;:7;:9::i;:::-;1047:54;;;;;-1:-1:-1;;;;;1047:54:53;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1047:54:53;;;;;;;;;;;;;;;-1:-1:-1;;;;;1136:29:46;;;;;;;:17;:29;;;;;:42;1045:141::o;449:127:51:-;1055:9:53;:7;:9::i;:::-;1047:54;;;;;-1:-1:-1;;;;;1047:54:53;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1047:54:53;;;;;;;;;;;;;;;536:15:51;:32;;-1:-1:-1;;536:32:51;-1:-1:-1;;;;;536:32:51;;;;;;;;;;449:127::o;643:92::-;712:15;;-1:-1:-1;;;;;712:15:51;643:92;:::o;866:173:46:-;1055:9:53;:7;:9::i;:::-;1047:54;;;;;-1:-1:-1;;;;;1047:54:53;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1047:54:53;;;;;;;;;;;;;;;934:41:46;:9;964:10;934:41;:29;:41;:::i;:::-;-1:-1:-1;;;;;986:29:46;;;;;:17;:29;;;;;292:10;986:45;;866:173::o;1947:109:53:-;1055:9;:7;:9::i;:::-;1047:54;;;;;-1:-1:-1;;;;;1047:54:53;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1047:54:53;;;;;;;;;;;;;;;2020:28;2039:8;2020:18;:28::i;:::-;1947:109;:::o;456:102:49:-;1055:9:53;:7;:9::i;:::-;1047:54;;;;;-1:-1:-1;;;;;1047:54:53;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;1047:54:53;;;;;;;;;;;;;;;537:6:49;:13;;;;;;;-1:-1:-1;;537:13:49;;;;;;;;;456:102::o;3359:477:61:-;3481:16;;3450:4;;;3530:91;3538:3;3536:1;:5;3530:91;;;3581:4;-1:-1:-1;;;;;3565:20:61;:9;3575:1;3565:12;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3565:12:61;:20;3561:48;;;3604:5;;3561:48;3542:3;;3530:91;;;3637:3;3635:1;:5;3631:175;;;3667:1;3663:3;:5;3660:1;:8;3656:80;;3704:9;3718:1;3714:3;:5;3704:16;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3704:16:61;3689:9;3699:1;3689:12;;;;;;;;;;;;;;;;:31;;;;;-1:-1:-1;;;;;3689:31:61;;;;;-1:-1:-1;;;;;3689:31:61;;;;;;3656:80;3750:18;;;:9;-1:-1:-1;;3750:18:61;;;:::i;:::-;;3790:4;3783:11;;;;;;3631:175;-1:-1:-1;3823:5:61;;3359:477;-1:-1:-1;;;;3359:477:61:o;3842:286::-;3963:16;;3933:4;;;3990:108;4009:3;4007:1;:5;3990:108;;;4052:4;-1:-1:-1;;;;;4036:20:61;:9;4046:1;4036:12;;;;;;;;;;;;;;-1:-1:-1;;;;;4036:20:61;;4032:54;;;4082:4;4075:11;;;;;;4032:54;4013:3;;3990:108;;3170:183;3265:33;3283:9;3265:33;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;3265:33:61;;;;;;;;;;;;;;;;;;;;;3293:4;3265:17;:33::i;:::-;3260:86;;27:10:-1;;39:1;23:18;;45:23;;-1:-1;3314:20:61;;;;;;;;;-1:-1:-1;;3314:20:61;-1:-1:-1;;;;;3314:20:61;;;;;3260:86;3170:183;;:::o;2162:229:53:-;-1:-1:-1;;;;;2236:22:53;;2228:73;;;;-1:-1:-1;;;;;2228:73:53;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2338:6;;;2317:38;;-1:-1:-1;;;;;2317:38:53;;;;2338:6;;;2317:38;;;2366:6;:17;;-1:-1:-1;;2366:17:53;-1:-1:-1;;;;;2366:17:53;;;;;;;;;;2162:229::o;307:2062:13:-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;",
+  "source": "pragma solidity =0.5.16;\r\nimport \"../modules/Managerable.sol\";\r\nimport \"../modules/AddressWhiteList.sol\";\r\nimport \"../modules/ReentrancyGuard.sol\";\r\n/**\r\n * @title FPTCoin mine pool, which manager contract is FPTCoin.\r\n * @dev A smart-contract which distribute some mine coins by FPTCoin balance.\r\n *\r\n */\r\ncontract MinePoolData is Managerable,AddressWhiteList,ReentrancyGuard {\r\n    //Special decimals for calculation\r\n    uint256 constant calDecimals = 1e18;\r\n    // miner's balance\r\n    // map mineCoin => user => balance\r\n    mapping(address=>mapping(address=>uint256)) internal minerBalances;\r\n    // miner's origins, specially used for mine distribution\r\n    // map mineCoin => user => balance\r\n    mapping(address=>mapping(address=>uint256)) internal minerOrigins;\r\n    \r\n    // mine coins total worth, specially used for mine distribution\r\n    mapping(address=>uint256) internal totalMinedWorth;\r\n    // total distributed mine coin amount\r\n    mapping(address=>uint256) internal totalMinedCoin;\r\n    // latest time to settlement\r\n    mapping(address=>uint256) internal latestSettleTime;\r\n    //distributed mine amount\r\n    mapping(address=>uint256) internal mineAmount;\r\n    //distributed time interval\r\n    mapping(address=>uint256) internal mineInterval;\r\n    //distributed mine coin amount for buy options user.\r\n    mapping(address=>uint256) internal buyingMineMap;\r\n    // user's Opterator indicator \r\n    uint256 constant internal opBurnCoin = 1;\r\n    uint256 constant internal opMintCoin = 2;\r\n    uint256 constant internal opTransferCoin = 3;\r\n    /**\r\n     * @dev Emitted when `account` mint `amount` miner shares.\r\n     */\r\n    event MintMiner(address indexed account,uint256 amount);\r\n    /**\r\n     * @dev Emitted when `account` burn `amount` miner shares.\r\n     */\r\n    event BurnMiner(address indexed account,uint256 amount);\r\n    /**\r\n     * @dev Emitted when `from` redeem `value` mineCoins.\r\n     */\r\n    event RedeemMineCoin(address indexed from, address indexed mineCoin, uint256 value);\r\n    /**\r\n     * @dev Emitted when `from` transfer to `to` `amount` mineCoins.\r\n     */\r\n    event TranserMiner(address indexed from, address indexed to, uint256 amount);\r\n    /**\r\n     * @dev Emitted when `account` buying options get `amount` mineCoins.\r\n     */\r\n    event BuyingMiner(address indexed account,address indexed mineCoin,uint256 amount);\r\n}",
+  "sourcePath": "C:\\work\\solidity\\FinnexusOptions_V2\\contracts\\FNXMinePool\\MinePoolData.sol",
   "ast": {
-    "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol",
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol",
     "exportedSymbols": {
       "MinePoolData": [
-        4323
+        4657
       ]
     },
-    "id": 4324,
+    "id": 4658,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4229,
+        "id": 4563,
         "literals": [
           "solidity",
           "=",
@@ -396,35 +380,35 @@
         "src": "0:24:13"
       },
       {
-        "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/modules/Managerable.sol",
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Managerable.sol",
         "file": "../modules/Managerable.sol",
-        "id": 4230,
+        "id": 4564,
         "nodeType": "ImportDirective",
-        "scope": 4324,
-        "sourceUnit": 16714,
-        "src": "25:36:13",
+        "scope": 4658,
+        "sourceUnit": 19399,
+        "src": "26:36:13",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol",
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol",
         "file": "../modules/AddressWhiteList.sol",
-        "id": 4231,
+        "id": 4565,
         "nodeType": "ImportDirective",
-        "scope": 4324,
-        "sourceUnit": 15014,
-        "src": "62:41:13",
+        "scope": 4658,
+        "sourceUnit": 17580,
+        "src": "64:41:13",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol",
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol",
         "file": "../modules/ReentrancyGuard.sol",
-        "id": 4232,
+        "id": 4566,
         "nodeType": "ImportDirective",
-        "scope": 4324,
-        "sourceUnit": 16963,
-        "src": "104:40:13",
+        "scope": 4658,
+        "sourceUnit": 19648,
+        "src": "107:40:13",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -434,86 +418,86 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 4233,
+              "id": 4567,
               "name": "Managerable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 16713,
-              "src": "323:11:13",
+              "referencedDeclaration": 19398,
+              "src": "332:11:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Managerable_$16713",
+                "typeIdentifier": "t_contract$_Managerable_$19398",
                 "typeString": "contract Managerable"
               }
             },
-            "id": 4234,
+            "id": 4568,
             "nodeType": "InheritanceSpecifier",
-            "src": "323:11:13"
+            "src": "332:11:13"
           },
           {
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 4235,
+              "id": 4569,
               "name": "AddressWhiteList",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 15013,
-              "src": "335:16:13",
+              "referencedDeclaration": 17579,
+              "src": "344:16:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AddressWhiteList_$15013",
+                "typeIdentifier": "t_contract$_AddressWhiteList_$17579",
                 "typeString": "contract AddressWhiteList"
               }
             },
-            "id": 4236,
+            "id": 4570,
             "nodeType": "InheritanceSpecifier",
-            "src": "335:16:13"
+            "src": "344:16:13"
           },
           {
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 4237,
+              "id": 4571,
               "name": "ReentrancyGuard",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 16962,
-              "src": "352:15:13",
+              "referencedDeclaration": 19647,
+              "src": "361:15:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ReentrancyGuard_$16962",
+                "typeIdentifier": "t_contract$_ReentrancyGuard_$19647",
                 "typeString": "contract ReentrancyGuard"
               }
             },
-            "id": 4238,
+            "id": 4572,
             "nodeType": "InheritanceSpecifier",
-            "src": "352:15:13"
+            "src": "361:15:13"
           }
         ],
         "contractDependencies": [
-          15013,
-          16571,
-          16713,
-          16939,
-          16962
+          17579,
+          19256,
+          19398,
+          19624,
+          19647
         ],
         "contractKind": "contract",
-        "documentation": "@title FPTCoin mine pool, which manager contract is FPTCoin.\n@dev A smart-contract which distribute some mine coins by FPTCoin balance.\n ",
+        "documentation": "@title FPTCoin mine pool, which manager contract is FPTCoin.\n@dev A smart-contract which distribute some mine coins by FPTCoin balance.\n\n ",
         "fullyImplemented": true,
-        "id": 4323,
+        "id": 4657,
         "linearizedBaseContracts": [
-          4323,
-          16962,
-          15013,
-          16571,
-          16713,
-          16939
+          4657,
+          19647,
+          17579,
+          19256,
+          19398,
+          19624
         ],
         "name": "MinePoolData",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 4241,
+            "id": 4575,
             "name": "calDecimals",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "413:35:13",
+            "scope": 4657,
+            "src": "424:35:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -521,10 +505,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 4239,
+              "id": 4573,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "413:7:13",
+              "src": "424:7:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -533,14 +517,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "31653138",
-              "id": 4240,
+              "id": 4574,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "444:4:13",
+              "src": "455:4:13",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_1000000000000000000_by_1",
@@ -552,11 +536,11 @@
           },
           {
             "constant": false,
-            "id": 4247,
+            "id": 4581,
             "name": "minerBalances",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "516:66:13",
+            "scope": 4657,
+            "src": "530:66:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -564,46 +548,46 @@
               "typeString": "mapping(address => mapping(address => uint256))"
             },
             "typeName": {
-              "id": 4246,
+              "id": 4580,
               "keyType": {
-                "id": 4242,
+                "id": 4576,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "524:7:13",
+                "src": "538:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "516:43:13",
+              "src": "530:43:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
                 "typeString": "mapping(address => mapping(address => uint256))"
               },
               "valueType": {
-                "id": 4245,
+                "id": 4579,
                 "keyType": {
-                  "id": 4243,
+                  "id": 4577,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "541:7:13",
+                  "src": "555:7:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
                   }
                 },
                 "nodeType": "Mapping",
-                "src": "533:25:13",
+                "src": "547:25:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                   "typeString": "mapping(address => uint256)"
                 },
                 "valueType": {
-                  "id": 4244,
+                  "id": 4578,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "550:7:13",
+                  "src": "564:7:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -616,11 +600,11 @@
           },
           {
             "constant": false,
-            "id": 4253,
+            "id": 4587,
             "name": "minerOrigins",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "688:65:13",
+            "scope": 4657,
+            "src": "705:65:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -628,46 +612,46 @@
               "typeString": "mapping(address => mapping(address => uint256))"
             },
             "typeName": {
-              "id": 4252,
+              "id": 4586,
               "keyType": {
-                "id": 4248,
+                "id": 4582,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "696:7:13",
+                "src": "713:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "688:43:13",
+              "src": "705:43:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
                 "typeString": "mapping(address => mapping(address => uint256))"
               },
               "valueType": {
-                "id": 4251,
+                "id": 4585,
                 "keyType": {
-                  "id": 4249,
+                  "id": 4583,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "713:7:13",
+                  "src": "730:7:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
                   }
                 },
                 "nodeType": "Mapping",
-                "src": "705:25:13",
+                "src": "722:25:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                   "typeString": "mapping(address => uint256)"
                 },
                 "valueType": {
-                  "id": 4250,
+                  "id": 4584,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "722:7:13",
+                  "src": "739:7:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -680,11 +664,11 @@
           },
           {
             "constant": false,
-            "id": 4257,
+            "id": 4591,
             "name": "totalMinedWorth",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "832:50:13",
+            "scope": 4657,
+            "src": "852:50:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -692,28 +676,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4256,
+              "id": 4590,
               "keyType": {
-                "id": 4254,
+                "id": 4588,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "840:7:13",
+                "src": "860:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "832:25:13",
+              "src": "852:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4255,
+                "id": 4589,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "849:7:13",
+                "src": "869:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -725,11 +709,11 @@
           },
           {
             "constant": false,
-            "id": 4261,
+            "id": 4595,
             "name": "totalMinedCoin",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "930:49:13",
+            "scope": 4657,
+            "src": "952:49:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -737,28 +721,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4260,
+              "id": 4594,
               "keyType": {
-                "id": 4258,
+                "id": 4592,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "938:7:13",
+                "src": "960:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "930:25:13",
+              "src": "952:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4259,
+                "id": 4593,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "947:7:13",
+                "src": "969:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -770,11 +754,11 @@
           },
           {
             "constant": false,
-            "id": 4265,
+            "id": 4599,
             "name": "latestSettleTime",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1018:51:13",
+            "scope": 4657,
+            "src": "1042:51:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -782,28 +766,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4264,
+              "id": 4598,
               "keyType": {
-                "id": 4262,
+                "id": 4596,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1026:7:13",
+                "src": "1050:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1018:25:13",
+              "src": "1042:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4263,
+                "id": 4597,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "1035:7:13",
+                "src": "1059:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -815,11 +799,11 @@
           },
           {
             "constant": false,
-            "id": 4269,
+            "id": 4603,
             "name": "mineAmount",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1105:45:13",
+            "scope": 4657,
+            "src": "1131:45:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -827,28 +811,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4268,
+              "id": 4602,
               "keyType": {
-                "id": 4266,
+                "id": 4600,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1113:7:13",
+                "src": "1139:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1105:25:13",
+              "src": "1131:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4267,
+                "id": 4601,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "1122:7:13",
+                "src": "1148:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -860,11 +844,11 @@
           },
           {
             "constant": false,
-            "id": 4273,
+            "id": 4607,
             "name": "mineInterval",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1188:47:13",
+            "scope": 4657,
+            "src": "1216:47:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -872,28 +856,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4272,
+              "id": 4606,
               "keyType": {
-                "id": 4270,
+                "id": 4604,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1196:7:13",
+                "src": "1224:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1188:25:13",
+              "src": "1216:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4271,
+                "id": 4605,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "1205:7:13",
+                "src": "1233:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -905,11 +889,11 @@
           },
           {
             "constant": false,
-            "id": 4277,
+            "id": 4611,
             "name": "buyingMineMap",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1298:48:13",
+            "scope": 4657,
+            "src": "1328:48:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -917,28 +901,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4276,
+              "id": 4610,
               "keyType": {
-                "id": 4274,
+                "id": 4608,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1306:7:13",
+                "src": "1336:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1298:25:13",
+              "src": "1328:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4275,
+                "id": 4609,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "1315:7:13",
+                "src": "1345:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -950,11 +934,11 @@
           },
           {
             "constant": true,
-            "id": 4280,
+            "id": 4614,
             "name": "opBurnCoin",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1387:40:13",
+            "scope": 4657,
+            "src": "1419:40:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -962,10 +946,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 4278,
+              "id": 4612,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1387:7:13",
+              "src": "1419:7:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -974,14 +958,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "31",
-              "id": 4279,
+              "id": 4613,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1426:1:13",
+              "src": "1458:1:13",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_1_by_1",
@@ -993,11 +977,11 @@
           },
           {
             "constant": true,
-            "id": 4283,
+            "id": 4617,
             "name": "opMintCoin",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1433:40:13",
+            "scope": 4657,
+            "src": "1466:40:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1005,10 +989,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 4281,
+              "id": 4615,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1433:7:13",
+              "src": "1466:7:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -1017,14 +1001,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "32",
-              "id": 4282,
+              "id": 4616,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1472:1:13",
+              "src": "1505:1:13",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_2_by_1",
@@ -1036,11 +1020,11 @@
           },
           {
             "constant": true,
-            "id": 4286,
+            "id": 4620,
             "name": "opTransferCoin",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1479:44:13",
+            "scope": 4657,
+            "src": "1513:44:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1048,10 +1032,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 4284,
+              "id": 4618,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1479:7:13",
+              "src": "1513:7:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -1060,14 +1044,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "33",
-              "id": 4285,
+              "id": 4619,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1522:1:13",
+              "src": "1556:1:13",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3_by_1",
@@ -1080,21 +1064,21 @@
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `account` mint `amount` miner shares.",
-            "id": 4292,
+            "id": 4626,
             "name": "MintMiner",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4291,
+              "id": 4625,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4288,
+                  "id": 4622,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4292,
-                  "src": "1624:23:13",
+                  "scope": 4626,
+                  "src": "1662:23:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1102,10 +1086,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4287,
+                    "id": 4621,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1624:7:13",
+                    "src": "1662:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1117,12 +1101,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4290,
+                  "id": 4624,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4292,
-                  "src": "1648:14:13",
+                  "scope": 4626,
+                  "src": "1686:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1130,10 +1114,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4289,
+                    "id": 4623,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1648:7:13",
+                    "src": "1686:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1143,28 +1127,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1623:40:13"
+              "src": "1661:40:13"
             },
-            "src": "1608:56:13"
+            "src": "1646:56:13"
           },
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `account` burn `amount` miner shares.",
-            "id": 4298,
+            "id": 4632,
             "name": "BurnMiner",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4297,
+              "id": 4631,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4294,
+                  "id": 4628,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4298,
-                  "src": "1764:23:13",
+                  "scope": 4632,
+                  "src": "1806:23:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1172,10 +1156,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4293,
+                    "id": 4627,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1764:7:13",
+                    "src": "1806:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1187,12 +1171,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4296,
+                  "id": 4630,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4298,
-                  "src": "1788:14:13",
+                  "scope": 4632,
+                  "src": "1830:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1200,10 +1184,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4295,
+                    "id": 4629,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1788:7:13",
+                    "src": "1830:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1213,28 +1197,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1763:40:13"
+              "src": "1805:40:13"
             },
-            "src": "1748:56:13"
+            "src": "1790:56:13"
           },
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `from` redeem `value` mineCoins.",
-            "id": 4306,
+            "id": 4640,
             "name": "RedeemMineCoin",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4305,
+              "id": 4639,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4300,
+                  "id": 4634,
                   "indexed": true,
                   "name": "from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4306,
-                  "src": "1904:20:13",
+                  "scope": 4640,
+                  "src": "1950:20:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1242,10 +1226,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4299,
+                    "id": 4633,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1904:7:13",
+                    "src": "1950:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1257,12 +1241,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4302,
+                  "id": 4636,
                   "indexed": true,
                   "name": "mineCoin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4306,
-                  "src": "1926:24:13",
+                  "scope": 4640,
+                  "src": "1972:24:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1270,10 +1254,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4301,
+                    "id": 4635,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1926:7:13",
+                    "src": "1972:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1285,12 +1269,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4304,
+                  "id": 4638,
                   "indexed": false,
                   "name": "value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4306,
-                  "src": "1952:13:13",
+                  "scope": 4640,
+                  "src": "1998:13:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1298,10 +1282,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4303,
+                    "id": 4637,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1952:7:13",
+                    "src": "1998:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1311,28 +1295,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1903:63:13"
+              "src": "1949:63:13"
             },
-            "src": "1883:84:13"
+            "src": "1929:84:13"
           },
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `from` transfer to `to` `amount` mineCoins.",
-            "id": 4314,
+            "id": 4648,
             "name": "TranserMiner",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4313,
+              "id": 4647,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4308,
+                  "id": 4642,
                   "indexed": true,
                   "name": "from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4314,
-                  "src": "2076:20:13",
+                  "scope": 4648,
+                  "src": "2126:20:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1340,10 +1324,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4307,
+                    "id": 4641,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2076:7:13",
+                    "src": "2126:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1355,12 +1339,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4310,
+                  "id": 4644,
                   "indexed": true,
                   "name": "to",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4314,
-                  "src": "2098:18:13",
+                  "scope": 4648,
+                  "src": "2148:18:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1368,10 +1352,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4309,
+                    "id": 4643,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2098:7:13",
+                    "src": "2148:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1383,12 +1367,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4312,
+                  "id": 4646,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4314,
-                  "src": "2118:14:13",
+                  "scope": 4648,
+                  "src": "2168:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1396,10 +1380,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4311,
+                    "id": 4645,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2118:7:13",
+                    "src": "2168:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1409,28 +1393,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "2075:58:13"
+              "src": "2125:58:13"
             },
-            "src": "2057:77:13"
+            "src": "2107:77:13"
           },
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `account` buying options get `amount` mineCoins.",
-            "id": 4322,
+            "id": 4656,
             "name": "BuyingMiner",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4321,
+              "id": 4655,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4316,
+                  "id": 4650,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4322,
-                  "src": "2247:23:13",
+                  "scope": 4656,
+                  "src": "2301:23:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1438,10 +1422,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4315,
+                    "id": 4649,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2247:7:13",
+                    "src": "2301:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1453,12 +1437,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4318,
+                  "id": 4652,
                   "indexed": true,
                   "name": "mineCoin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4322,
-                  "src": "2271:24:13",
+                  "scope": 4656,
+                  "src": "2325:24:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1466,10 +1450,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4317,
+                    "id": 4651,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2271:7:13",
+                    "src": "2325:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1481,12 +1465,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4320,
+                  "id": 4654,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4322,
-                  "src": "2296:14:13",
+                  "scope": 4656,
+                  "src": "2350:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1494,10 +1478,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4319,
+                    "id": 4653,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2296:7:13",
+                    "src": "2350:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1507,29 +1491,29 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "2246:65:13"
+              "src": "2300:65:13"
             },
-            "src": "2229:83:13"
+            "src": "2283:83:13"
           }
         ],
-        "scope": 4324,
-        "src": "298:2016:13"
+        "scope": 4658,
+        "src": "307:2062:13"
       }
     ],
-    "src": "0:2314:13"
+    "src": "0:2369:13"
   },
   "legacyAST": {
-    "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol",
+    "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/FNXMinePool/MinePoolData.sol",
     "exportedSymbols": {
       "MinePoolData": [
-        4323
+        4657
       ]
     },
-    "id": 4324,
+    "id": 4658,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4229,
+        "id": 4563,
         "literals": [
           "solidity",
           "=",
@@ -1540,35 +1524,35 @@
         "src": "0:24:13"
       },
       {
-        "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/modules/Managerable.sol",
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/Managerable.sol",
         "file": "../modules/Managerable.sol",
-        "id": 4230,
+        "id": 4564,
         "nodeType": "ImportDirective",
-        "scope": 4324,
-        "sourceUnit": 16714,
-        "src": "25:36:13",
+        "scope": 4658,
+        "sourceUnit": 19399,
+        "src": "26:36:13",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol",
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/AddressWhiteList.sol",
         "file": "../modules/AddressWhiteList.sol",
-        "id": 4231,
+        "id": 4565,
         "nodeType": "ImportDirective",
-        "scope": 4324,
-        "sourceUnit": 15014,
-        "src": "62:41:13",
+        "scope": 4658,
+        "sourceUnit": 17580,
+        "src": "64:41:13",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/jqg/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol",
+        "absolutePath": "/C/work/solidity/FinnexusOptions_V2/contracts/modules/ReentrancyGuard.sol",
         "file": "../modules/ReentrancyGuard.sol",
-        "id": 4232,
+        "id": 4566,
         "nodeType": "ImportDirective",
-        "scope": 4324,
-        "sourceUnit": 16963,
-        "src": "104:40:13",
+        "scope": 4658,
+        "sourceUnit": 19648,
+        "src": "107:40:13",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -1578,86 +1562,86 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 4233,
+              "id": 4567,
               "name": "Managerable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 16713,
-              "src": "323:11:13",
+              "referencedDeclaration": 19398,
+              "src": "332:11:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Managerable_$16713",
+                "typeIdentifier": "t_contract$_Managerable_$19398",
                 "typeString": "contract Managerable"
               }
             },
-            "id": 4234,
+            "id": 4568,
             "nodeType": "InheritanceSpecifier",
-            "src": "323:11:13"
+            "src": "332:11:13"
           },
           {
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 4235,
+              "id": 4569,
               "name": "AddressWhiteList",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 15013,
-              "src": "335:16:13",
+              "referencedDeclaration": 17579,
+              "src": "344:16:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AddressWhiteList_$15013",
+                "typeIdentifier": "t_contract$_AddressWhiteList_$17579",
                 "typeString": "contract AddressWhiteList"
               }
             },
-            "id": 4236,
+            "id": 4570,
             "nodeType": "InheritanceSpecifier",
-            "src": "335:16:13"
+            "src": "344:16:13"
           },
           {
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 4237,
+              "id": 4571,
               "name": "ReentrancyGuard",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 16962,
-              "src": "352:15:13",
+              "referencedDeclaration": 19647,
+              "src": "361:15:13",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ReentrancyGuard_$16962",
+                "typeIdentifier": "t_contract$_ReentrancyGuard_$19647",
                 "typeString": "contract ReentrancyGuard"
               }
             },
-            "id": 4238,
+            "id": 4572,
             "nodeType": "InheritanceSpecifier",
-            "src": "352:15:13"
+            "src": "361:15:13"
           }
         ],
         "contractDependencies": [
-          15013,
-          16571,
-          16713,
-          16939,
-          16962
+          17579,
+          19256,
+          19398,
+          19624,
+          19647
         ],
         "contractKind": "contract",
-        "documentation": "@title FPTCoin mine pool, which manager contract is FPTCoin.\n@dev A smart-contract which distribute some mine coins by FPTCoin balance.\n ",
+        "documentation": "@title FPTCoin mine pool, which manager contract is FPTCoin.\n@dev A smart-contract which distribute some mine coins by FPTCoin balance.\n\n ",
         "fullyImplemented": true,
-        "id": 4323,
+        "id": 4657,
         "linearizedBaseContracts": [
-          4323,
-          16962,
-          15013,
-          16571,
-          16713,
-          16939
+          4657,
+          19647,
+          17579,
+          19256,
+          19398,
+          19624
         ],
         "name": "MinePoolData",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 4241,
+            "id": 4575,
             "name": "calDecimals",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "413:35:13",
+            "scope": 4657,
+            "src": "424:35:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1665,10 +1649,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 4239,
+              "id": 4573,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "413:7:13",
+              "src": "424:7:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -1677,14 +1661,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "31653138",
-              "id": 4240,
+              "id": 4574,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "444:4:13",
+              "src": "455:4:13",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_1000000000000000000_by_1",
@@ -1696,11 +1680,11 @@
           },
           {
             "constant": false,
-            "id": 4247,
+            "id": 4581,
             "name": "minerBalances",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "516:66:13",
+            "scope": 4657,
+            "src": "530:66:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1708,46 +1692,46 @@
               "typeString": "mapping(address => mapping(address => uint256))"
             },
             "typeName": {
-              "id": 4246,
+              "id": 4580,
               "keyType": {
-                "id": 4242,
+                "id": 4576,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "524:7:13",
+                "src": "538:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "516:43:13",
+              "src": "530:43:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
                 "typeString": "mapping(address => mapping(address => uint256))"
               },
               "valueType": {
-                "id": 4245,
+                "id": 4579,
                 "keyType": {
-                  "id": 4243,
+                  "id": 4577,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "541:7:13",
+                  "src": "555:7:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
                   }
                 },
                 "nodeType": "Mapping",
-                "src": "533:25:13",
+                "src": "547:25:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                   "typeString": "mapping(address => uint256)"
                 },
                 "valueType": {
-                  "id": 4244,
+                  "id": 4578,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "550:7:13",
+                  "src": "564:7:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1760,11 +1744,11 @@
           },
           {
             "constant": false,
-            "id": 4253,
+            "id": 4587,
             "name": "minerOrigins",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "688:65:13",
+            "scope": 4657,
+            "src": "705:65:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1772,46 +1756,46 @@
               "typeString": "mapping(address => mapping(address => uint256))"
             },
             "typeName": {
-              "id": 4252,
+              "id": 4586,
               "keyType": {
-                "id": 4248,
+                "id": 4582,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "696:7:13",
+                "src": "713:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "688:43:13",
+              "src": "705:43:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
                 "typeString": "mapping(address => mapping(address => uint256))"
               },
               "valueType": {
-                "id": 4251,
+                "id": 4585,
                 "keyType": {
-                  "id": 4249,
+                  "id": 4583,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "713:7:13",
+                  "src": "730:7:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
                   }
                 },
                 "nodeType": "Mapping",
-                "src": "705:25:13",
+                "src": "722:25:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                   "typeString": "mapping(address => uint256)"
                 },
                 "valueType": {
-                  "id": 4250,
+                  "id": 4584,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "722:7:13",
+                  "src": "739:7:13",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1824,11 +1808,11 @@
           },
           {
             "constant": false,
-            "id": 4257,
+            "id": 4591,
             "name": "totalMinedWorth",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "832:50:13",
+            "scope": 4657,
+            "src": "852:50:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1836,28 +1820,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4256,
+              "id": 4590,
               "keyType": {
-                "id": 4254,
+                "id": 4588,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "840:7:13",
+                "src": "860:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "832:25:13",
+              "src": "852:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4255,
+                "id": 4589,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "849:7:13",
+                "src": "869:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -1869,11 +1853,11 @@
           },
           {
             "constant": false,
-            "id": 4261,
+            "id": 4595,
             "name": "totalMinedCoin",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "930:49:13",
+            "scope": 4657,
+            "src": "952:49:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1881,28 +1865,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4260,
+              "id": 4594,
               "keyType": {
-                "id": 4258,
+                "id": 4592,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "938:7:13",
+                "src": "960:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "930:25:13",
+              "src": "952:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4259,
+                "id": 4593,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "947:7:13",
+                "src": "969:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -1914,11 +1898,11 @@
           },
           {
             "constant": false,
-            "id": 4265,
+            "id": 4599,
             "name": "latestSettleTime",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1018:51:13",
+            "scope": 4657,
+            "src": "1042:51:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1926,28 +1910,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4264,
+              "id": 4598,
               "keyType": {
-                "id": 4262,
+                "id": 4596,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1026:7:13",
+                "src": "1050:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1018:25:13",
+              "src": "1042:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4263,
+                "id": 4597,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "1035:7:13",
+                "src": "1059:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -1959,11 +1943,11 @@
           },
           {
             "constant": false,
-            "id": 4269,
+            "id": 4603,
             "name": "mineAmount",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1105:45:13",
+            "scope": 4657,
+            "src": "1131:45:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1971,28 +1955,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4268,
+              "id": 4602,
               "keyType": {
-                "id": 4266,
+                "id": 4600,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1113:7:13",
+                "src": "1139:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1105:25:13",
+              "src": "1131:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4267,
+                "id": 4601,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "1122:7:13",
+                "src": "1148:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -2004,11 +1988,11 @@
           },
           {
             "constant": false,
-            "id": 4273,
+            "id": 4607,
             "name": "mineInterval",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1188:47:13",
+            "scope": 4657,
+            "src": "1216:47:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2016,28 +2000,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4272,
+              "id": 4606,
               "keyType": {
-                "id": 4270,
+                "id": 4604,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1196:7:13",
+                "src": "1224:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1188:25:13",
+              "src": "1216:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4271,
+                "id": 4605,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "1205:7:13",
+                "src": "1233:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -2049,11 +2033,11 @@
           },
           {
             "constant": false,
-            "id": 4277,
+            "id": 4611,
             "name": "buyingMineMap",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1298:48:13",
+            "scope": 4657,
+            "src": "1328:48:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2061,28 +2045,28 @@
               "typeString": "mapping(address => uint256)"
             },
             "typeName": {
-              "id": 4276,
+              "id": 4610,
               "keyType": {
-                "id": 4274,
+                "id": 4608,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1306:7:13",
+                "src": "1336:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1298:25:13",
+              "src": "1328:25:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
                 "typeString": "mapping(address => uint256)"
               },
               "valueType": {
-                "id": 4275,
+                "id": 4609,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
-                "src": "1315:7:13",
+                "src": "1345:7:13",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
@@ -2094,11 +2078,11 @@
           },
           {
             "constant": true,
-            "id": 4280,
+            "id": 4614,
             "name": "opBurnCoin",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1387:40:13",
+            "scope": 4657,
+            "src": "1419:40:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2106,10 +2090,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 4278,
+              "id": 4612,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1387:7:13",
+              "src": "1419:7:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2118,14 +2102,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "31",
-              "id": 4279,
+              "id": 4613,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1426:1:13",
+              "src": "1458:1:13",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_1_by_1",
@@ -2137,11 +2121,11 @@
           },
           {
             "constant": true,
-            "id": 4283,
+            "id": 4617,
             "name": "opMintCoin",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1433:40:13",
+            "scope": 4657,
+            "src": "1466:40:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2149,10 +2133,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 4281,
+              "id": 4615,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1433:7:13",
+              "src": "1466:7:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2161,14 +2145,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "32",
-              "id": 4282,
+              "id": 4616,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1472:1:13",
+              "src": "1505:1:13",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_2_by_1",
@@ -2180,11 +2164,11 @@
           },
           {
             "constant": true,
-            "id": 4286,
+            "id": 4620,
             "name": "opTransferCoin",
             "nodeType": "VariableDeclaration",
-            "scope": 4323,
-            "src": "1479:44:13",
+            "scope": 4657,
+            "src": "1513:44:13",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2192,10 +2176,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 4284,
+              "id": 4618,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "1479:7:13",
+              "src": "1513:7:13",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2204,14 +2188,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "33",
-              "id": 4285,
+              "id": 4619,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1522:1:13",
+              "src": "1556:1:13",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3_by_1",
@@ -2224,21 +2208,21 @@
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `account` mint `amount` miner shares.",
-            "id": 4292,
+            "id": 4626,
             "name": "MintMiner",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4291,
+              "id": 4625,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4288,
+                  "id": 4622,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4292,
-                  "src": "1624:23:13",
+                  "scope": 4626,
+                  "src": "1662:23:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2246,10 +2230,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4287,
+                    "id": 4621,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1624:7:13",
+                    "src": "1662:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2261,12 +2245,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4290,
+                  "id": 4624,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4292,
-                  "src": "1648:14:13",
+                  "scope": 4626,
+                  "src": "1686:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2274,10 +2258,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4289,
+                    "id": 4623,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1648:7:13",
+                    "src": "1686:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2287,28 +2271,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1623:40:13"
+              "src": "1661:40:13"
             },
-            "src": "1608:56:13"
+            "src": "1646:56:13"
           },
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `account` burn `amount` miner shares.",
-            "id": 4298,
+            "id": 4632,
             "name": "BurnMiner",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4297,
+              "id": 4631,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4294,
+                  "id": 4628,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4298,
-                  "src": "1764:23:13",
+                  "scope": 4632,
+                  "src": "1806:23:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2316,10 +2300,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4293,
+                    "id": 4627,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1764:7:13",
+                    "src": "1806:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2331,12 +2315,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4296,
+                  "id": 4630,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4298,
-                  "src": "1788:14:13",
+                  "scope": 4632,
+                  "src": "1830:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2344,10 +2328,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4295,
+                    "id": 4629,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1788:7:13",
+                    "src": "1830:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2357,28 +2341,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1763:40:13"
+              "src": "1805:40:13"
             },
-            "src": "1748:56:13"
+            "src": "1790:56:13"
           },
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `from` redeem `value` mineCoins.",
-            "id": 4306,
+            "id": 4640,
             "name": "RedeemMineCoin",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4305,
+              "id": 4639,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4300,
+                  "id": 4634,
                   "indexed": true,
                   "name": "from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4306,
-                  "src": "1904:20:13",
+                  "scope": 4640,
+                  "src": "1950:20:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2386,10 +2370,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4299,
+                    "id": 4633,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1904:7:13",
+                    "src": "1950:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2401,12 +2385,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4302,
+                  "id": 4636,
                   "indexed": true,
                   "name": "mineCoin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4306,
-                  "src": "1926:24:13",
+                  "scope": 4640,
+                  "src": "1972:24:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2414,10 +2398,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4301,
+                    "id": 4635,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1926:7:13",
+                    "src": "1972:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2429,12 +2413,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4304,
+                  "id": 4638,
                   "indexed": false,
                   "name": "value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4306,
-                  "src": "1952:13:13",
+                  "scope": 4640,
+                  "src": "1998:13:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2442,10 +2426,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4303,
+                    "id": 4637,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1952:7:13",
+                    "src": "1998:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2455,28 +2439,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1903:63:13"
+              "src": "1949:63:13"
             },
-            "src": "1883:84:13"
+            "src": "1929:84:13"
           },
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `from` transfer to `to` `amount` mineCoins.",
-            "id": 4314,
+            "id": 4648,
             "name": "TranserMiner",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4313,
+              "id": 4647,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4308,
+                  "id": 4642,
                   "indexed": true,
                   "name": "from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4314,
-                  "src": "2076:20:13",
+                  "scope": 4648,
+                  "src": "2126:20:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2484,10 +2468,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4307,
+                    "id": 4641,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2076:7:13",
+                    "src": "2126:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2499,12 +2483,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4310,
+                  "id": 4644,
                   "indexed": true,
                   "name": "to",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4314,
-                  "src": "2098:18:13",
+                  "scope": 4648,
+                  "src": "2148:18:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2512,10 +2496,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4309,
+                    "id": 4643,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2098:7:13",
+                    "src": "2148:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2527,12 +2511,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4312,
+                  "id": 4646,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4314,
-                  "src": "2118:14:13",
+                  "scope": 4648,
+                  "src": "2168:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2540,10 +2524,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4311,
+                    "id": 4645,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2118:7:13",
+                    "src": "2168:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2553,28 +2537,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "2075:58:13"
+              "src": "2125:58:13"
             },
-            "src": "2057:77:13"
+            "src": "2107:77:13"
           },
           {
             "anonymous": false,
             "documentation": "@dev Emitted when `account` buying options get `amount` mineCoins.",
-            "id": 4322,
+            "id": 4656,
             "name": "BuyingMiner",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 4321,
+              "id": 4655,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4316,
+                  "id": 4650,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4322,
-                  "src": "2247:23:13",
+                  "scope": 4656,
+                  "src": "2301:23:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2582,10 +2566,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4315,
+                    "id": 4649,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2247:7:13",
+                    "src": "2301:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2597,12 +2581,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4318,
+                  "id": 4652,
                   "indexed": true,
                   "name": "mineCoin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4322,
-                  "src": "2271:24:13",
+                  "scope": 4656,
+                  "src": "2325:24:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2610,10 +2594,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4317,
+                    "id": 4651,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2271:7:13",
+                    "src": "2325:7:13",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -2625,12 +2609,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 4320,
+                  "id": 4654,
                   "indexed": false,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4322,
-                  "src": "2296:14:13",
+                  "scope": 4656,
+                  "src": "2350:14:13",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2638,10 +2622,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4319,
+                    "id": 4653,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2296:7:13",
+                    "src": "2350:7:13",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2651,26 +2635,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "2246:65:13"
+              "src": "2300:65:13"
             },
-            "src": "2229:83:13"
+            "src": "2283:83:13"
           }
         ],
-        "scope": 4324,
-        "src": "298:2016:13"
+        "scope": 4658,
+        "src": "307:2062:13"
       }
     ],
-    "src": "0:2314:13"
+    "src": "0:2369:13"
   },
   "compiler": {
     "name": "solc",
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.2.4",
-  "updatedAt": "2020-09-09T03:13:04.202Z",
+  "schemaVersion": "3.1.0",
+  "updatedAt": "2020-10-21T03:26:50.288Z",
   "devdoc": {
-    "details": "A smart-contract which distribute some mine coins by FPTCoin balance. ",
+    "details": "A smart-contract which distribute some mine coins by FPTCoin balance.  ",
     "methods": {
       "addWhiteList(address)": {
         "details": "Implementation of add an eligible address into the whitelist.",
@@ -2679,7 +2663,7 @@
         }
       },
       "getManager()": {
-        "details": "get manager address.      "
+        "details": "get manager address.       "
       },
       "getWhiteList()": {
         "details": "Implementation of getting the eligible whitelist."
@@ -2703,10 +2687,10 @@
         }
       },
       "renounceOwnership()": {
-        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.      * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
       },
       "setManager(address)": {
-        "details": "set manager by owner.      "
+        "details": "set manager by owner.       "
       },
       "transferOwnership(address)": {
         "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."

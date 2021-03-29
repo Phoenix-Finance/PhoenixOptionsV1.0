@@ -2,6 +2,7 @@ pragma solidity =0.5.16;
 import "../modules/SafeMath.sol";
 import "../modules/SafeInt256.sol";
 import "./ManagerData.sol";
+import "../ERC20/safeErc20.sol";
 /**
  * @title collateral calculate module
  * @dev A smart-contract which has operations of collateral and methods of calculate collateral occupation.
@@ -69,7 +70,8 @@ contract CollateralCal is ManagerData {
      * @param collateral The collateral coin address which is in whitelist.
      * @param amount the amount of collateral to deposit.
      */
-    function addCollateral(address collateral,uint256 amount) nonReentrant notHalted  public payable {
+    function addCollateral(address collateral,uint256 amount) nonReentrant notHalted
+                 addressPermissionAllowed(collateral,allowAddCollateral)  public payable {
         amount = getPayableAmount(collateral,amount);
         uint256 fee = _collateralPool.addTransactionFee(collateral,amount,3);
         amount = amount-fee;
@@ -79,9 +81,7 @@ contract CollateralCal is ManagerData {
             "Allowances : user's allowance is unsufficient!");
         uint256 mintAmount = userPaying/getTokenNetworth();
         _collateralPool.addUserPayingUsd(msg.sender,userPaying);
-        _collateralPool.addCollateralBalance(collateral,amount);
         _collateralPool.addUserInputCollateral(msg.sender,collateral,amount);
-         _collateralPool.addNetWorthBalance(collateral,int256(amount));
         emit AddCollateral(msg.sender,collateral,amount,mintAmount);
         _FPTCoin.mint(msg.sender,mintAmount);
     }
@@ -91,10 +91,10 @@ contract CollateralCal is ManagerData {
      * @param tokenAmount the amount of FPTCoin want to redeem.
      * @param collateral The prioritized collateral coin address.
      */
-    function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted InRange(tokenAmount) public {
-        require(checkAddressPermission(collateral,allowRedeemCollateral) , "settlement is unsupported token");
+    function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted
+        addressPermissionAllowed(collateral,allowRedeemCollateral) InRange(tokenAmount) public {
         uint256 lockedAmount = _FPTCoin.lockedBalanceOf(msg.sender);
-        require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"SCoin balance is insufficient!");
+        require(_FPTCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"FPT Coin balance is insufficient!");
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
         uint256 leftCollateral = getLeftCollateral();
         (uint256 burnAmount,uint256 redeemWorth) = _FPTCoin.redeemLockedCollateral(msg.sender,tokenAmount,leftCollateral);
@@ -201,6 +201,7 @@ contract CollateralCal is ManagerData {
                 netWorthBalances,prices);
         return (colBalances,PremiumBalances,prices);
     } 
+
     /**
      * @dev Retrieve the occupied collateral worth, multiplied by minimum collateral rate, priced in USD. 
      */
@@ -257,12 +258,15 @@ contract CollateralCal is ManagerData {
         for (uint256 i=0;i<whiteListLen;i++){
             address addr = whiteList[i];
             int256 price = int256(oraclePrice(addr));
-            int256 netWorth = getRealBalance(addr);
+            int256 netWorth = _collateralPool.getRealBalance(addr);
             if (netWorth != 0){
                 totalNum = totalNum.add(price.mul(netWorth));
             }
         }
         return totalNum>=0 ? uint256(totalNum) : 0;  
+    }
+    function getAllRealBalance()public view returns(int256[] memory){
+        return _collateralPool.getAllRealBalance(whiteList);
     }
     /**
      * @dev Retrieve the balance of collateral, the auxiliary function for the total collateral calculation. 
@@ -299,32 +303,60 @@ contract CollateralCal is ManagerData {
             //_transferPaybackAndFee(msg.sender,addr,_payBack,feeType);
         } 
     }
+
     /**
      * @dev the auxiliary function for getting user's transer
      */
     function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
-        require(checkAddressPermission(settlement,allowBuyOptions) , "settlement is unsupported token");
-        uint256 colAmount = 0;
+//        require(checkAddressPermission(settlement,allowBuyOptions) , "settlement is unsupported token");
         if (settlement == address(0)){
-            colAmount = msg.value;
+            settlementAmount = msg.value;
             address payable poolAddr = address(uint160(address(_collateralPool)));
-            poolAddr.transfer(msg.value);
+            poolAddr.transfer(settlementAmount);
         }else if (settlementAmount > 0){
             IERC20 oToken = IERC20(settlement);
-            uint256 preBalance = oToken.balanceOf(address(this));
-            oToken.transferFrom(msg.sender, address(this), settlementAmount);
-            uint256 afterBalance = oToken.balanceOf(address(this));
+            uint256 preBalance = oToken.balanceOf(address(_collateralPool));
+            SafeERC20.safeTransferFrom(oToken,msg.sender, address(_collateralPool), settlementAmount);
+//            oToken.transferFrom(msg.sender, address(_collateralPool), settlementAmount);
+            uint256 afterBalance = oToken.balanceOf(address(_collateralPool));
             require(afterBalance-preBalance==settlementAmount,"settlement token transfer error!");
-            colAmount = settlementAmount;
-            oToken.transfer(address(_collateralPool),settlementAmount);
         }
-        require(isInputAmountInRange(colAmount),"input amount is out of input amount range");
-        return colAmount;
+        require(isInputAmountInRange(settlementAmount),"input amount is out of input amount range");
+        return settlementAmount;
     }
     /**
      * @dev collateral occupation rate calculation
      *      collateral occupation rate = sum(collateral Rate * collateral balance) / sum(collateral balance)
      */
+    function getCollateralAndRate()internal view returns (uint256,uint256){
+        int256 totalNum = 0;
+        uint256 totalCollateral = 0;
+        uint256 totalRate = 0;
+        uint whiteListLen = whiteList.length;
+        for (uint256 i=0;i<whiteListLen;i++){
+            address addr = whiteList[i];
+            int256 balance = _collateralPool.getRealBalance(addr);
+            if (balance != 0){
+                balance = balance*(int256(oraclePrice(addr)));
+                if (balance > 0 && collateralRate[addr] > 0){
+                    totalNum = totalNum.add(balance);
+                    totalCollateral = totalCollateral.add(uint256(balance));
+                    totalRate = totalRate.add(uint256(balance)/collateralRate[addr]);
+                } 
+            }
+        }
+        if (totalRate > 0){
+            totalRate = totalCollateral/totalRate;
+        }else{
+            totalRate = 5000;
+        }
+        return (totalNum>=0 ? uint256(totalNum) : 0,totalRate);  
+    }
+    /**
+     * @dev collateral occupation rate calculation
+     *      collateral occupation rate = sum(collateral Rate * collateral balance) / sum(collateral balance)
+     */
+
     function calculateCollateralRate()public view returns (uint256){
         uint256 totalCollateral = 0;
         uint256 totalRate = 0;

@@ -7,8 +7,7 @@ import "../modules/tuple64.sol";
  *
  */
 contract OptionsBase is OptionsData {
-    using whiteListUint256 for uint256[];
-
+    using whiteListUint32 for uint32[];
     constructor () public{
         initialize();
     }
@@ -16,11 +15,18 @@ contract OptionsBase is OptionsData {
         expirationList =  [1 days,2 days,3 days, 7 days, 10 days, 15 days,20 days, 30 days/*,90 days*/];
         underlyingAssets = [1,2];
     }
+    function setTimeLimitation(uint256 _limit)public onlyOwner{
+        limitation = _limit;
+    }
+    function getTimeLimitation()public view returns(uint256){
+        return limitation;
+    }
+    
     /**
      * @dev retrieve user's options' id. 
      * @param user user's account.
      */     
-    function getUserOptionsID(address user)public view returns(uint256[] memory){
+    function getUserOptionsID(address user)public view returns(uint64[] memory){
         return optionsBalances[user];
     }
     /**
@@ -29,10 +35,10 @@ contract OptionsBase is OptionsData {
      * @param from user's option list begin positon.
      * @param size retrieve size.
      */ 
-    function getUserOptionsID(address user,uint256 from,uint256 size)public view returns(uint256[] memory){
+    function getUserOptionsID(address user,uint256 from,uint256 size)public view returns(uint64[] memory){
         require(from <optionsBalances[user].length,"input from is overflow");
         require(size>0,"input size is zero");
-        uint256[] memory userIdAry = new uint256[](size);
+        uint64[] memory userIdAry = new uint64[](size);
         if (from+size>optionsBalances[user].length){
             size = optionsBalances[user].length-from;
         }
@@ -47,6 +53,15 @@ contract OptionsBase is OptionsData {
     function getOptionInfoLength()public view returns (uint256){
         return allOptions.length;
     }
+    function getOptionInfo(uint64 id)internal view returns(address,uint256,uint256,uint256,uint256){
+        OptionsInfo memory info = allOptions[id-1];
+        return (info.owner,
+            (uint256(id) << 128)+(uint256(info.underlying) << 64) + info.optType,
+            (uint256(info.createTime+limitation) << 128)+(uint256(info.createTime) << 64)+info.createTime+info.expiration,
+            info.strikePrice,
+            info.amount);
+            
+    }
     /**
      * @dev retrieve `size` number of options' information. 
      * @param from all option list begin positon.
@@ -54,48 +69,50 @@ contract OptionsBase is OptionsData {
      */     
     function getOptionInfoList(uint256 from,uint256 size)public view 
                 returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
-        require(from <allOptions.length,"input from is overflow");
+        uint256 allLen = allOptions.length;
+        require(from <allLen,"input from is overflow");
         require(size>0,"input size is zero");
-        if (from+size>allOptions.length){
-            size = allOptions.length - from;
+        if (from+size>allLen){
+            size = allLen - from;
         }
         address[] memory ownerArr = new address[](size);
-        uint256[] memory typeAndUnderArr = new uint256[](size);
-        uint256[] memory expArr = new uint256[](size);
+        uint256[] memory type_underlying_id = new uint256[](size);
+        uint256[] memory exp_create_limit = new uint256[](size);
         uint256[] memory priceArr = new uint256[](size);
         uint256[] memory amountArr = new uint256[](size);
         for (uint i=0;i<size;i++){
-            OptionsInfo storage info = allOptions[from+i];
-            ownerArr[i] = info.owner;
-            typeAndUnderArr[i] = (info.underlying << 16) + info.optType;
-            expArr[i] = info.expiration;
-            priceArr[i] = info.strikePrice;
-            amountArr[i] = info.amount;
+            (ownerArr[i],type_underlying_id[i],exp_create_limit[i],priceArr[i],amountArr[i]) = 
+                getOptionInfo(uint64(from+i+1));
         }
-        return (ownerArr,typeAndUnderArr,expArr,priceArr,amountArr);
+        return (ownerArr,type_underlying_id,exp_create_limit,priceArr,amountArr);
     }
+
     /**
      * @dev retrieve given `ids` options' information. 
      * @param ids retrieved options' id.
      */   
-    function getOptionInfoListFromID(uint256[] memory ids)public view 
+    function getOptionInfoListFromID(uint64[] memory ids)public view 
                 returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
         uint256 size = ids.length;
         require(size > 0, "input ids array is empty");
         address[] memory ownerArr = new address[](size);
-        uint256[] memory typeAndUnderArr = new uint256[](size);
-        uint256[] memory expArr = new uint256[](size);
+        uint256[] memory type_underlying_id = new uint256[](size);
+        uint256[] memory exp_create_limit = new uint256[](size);
         uint256[] memory priceArr = new uint256[](size);
         uint256[] memory amountArr = new uint256[](size);
         for (uint i=0;i<size;i++){
-            OptionsInfo storage info = _getOptionsById(ids[i]);
-            ownerArr[i] = info.owner;
-            typeAndUnderArr[i] = (info.underlying << 16) + info.optType;
-            expArr[i] = info.expiration;
-            priceArr[i] = info.strikePrice;
-            amountArr[i] = info.amount;
+            (ownerArr[i],type_underlying_id[i],exp_create_limit[i],priceArr[i],amountArr[i]) = 
+                getOptionInfo(ids[i]);
         }
-        return (ownerArr,typeAndUnderArr,expArr,priceArr,amountArr);
+        return (ownerArr,type_underlying_id,exp_create_limit,priceArr,amountArr);
+    }
+        /**
+     * @dev retrieve given `ids` options' information. 
+     * @param user retrieved user's address.
+     */   
+    function getUserAllOptionInfo(address user)public view 
+                returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
+        return getOptionInfoListFromID(optionsBalances[user]);
     }
     /**
      * @dev retrieve given `optionsId` option's burned limit timestamp. 
@@ -103,25 +120,25 @@ contract OptionsBase is OptionsData {
      */ 
     function getOptionsLimitTimeById(uint256 optionsId)public view returns(uint256){
         require(optionsId>0 && optionsId <= allOptions.length,"option id is not exist");
-        return getItemTimeLimitation(optionsId);
+        OptionsInfo storage info = allOptions[optionsId-1];
+        return info.createTime + limitation;
     }
     /**
      * @dev retrieve given `optionsId` option's information. 
      * @param optionsId retrieved option's id.
      */ 
     function getOptionsById(uint256 optionsId)public view returns(uint256,address,uint8,uint32,uint256,uint256,uint256){
-        OptionsInfo storage info = _getOptionsById(optionsId);
-        return (info.optionID,info.owner,info.optType,info.underlying,info.expiration,info.strikePrice,info.amount);
+        OptionsInfo memory info = _getOptionsById(optionsId);
+        return (optionsId,info.owner,info.optType,info.underlying,info.createTime+info.expiration,info.strikePrice,info.amount);
     }
     /**
      * @dev retrieve given `optionsId` option's extra information. 
      * @param optionsId retrieved option's id.
      */
-    function getOptionsExtraById(uint256 optionsId)public view returns(address,uint256,uint256,uint256,uint256,uint256){
-        require(optionsId>0 && optionsId <= allOptions.length,"option id is not exist");
-        OptionsInfoEx storage info = optionExtraMap[optionsId];
-        return (info.settlement,info.tokenTimePrice,info.underlyingPrice,
-                info.fullPrice,info.ivNumerator,info.ivDenominator);
+    function getOptionsExtraById(uint256 optionsId)public view returns(address,uint256,uint256,uint256,uint256){
+        OptionsInfo memory info = _getOptionsById(optionsId);
+        return (info.settlement,info.settlePrice,(info.strikePrice*info.priceRate)>>28,
+                info.optionsPrice,info.iv);
     }
     /**
      * @dev An auxiliary function, get underlying prices. 
@@ -137,51 +154,67 @@ contract OptionsBase is OptionsData {
     /**
      * @dev create new option, store option info.
      * @param from option's owner
-     * @param settlement the Coin address which user's paying for
-     * @param type_ly_exp the tuple64 of option type, underlying,expiration
-     * @param strikePrice option's strike price
-     * @param optionPrice option's paid price
+     * @param type_ly_expiration the tuple64 of option type, underlying,expiration
+     * @param strikePrice option's strike price and underlying price
+     * @param underlyingPrice option's paid price and price rate
      * @param amount option's amount
      */
-    function _createOptions(address from,address settlement,uint256 type_ly_exp,uint256 strikePrice,uint256 optionPrice,
-                uint256 amount) internal {
-        uint256 optionID = allOptions.length;
-        uint8 optType = uint8(tuple64.getValue0(type_ly_exp));
-        uint32 underlying = uint32(tuple64.getValue1(type_ly_exp));
-        allOptions.push(OptionsInfo(uint64(optionID+1),from,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount));
-        optionsBalances[from].push(optionID+1);
-        OptionsInfo memory info = allOptions[optionID];
-        setOptionsExtra(info,settlement,optionPrice,strikePrice);
-        setItemTimeLimitation(optionID+1);
-        emit CreateOption(from,optionID+1,optType,underlying,tuple64.getValue2(type_ly_exp)+now,strikePrice,amount);
+    function _createOptions(address from,address settlement,uint256 type_ly_expiration,
+        uint128 strikePrice,uint128 underlyingPrice,uint128 amount,uint128 settlePrice) internal returns(uint256){
+        uint32 expiration = uint32(type_ly_expiration>>128);
+        require(underlyingAssets.isEligibleUint32(uint32(type_ly_expiration>>64)) , "underlying is unsupported asset");
+        require(expirationList.isEligibleUint32(expiration),"expiration value is not supported");
+        uint256 iv = _volatility.calculateIv(uint32(type_ly_expiration>>64),uint8(type_ly_expiration),expiration,
+            underlyingPrice,strikePrice); 
+        uint256 optPrice = _optionsPrice.getOptionsPrice_iv(underlyingPrice,strikePrice,expiration,iv,uint8(type_ly_expiration));
+        allOptions.push(OptionsInfo(from,
+            uint8(type_ly_expiration),
+            uint24(type_ly_expiration>>64),
+            uint64(optPrice),
+            settlement,
+            uint64(now),
+            expiration,
+            amount,
+            settlePrice,
+            strikePrice,
+            uint32((underlyingPrice<<28)/strikePrice),
+            uint64(iv),
+            0));
+        uint64 optionID = uint64(allOptions.length);
+        optionsBalances[from].push(optionID);
+        emit CreateOption(from,optionID,uint8(type_ly_expiration),uint32(type_ly_expiration>>64),expiration+now,
+            strikePrice,amount);
+        return optPrice;
     }
     /**
      * @dev An auxiliary function, store new option's extra information.
      * @param info option's information
      * @param settlement the Coin address which user's paying for
-     * @param optionPrice option's paid price
-     * @param strikePrice option's strike price
+     * @param priceAndRate option's paid price
+     * @param underlyingAndStrike option's strike price and underlying price
      */
-    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 optionPrice,uint256 strikePrice) internal{
-        uint256 underlyingPrice = oracleUnderlyingPrice(info.underlying);
+     /*
+    function setOptionsExtra(OptionsInfo memory info,address settlement,uint256 priceAndRate,uint256 underlyingAndStrike,uint256 settlePrice) internal{
+        uint256 underlyingPrice = (underlyingAndStrike>>128);
         uint256 expiration = info.expiration - now;
-        (uint256 ivNumerator,uint256 ivDenominator) = _volatility.calculateIv(info.underlying,info.optType,expiration,underlyingPrice,strikePrice);
-        uint256 fullPrice = _optionsPrice.getOptionsPrice_iv(underlyingPrice,strikePrice,expiration,ivNumerator,
-                ivDenominator,info.optType);
-        uint256 tokenTimePrice = optionPrice*calDecimals/fullPrice/oraclePrice(settlement);
-        optionExtraMap[info.optionID-1]= OptionsInfoEx(settlement,tokenTimePrice,underlyingPrice,fullPrice,ivNumerator,ivDenominator);
+        uint256 ivNumerator = _volatility.calculateIv(info.underlying,info.optType,expiration,underlyingPrice,uint256(uint128(underlyingAndStrike)));
+        uint128 optionPrice = uint128(priceAndRate>>128);
+        uint128 rate = uint128(priceAndRate);
+        settlePrice = settlePrice/(uint256(rate));
+        optionExtraMap[info.optionID-1]= OptionsInfoEx(settlement,settlePrice,underlyingPrice,(uint256(optionPrice)*rate)>>32,ivNumerator,1<<32);
     }
+    */
     /**
      * @dev burn an exist option whose id is `id`.
      * @param from option's owner
      * @param amount option's amount
      */
-    function _burnOptions(address from,uint256 id,uint256 amount)internal{
-        OptionsInfo storage info = _getOptionsById(id);
-        checkEligible(info);
-        checkOwner(info,from);
-        checkSufficient(info,amount);
-        info.amount = info.amount-amount;
+    function _burnOptions(address from,uint256 id,OptionsInfo memory info,uint256 amount)internal{
+//        OptionsInfo storage info = _getOptionsById(id);
+        require(info.createTime+info.expiration>now,"option is expired");
+        require(info.owner == from,"caller is not the options owner");
+        require(info.amount >= amount,"option amount is insufficient");
+        allOptions[id-1].amount = info.amount-uint128(amount);
         emit BurnOption(from,id,amount);
     }
     /**
@@ -191,8 +224,8 @@ contract OptionsBase is OptionsData {
      */
     function getExerciseWorth(uint256 optionsId,uint256 amount)public view returns(uint256){
         OptionsInfo memory info = _getOptionsById(optionsId);
-        checkEligible(info);
-        checkSufficient(info,amount);
+        require(info.createTime+info.expiration>now,"option is expired");
+        require(info.amount >= amount,"option amount is insufficient");
         uint256 underlyingPrice = oracleUnderlyingPrice(info.underlying);
         uint256 tokenPayback = _getOptionsPayback(info.optType,info.strikePrice,underlyingPrice);
         if (tokenPayback == 0 ){
@@ -221,80 +254,44 @@ contract OptionsBase is OptionsData {
         require(id>0 && id <= allOptions.length,"option id is not exist");
         return allOptions[id-1];
     }
-    /**
-     * @dev check whether option is eligible, check option's expiration.
-     * @param info option's information
-     */
-    function checkEligible(OptionsInfo memory info)internal view{
-        require(info.expiration>now,"option is expired");
-    }
-    /**
-     * @dev check whether option's owner is equal.
-     * @param info option's information
-     * @param owner user's address
-     */
-    function checkOwner(OptionsInfo memory info,address owner)internal pure{
-        require(info.owner == owner,"caller is not the options owner");
-    }
-    /**
-     * @dev check whether option's amount is sufficient.
-     * @param info option's information
-     * @param amount user input amount
-     */
-    function checkSufficient(OptionsInfo memory info,uint256 amount) internal pure{
-        require(info.amount >= amount,"option amount is insufficient");
-    }
-    /**
-     * @dev check option's underlying and expiration.
-     * @param expiration option's expiration
-     * @param underlying option's underlying
-     */
-    function buyOptionCheck(uint256 expiration,uint32 underlying)public view{
-        require(isEligibleUnderlyingAsset(underlying) , "underlying is unsupported asset");
-        checkExpiration(expiration);
-    }
+
+    // /**
+    //  * @dev check option's underlying and expiration.
+    //  * @param expiration option's expiration
+    //  * @param underlying option's underlying
+    //  */
+    // function buyOptionCheck(uint32 expiration,uint32 underlying)public view{
+    //     require(underlyingAssets.isEligibleUint32(underlying) , "underlying is unsupported asset");
+    //     require(expirationList.isEligibleUint32(expiration),"expiration value is not supported");
+    // }
     /**
      * @dev Implementation of add an eligible expiration into the expirationList.
      * @param expiration new eligible expiration.
      */
-    function addExpiration(uint256 expiration)public onlyOwner{
-        expirationList.addWhiteListUint256(expiration);
+    function addExpiration(uint32 expiration)public onlyOwner{
+        expirationList.addWhiteListUint32(expiration);
     }
     /**
      * @dev Implementation of revoke an invalid expiration from the expirationList.
      * @param removeExpiration revoked expiration.
      */
-    function removeExpirationList(uint256 removeExpiration)public onlyOwner returns(bool) {
-        return expirationList.removeWhiteListUint256(removeExpiration);
+    function removeExpirationList(uint32 removeExpiration)public onlyOwner returns(bool) {
+        return expirationList.removeWhiteListUint32(removeExpiration);
     }
     /**
      * @dev Implementation of getting the eligible expirationList.
      */
-    function getExpirationList()public view returns (uint256[] memory){
+    function getExpirationList()public view returns (uint32[] memory){
         return expirationList;
     }
     /**
      * @dev Implementation of testing whether the input expiration is eligible.
      * @param expiration input expiration for testing.
      */    
-    function isEligibleExpiration(uint256 expiration) public view returns (bool){
-        return expirationList.isEligibleUint256(expiration);
+    function isEligibleExpiration(uint32 expiration) public view returns (bool){
+        return expirationList.isEligibleUint32(expiration);
     }
-    /**
-     * @dev check option's expiration.
-     * @param expiration option's expiration
-     */
-    function checkExpiration(uint256 expiration) public view{
-        return require(isEligibleExpiration(expiration),"expiration value is not supported");
-    }
-    /**
-     * @dev retrieve index from expiration white list.
-            If the input expriation is not found, the index is equal to whitelist's length, 
-     * @param expiration input expiration
-     */
-    function _getEligibleExpirationIndex(uint256 expiration) internal view returns (uint256){
-        return expirationList._getEligibleIndexUint256(expiration);
-    }
+
     /**
      * @dev An auxiliary function, retrieve first available option's positon.
      * @param begin  the start of option's positon
@@ -310,7 +307,7 @@ contract OptionsBase is OptionsData {
         begin = newFirstOption;
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
-            if(info.expiration<now || info.amount == 0){
+            if(info.createTime+info.expiration<now || info.amount == 0){
                 continue;
             }
             break;
@@ -324,10 +321,11 @@ contract OptionsBase is OptionsData {
      * @param underlyingPrice  underlying current price.
      */
     function calOptionsCollateral(OptionsInfo memory option,uint256 underlyingPrice)internal view returns(uint256){
-        if (option.expiration<=now || option.amount == 0){
+        uint256 amount = option.amount;
+        if (option.createTime+option.expiration<=now || amount == 0){
             return 0;
         }
-        uint256 totalOccupied = _getOptionsWorth(option.optType,option.strikePrice,underlyingPrice)*option.amount;
+        uint256 totalOccupied = _getOptionsWorth(option.optType,option.strikePrice,underlyingPrice)*amount;
         require(totalOccupied<=1e40,"Option collateral occupied calculate error");
         return totalOccupied;
     }
@@ -350,7 +348,7 @@ contract OptionsBase is OptionsData {
      * @param amount  option's amount
      */
     function getBurnedFullPay(uint256 optionID,uint256 amount) Smaller(amount) public view returns(address,uint256){
-        OptionsInfoEx storage optionEx = optionExtraMap[optionID-1];
-        return (optionEx.settlement,optionEx.fullPrice*optionEx.tokenTimePrice*amount/calDecimals);
+        OptionsInfo memory info = _getOptionsById(optionID);
+        return (info.settlement,info.optionsPrice*amount/info.settlePrice);
     }
 }

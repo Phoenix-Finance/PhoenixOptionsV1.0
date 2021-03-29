@@ -19,11 +19,18 @@ contract OptionsProxy is OptionsData,baseProxy{
         _optionsPrice = IOptionsPrice(optionsPriceAddr);
         _volatility = IVolatility(ivAddress);
     }
+    function setTimeLimitation(uint256 /*_limit*/)public{
+        delegateAndReturn();
+    }
+    function getTimeLimitation()public view returns(uint256){
+        delegateToViewAndReturn();
+    }
+    
     /**
      * @dev retrieve user's options' id. 
      *  user user's account.
      */     
-    function getUserOptionsID(address /*user*/)public view returns(uint256[] memory){
+    function getUserOptionsID(address /*user*/)public view returns(uint64[] memory){
         delegateToViewAndReturn();
     }
     /**
@@ -32,7 +39,7 @@ contract OptionsProxy is OptionsData,baseProxy{
      *  from user's option list begin positon.
      *  size retrieve size.
      */ 
-    function getUserOptionsID(address /*user*/,uint256 /*from*/,uint256 /*size*/)public view returns(uint256[] memory){
+    function getUserOptionsID(address /*user*/,uint256 /*from*/,uint256 /*size*/)public view returns(uint64[] memory){
         delegateToViewAndReturn();
     }
     /**
@@ -76,7 +83,7 @@ contract OptionsProxy is OptionsData,baseProxy{
      * @dev retrieve given `optionsId` option's extra information. 
      *  optionsId retrieved option's id.
      */
-    function getOptionsExtraById(uint256 /*optionsId*/)public view returns(address,uint256,uint256,uint256,uint256,uint256){
+    function getOptionsExtraById(uint256 /*optionsId*/)public view returns(address,uint256,uint256,uint256,uint256){
         delegateToViewAndReturn();
     }
     /**
@@ -92,27 +99,27 @@ contract OptionsProxy is OptionsData,baseProxy{
      *  expiration option's expiration
      *  underlying option's underlying
      */
-    function buyOptionCheck(uint256 /*expiration*/,uint32 /*underlying*/)public view{
-        delegateToViewAndReturn();
-    }
+    // function buyOptionCheck(uint32 /*expiration*/,uint32 /*underlying*/)public view{
+    //     delegateToViewAndReturn();
+    // }
     /**
      * @dev Implementation of add an eligible expiration into the expirationList.
      *  expiration new eligible expiration.
      */
-    function addExpiration(uint256 /*expiration*/)public{
+    function addExpiration(uint32 /*expiration*/)public{
         delegateAndReturn();
     }
     /**
      * @dev Implementation of revoke an invalid expiration from the expirationList.
      *  removeExpiration revoked expiration.
      */
-    function removeExpirationList(uint256 /*removeExpiration*/)public returns(bool) {
+    function removeExpirationList(uint32 /*removeExpiration*/)public returns(bool) {
         delegateAndReturn();
     }
     /**
      * @dev Implementation of getting the eligible expirationList.
      */
-    function getExpirationList()public view returns (uint256[] memory){
+    function getExpirationList()public view returns (uint32[] memory){
         delegateToViewAndReturn();
     }
     /**
@@ -170,6 +177,9 @@ contract OptionsProxy is OptionsData,baseProxy{
     function setCollateralPhase(uint256 /*totalCallOccupied*/,uint256 /*totalPutOccupied*/,
         uint256 /*beginOption*/,int256 /*latestCallOccpied*/,int256 /*latestPutOccpied*/) public{
         delegateAndReturn();
+    }
+    function getAllTotalOccupiedCollateral() public view returns (uint256,uint256){
+        delegateToViewAndReturn();
     }
     /**
      * @dev get call options total collateral occupied value.
@@ -250,8 +260,8 @@ contract OptionsProxy is OptionsData,baseProxy{
      *  optionPrice current new option's price, calculated by options price contract.
      *  amount user's input new option's amount.
      */ 
-    function createOptions(address /*from*/,address /*settlement*/,uint256 /*type_ly_exp*/,uint256 /*strikePrice*/,uint256 /*optionPrice*/,
-                uint256 /*amount*/) public {
+    function createOptions(address /*from*/,address /*settlement*/,uint256 /*type_ly_exp*/,
+    uint128 /*strikePrice*/,uint128 /*underlyingPrice*/,uint128 /*amount*/,uint128 /*settlePrice*/) public returns(uint256) {
         delegateAndReturn();
     }
     /**
@@ -263,5 +273,9 @@ contract OptionsProxy is OptionsData,baseProxy{
      */ 
     function burnOptions(address /*from*/,uint256 /*id*/,uint256 /*amount*/,uint256 /*optionPrice*/)public{
         delegateAndReturn();
+    }
+    function getUserAllOptionInfo(address /*user*/)public view 
+        returns(address[] memory,uint256[] memory,uint256[] memory,uint256[] memory,uint256[] memory){
+        delegateToViewAndReturn();
     }
 }

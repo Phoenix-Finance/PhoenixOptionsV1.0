@@ -8,6 +8,7 @@ contract('OptionsManagerV2', function (accounts){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
+        await contracts.manager.approve(accounts[0],new BN("10000000000000000000000",10));
         await contracts.FNX.approve(contracts.manager.address,10000000000000);
         await contracts.manager.addCollateral(contracts.FNX.address,10000000000000);
         await logBalance(contracts.FNX,contracts.collateral.address);
@@ -53,6 +54,7 @@ contract('OptionsManagerV2', function (accounts){
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
 
+        await contracts.manager.approve(accounts[0],new BN("10000000000000000000000",10));
         tx = await contracts.manager.addWhiteList(contracts.FNX.address);
         await web3.eth.sendTransaction({from:accounts[0],to:contracts.mine.address,value:9e18});
         await contracts.FNX.transfer(contracts.mine.address,new BN("100000000000000000000",10));
@@ -65,6 +67,7 @@ contract('OptionsManagerV2', function (accounts){
         for (var i=0;i<100;i++){
                 await contracts.options.addExpiration(month);
         }
+        await contracts.manager.approve(accounts[1],new BN("10000000000000000000000",10));
         await logBalance(contracts.FNX,contracts.collateral.address);
         await contracts.manager.addCollateral(collateral0,1000000000000000,{from : accounts[1],value : 1000000000000000});
         minebalance = await contracts.mine.getMinerBalance(accounts[0],collateral0);

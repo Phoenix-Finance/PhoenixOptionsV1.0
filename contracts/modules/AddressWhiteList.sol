@@ -51,4 +51,8 @@ contract AddressWhiteList is Halt {
     function checkAddressPermission(address tmpAddress,uint256 state) public view returns (bool){
         return  (addressPermission[tmpAddress]&state) == state;
     }
+    modifier addressPermissionAllowed(address tmpAddress,uint256 state){
+        require(checkAddressPermission(tmpAddress,state) , "Input address is not allowed");
+        _;
+    }
 }

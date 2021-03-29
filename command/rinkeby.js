@@ -1,6 +1,7 @@
-let Web3 = require("Web3")
+let Web3 = require("Web3");
 const fs = require('fs');
-let web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/f977681c79004fad87aa00da8f003597"));
+//let web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/f977681c79004fad87aa00da8f003597"));
+let web3 = new Web3(new Web3.providers.HttpProvider("https://demodex.wandevs.org:48545"));
 let contract = require("./contract/Contract.js")
 let contractfunc = require("./contract/ContractFunc.js")
 let OptionsPool = require("../build/contracts/OptionsPool.json");
@@ -8,14 +9,25 @@ let OptionsManagerV2 = require("../build/contracts/OptionsManagerV2.json");
 let OptionsPrice = require("../build/contracts/OptionsPrice.json");
 let FNXOracle = require("../build/contracts/FNXOracle.json");
 let FPTCoin = require("../build/contracts/FPTCoin.json");
-let FNXCoin = require("../build/contracts/FNXCoin.json");
+let ImpliedVol = require("../build/contracts/ImpliedVolatility.json");
 async function rinkebyQuery(){
-    let fpt = await new web3.eth.Contract(FPTCoin.abi,"0xd87ec82edf3c02718ead93d754aa02bba80a576f");
+    let iv = await new web3.eth.Contract(ImpliedVol.abi,"0xb753bbfbf48e7d6de6c865e36675690879f9b9ec");
+    let atmIv = await iv.methods.calculateIv(1,0,3600,9250e8,9250e8).call();
+    console.log("btc atmIv : ",atmIv[0]);
+    let oracle = await new web3.eth.Contract(FNXOracle.abi,"0xfeae9278a9553591045425a27188e1e0a071aee5");
+    let btcPrice = await oracle.methods.getUnderlyingPrice(1).call();
+    console.log("btcPrice :",btcPrice.toString(10));
+
+    /*
     let times = await fpt.methods.lockedBalanceOf("0xa936B6F2557c096C0052a9A4765963B381D33896").call();
     console.log("burn limted time : ",times.toString(10));
     let manager = await new web3.eth.Contract(OptionsManagerV2.abi,"0xf5887c9e5cb7a5cf7aa21dc19af5fff372e238a5");
     let result = await manager.methods.getWhiteList().call();
-    console.log("getWhiteList :",result.toString(10));
+    console.log("getWhiteList :",result);
+    for(var i = 0;i<result.length;i++){
+        let value = await manager.methods.getNetWorthBalance(result[i]).call();
+        console.log(`${result[i]} balance : ${value.toString(10)}`);
+    }
     let netWorth = await manager.methods.getTokenNetworth().call();
     console.log("netWorth :",netWorth.toString(10));
      result = await manager.methods.getTotalCollateral().call();
@@ -34,6 +46,7 @@ async function rinkebyQuery(){
     console.log("price :",result.toString(10));
     result = await oracle.methods.getPrice("0xB642Cef1cffD9cCEa0e6724887b722B27A3E7D23").call();
     console.log("fnx price :",result.toString(10));
+    */
 }
 rinkebyQuery();
 async function wanTest(){

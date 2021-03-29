@@ -1,14 +1,18 @@
 const BN = require("bn.js");
 let month = 30;
 let collateral0 = "0x0000000000000000000000000000000000000000";
+const OptionsPrice = artifacts.require("OptionsPriceTest");
 let {migration ,createAndAddErc20,AddCollateral0} = require("./testFunction.js");
 let curtime;
 contract('OptionsManagerV2', function (accounts){
     it('OptionsManagerV2 cal networth', async function (){
         let contracts = await migration(accounts);
+        contracts.price = await OptionsPrice.new(contracts.iv.address);
+        contracts.options.setOptionsPriceAddress(contracts.price.address);
+        contracts.manager.setOptionsPriceAddress(contracts.price.address);
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
-        await contracts.price.setExpirationZoom(1000);
+        //await contracts.price.setExpirationZoom(1000);
         contracts.options.addExpiration(month);
         let amount = 1e14;
         await logNetWroth(1,contracts);
@@ -16,12 +20,16 @@ contract('OptionsManagerV2', function (accounts){
         await logNetWroth(2,contracts);
         await contracts.manager.addCollateral(collateral0,amount,{value : amount});
         await logNetWroth(3,contracts);
+        await contracts.FNX.approve(contracts.manager.address,10000000000000);
+        await contracts.manager.addCollateral(contracts.FNX.address,10000000000000);
         let whiteList = await contracts.manager.getWhiteList();
         tx = await contracts.collateral.calSharedPayment(whiteList);
         curtime = Date.now();
         tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
         await logNetWroth(4,contracts);
         tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
+        await contracts.FNX.approve(contracts.manager.address,1000000000000000);
+        await contracts.manager.buyOption(contracts.FNX.address,1000000000000000,9000e8,1,month,10000000000,1);
 //        console.log(tx);
         tx = await contracts.manager.buyOption(collateral0,200000000000000,8000e8,1,month,10000000000,0,{value : 200000000000000});
         tx = await contracts.manager.buyOption(collateral0,200000000000000,8000e8,1,month,20000000000,0,{from:accounts[1],value : 200000000000000});
@@ -34,12 +42,12 @@ contract('OptionsManagerV2', function (accounts){
         }
         await calculateNetWroth(contracts,contracts.FNX);
         await logNetWroth(7,contracts);
-        tx = await contracts.manager.sellOption(1,10000000000);
-        await logNetWroth(8,contracts);
-        tx = await contracts.manager.sellOption(2,10000000000);
-        await logNetWroth(9,contracts);
-        tx = await contracts.manager.sellOption(3,10000000000);
-        await logNetWroth(10,contracts);
+        // tx = await contracts.manager.sellOption(1,10000000000);
+        // await logNetWroth(8,contracts);
+        // tx = await contracts.manager.sellOption(2,10000000000);
+        // await logNetWroth(9,contracts);
+        // tx = await contracts.manager.sellOption(3,10000000000);
+        // await logNetWroth(10,contracts);
         console.log("-----------------------------------------");
         await calculateNetWroth(contracts,contracts.FNX);
         await logNetWroth(11,contracts);
@@ -51,9 +59,12 @@ contract('OptionsManagerV2', function (accounts){
     });
     it('OptionsManagerV2 exercise networth', async function (){
         let contracts = await migration(accounts);
+        contracts.price = await OptionsPrice.new(contracts.iv.address);
+        contracts.options.setOptionsPriceAddress(contracts.price.address);
+        contracts.manager.setOptionsPriceAddress(contracts.price.address);
         await AddCollateral0(contracts);
         await createAndAddErc20(contracts);
-        await contracts.price.setExpirationZoom(1000);
+        //await contracts.price.setExpirationZoom(1000);
         contracts.options.addExpiration(month);
         contracts.options.addExpiration(month);
         let Index = await contracts.options.getOptionInfoLength();
@@ -63,14 +74,20 @@ contract('OptionsManagerV2', function (accounts){
         await logNetWroth(21,contracts);
         await contracts.manager.addCollateral(collateral0,amount,{value : amount});
         await logNetWroth(22,contracts);
+        await contracts.FNX.approve(contracts.manager.address,10000000000000);
+        await contracts.manager.addCollateral(contracts.FNX.address,10000000000000);
+
        
         tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
 //        console.log(tx);
         tx = await contracts.manager.buyOption(collateral0,1000000000000000,9000e8,1,month,10000000000,0,{value : 1000000000000000});
+
 //        console.log(tx);
         tx = await contracts.manager.buyOption(collateral0,200000000000000,8000e8,1,month,10000000000,0,{value : 200000000000000});
         tx = await contracts.manager.buyOption(collateral0,200000000000000,8000e8,1,month,20000000000,0,{from:accounts[1],value : 200000000000000});
-//        console.log(tx);
+        await contracts.FNX.approve(contracts.manager.address,1000000000000000);
+        await contracts.manager.buyOption(contracts.FNX.address,1000000000000000,9000e8,1,month,10000000000,1);
+        //        console.log(tx);
         await logNetWroth(23,contracts);
         await calculateNetWroth(contracts,contracts.FNX);
         await logNetWroth(24,contracts);

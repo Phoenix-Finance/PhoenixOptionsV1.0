@@ -24,7 +24,10 @@ contract CollateralProxy is CollateralData,baseProxy{
     function () external payable onlyManager{
 
     }
-    function getFeeRate(uint256 /*feeType*/)public view returns (uint256,uint256){
+    function getFeeRateAll()public view returns (uint32[] memory){
+        delegateToViewAndReturn();
+    }
+    function getFeeRate(uint256 /*feeType*/)public view returns (uint32){
         delegateToViewAndReturn();
     }
     /**
@@ -34,7 +37,7 @@ contract CollateralProxy is CollateralData,baseProxy{
      *  denominator thedenominator of transaction fee.
      * transaction fee = numerator/denominator;
      */   
-    function setTransactionFee(uint256 /*feeType*/,uint256 /*numerator*/,uint256 /*denominator*/)public{
+    function setTransactionFee(uint256 /*feeType*/,uint32 /*thousandth*/)public{
         delegateAndReturn();
     }
 
@@ -195,6 +198,9 @@ contract CollateralProxy is CollateralData,baseProxy{
             uint256 /*feeType*/)public{
         delegateAndReturn();
     }
+    function buyOptionsPayfor(address payable /*recieptor*/,address /*settlement*/,uint256 /*settlementAmount*/,uint256 /*allPay*/)public onlyManager{
+        delegateAndReturn();
+    }
     /**
      * @dev Operation for transfer user's payback. Only manager contract can invoke this function.
      *  recieptor the recieptor account.
@@ -232,6 +238,9 @@ contract CollateralProxy is CollateralData,baseProxy{
         uint256[] memory /*_RealBalances*/,uint256[] memory /*prices*/) public view returns(uint256[] memory,uint256[] memory){
             delegateToViewAndReturn();
     } 
+    function getAllRealBalance(address[] memory /*whiteList*/)public view returns(int256[] memory){
+        delegateToViewAndReturn();
+    }
     function getRealBalance(address /*settlement*/)public view returns(int256){
         delegateToViewAndReturn();
     }

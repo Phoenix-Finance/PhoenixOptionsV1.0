@@ -1,25 +1,7 @@
 pragma solidity =0.5.16;
 import "../optionsPrice.sol";
 contract OptionsPriceTest is OptionsPrice{
-    uint256 expirationZoom = 1;
     constructor (address ivContract) OptionsPrice(ivContract) public{
-    }
-    function setExpirationZoom(uint256 zoom) public{
-        expirationZoom = zoom;
-    }
-    function testCalculateD1D2_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint256 ivNumerator,uint256 ivDenominator)
-        public view returns(int256,int256,int256,int256){
-        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
-        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice,strikePrice,expiration,rate,_iv);
-        return (d1.numerator,d1.denominator,d2.numerator,d2.denominator);
-    }
-    function testCalculateND1ND2_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint256 ivNumerator,uint256 ivDenominator)
-        public view returns(int256,int256,int256,int256){
-        Fraction.fractionNumber memory _iv = Fraction.fractionNumber(int256(ivNumerator),int256(ivDenominator));
-        (Fraction.fractionNumber memory d1, Fraction.fractionNumber memory d2) = calculateD1D2(currentPrice,strikePrice,expiration,rate,_iv);
-        d1 = d1.normsDist();
-        d2 = d2.normsDist();
-        return (d1.numerator,d1.denominator,d2.numerator,d2.denominator);
     }
         /**
      * @dev calculate option's price using B_S formulas
@@ -29,8 +11,12 @@ contract OptionsPriceTest is OptionsPrice{
      * @param underlying option's underlying id, 1 for BTC, 2 for ETH.
      * @param optType option's type, 0 for CALL, 2 for PUT.
      */
+    uint256 fakeOptionPrice = 0;
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint32 underlying,uint8 optType)public view returns (uint256){
-        expiration = expiration * expirationZoom;
+        expiration = expiration * 4000;
+        if(fakeOptionPrice>0) {
+            return fakeOptionPrice;
+        }
         return OptionsPrice.getOptionsPrice(currentPrice,strikePrice,expiration,underlying,optType);
     }
     /**
@@ -39,12 +25,16 @@ contract OptionsPriceTest is OptionsPrice{
      * @param strikePrice option's strike price.
      * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
      * @param ivNumerator user input iv numerator.
-     * @param ivDenominator user input iv denominator.
      * @param optType option's type, 0 for CALL, 2 for PUT.
      */
     function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
-            uint256 ivNumerator,uint256 ivDenominator,uint8 optType)public view returns (uint256){
-                expiration = expiration * expirationZoom;
-        return OptionsPrice.getOptionsPrice_iv(currentPrice,strikePrice,expiration,ivNumerator,ivDenominator,optType);
+            uint256 ivNumerator,uint8 optType)public pure returns (uint256){
+        expiration = expiration * 4000;
+        return OptionsPrice.getOptionsPrice_iv(currentPrice,strikePrice,expiration,ivNumerator,optType);
     }
+
+    function setOptionsPrice(uint256 optionPrice) public{
+        fakeOptionPrice = optionPrice;
+    }
+
 }

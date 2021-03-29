@@ -33,7 +33,7 @@ contract CollateralPool is TransactionFee{
      * @param feeType transaction fee type. see TransactionFee contract
      */
     function addTransactionFee(address collateral,uint256 amount,uint256 feeType)public onlyManager returns (uint256) {
-        uint256 fee = calculateFee(feeType,amount);
+        uint256 fee = FeeRates[feeType]*amount/1000;
         _addTransactionFee(collateral,fee);
         return fee;
     }
@@ -76,6 +76,8 @@ contract CollateralPool is TransactionFee{
      */
     function addUserInputCollateral(address user,address collateral,uint256 amount)public onlyManager{
         userInputCollateral[user][collateral] = userInputCollateral[user][collateral].add(amount);
+        collateralBalances[collateral] = collateralBalances[collateral].add(amount);
+        netWorthBalances[collateral] = netWorthBalances[collateral].add(int256(amount));
     }
     /**
      * @dev Opterator net worth balance data. Only manager contract can modify database.
@@ -181,6 +183,19 @@ contract CollateralPool is TransactionFee{
         _transferPaybackAndFee(recieptor,settlement,payback,feeType);
         netWorthBalances[settlement] = netWorthBalances[settlement].sub(int256(payback));
     }
+        /**
+     * @dev Operation for transfer user's payback. Only manager contract can invoke this function.
+     * @param recieptor the recieptor account.
+     * @param allPay the payback amount
+     */
+    function buyOptionsPayfor(address payable recieptor,address settlement,uint256 settlementAmount,uint256 allPay)public onlyManager{
+        uint256 fee = addTransactionFee(settlement,allPay,0);
+        require(settlementAmount>=allPay+fee,"settlement asset is insufficient!");
+        settlementAmount = settlementAmount-(allPay+fee);
+        if (settlementAmount > 0){
+            _transferPayback(recieptor,settlement,settlementAmount);
+        }
+    }
     /**
      * @dev Operation for transfer user's payback. Only manager contract can invoke this function.
      * @param recieptor the recieptor account.
@@ -205,36 +220,39 @@ contract CollateralPool is TransactionFee{
         uint256 ln = tmpWhiteList.length;
         uint256[] memory PaybackBalances = new uint256[](ln);
         uint256 i=0;
+        uint256 amount;
         for(; i<ln && redeemWorth>0;i++){
             //address addr = tmpWhiteList[i];
             if (colBalances[i] > 0){
-                uint256 amount = redeemWorth/prices[i];
+                amount = redeemWorth/prices[i];
                 if (amount < colBalances[i]){
                     redeemWorth = 0;
                 }else{
                     amount = colBalances[i];
                     redeemWorth = redeemWorth - colBalances[i]*prices[i];
                 }
+                PaybackBalances[i] = amount;
+                amount = amount * userInputCollateral[account][tmpWhiteList[i]]/colBalances[i];
                 userInputCollateral[account][tmpWhiteList[i]] =userInputCollateral[account][tmpWhiteList[i]].sub(amount);
                 collateralBalances[tmpWhiteList[i]] = collateralBalances[tmpWhiteList[i]].sub(amount);
-                PaybackBalances[i] = amount;
+
             }
         }
         if (redeemWorth>0) {
-           uint256 totalWorth = 0;
+           amount = 0;
             for (i=0; i<ln;i++){
-                totalWorth = totalWorth.add(PremiumBalances[i]*prices[i]);
+                amount = amount.add(PremiumBalances[i]*prices[i]);
             }
-            require(totalWorth >= redeemWorth ,"redeem collateral is insufficient");
+//            require(amount >= redeemWorth ,"redeem collateral is insufficient");
+            if (amount<redeemWorth){
+                amount = redeemWorth;
+            }
             for (i=0; i<ln;i++){
-                PaybackBalances[i] = PaybackBalances[i].add(PremiumBalances[i].mul(redeemWorth)/totalWorth);
+                PaybackBalances[i] = PaybackBalances[i].add(PremiumBalances[i].mul(redeemWorth)/amount);
             }
         }
         for (i=0;i<ln;i++){ 
             transferPaybackAndFee(account,tmpWhiteList[i],PaybackBalances[i],redeemColFee);
-//            addr = whiteList[i];
-//            netWorthBalances[addr] = netWorthBalances[addr].sub(PaybackBalances[i]);
-//            _transferPaybackAndFee(msg.sender,addr,PaybackBalances[i],redeemColFee);
         } 
     }
     /**
@@ -288,6 +306,15 @@ contract CollateralPool is TransactionFee{
             return (0,netWorthBalance);
         }
     }
+    function getAllRealBalance(address[] memory whiteList)public view returns(int256[] memory){
+        uint256 len = whiteList.length;
+        int256[] memory realBalances = new int256[](len); 
+        for (uint i = 0;i<len;i++){
+            int256 latestWorth = _optionsPool.getNetWrothLatestWorth(whiteList[i]);
+            realBalances[i] = netWorthBalances[whiteList[i]].add(latestWorth);
+        }
+        return realBalances;
+    }
         /**
      * @dev Retrieve the balance of collateral, the auxiliary function for the total collateral calculation. 
      */
@@ -310,25 +337,22 @@ contract CollateralPool is TransactionFee{
      */
     function addNetBalance(address settlement,uint256 amount) public payable {
         amount = getPayableAmount(settlement,amount);
-        addNetWorthBalance(settlement,int256(amount));
-//        netWorthBalances[settlement] = netWorthBalances[settlement].add(amount);
+        netWorthBalances[settlement] = netWorthBalances[settlement].add(int256(amount));
     }
         /**
      * @dev the auxiliary function for getting user's transer
      */
     function getPayableAmount(address settlement,uint256 settlementAmount) internal returns (uint256) {
-        uint256 colAmount = 0;
         if (settlement == address(0)){
-            colAmount = msg.value;
+            settlementAmount = msg.value;
         }else if (settlementAmount > 0){
             IERC20 oToken = IERC20(settlement);
             uint256 preBalance = oToken.balanceOf(address(this));
             oToken.transferFrom(msg.sender, address(this), settlementAmount);
             uint256 afterBalance = oToken.balanceOf(address(this));
             require(afterBalance-preBalance==settlementAmount,"settlement token transfer error!");
-            colAmount = settlementAmount;
         }
-        return colAmount;
+        return settlementAmount;
     }
         /**
      * @dev Calculate the collateral pool shared worth.

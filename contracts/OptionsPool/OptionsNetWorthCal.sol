@@ -78,13 +78,12 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         (begin,newFirstOption) = getFirstOption(begin, netWorthirstOption,end); 
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
-            OptionsInfoEx storage optionEx = optionExtraMap[begin];
-            uint256 timeValue = _calculateCurrentPrice(optionEx.underlyingPrice,info.strikePrice,info.expiration,
-                optionEx.ivNumerator,optionEx.ivDenominator,info.optType);
-            if (timeValue<optionEx.fullPrice){
-                timeValue = optionEx.fullPrice - timeValue;
-                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                timeValue = optionEx.tokenTimePrice*timeValue*info.amount/calDecimals;
+            uint256 timeValue = _calculateCurrentPrice((info.strikePrice*info.priceRate)>>28,info.optionsPrice,
+                info.createTime+info.expiration,info.iv,info.optType);
+            if (timeValue<info.optionsPrice){
+                timeValue = info.optionsPrice - timeValue;
+                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,info.settlement);
+                timeValue = timeValue*info.amount/info.settlePrice;
                 require(timeValue<=1e40,"option time shared value calculate error");
                 totalSharedPayment[index] = totalSharedPayment[index]+timeValue;
             }
@@ -101,10 +100,10 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         int256[] memory totalExpiredPayment = new int256[](whiteList.length);
         for (;begin<end;begin++){
             OptionsInfo storage info = allOptions[begin];
-            if (info.amount>0){
-                OptionsInfoEx storage optionEx = optionExtraMap[begin];
-                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
-                uint256 timeValue = optionEx.fullPrice*optionEx.tokenTimePrice*info.amount/calDecimals;
+            uint256 amount = info.amount;
+            if (amount>0){
+                uint256 index = whiteListAddress._getEligibleIndexAddress(whiteList,info.settlement);
+                uint256 timeValue = info.optionsPrice*amount/info.settlePrice;
                 require(timeValue<=1e40,"option time shared value calculate error");
                 totalExpiredPayment[index] = totalExpiredPayment[index]+int256(timeValue);
             }
@@ -148,14 +147,14 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
         int256[] memory OptionsFallBalances = new int256[](whiteList.length);
         for (;begin<lastOption;begin++){
             OptionsInfo storage info = allOptions[begin];
-            if(info.expiration<now || info.amount == 0){
+            uint256 amount = info.amount;
+            if(info.createTime + info.expiration<now || amount == 0){
                 continue;
             }
             uint256 index = _getEligibleUnderlyingIndex(info.underlying);
-            int256 curValue = _calCurtimeCallateralFall(info,info.amount,prices[index]);
+            int256 curValue = _calCurtimeCallateralFall(info,amount,prices[index]);
             if (curValue != 0){
-                OptionsInfoEx storage optionEx = optionExtraMap[begin];
-                index = whiteListAddress._getEligibleIndexAddress(whiteList,optionEx.settlement);
+                index = whiteListAddress._getEligibleIndexAddress(whiteList,info.settlement);
                 OptionsFallBalances[index] = OptionsFallBalances[index]-curValue;
             }
         }
@@ -168,12 +167,11 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
      * @param curPrice current underlying price.
      */
     function _calCurtimeCallateralFall(OptionsInfo memory info,uint256 amount,uint256 curPrice) internal view returns(int256){
-        if (info.expiration<=now || amount == 0){
+        if (info.createTime + info.expiration<=now || amount == 0){
             return 0;
         }
-        uint256 newFall = _getOptionsPayback(info.optType,info.strikePrice,curPrice)*amount;
-        OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
-        uint256 OriginFall = _getOptionsPayback(info.optType,info.strikePrice,optionEx.underlyingPrice)*amount;
+        uint256 newFall = _getOptionsPayback(info.optType,info.optionsPrice,curPrice)*amount;
+        uint256 OriginFall = _getOptionsPayback(info.optType,info.optionsPrice,(info.strikePrice*info.priceRate)>>28)*amount;
         int256 curValue = int256(newFall) - int256(OriginFall);
         require(curValue>=-1e40 && curValue<=1e40,"options fall calculate error");
         return curValue;
@@ -181,9 +179,9 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
     /*
     function _addNewOptionsNetworth(OptionsInfo memory info)  internal {
         OptionsInfoEx storage infoEx =  optionExtraMap[info.optionID-1];
-        uint256 price = oraclePrice(infoEx.settlement);
-        uint256 curValue = _calCurtimeCallateralFall(info,info.amount,infoEx.underlyingPrice)/price;
-        optionsLatestNetWorth[infoEx.settlement] = optionsLatestNetWorth[infoEx.settlement].sub(int256(curValue));
+        uint256 price = oraclePrice(info.underlying);
+        uint256 curValue = _calCurtimeCallateralFall(info,getOptionAmount(info),(info.strikePrice*info.priceRate)>>28)/price;
+        optionsLatestNetWorth[nfo.underlying] = optionsLatestNetWorth[nfo.underlying].sub(int256(curValue));
     }
     */
     /**
@@ -195,12 +193,12 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
      */
     function _burnOptionsNetworth(OptionsInfo memory info,uint256 amount,uint256 underlyingPrice,uint256 currentPrice) internal {
         int256 curValue = _calCurtimeCallateralFall(info,amount,underlyingPrice);
-        OptionsInfoEx storage optionEx = optionExtraMap[info.optionID-1];
-        uint256 timeWorth = optionEx.fullPrice>currentPrice ? optionEx.fullPrice-currentPrice : 0;
-        timeWorth = optionEx.tokenTimePrice*timeWorth*amount/calDecimals;
-        curValue = curValue / int256(oraclePrice(optionEx.settlement));
+        uint256 timeWorth = info.optionsPrice>currentPrice ? info.optionsPrice-currentPrice : 0;
+        timeWorth = timeWorth*amount/info.settlePrice;
+        address settlement = info.settlement;
+        curValue = curValue / int256(oraclePrice(settlement));
         int256 value = curValue - int256(timeWorth);
-        optionsLatestNetWorth[optionEx.settlement] = optionsLatestNetWorth[optionEx.settlement]+value;
+        optionsLatestNetWorth[settlement] = optionsLatestNetWorth[settlement]+value;
     }
     /**
      * @dev An anxiliary function, calculate time shared current option price.
@@ -208,12 +206,11 @@ contract OptionsNetWorthCal is OptionsOccupiedCal {
      * @param strikePrice the option strikePrice.
      * @param expiration option time expiration time left, equal option.expiration - now.
      * @param ivNumerator Implied valotility numerator when option is created.
-     * @param ivDenominator Implied valotility denominator when option is created.
      */
-    function _calculateCurrentPrice(uint256 curprice,uint256 strikePrice,uint256 expiration,uint256 ivNumerator,uint256 ivDenominator,uint8 optType)internal view returns (uint256){
+    function _calculateCurrentPrice(uint256 curprice,uint256 strikePrice,uint256 expiration,uint256 ivNumerator,uint8 optType)internal view returns (uint256){
         if (expiration > now){
             return _optionsPrice.getOptionsPrice_iv(curprice,strikePrice,expiration-now,ivNumerator,
-                ivDenominator,optType);
+                optType);
         }
         return 0;
     }

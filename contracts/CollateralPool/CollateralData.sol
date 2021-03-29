@@ -9,13 +9,9 @@ import "../modules/Operator.sol";
  *
  */
 contract CollateralData is AddressWhiteList,Managerable,Operator,ImportOptionsPool{
-    struct fraction{
-        uint256 numerator;
-        uint256 denominator;
-    }
         // The total fees accumulated in the contract
     mapping (address => uint256) 	internal feeBalances;
-    fraction[] internal FeeRates;
+    uint32[] internal FeeRates;
      /**
      * @dev Returns the rate of trasaction fee.
      */   

@@ -15,6 +15,9 @@ contract UnderlyingAssets is Ownable {
     function addUnderlyingAsset(uint32 underlying)public onlyOwner{
         underlyingAssets.addWhiteListUint32(underlying);
     }
+    function setUnderlyingAsset(uint32[] memory underlyings)public onlyOwner{
+        underlyingAssets = underlyings;
+    }
     /**
      * @dev Implementation of revoke an invalid underlying from the underlyingAssets.
      * @param removeUnderlying revoked underlying.

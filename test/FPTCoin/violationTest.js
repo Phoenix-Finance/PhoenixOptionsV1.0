@@ -4,7 +4,7 @@ const Erc20Proxy = artifacts.require("Erc20Proxy");
 const FNXCoin = artifacts.require("FNXCoin");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 const FPTProxy = artifacts.require("FPTProxy");
-const FPTCoin = artifacts.require("FPTCoin");
+const FPTCoin = artifacts.require("FPTCoinUpgrade");
 const BN = require("bn.js");
 contract('Erc20Proxy', function (accounts){
     it('FPTProxy Erc20 violation test functions', async function (){
@@ -12,8 +12,8 @@ contract('Erc20Proxy', function (accounts){
         let erc20 = await Erc20Proxy.new(fnx.address);
         let pool = await minePool.new();
         let poolProxy = await minePoolProxy.new(pool.address);
-        let fptimpl = await FPTCoin.new(poolProxy.address);
-        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address);
+        let fptimpl = await FPTCoin.new(poolProxy.address,"FPT-A");
+        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address,"FPT-A");
 
         await poolProxy.setManager(fpt.address);
         await poolProxy.setMineCoinInfo(collateral0,1000000,2);
@@ -38,8 +38,8 @@ contract('Erc20Proxy', function (accounts){
         let erc20 = await Erc20Proxy.new(fnx.address);
         let pool = await minePool.new();
         let poolProxy = await minePoolProxy.new(pool.address);
-        let fptimpl = await FPTCoin.new(poolProxy.address);
-        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address);
+        let fptimpl = await FPTCoin.new(poolProxy.address,"FPT-A");
+        let fpt = await FPTProxy.new(fptimpl.address,poolProxy.address,"FPT-A");
 
         await poolProxy.setManager(fpt.address);
         await poolProxy.setMineCoinInfo(collateral0,1000000,2);
@@ -51,7 +51,7 @@ contract('Erc20Proxy', function (accounts){
         await fpt.mint(accounts[0],10000000000);
         await fpt.mint(accounts[1],10000000000);
         await fpt.mint(accounts[2],10000000000);
-        await fpt.setTimeLimitation(2);
+        await fpt.setTimeLimitation(4);
         await testViolation("burn time is unexpired",async function(){
             await fpt.burn(accounts[0],5000000000);   
         });

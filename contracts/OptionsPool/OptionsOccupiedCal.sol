@@ -90,6 +90,12 @@ contract OptionsOccupiedCal is OptionsBase {
         putLatestOccupied -= latestPutOccpied;
     }
     /**
+     * @dev get real total collateral occupied value.
+     */ 
+    function getAllTotalOccupiedCollateral() public view returns (uint256,uint256) {
+        return (getCallTotalOccupiedCollateral(),getPutTotalOccupiedCollateral());
+    }
+    /**
      * @dev get call options total collateral occupied value.
      */ 
     function getCallTotalOccupiedCollateral() public view returns (uint256) {
@@ -129,19 +135,20 @@ contract OptionsOccupiedCal is OptionsBase {
     function getTotalOccupiedCollateral() public view returns (uint256) {
         return getCallTotalOccupiedCollateral() + getPutTotalOccupiedCollateral();
     }
-    /**
-     * @dev add new option collateral occupied value when user create a new option.
-     * @param info new option's information.
-     */ 
-    function _addOptionsCollateral(OptionsInfo memory info) internal {
-        OptionsInfoEx storage infoEx =  optionExtraMap[info.optionID-1];
-        uint256 newOccupied = calOptionsCollateral(info,infoEx.underlyingPrice);
-        if (info.optType == 0){
-            callLatestOccupied += int256(newOccupied);
-        }else{
-            putLatestOccupied += int256(newOccupied);
-        }
-    }
+//     /**
+//      * @dev add new option collateral occupied value when user create a new option.
+//      * @param optionID new option's ID.
+//      */ 
+//     function _addOptionsCollateral(uint256 optionID) internal {
+//         OptionsInfo memory info = allOptions[optionID-1];
+// //        OptionsInfoEx storage infoEx =  optionExtraMap[optionID-1];
+//         uint256 newOccupied = calOptionsCollateral(info,(info.strikePrice*info.priceRate)>>28);
+//         if (info.optType == 0){
+//             callLatestOccupied += int256(newOccupied);
+//         }else{
+//             putLatestOccupied += int256(newOccupied);
+//         }
+//     }
     /**
      * @dev deduct burned option collateral occupied value when user burn option.
      * @param info burned option's information.

@@ -28,7 +28,7 @@ contract ManagerData is ReentrancyGuard,ImputRange,AddressWhiteList,Allowances,I
      * @dev Emitted when `from` redeemed `allRedeem` collateral.
      */
     event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);
-
+    event DebugEvent(uint256 id,uint256 value1,uint256 value2);
         /**
     * @dev input price valid range rate, thousandths.
     * the input price must greater than current price * minPriceRate /1000
@@ -42,12 +42,11 @@ contract ManagerData is ReentrancyGuard,ImputRange,AddressWhiteList,Allowances,I
      * @dev Emitted when `from` buy `optionAmount` option and create new option.
      * @param from user's account
      * @param settlement user's input settlement paid for buy new option.
-     * @param optionId new option's id
      * @param optionPrice option's paid price
      * @param settlementAmount settement cost
      * @param optionAmount mint option token amount.
      */  
-    event BuyOption(address indexed from,address indexed settlement,uint256 indexed optionId,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);
+    event BuyOption(address indexed from,address indexed settlement,uint256 optionPrice,uint256 settlementAmount,uint256 optionAmount);
     /**
      * @dev Emitted when `from` sell `amount` option whose id is `optionId` and received sellValue,priced in usd.
      */  

@@ -42,7 +42,7 @@ contract('OptionsManagerV2', function (accounts){
             await calculateNetWroth(contracts);
             for (var j=0;j<5;j++){
                 await contracts.manager.redeemCollateral(4985000000000,result[j]);
-                await contracts.manager.sellOption(j+1,10000000000);
+                //await contracts.manager.sellOption(j+1,10000000000);
             }
             return;
         }

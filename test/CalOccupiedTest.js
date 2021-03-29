@@ -36,8 +36,6 @@ contract('OptionsManagerV2', function (accounts){
             return;
         }
      });
-});
-contract('OptionsManagerV2', function (accounts){
     it('OptionsManagerV2 buy options Price test', async function (){
         let contracts = await migration(accounts);
         await AddCollateral0(contracts);
@@ -73,8 +71,9 @@ contract('OptionsManagerV2', function (accounts){
 async function calculateNetWroth(contracts){
     let whiteList = [collateral0,contracts.FNX.address];
     optionsLen = await contracts.options.getOptionCalRangeAll(whiteList);
-    console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
-
+    console.log(optionsLen[0].toString(10),optionsLen[1].toString(10));
+//    console.log(optionsLen[0].toString(10),optionsLen[1].toString(10),optionsLen[2].toString(10),optionsLen[4].toString(10));
+    return;
     let result =  await contracts.options.calculatePhaseOccupiedCollateral(optionsLen[4],optionsLen[0],optionsLen[4]);
     console.log(result[0].toString(10),result[1].toString(10));
     let tx = await contracts.options.setOccupiedCollateral();

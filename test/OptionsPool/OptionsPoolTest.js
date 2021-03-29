@@ -1,5 +1,5 @@
 const FNXOracle = artifacts.require("TestFNXOracle");
-const OptionsPrice = artifacts.require("OptionsPriceTest");
+const OptionsPrice = artifacts.require("OptionsPrice");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 
 let OptionsPool = artifacts.require("OptionsPool");
@@ -49,8 +49,10 @@ contract('OptionsProxy', function (accounts){
         let pool = await OptionsPool.new(oracle.address,price.address,iv.address);
         let options = await OptionsProxy.new(pool.address,oracle.address,price.address,iv.address);
         await options.setManager(accounts[0]);
-        let bn = new BN("200000000000000000010000000000000001",16);
-        await options.createOptions(accounts[0],collateral0,bn,925000000000,10000000000,10000000000);
+        let bn = new BN("10000000000000001",16);
+        let bn1 = new BN(86400);
+        bn = bn.add(bn1.shln(128));
+        await options.createOptions(accounts[0],collateral0,bn,92500000000,925000000000,10000000000,50e8);
         let result = await options.getOptionsById(1);
         console.log(result);
         result = await options.getOptionsExtraById(1);
