@@ -98,9 +98,8 @@ contract CollateralCal is ManagerData {
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
         uint256 leftCollateral = getLeftCollateral();
         (uint256 burnAmount,uint256 redeemWorth) = _FPTCoin.redeemLockedCollateral(msg.sender,tokenAmount,leftCollateral);
-        tokenAmount -= burnAmount;
-        burnAmount = 0;
-        if (tokenAmount > 0){
+        //tokenAmount -= burnAmount;
+        if (tokenAmount > burnAmount){
             leftCollateral -= redeemWorth;
             
             if (lockedAmount > 0){
@@ -111,6 +110,8 @@ contract CollateralCal is ManagerData {
                 burnAmount = newRedeem;
                 redeemWorth += newWorth;
             }
+        }else{
+            burnAmount = 0;
         }
         _redeemCollateralWorth(collateral,redeemWorth,userTotalWorth);
         if (burnAmount>0){

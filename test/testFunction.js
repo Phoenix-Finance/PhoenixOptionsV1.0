@@ -3,6 +3,7 @@ const BN = require("bn.js");
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 
 let FNXCoin = artifacts.require("FNXCoin");
+let USDCoin = artifacts.require("USDCoin");
 let Erc20Proxy = artifacts.require("Erc20Proxy");
 let USDCoin = artifacts.require("USDCoin");
 
