@@ -1,7 +1,7 @@
 pragma solidity =0.5.16;
-import "./interfaces/IFNXOracle.sol";
+import "./interfaces/IPHXOracle.sol";
 import "./modules/Operator.sol";
-contract FNXOracle is IFNXOracle,Operator {
+contract PHXOracle is IPHXOracle,Operator {
     mapping(uint256 => uint256) internal priceMap;
     /**
       * @notice set price of an asset

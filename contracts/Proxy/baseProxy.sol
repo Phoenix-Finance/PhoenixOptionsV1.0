@@ -54,7 +54,7 @@ contract baseProxy is Ownable {
         return abi.decode(returnData, (bytes));
     }
 
-    function delegateToViewAndReturn() internal view returns (bytes memory) {
+    function delegateToViewAndReturn() internal view returns (bytes memory data) {
         (bool success, ) = address(this).staticcall(abi.encodeWithSignature("delegateToImplementation(bytes)", msg.data));
 
         assembly {

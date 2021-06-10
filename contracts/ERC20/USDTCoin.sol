@@ -1,7 +1,7 @@
 pragma solidity =0.5.16;
-import "./FNXCoin.sol";
+import "./PHXCoin.sol";
 
-contract USDTCoin is FNXCoin {
+contract USDTCoin is PHXCoin {
 
     constructor () public{
         name = "USDT Coin";
