@@ -1,6 +1,7 @@
 let Web3 = require("Web3")
+let Debug = require("web3-eth-debug").Debug;
 const fs = require('fs');
-let web3 = new Web3(new Web3.providers.HttpProvider("https://demodex.wandevs.org:48545"));
+let web3 = new Web3(new Web3.providers.HttpProvider("https://gwan-ssl.wandevs.org:56891"));
 let contract = require("./contract/Contract.js")
 let contractfunc = require("./contract/ContractFunc.js")
 let OptionsPool = require("../build/contracts/OptionsPool.json");
@@ -9,8 +10,24 @@ let OptionsPrice = require("../build/contracts/OptionsPrice.json");
 let FNXOracle = require("../build/contracts/FNXOracle.json");
 let FPTCoin = require("../build/contracts/FPTCoin.json");
 let collateral0 = "0x0000000000000000000000000000000000000000";
+const debug = new Debug(new Web3.providers.HttpProvider("https://gwan-ssl.wandevs.org:56891"))
+var abi = require('ethereumjs-abi')
+var BN = require('bn.js')
 async function wanTest(){
-
+    for(var i=0;i<10;i++){
+        let wanInfo = await web3.eth.getStorageAt("0xc6f4465a6a521124c8e3096b62575c157999d361",i,14677628)
+        console.log(i,wanInfo)
+    }
+    newKey = "0x"+abi.soliditySHA3(["uint","uint"],[new BN(0),new BN(1)]).toString('hex')
+    console.log(newKey)
+//    let newKey =  web3.utils.sha3(key + index, {"encoding":"hex"})
+    let wanInfo = await web3.eth.getStorageAt("0xc6f4465a6a521124c8e3096b62575c157999d361",newKey,14677628)
+    console.log("balance",wanInfo)
+    return;
+ //   let block = await debug.dumpBlock(14677628);
+    
+    fs.writeFileSync("C:\\work\\wanchain.json",JSON.stringify(block,null,4),"utf8");
+    return;
     let fpt = await new web3.eth.Contract(FPTCoin.abi,"0xa9df04d91bd857eaa8122fc239ac1d9ed9d2a15e");
     let times = await fpt.methods.getUserBurnTimeLimite("0xa936B6F2557c096C0052a9A4765963B381D33896").call();
     console.log("burn limted time : ",times.toString(10));

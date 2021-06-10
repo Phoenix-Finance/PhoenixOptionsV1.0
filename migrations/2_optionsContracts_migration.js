@@ -1,7 +1,7 @@
 
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 
-let FNXCoin = artifacts.require("FNXCoin");
+let PHXCoin = artifacts.require("PHXCoin");
 let Erc20Proxy = artifacts.require("Erc20Proxy");
 
 let OptionsPool = artifacts.require("OptionsPool");
@@ -20,7 +20,25 @@ let CollateralPool = artifacts.require("CollateralPool");
 let CollProxy = artifacts.require("CollateralProxy");
 
 let collateral0 = "0x0000000000000000000000000000000000000000";
+let USDCoin = artifacts.require("USDCoin");
+let WBTC = artifacts.require("WBTC");
+let WETH = artifacts.require("WETH");
 module.exports = async function(deployer, network,accounts) {
+    //0x982c1E6bd1550c1702fEc0C7cf8E4eb358BD39ef
+    await deployer.deploy(PHXCoin);
+    //0x62f364c7127A16CE91dD68acB8476992044F5b39
+    await deployer.deploy(USDCoin);
+    //0xfD7601e484cc5532Beb5CB2ee52014EaFCAF3DAE
+    await deployer.deploy(WBTC);
+    //0x755C76b93c41e5Efb3966d9473Cfc79c31248F4D
+    await deployer.deploy(WETH);
+    let WBTCInfo = await WBTC.at(WBTC.address);
+    let balance = await WBTCInfo.balanceOf(accounts[0]);
+    console.log(balance.toString())
+    WBTCInfo = await USDCoin.at(USDCoin.address);
+    balance = await WBTCInfo.balanceOf(accounts[0]);
+    console.log(balance.toString())
+    return;
     const FNXOracle = artifacts.require("TestFNXOracle");
     const OptionsPrice = artifacts.require("OptionsPrice");
     await deployer.deploy(ImpliedVolatility);
@@ -29,7 +47,7 @@ module.exports = async function(deployer, network,accounts) {
     let oracleInstance = await deployer.deploy(FNXOracle);
     await deployer.deploy(OptionsPrice,ivAddress);
     return;
-    await migrate(deployer,FNXCoin,Erc20Proxy);
+    await migrate(deployer,PHXCoin,Erc20Proxy);
     return;
     let optionsPool = await migrate(deployer,OptionsPool,OptionsProxy,FNXOracle.address,OptionsPrice.address,ivAddress);
     let minePool = await migrate(deployer,FNXMinePool,MinePoolProxy);
@@ -50,14 +68,14 @@ module.exports = async function(deployer, network,accounts) {
     await optionsPool.addOperator(accounts[0]);
     await manager.addOperator(accounts[0]);
     //await minePool.setMineCoinInfo(collateral0,1500000000000000,2);
-    await minePool.setMineCoinInfo(FNXCoin.address,500000000000000,2);
+    await minePool.setMineCoinInfo(PHXCoin.address,500000000000000,2);
     //await minePool.setBuyingMineInfo(collateral0,150000000);
-    await minePool.setBuyingMineInfo(FNXCoin.address,300000000);
+    await minePool.setBuyingMineInfo(PHXCoin.address,300000000);
     await optionsPool.setBurnTimeLimit(0);
     await CoinInstance.setBurnTimeLimited(0);
     await manager.setCollateralRate(collateral0,1500);
-    await manager.setCollateralRate(FNXCoin.address,5000);
-    console.log("fnx:",FNXCoin.address)
+    await manager.setCollateralRate(PHXCoin.address,5000);
+    console.log("fnx:",PHXCoin.address)
     console.log("Oracle:",FNXOracle.address);
     console.log("iv:",ivAddress);
     console.log("OptionsPrice:",OptionsPrice.address);

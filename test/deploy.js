@@ -2,7 +2,7 @@ const BN = require("bn.js");
 
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 
-let FNXCoin = artifacts.require("FNXCoin");
+let PHXCoin = artifacts.require("PHXCoin");
 let Erc20Proxy = artifacts.require("Erc20Proxy");
 let USDCoin = artifacts.require("USDCoin");
 let USDTCoin = artifacts.require("USDTCoin");
@@ -89,7 +89,7 @@ contract('OptionsManagerV2', function (accounts){
         await fptA.setTimeLimitation(0);
         await fptB.setTimeLimitation(0);
 
-        let fnx = await FNXCoin.new();
+        let fnx = await PHXCoin.new();
         let erc20 = await Erc20Proxy.new(fnx.address);
 
         console.log("FNX : ",erc20.address)
