@@ -1,7 +1,6 @@
 pragma solidity =0.5.16;
-import "./interfaces/IPHXOracle.sol";
-import "./modules/Operator.sol";
-contract PHXOracle is IPHXOracle,Operator {
+import "./PhoenixModules/modules/Operator.sol";
+contract PHXOracle is Operator {
     mapping(uint256 => uint256) internal priceMap;
     /**
       * @notice set price of an asset
@@ -9,7 +8,7 @@ contract PHXOracle is IPHXOracle,Operator {
       * @param asset Asset for which to set the price
       * @param price the Asset's price
       */    
-    function setPrice(address asset,uint256 price) public onlyOperatorIndex(0) {
+    function setPrice(address asset,uint256 price) public onlyOperator(3) {
         priceMap[uint256(asset)] = price;
 
     }
@@ -19,7 +18,7 @@ contract PHXOracle is IPHXOracle,Operator {
       * @param underlying underlying for which to set the price
       * @param price the underlying's price
       */  
-    function setUnderlyingPrice(uint256 underlying,uint256 price) public onlyOperatorIndex(0) {
+    function setUnderlyingPrice(uint256 underlying,uint256 price) public onlyOperator(3) {
         require(underlying>0 , "underlying cannot be zero");
         priceMap[underlying] = price;
     }
@@ -31,7 +30,7 @@ contract PHXOracle is IPHXOracle,Operator {
     * @param underlyings a set of underlyings for which to set the price
     * @param ulPrices  a set of the underlyings's price
     */    
-    function setPriceAndUnderlyingPrice(address[] memory assets,uint256[] memory assetPrices,uint256[] memory underlyings,uint256[] memory ulPrices) public onlyOperatorIndex(0) {
+    function setPriceAndUnderlyingPrice(address[] memory assets,uint256[] memory assetPrices,uint256[] memory underlyings,uint256[] memory ulPrices) public onlyOperator(3) {
         require(assets.length == assetPrices.length,"assets and assetPrices are not of the same length");
         require(underlyings.length == ulPrices.length,"underlyings and ulPrices are not of the same length");
         uint i = 0;
@@ -48,7 +47,7 @@ contract PHXOracle is IPHXOracle,Operator {
       * @param optoken options token for which to set the sell price
       * @param price the options token sell price
       */     
-    function setSellOptionsPrice(address optoken,uint256 price) public onlyOperatorIndex(0) {
+    function setSellOptionsPrice(address optoken,uint256 price) public onlyOperator(3) {
         uint256 key = uint256(optoken)*10+1;
         priceMap[key] = price;
     }
@@ -58,7 +57,7 @@ contract PHXOracle is IPHXOracle,Operator {
       * @param optoken options token for which to set the buy price
       * @param price the options token buy price
       */      
-    function setBuyOptionsPrice(address optoken,uint256 price) public onlyOperatorIndex(0) {
+    function setBuyOptionsPrice(address optoken,uint256 price) public onlyOperator(3) {
         uint256 key = uint256(optoken)*10+2;
         priceMap[key] = price;
     }
@@ -69,7 +68,7 @@ contract PHXOracle is IPHXOracle,Operator {
       * @param buyPrices a group of buy prices
       * @param SellPrices a group of sell prices
       */    
-    function setOptionsBuyAndSellPrice(address[] memory optokens,uint256[] memory buyPrices,uint256[] memory SellPrices) public onlyOperatorIndex(0) {
+    function setOptionsBuyAndSellPrice(address[] memory optokens,uint256[] memory buyPrices,uint256[] memory SellPrices) public onlyOperator(3) {
         require(optokens.length == buyPrices.length,"optokens and buyPrices are not of the same length");
         require(optokens.length == SellPrices.length,"optokens and SellPrices are not of the same length");
         uint i=0;

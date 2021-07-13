@@ -1,22 +1,38 @@
+let createFactory = require("../optionsFactory/optionsFactory.js");
+//const minePoolProxy = artifacts.require("MinePoolProxy");
+//const minePool = artifacts.require("FNXMinePool");
+//const Erc20Proxy = artifacts.require("Erc20Proxy");
+const PHXCoin = artifacts.require("PHXCoin");
+const USDCoin = artifacts.require("USDCoin");
+const OptionsPool = artifacts.require("OptionsPool");
+const CollateralPool = artifacts.require("CollateralPool");
+const PHXVestingPool = artifacts.require("PHXVestingPool");
+let collateral0 = "0x0000000000000000000000000000000000000000";
 const BN = require("bn.js");
-const assert = require('assert');
-let month = 10;
-let ETH = "0x0000000000000000000000000000000000000000";
-let {migration ,createAndAddErc20,createAndAddUSDC,AddCollateral0} = require("../testFunction.js");
 contract('OptionsManagerV2', function (accounts) {
     let contracts;
+    let factory;
     let ethAmount = new BN("10000000000000000000");
     let usdcAmount = 10000000000;
 
     let payamount = new BN("100000000000000000000");
     let optamount = new BN("2000000000000000000");
 
-    let FNXAmount =  new BN("100000000000000000000");;
+    let FNXAmount =  new BN("100000000000000000000");
+    let owners = [accounts[1],accounts[2],accounts[3],accounts[4],accounts[5]];
     before(async () => {
-        contracts = await migration(accounts);
-        await AddCollateral0(contracts);
-        await createAndAddErc20(contracts);
-        await createAndAddUSDC(contracts);
+        factory = await createFactory.createFactory(accounts[0],owners)
+        let phx = await PHXCoin.new();
+        let usdc = await USDCoin.new();
+        contracts = await createFactory.createOptionsManager(factory,accounts[0],owners,
+            [collateral0,usdc.address,phx.address],[1500,1200,5000],[1,2]);
+        contracts.USDC = usdc;
+        contracts.phx =phx;
+        await factory.oracle.setOperator(3,accounts[1]);
+        let price = new BN("10000000000000000000");
+        await factory.oracle.setPrice(usdc.address,price,{from:accounts[1]});
+        await factory.oracle.setPrice(phx.address,1e7,{from:accounts[1]});
+        await factory.oracle.setPrice(collateral0,2e11,{from:accounts[1]});
     });
 
     it('USDC input ', async function () {
@@ -35,13 +51,13 @@ contract('OptionsManagerV2', function (accounts) {
     })
 
     it('FNX input', async function () {
-        await contracts.FNX.approve(contracts.manager.address, FNXAmount);
-        let preBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
-        let preBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
-        let tx = await contracts.manager.addCollateral(contracts.FNX.address, FNXAmount);
+        await contracts.phx.approve(contracts.manager.address, FNXAmount);
+        let preBalanceUser0 =await  contracts.phx.balanceOf(accounts[0]);
+        let preBalanceContract =await  contracts.phx.balanceOf(contracts.collateral.address);
+        let tx = await contracts.manager.addCollateral(contracts.phx.address, FNXAmount);
         assert.equal(tx.receipt.status,true);
-        let afterBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
-        let afterBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
+        let afterBalanceUser0 =await  contracts.phx.balanceOf(accounts[0]);
+        let afterBalanceContract =await  contracts.phx.balanceOf(contracts.collateral.address);
         let diffUser = preBalanceUser0.sub(afterBalanceUser0);
         let diffContract = afterBalanceContract.sub(preBalanceContract);
         assert.equal(diffUser.toString(10),FNXAmount.toString(10),"user FNX balance error");
@@ -58,7 +74,7 @@ contract('OptionsManagerV2', function (accounts) {
         console.log(preBalanceUser0.toString(10));
 
 
-        let tx = await contracts.manager.addCollateral(ETH,ethAmount,{from:accounts[0],value:ethAmount});
+        let tx = await contracts.manager.addCollateral(collateral0,ethAmount,{from:accounts[0],value:ethAmount});
         assert.equal(tx.receipt.status,true);
 
         let afterBalanceUser0 =await web3.eth.getBalance(accounts[0]);
@@ -77,11 +93,12 @@ contract('OptionsManagerV2', function (accounts) {
 
 
     it('redeem all', async function () {
+        await createFactory.multiSignatureAndSend(factory.multiSignature,contracts.ppt,"setTimeLimitation",accounts[0],owners,0);
         let usdcpreBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
         let usdcpreBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
 
-        let fnxpreBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
-        let fnxpreBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
+        let fnxpreBalanceUser0 =await  contracts.phx.balanceOf(accounts[0]);
+        let fnxpreBalanceContract =await  contracts.phx.balanceOf(contracts.collateral.address);
 
         let ethpreBalanceUser0 =await  web3.eth.getBalance(accounts[0]);
         ethpreBalanceUser0 = web3.utils.fromWei(ethpreBalanceUser0, "ether");
@@ -89,8 +106,8 @@ contract('OptionsManagerV2', function (accounts) {
         ethpreBalanceContract = web3.utils.fromWei(ethpreBalanceContract, "ether");
         console.log(ethpreBalanceUser0.toString(10));
 
-        let result = await contracts.FPT.balanceOf(accounts[0]);
-        tx = await contracts.manager.redeemCollateral(result,contracts.FNX.address);
+        let result = await contracts.ppt.balanceOf(accounts[0]);
+        tx = await contracts.manager.redeemCollateral(result,contracts.phx.address);
         assert.equal(tx.receipt.status,true);
 
 
@@ -102,8 +119,8 @@ contract('OptionsManagerV2', function (accounts) {
         assert.equal(usdcdiffUser.toNumber(),usdcdiffContract.toNumber(),"manager redeem usdc balance error");
 
 
-        let fnxafterBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
-        let fnxafterBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
+        let fnxafterBalanceUser0 =await  contracts.phx.balanceOf(accounts[0]);
+        let fnxafterBalanceContract =await  contracts.phx.balanceOf(contracts.collateral.address);
         let fnxdiffUser = fnxafterBalanceUser0.sub(fnxpreBalanceUser0);
         let fnxdiffContract = fnxpreBalanceContract.sub(fnxafterBalanceContract);
         assert.equal(fnxdiffUser.toString(10),FNXAmount.toString(10),"user redeem FNX balance error");

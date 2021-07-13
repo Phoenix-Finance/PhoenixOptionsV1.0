@@ -29,7 +29,7 @@ async function wanTest(){
     fs.writeFileSync("C:\\work\\wanchain.json",JSON.stringify(block,null,4),"utf8");
     return;
     let fpt = await new web3.eth.Contract(FPTCoin.abi,"0xa9df04d91bd857eaa8122fc239ac1d9ed9d2a15e");
-    let times = await fpt.methods.getUserBurnTimeLimite("0xa936B6F2557c096C0052a9A4765963B381D33896").call();
+    let times = await fpt.methods.getTimeLimitation("0xa936B6F2557c096C0052a9A4765963B381D33896").call();
     console.log("burn limted time : ",times.toString(10));
     let manager = await new web3.eth.Contract(OptionsManagerV2.abi,"0x2c245224c24718644f0e3964b5cfd4d507e1deef");
     let netWorth = await manager.methods.getTokenNetworth().call();

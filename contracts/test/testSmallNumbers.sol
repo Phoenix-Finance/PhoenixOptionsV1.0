@@ -1,5 +1,5 @@
 pragma solidity =0.5.16;
-import "../modules/SmallNumbers.sol";
+import "../PhoenixModules/modules/SmallNumbers.sol";
 
 contract testSmallNumbers {
     uint256 private test1;
@@ -9,7 +9,10 @@ contract testSmallNumbers {
         test1 = SmallNumbers.exp(value);
         emit DebugEvent(msg.sender,test1,test2);
     } 
-    function testNormSDist(int256 value) public view returns (int256){
+    function testPow(uint256 x,uint256 y) public pure returns (uint256){
+        return SmallNumbers.pow(x, y);
+    }
+    function testNormSDist(int256 value) public pure returns (int256){
         return SmallNumbers.normsDist(value);
     } 
 }

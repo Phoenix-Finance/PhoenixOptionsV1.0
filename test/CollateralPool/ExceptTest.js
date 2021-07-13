@@ -1,8 +1,14 @@
+let createFactory = require("../optionsFactory/optionsFactory.js");
+//const minePoolProxy = artifacts.require("MinePoolProxy");
+//const minePool = artifacts.require("FNXMinePool");
+//const Erc20Proxy = artifacts.require("Erc20Proxy");
+const PHXCoin = artifacts.require("PHXCoin");
+const USDCoin = artifacts.require("USDCoin");
+const OptionsPool = artifacts.require("OptionsPool");
+const CollateralPool = artifacts.require("CollateralPool");
+const PHXVestingPool = artifacts.require("PHXVestingPool");
+let collateral0 = "0x0000000000000000000000000000000000000000";
 const BN = require("bn.js");
-const assert = require('assert');
-let month = 10;
-let ETH = "0x0000000000000000000000000000000000000000";
-let {migration ,createAndAddErc20,createAndAddUSDC,AddCollateral0} = require("../testFunction.js");
 contract('OptionsManagerV2', function (accounts) {
     let contracts;
     let ethAmount = new BN("10000000000000000000");
@@ -11,16 +17,25 @@ contract('OptionsManagerV2', function (accounts) {
     let payamount = new BN("100000000000000000000");
     let optamount = new BN("2000000000000000000");
 
-    let FNXAmount =  new BN("100000000000000000000");;
+    let FNXAmount =  new BN("100000000000000000000");
+    let owners = [accounts[1],accounts[2],accounts[3],accounts[4],accounts[5]]; 
     before(async () => {
-        contracts = await migration(accounts);
-        await AddCollateral0(contracts);
-        await createAndAddErc20(contracts);
-        await createAndAddUSDC(contracts);
+
+        let factory = await createFactory.createFactory(accounts[0],owners)
+        let phx = await PHXCoin.new();
+        let usdc = await USDCoin.new();
+        contracts = await createFactory.createOptionsManager(factory,accounts[0],owners,
+            [collateral0,usdc.address,phx.address],[1500,1200,5000],[1,2]);
+        contracts.USDC = usdc;
+        contracts.phx =phx;
+        await factory.oracle.setOperator(3,accounts[1]);
+        let price = new BN("10000000000000000000");
+        await factory.oracle.setPrice(usdc.address,price,{from:accounts[1]});
+        await factory.oracle.setPrice(phx.address,1e7,{from:accounts[1]});
+        await factory.oracle.setPrice(collateral0,2e11,{from:accounts[1]});
     });
 
     it('USDC input and redeem', async function () {
-
         await contracts.USDC.approve(contracts.manager.address, usdcAmount);
         let preBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
         let preBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
@@ -31,68 +46,62 @@ contract('OptionsManagerV2', function (accounts) {
         let afterBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
         let diffUser = preBalanceUser0.sub(afterBalanceUser0);
         let diffContract = afterBalanceContract.sub(preBalanceContract);
+        console.log(afterBalanceContract.toNumber(),diffContract.toNumber())
         assert.equal(diffUser.toNumber(),usdcAmount,"user usdc balance error");
         assert.equal(diffUser.toNumber(),diffContract.toNumber(),"manager usdc balance error");
 
         let isExcept = false;
         preBalanceUser0 =await  contracts.USDC.balanceOf(accounts[0]);
         preBalanceContract =await  contracts.USDC.balanceOf(contracts.collateral.address);
-        let result = await contracts.FPT.balanceOf(accounts[0]);
+        let result = await contracts.ppt.balanceOf(accounts[0]);
 
         try {
-            tx = await contracts.manager.redeemCollateral(result + 1, contracts.FNX.address);
+            tx = await contracts.manager.redeemCollateral(result + 1, contracts.USDC.address);
             isExcept = false;
         }catch(e){
            // console.log(e);
-            assert.equal(e.reason.toString(),'SCoin balance is insufficient!');
+            assert.equal(e.reason.toString(),'PPT Coin balance is insufficient!');
             isExcept = true;
         }
 
         assert.equal(isExcept,true);
 
     })
-
-    it('FNX input and redeem', async function () {
-        await contracts.FNX.approve(contracts.manager.address, FNXAmount);
-        let preBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
-        let preBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
-        let tx = await contracts.manager.addCollateral(contracts.FNX.address, FNXAmount);
+    it('PHX input and redeem', async function () {
+        await contracts.phx.approve(contracts.manager.address, FNXAmount);
+        let preBalanceUser0 =await  contracts.phx.balanceOf(accounts[0]);
+        let preBalanceContract =await  contracts.phx.balanceOf(contracts.collateral.address);
+        let tx = await contracts.manager.addCollateral(contracts.phx.address, FNXAmount);
         assert.equal(tx.receipt.status,true);
-        let afterBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
-        let afterBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
+        let afterBalanceUser0 =await  contracts.phx.balanceOf(accounts[0]);
+        let afterBalanceContract =await  contracts.phx.balanceOf(contracts.collateral.address);
         let diffUser = preBalanceUser0.sub(afterBalanceUser0);
         let diffContract = afterBalanceContract.sub(preBalanceContract);
         assert.equal(diffUser.toString(10),FNXAmount.toString(10),"user FNX balance error");
         assert.equal(diffUser.toString(10),diffContract.toString(10),"manager FNX balance error");
 
         let isExcept = false;
-        preBalanceUser0 =await  contracts.FNX.balanceOf(accounts[0]);
-        preBalanceContract =await  contracts.FNX.balanceOf(contracts.collateral.address);
-        let result = await contracts.FPT.balanceOf(accounts[0]);
+        preBalanceUser0 =await  contracts.phx.balanceOf(accounts[0]);
+        preBalanceContract =await  contracts.phx.balanceOf(contracts.collateral.address);
+        let result = await contracts.ppt.balanceOf(accounts[0]);
 
         try {
-            tx = await contracts.manager.redeemCollateral(result + 1, contracts.FNX.address);
+            tx = await contracts.manager.redeemCollateral(result + 1, contracts.phx.address);
             isExcept = false;
         }catch(e){
             // console.log(e);
-            assert.equal(e.reason.toString(),'SCoin balance is insufficient!');
+            assert.equal(e.reason.toString(),'PPT Coin balance is insufficient!');
             isExcept = true;
         }
-
         assert.equal(isExcept,true);
-
     })
-
     it('ETH input and redeem', async function () {
-
         let preBalanceUser0 =await  web3.eth.getBalance(accounts[0]);
         preBalanceUser0 = web3.utils.fromWei(preBalanceUser0, "ether");
         let preBalanceContract =await  web3.eth.getBalance(contracts.collateral.address);
         preBalanceContract = web3.utils.fromWei(preBalanceContract, "ether");
         console.log(preBalanceUser0.toString(10));
-
-
-        let tx = await contracts.manager.addCollateral(ETH,ethAmount,{from:accounts[0],value:ethAmount});
+        let tx = await contracts.manager.addCollateral(collateral0,ethAmount,{from:accounts[0],value:ethAmount});
         assert.equal(tx.receipt.status,true);
 
         let afterBalanceUser0 =await web3.eth.getBalance(accounts[0]);
@@ -113,14 +122,14 @@ contract('OptionsManagerV2', function (accounts) {
         preBalanceContract = web3.utils.fromWei(preBalanceContract, "ether");
 
         let isExcept = false;
-        let result = await contracts.FPT.balanceOf(accounts[0]);
+        let result = await contracts.ppt.balanceOf(accounts[0]);
 
         try {
-            tx = await contracts.manager.redeemCollateral(result + 1, contracts.FNX.address);
+            tx = await contracts.manager.redeemCollateral(result + 1, collateral0);
             isExcept = false;
         }catch(e){
            // console.log(e);
-            assert.equal(e.reason.toString(),'SCoin balance is insufficient!');
+            assert.equal(e.reason.toString(),'PPT Coin balance is insufficient!');
             isExcept = true;
         }
 

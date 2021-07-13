@@ -1,0 +1,1402 @@
+{
+	"compiler": {
+		"version": "0.5.16+commit.9c3226ce"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "optionID",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "BurnOption",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "optionID",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint8",
+						"name": "optType",
+						"type": "uint8"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint32",
+						"name": "underlying",
+						"type": "uint32"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "expiration",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "strikePrice",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "CreateOption",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOperator",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOperator",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "OperatorTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOrigin",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOrigin",
+						"type": "address"
+					}
+				],
+				"name": "OriginTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint32",
+						"name": "expiration",
+						"type": "uint32"
+					}
+				],
+				"name": "addExpiration",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint32",
+						"name": "underlying",
+						"type": "uint32"
+					}
+				],
+				"name": "addUnderlyingAsset",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "allOptions",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint8",
+						"name": "optType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint24",
+						"name": "underlying",
+						"type": "uint24"
+					},
+					{
+						"internalType": "uint64",
+						"name": "optionsPrice",
+						"type": "uint64"
+					},
+					{
+						"internalType": "address",
+						"name": "settlement",
+						"type": "address"
+					},
+					{
+						"internalType": "uint64",
+						"name": "createTime",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint32",
+						"name": "expiration",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint128",
+						"name": "amount",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "settlePrice",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "strikePrice",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint32",
+						"name": "priceRate",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint64",
+						"name": "iv",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint32",
+						"name": "extra",
+						"type": "uint32"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "expirationList",
+				"outputs": [
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "optionID",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "getBurnedFullPay",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "optionsId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "getExerciseWorth",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "getExpirationList",
+				"outputs": [
+					{
+						"internalType": "uint32[]",
+						"name": "",
+						"type": "uint32[]"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "getInputAmountRange",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "getMultiSignatureAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "getOperator",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "getOptionInfoLength",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "from",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "size",
+						"type": "uint256"
+					}
+				],
+				"name": "getOptionInfoList",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint64[]",
+						"name": "ids",
+						"type": "uint64[]"
+					}
+				],
+				"name": "getOptionInfoListFromID",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "optionsId",
+						"type": "uint256"
+					}
+				],
+				"name": "getOptionsById",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint8",
+						"name": "",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "optionsId",
+						"type": "uint256"
+					}
+				],
+				"name": "getOptionsExtraById",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "optionsId",
+						"type": "uint256"
+					}
+				],
+				"name": "getOptionsLimitTimeById",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "getOracleAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "getUnderlyingAssets",
+				"outputs": [
+					{
+						"internalType": "uint32[]",
+						"name": "",
+						"type": "uint32[]"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "getUserAllOptionInfo",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "getUserOptionsID",
+				"outputs": [
+					{
+						"internalType": "uint64[]",
+						"name": "",
+						"type": "uint64[]"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "from",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "size",
+						"type": "uint256"
+					}
+				],
+				"name": "getUserOptionsID",
+				"outputs": [
+					{
+						"internalType": "uint64[]",
+						"name": "",
+						"type": "uint64[]"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "implementationVersion",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [],
+				"name": "initialize",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint32",
+						"name": "expiration",
+						"type": "uint32"
+					}
+				],
+				"name": "isEligibleExpiration",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "isInputAmountInRange",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "isOwner",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "limitation",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "optionsBalances",
+				"outputs": [
+					{
+						"internalType": "uint64",
+						"name": "",
+						"type": "uint64"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "optionsPrice",
+				"outputs": [
+					{
+						"internalType": "contract IOptionsPrice",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "_owner",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "ownerExpiredTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "_expired",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint32",
+						"name": "removeExpiration",
+						"type": "uint32"
+					}
+				],
+				"name": "removeExpirationList",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint32",
+						"name": "removeUnderlying",
+						"type": "uint32"
+					}
+				],
+				"name": "removeUnderlyingAssets",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_minAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_maxAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "setInputAmountRange",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newManager",
+						"type": "address"
+					}
+				],
+				"name": "setManager",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "newAddress",
+						"type": "address"
+					}
+				],
+				"name": "setOperator",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "oracle",
+						"type": "address"
+					}
+				],
+				"name": "setOracleAddress",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_limit",
+						"type": "uint256"
+					}
+				],
+				"name": "setTimeLimitation",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "uint32[]",
+						"name": "underlyings",
+						"type": "uint32[]"
+					}
+				],
+				"name": "setUnderlyingAsset",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_volatility",
+						"type": "address"
+					}
+				],
+				"name": "setVolatilityAddress",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_newOrigin",
+						"type": "address"
+					}
+				],
+				"name": "transferOrigin",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "txOrigin",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "_origin",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "underlyingAssets",
+				"outputs": [
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "version",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "version_",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "volatility",
+				"outputs": [
+					{
+						"internalType": "contract IVolatility",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "A Smart-contract to store options info.  ",
+			"methods": {
+				"addExpiration(uint32)": {
+					"details": "Implementation of add an eligible expiration into the expirationList.",
+					"params": {
+						"expiration": "new eligible expiration."
+					}
+				},
+				"addUnderlyingAsset(uint32)": {
+					"details": "Implementation of add an eligible underlying into the underlyingAssets.",
+					"params": {
+						"underlying": "new eligible underlying."
+					}
+				},
+				"getBurnedFullPay(uint256,uint256)": {
+					"details": "calculate `amount` number of Option's full price when option is burned.",
+					"params": {
+						"amount": "option's amount",
+						"optionID": "option's optionID"
+					}
+				},
+				"getExerciseWorth(uint256,uint256)": {
+					"details": "calculate option's exercise worth.",
+					"params": {
+						"amount": "option's amount",
+						"optionsId": "option's id"
+					}
+				},
+				"getExpirationList()": {
+					"details": "Implementation of getting the eligible expirationList."
+				},
+				"getInputAmountRange()": {
+					"details": "get the valid range of input amount"
+				},
+				"getOptionInfoLength()": {
+					"details": "retrieve all option list length. "
+				},
+				"getOptionInfoList(uint256,uint256)": {
+					"details": "retrieve `size` number of options' information. ",
+					"params": {
+						"from": "all option list begin positon.",
+						"size": "retrieve size."
+					}
+				},
+				"getOptionInfoListFromID(uint64[])": {
+					"details": "retrieve given `ids` options' information. ",
+					"params": {
+						"ids": "retrieved options' id."
+					}
+				},
+				"getOptionsById(uint256)": {
+					"details": "retrieve given `optionsId` option's information. ",
+					"params": {
+						"optionsId": "retrieved option's id."
+					}
+				},
+				"getOptionsExtraById(uint256)": {
+					"details": "retrieve given `optionsId` option's extra information. ",
+					"params": {
+						"optionsId": "retrieved option's id."
+					}
+				},
+				"getOptionsLimitTimeById(uint256)": {
+					"details": "retrieve given `optionsId` option's burned limit timestamp. ",
+					"params": {
+						"optionsId": "retrieved option's id."
+					}
+				},
+				"getUnderlyingAssets()": {
+					"details": "Implementation of getting the eligible underlyingAssets."
+				},
+				"getUserAllOptionInfo(address)": {
+					"details": "retrieve given `ids` options' information. ",
+					"params": {
+						"user": "retrieved user's address."
+					}
+				},
+				"getUserOptionsID(address)": {
+					"details": "retrieve user's options' id. ",
+					"params": {
+						"user": "user's account."
+					}
+				},
+				"getUserOptionsID(address,uint256,uint256)": {
+					"details": "retrieve user's `size` number of options' id. ",
+					"params": {
+						"from": "user's option list begin positon.",
+						"size": "retrieve size.",
+						"user": "user's account."
+					}
+				},
+				"isEligibleExpiration(uint32)": {
+					"details": "Implementation of testing whether the input expiration is eligible.",
+					"params": {
+						"expiration": "input expiration for testing."
+					}
+				},
+				"isInputAmountInRange(uint256)": {
+					"details": "Determine whether the input amount is within the valid range",
+					"params": {
+						"amount": "Test value which is user input"
+					}
+				},
+				"removeExpirationList(uint32)": {
+					"details": "Implementation of revoke an invalid expiration from the expirationList.",
+					"params": {
+						"removeExpiration": "revoked expiration."
+					}
+				},
+				"removeUnderlyingAssets(uint32)": {
+					"details": "Implementation of revoke an invalid underlying from the underlyingAssets.",
+					"params": {
+						"removeUnderlying": "revoked underlying."
+					}
+				},
+				"setInputAmountRange(uint256,uint256)": {
+					"details": "set the valid range of input amount",
+					"params": {
+						"_maxAmount": "the maximum input amount limit",
+						"_minAmount": "the minimum input amount limit"
+					}
+				},
+				"setOperator(uint256,address)": {
+					"details": "modify indexed operator by owner.       "
+				},
+				"transferOwnership(address)": {
+					"details": "Allows the current owner to transfer ownership",
+					"params": {
+						"_newOwner": "The address to transfer ownership to"
+					}
+				}
+			},
+			"title": "Options data contract."
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/OptionsPool/Optionsbase.sol": "OptionsBase"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/OptionsPool/OptionsData.sol": {
+			"keccak256": "0x7c35d5a4f733bb37d7d2223a2f0ef3ba9ab899ea126f53960e2318d6a19b4552",
+			"urls": [
+				"bzz-raw://5c278d1018b1581a43573d8da63706319cae737e9e334ed32da7d146ebd0413d",
+				"dweb:/ipfs/QmQV6wYqUoVy8rKqnuprTurg3tkWPoVP5LzctXR7txjJAg"
+			]
+		},
+		"contracts/OptionsPool/Optionsbase.sol": {
+			"keccak256": "0xc4fb0fbaa2b4aa59cff6d88f503a754cf39d9de5229fb94779088791e6b0cafb",
+			"urls": [
+				"bzz-raw://dd93215a912cf03b79c6976f894b5a09ff2d89b3490939ca9b532c39c2ce6c9b",
+				"dweb:/ipfs/QmVtQ1RciJ1APytsUsdyo7N1vJdJe5Yna2eAS1eZ2poe7H"
+			]
+		},
+		"contracts/PhoenixModules/interface/IPHXOracle.sol": {
+			"keccak256": "0x28eeb350ba5ed4c6b4ec0f7e484b3a61a1ef00bb7f66d76a8b9031ad7bc6b785",
+			"urls": [
+				"bzz-raw://9e8428127a3c0cc65d4e54e349ef7b1603a8b889aa83f9483999ec829906227c",
+				"dweb:/ipfs/QmcHirriFrXy5fEY5W24wnzaG4WuicwbSBK1TNU6RhSMWT"
+			]
+		},
+		"contracts/PhoenixModules/modules/whiteList.sol": {
+			"keccak256": "0x3998d704b2977aa536ddf86334e9d4e64fb69d843b353bb55e867354fb3b68ee",
+			"urls": [
+				"bzz-raw://6435be8854d3a6bb8064e3a6a0bad87f769d72470d0d536c34eacd88ac50739a",
+				"dweb:/ipfs/Qma5rhuntHwqzaH7m5jDuKmrD7Go8Lo2p2nEysHW6MtvRu"
+			]
+		},
+		"contracts/PhoenixModules/multiSignature/multiSignatureClient.sol": {
+			"keccak256": "0xd1b3de33c2be682c07a18a750d8c308a5d2ffa3cf9ce900c128335c6727fc151",
+			"urls": [
+				"bzz-raw://e12d3163e2735162a7f36f98a903edacb09ef62372989683eca6d6d259459d0f",
+				"dweb:/ipfs/Qmcs1dTWaD1yuNCUNb3zZhaTUyB7W1kKnaUPfoa1ZhEZMW"
+			]
+		},
+		"contracts/PhoenixModules/proxyModules/ImputRange.sol": {
+			"keccak256": "0xb6b6bed09b048c853e54cc86fdb00a31f1c356b6b201a142bfd332ca422d0584",
+			"urls": [
+				"bzz-raw://196a6ccc968014200a4133bee0aed888feea906f807bb3a57788a397f4468a54",
+				"dweb:/ipfs/QmXbq1roN19rRhYwRBMBXMLZdFWWQ76XAc4UJaTCMsNDKs"
+			]
+		},
+		"contracts/PhoenixModules/proxyModules/initializable.sol": {
+			"keccak256": "0x64afbd6177a6fc9c7f1c9eff39326c43f3a2d2576021f064a521082a57b356bb",
+			"urls": [
+				"bzz-raw://aec6a421d61bd18cd0d32b7bfe1e50990b54549bdf2e05b7c0c4dc761c900e84",
+				"dweb:/ipfs/QmVAspAXzaB5CpfEeb9d1jVYoALfMwd1fqrFFPPW9xs5aj"
+			]
+		},
+		"contracts/PhoenixModules/proxyModules/proxyOperator.sol": {
+			"keccak256": "0x23c44e24387885b528b77b21c6c9ca9c03188f6afade8f17575042e792c14a44",
+			"urls": [
+				"bzz-raw://89dd8d9c6d94963e15f549dd2f7a86519f5fa870f443b4426f21149aa8107979",
+				"dweb:/ipfs/QmZNbdXb32NURWNu9N5PMMcyCMYAMY3uSVPQxdchjiGtxa"
+			]
+		},
+		"contracts/PhoenixModules/proxyModules/proxyOwner.sol": {
+			"keccak256": "0x2ad020ca8168f0104823c49f6067f8e985d25f40679c25764c1b29de7db21854",
+			"urls": [
+				"bzz-raw://6a79b104a7c02e5e8f16ff7c7ea5f12471d20ad762a9a74bd8235bf5658b348e",
+				"dweb:/ipfs/QmYNKqQ69dALywiWF1ddZZh2PqxvAhVVjacuG4ix6cBZAS"
+			]
+		},
+		"contracts/PhoenixModules/proxyModules/versionUpdater.sol": {
+			"keccak256": "0xa04bf43bb3fe51974865aaf7dc7577a35933c8a54413230eca1fb7b46d9a43c3",
+			"urls": [
+				"bzz-raw://79cf6f27b4462975f13a9b540b7b496ed199b75ce95b672ee1ec08adf0154998",
+				"dweb:/ipfs/QmYCUcycyEPionUw6vHwvWxE5xdWm9htNysRzmXJQnke4T"
+			]
+		},
+		"contracts/interfaces/IOptionsPrice.sol": {
+			"keccak256": "0x68729f918920863563b8f5bccdcf406ca8620c1e959256a4f68af505ab76b9ec",
+			"urls": [
+				"bzz-raw://d565b6c684b5769a87f7e0fca16b45f9bbec5d43d068f5a098b8231758707a2d",
+				"dweb:/ipfs/QmZrmuGKZjk9o663Tz37c4h8ba98gueyynx5Q7FrKEJNhL"
+			]
+		},
+		"contracts/interfaces/IVolatility.sol": {
+			"keccak256": "0xefafcfaabda71e48556622e1f6e77d28a19bdbdd40f58341dbccc3c643451bdd",
+			"urls": [
+				"bzz-raw://bb8113159e5b56d1768072278db0ffa8b6dd50faf3707c3d437aba3a34b57528",
+				"dweb:/ipfs/QmRSYpFCYwAXXmuDFMG1khAjDkUTPMLcSe3pCekdWiKbyz"
+			]
+		}
+	},
+	"version": 1
+}

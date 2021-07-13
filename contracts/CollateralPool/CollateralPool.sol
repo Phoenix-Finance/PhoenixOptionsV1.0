@@ -1,6 +1,6 @@
 pragma solidity =0.5.16;
 
-import "../modules/SafeInt256.sol";
+import "../PhoenixModules/modules/SafeInt256.sol";
 import "./TransactionFee.sol";
 /**
  * @title collateral pool contract with coin and necessary storage data.
@@ -10,20 +10,19 @@ import "./TransactionFee.sol";
 contract CollateralPool is TransactionFee{
     using SafeMath for uint256;
     using SafeInt256 for int256;
-    constructor(address optionsPool)public{
-        _optionsPool = IOptionsPool(optionsPool);
+    constructor (address multiSignatureClient)public proxyOwner(multiSignatureClient) {
     }
     /**
      * @dev Transfer colleteral from manager contract to this contract.
      *  Only manager contract can invoke this function.
      */
-    function () external payable onlyManager{
+    function () external payable {
 
     }
-    function initialize() onlyOwner public {
-        TransactionFee.initialize();
-    }
     function update() onlyOwner public{
+    }
+    function setOptionsPoolAddress(address _optionsPool)external onlyOwner{
+        optionsPool = IOptionsPool(_optionsPool);
     }
     /**
      * @dev An interface for add transaction fee.
@@ -61,20 +60,14 @@ contract CollateralPool is TransactionFee{
         return collateralBalances[collateral];
     }
     /**
-     * @dev Opterator user paying data, priced in USD. Only manager contract can modify database.
-     * @param user input user account which need add paying amount.
-     * @param amount the input paying amount.
-     */
-    function addUserPayingUsd(address user,uint256 amount)public onlyManager{
-        userCollateralPaying[user] = userCollateralPaying[user].add(amount);
-    }
-    /**
      * @dev Opterator user input collateral data. Only manager contract can modify database.
      * @param user input user account which need add input collateral.
+     * @param amountUSD the input paying amount.
      * @param collateral the collateral address.
      * @param amount the input collateral amount.
      */
-    function addUserInputCollateral(address user,address collateral,uint256 amount)public onlyManager{
+    function addUserInputCollateral(address user,uint256 amountUSD,address collateral,uint256 amount)public onlyManager{
+        userCollateralPaying[user] = userCollateralPaying[user].add(amountUSD);
         userInputCollateral[user][collateral] = userInputCollateral[user][collateral].add(amount);
         collateralBalances[collateral] = collateralBalances[collateral].add(amount);
         netWorthBalances[collateral] = netWorthBalances[collateral].add(int256(amount));
@@ -310,7 +303,7 @@ contract CollateralPool is TransactionFee{
         uint256 len = whiteList.length;
         int256[] memory realBalances = new int256[](len); 
         for (uint i = 0;i<len;i++){
-            int256 latestWorth = _optionsPool.getNetWrothLatestWorth(whiteList[i]);
+            int256 latestWorth = optionsPool.optionsLatestNetWorth(whiteList[i]);
             realBalances[i] = netWorthBalances[whiteList[i]].add(latestWorth);
         }
         return realBalances;
@@ -319,11 +312,11 @@ contract CollateralPool is TransactionFee{
      * @dev Retrieve the balance of collateral, the auxiliary function for the total collateral calculation. 
      */
     function getRealBalance(address settlement)public view returns(int256){
-        int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
+        int256 latestWorth = optionsPool.optionsLatestNetWorth(settlement);
         return netWorthBalances[settlement].add(latestWorth);
     }
     function getNetWorthBalance(address settlement)public view returns(uint256){
-        int256 latestWorth = _optionsPool.getNetWrothLatestWorth(settlement);
+        int256 latestWorth = optionsPool.optionsLatestNetWorth(settlement);
         int256 netWorth = netWorthBalances[settlement].add(latestWorth);
         if (netWorth>0){
             return uint256(netWorth);
@@ -354,16 +347,16 @@ contract CollateralPool is TransactionFee{
         }
         return settlementAmount;
     }
-        /**
+    /**
      * @dev Calculate the collateral pool shared worth.
      * The foundation operator will invoke this function frequently
      */
-    function calSharedPayment(address[] memory _whiteList) public onlyOperatorIndex(0) {
-        (uint256 firstOption,int256[] memory latestShared) = _optionsPool.getNetWrothCalInfo(_whiteList);
-        uint256 lastOption = _optionsPool.getOptionInfoLength();
+    function calSharedPayment(address[] memory _whiteList) public onlyOperator(1) {
+        (uint256 firstOption,int256[] memory latestShared) = optionsPool.getNetWrothCalInfo(_whiteList);
+        uint256 lastOption = optionsPool.getOptionInfoLength();
         (int256[] memory newNetworth,uint256[] memory sharedBalance,uint256 newFirst) =
-                     _optionsPool.calRangeSharedPayment(lastOption,firstOption,lastOption,_whiteList);
-        int256[] memory fallBalance = _optionsPool.calculatePhaseOptionsFall(lastOption,newFirst,lastOption,_whiteList);
+                     optionsPool.calRangeSharedPayment(lastOption,firstOption,lastOption,_whiteList);
+        int256[] memory fallBalance = optionsPool.calculatePhaseOptionsFall(lastOption,newFirst,lastOption,_whiteList);
         for (uint256 i= 0;i<fallBalance.length;i++){
             fallBalance[i] = int256(sharedBalance[i]).sub(latestShared[i]).add(fallBalance[i]);
         }
@@ -376,8 +369,8 @@ contract CollateralPool is TransactionFee{
      * @param sharedBalances All unexpired options' shared balance distributed by time.
      * @param firstOption The new first unexpired option's index.
      */
-    function setSharedPayment(address[] memory _whiteList,int256[] memory newNetworth,int256[] memory sharedBalances,uint256 firstOption) public onlyOperatorIndex(0){
-        _optionsPool.setSharedState(firstOption,sharedBalances,_whiteList);
+    function setSharedPayment(address[] memory _whiteList,int256[] memory newNetworth,int256[] memory sharedBalances,uint256 firstOption) public onlyOperator(1){
+        optionsPool.setSharedState(firstOption,sharedBalances,_whiteList);
         addNetWorthBalances(_whiteList,newNetworth);
     }
 }

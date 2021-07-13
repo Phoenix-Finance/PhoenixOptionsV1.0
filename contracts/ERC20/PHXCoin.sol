@@ -1,16 +1,14 @@
 pragma solidity =0.5.16;
-import "./IERC20.sol";
-import "../modules/SafeMath.sol";
-import "../modules/timeLimitation.sol";
-import "./Erc20Data.sol";
+import "../PhoenixModules/modules/SafeMath.sol";
+import "../PhoenixModules/ERC20/Erc20Data.sol";
 
-contract PHXCoin is IERC20,Erc20Data,timeLimitation {
+contract PHXCoin is Erc20Data {
     using SafeMath for uint256;
 
     constructor () public{
         initialize();
     }
-    function initialize() onlyOwner public{
+    function initialize() internal {
         name = "PHXCoin";
         symbol = "PHX";
         decimals = 18;
@@ -141,8 +139,7 @@ contract PHXCoin is IERC20,Erc20Data,timeLimitation {
         return true;
     }
     */
-    function mint(address account,uint256 amount) public OutLimitation(uint256(account)) returns (bool){
-        setItemTimeLimitation(uint256(account));
+    function mint(address account,uint256 amount) public returns (bool){
         require(amount<=1e23,"out of mint limitation");
         _mint(account,amount);
         return true;

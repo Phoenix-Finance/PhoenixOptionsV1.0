@@ -1,14 +1,11 @@
 pragma solidity =0.5.16;
-import "../modules/Managerable.sol";
-import "../interfaces/IFNXOracle.sol";
-import "../modules/underlyingAssets.sol";
+
+import "../PhoenixModules/proxyModules/versionUpdater.sol";
+import "../PhoenixModules/proxyModules/ImputRange.sol";
+import "../PhoenixModules/interface/IPHXOracle.sol";
 import "../interfaces/IVolatility.sol";
 import "../interfaces/IOptionsPrice.sol";
-import "../modules/Operator.sol";
-import "../modules/ImputRange.sol";
-contract OptionsData is UnderlyingAssets,ImputRange,Managerable,ImportOracle,ImportVolatility,ImportOptionsPrice,Operator{
-
-        // store option info
+contract OptionsData is versionUpdater,ImputRange,ImportOracle{
         struct OptionsInfo {
         address     owner;      // option's owner
         uint8   	optType;    //0 for call, 1 for put
@@ -28,29 +25,39 @@ contract OptionsData is UnderlyingAssets,ImputRange,Managerable,ImportOracle,Imp
         uint64      iv;
         uint32      extra;
     }
-
-    uint256 internal limitation = 1 hours;
+    struct underlyingOccupied {
+        //latest calcutated Options Occupied value.
+        uint256 callOccupied;
+        uint256 putOccupied;
+        //latest Options volatile occupied value when bought or selled options.
+        int256 callLatestOccupied;
+        int256 putLatestOccupied;
+    }
+    uint256 constant internal currentVersion = 1;
+    function implementationVersion() public pure returns (uint256) 
+    {
+        return currentVersion;
+    }
+    IVolatility public volatility;
+    IOptionsPrice public optionsPrice;
+    uint32[] public underlyingAssets;
+    uint256 public limitation;
     //all options information list
-    OptionsInfo[] internal allOptions;
+    OptionsInfo[] public allOptions;
     //user options balances
-    mapping(address=>uint64[]) internal optionsBalances;
+    mapping(address=>uint64[]) public optionsBalances;
     //expiration whitelist
-    uint32[] internal expirationList;
+    uint32[] public expirationList;
     
     // first option position which is needed calculate.
-    uint256 internal netWorthirstOption;
+    uint256 public netWorthFirstOption;
     // options latest networth balance. store all options's net worth share started from first option.
-    mapping(address=>int256) internal optionsLatestNetWorth;
+    mapping(address=>int256) public optionsLatestNetWorth;
 
     // first option position which is needed calculate.
     uint256 internal occupiedFirstOption; 
-    //latest calcutated Options Occupied value.
-    uint256 internal callOccupied;
-    uint256 internal putOccupied;
-    //latest Options volatile occupied value when bought or selled options.
-    int256 internal callLatestOccupied;
-    int256 internal putLatestOccupied;
-
+    mapping(uint32=>underlyingOccupied) public underlyingOccupiedMap;
+    uint256 public underlyingTotalOccupied;
     /**
      * @dev Emitted when `owner` create a new option. 
      * @param owner new option's owner
@@ -67,32 +74,3 @@ contract OptionsData is UnderlyingAssets,ImputRange,Managerable,ImportOracle,Imp
      */    
     event BurnOption(address indexed owner,uint256 indexed optionID,uint amount);
 }
-/*
-contract OptionsDataV2 is OptionsData{
-        // store option info
-    struct OptionsInfoV2 {
-        uint64     optionID;    //an increasing nubmer id, begin from one.
-        uint64		expiration; // Expiration timestamp
-        uint128     strikePrice;    //strike price
-        uint8   	optType;    //0 for call, 1 for put
-        uint32		underlying; // underlying ID, 1 for BTC,2 for ETH
-        address     owner;      // option's owner
-        uint256     amount;         // mint amount
-    }
-    // store option extra info
-    struct OptionsInfoExV2 {
-        address      settlement;    //user's settlement paying for option. 
-        uint128      tokenTimePrice; //option's buying price based on settlement, used for options share calculation
-        uint128      underlyingPrice;//underlying price when option is created.
-        uint128      fullPrice;      //option's buying price.
-        uint128      ivNumerator;   // option's iv numerator when option is created.
-//        uint256      ivDenominator;// option's iv denominator when option is created.
-    }
-        //all options information list
-    OptionsInfoV2[] internal allOptionsV2;
-    // all option's extra information map
-    mapping(uint256=>OptionsInfoExV2) internal optionExtraMapV2;
-        //user options balances
-//    mapping(address=>uint64[]) internal optionsBalancesV2;
-}
-*/

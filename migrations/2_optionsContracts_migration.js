@@ -2,28 +2,17 @@
 const ImpliedVolatility = artifacts.require("ImpliedVolatility");
 
 let PHXCoin = artifacts.require("PHXCoin");
-let Erc20Proxy = artifacts.require("Erc20Proxy");
 
 let OptionsPool = artifacts.require("OptionsPool");
-let OptionsProxy = artifacts.require("OptionsProxy");
 
-let FNXMinePool = artifacts.require("FNXMinePool");
-let MinePoolProxy = artifacts.require("MinePoolProxy");
-
-const OptionsManagerV2 = artifacts.require("OptionsManagerV2");
-const ManagerProxy = artifacts.require("ManagerProxy");
-
-let FPTCoin = artifacts.require("FPTCoin");
-let FPTProxy = artifacts.require("FPTProxy");
-
-let CollateralPool = artifacts.require("CollateralPool");
-let CollProxy = artifacts.require("CollateralProxy");
 
 let collateral0 = "0x0000000000000000000000000000000000000000";
 let USDCoin = artifacts.require("USDCoin");
 let WBTC = artifacts.require("WBTC");
 let WETH = artifacts.require("WETH");
 module.exports = async function(deployer, network,accounts) {
+    await deployer.deploy(PHXCoin);
+    return;
     //0x982c1E6bd1550c1702fEc0C7cf8E4eb358BD39ef
     await deployer.deploy(PHXCoin);
     //0x62f364c7127A16CE91dD68acB8476992044F5b39

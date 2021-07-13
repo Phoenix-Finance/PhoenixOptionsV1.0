@@ -1,25 +1,22 @@
+let createFactory = require("../optionsFactory/optionsFactory.js");
+//const minePoolProxy = artifacts.require("MinePoolProxy");
+//const minePool = artifacts.require("FNXMinePool");
+//const Erc20Proxy = artifacts.require("Erc20Proxy");
+const PHXCoin = artifacts.require("PHXCoin");
+const OptionsPool = artifacts.require("OptionsPool");
 const CollateralPool = artifacts.require("CollateralPool");
-const CollateralProxy = artifacts.require("CollateralProxy");
-let OptionsPool = artifacts.require("OptionsPool");
-let OptionsProxy = artifacts.require("OptionsProxy");
-const ImpliedVolatility = artifacts.require("ImpliedVolatility");
-const FNXOracle = artifacts.require("TestFNXOracle");
-const OptionsPrice = artifacts.require("OptionsPrice");
-
+const PHXVestingPool = artifacts.require("PHXVestingPool");
 let collateral0 = "0x0000000000000000000000000000000000000000";
 const BN = require("bn.js");
 contract('CollateralPool', function (accounts){
-
     it('CollateralPool set functions', async function (){
-        let ivInstance = await ImpliedVolatility.new();
-        let oracleInstance = await FNXOracle.new();
-        let price = await OptionsPrice.new(ivInstance.address);
-        let optPool = await OptionsPool.new(oracleInstance.address,price.address,ivInstance.address);
-        let options = await OptionsProxy.new(optPool.address,oracleInstance.address,price.address,ivInstance.address);
-        let collateral = await CollateralPool.new(options.address);
-        let pool = await CollateralProxy.new(collateral.address,options.address);
+        let owners = [accounts[1],accounts[2],accounts[3],accounts[4],accounts[5]] 
+        let factory = await createFactory.createTestFactory(accounts[0],owners)
+        await factory.optionsFactory.testCreateCollateralPool([1,2]);
+        let pool = await factory.optionsFactory.latestAddress();
+        pool = await CollateralPool.at(pool);
         for (var i=0;i<5;i++){
-            await pool.setTransactionFee(i,i+1);
+            await createFactory.multiSignatureAndSend(factory.multiSignature,pool,"setTransactionFee",accounts[0],owners,i,i+1);
             let result = await pool.getFeeRate(i);
             assert.equal(result,i+1,"getFeeRate Error");
             result = await pool.calculateFee(i,10000);
@@ -36,9 +33,6 @@ contract('CollateralPool', function (accounts){
         assert.equal(result,0,"getNetWorthBalance Error");
         result = await pool.getCollateralBalance(collateral0);
         assert.equal(result,0,"getCollateralBalance Error");
-        await pool.addWhiteList(collateral0);
-        result = await pool.getAllFeeBalances();
         console.log(result);
     });
-
 });

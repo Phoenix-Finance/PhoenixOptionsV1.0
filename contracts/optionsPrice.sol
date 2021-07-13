@@ -1,24 +1,23 @@
 pragma solidity =0.5.16;
 
-import "./modules/Ownable.sol";
 import "./interfaces/IVolatility.sol";
-import "./modules/SmallNumbers.sol";
+import "./PhoenixModules/modules/SmallNumbers.sol";
 /**
  * @title Options price calculation contract.
  * @dev calculate options' price, using B-S formulas.
  *
  */
-contract OptionsPrice is ImportVolatility{
+contract OptionsPrice{
     // one year seconds
     uint256 constant internal Year = 365 days;
     int256 constant public FIXED_ONE = 1 << 32; // 0x100000000
     uint256 internal ratioR2 = 4<<32;
-    
+    IVolatility public  volatility;
     /**
      * @dev constructor function , setting contract address.
      */  
     constructor (address ivContract) public{
-        setVolatilityAddress(ivContract);
+        volatility = IVolatility(ivContract);
     }
 
     /**
@@ -27,10 +26,10 @@ contract OptionsPrice is ImportVolatility{
      * @param strikePrice option's strike price.
      * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
      * @param underlying option's underlying id, 1 for BTC, 2 for ETH.
-     * @param optType option's type, 0 for CALL, 2 for PUT.
+     * @param optType option's type, 0 for CALL, 1 for PUT.
      */
     function getOptionsPrice(uint256 currentPrice, uint256 strikePrice, uint256 expiration,uint32 underlying,uint8 optType)public view returns (uint256){
-         uint256 _iv = _volatility.calculateIv(underlying,optType,expiration,currentPrice,strikePrice);
+         uint256 _iv = volatility.calculateIv(underlying,optType,expiration,currentPrice,strikePrice);
         if (optType == 0) {
             return callOptionsPrice(currentPrice,strikePrice,expiration,_iv);
         }else if (optType == 1){
@@ -45,7 +44,7 @@ contract OptionsPrice is ImportVolatility{
      * @param strikePrice option's strike price.
      * @param expiration option's expiration left time. Equal option's expiration timestamp - now.
      * @param _iv user input iv numerator.
-     * @param optType option's type, 0 for CALL, 2 for PUT.
+     * @param optType option's type, 0 for CALL, 1 for PUT.
      */
     function getOptionsPrice_iv(uint256 currentPrice, uint256 strikePrice, uint256 expiration,
             uint256 _iv,uint8 optType)public pure returns (uint256){

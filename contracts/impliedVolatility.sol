@@ -1,6 +1,6 @@
 pragma solidity =0.5.16;
-import "./modules/Operator.sol";
-import "./modules/SmallNumbers.sol";
+import "./PhoenixModules/modules/Operator.sol";
+import "./PhoenixModules/modules/SmallNumbers.sol";
 /**
  * @title Options Implied volatility calculation.
  * @dev A Smart-contract to calculate options Implied volatility.
@@ -58,7 +58,7 @@ contract ImpliedVolatility is Operator {
      * @param underlying underlying ID.,1 for BTC, 2 for ETH
      * @param _Iv0 underlying's atm implied volatility. 
      */ 
-    function SetAtmIv(uint32 underlying,uint256 _Iv0)public onlyOperatorIndex(0){
+    function SetAtmIv(uint32 underlying,uint256 _Iv0)public onlyOperator(3){
         ATMIv0[underlying] = _Iv0;
     }
     function getAtmIv(uint32 underlying)public view returns(uint256){
