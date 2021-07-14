@@ -4,9 +4,9 @@ pragma solidity >=0.5.16;
  * Phoenix
  * Copyright (C) 2020 Phoenix Options Protocol
  */
-import './proxyOperator.sol';
+import './proxyOwner.sol';
 
-contract AddressPermission is proxyOperator {
+contract AddressPermission is proxyOwner {
     mapping(address => uint256) public addressPermission;
     function modifyPermission(address addAddress,uint256 permission)public OwnerOrOrigin {
         addressPermission[addAddress] = permission;

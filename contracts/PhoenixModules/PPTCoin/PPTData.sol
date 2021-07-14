@@ -4,12 +4,13 @@ import "../ERC20/Erc20Data.sol";
 import "../proxyModules/timeLimitation.sol";
 import "../acceleratedMinePool/IAcceleratedMinePool.sol";
 import "../proxyModules/proxyOperator.sol";
+import "../proxyModules/poolLimit.sol";
 /**
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Phoenix
  * Copyright (C) 2020 Phoenix Options Protocol
  */
-contract PPTData is Erc20Data,timeLimitation,proxyOperator,versionUpdater{
+contract PPTData is Erc20Data,timeLimitation,poolLimit,proxyOperator,versionUpdater{
     /**
     * @dev lock mechanism is used when user redeem collateral and left collateral is insufficient.
     * _totalLockedWorth stores total locked worth, priced in USD.

@@ -20,6 +20,8 @@ contract PPTCoin is SharedCoin {
         versionUpdater.initialize();
         _totalSupply = 0;
         decimals = 18;
+        totalLimit = uint256(-1);
+        userLimit = uint256(-1);
     }
     function setMinePool(address acceleratedMinePool) external onlyOwner{
         minePool = IAcceleratedMinePool(acceleratedMinePool);
@@ -105,7 +107,7 @@ contract PPTCoin is SharedCoin {
      * @param account user's account.
      * @param amount amount of PPT.
      */ 
-    function mint(address account, uint256 amount) public onlyManager {
+    function mint(address account, uint256 amount) public onlyManager belowTotalLimit(_totalSupply+amount) belowUserLimit(balances[account]+amount) {
         SharedCoin._mint(account,amount);
         if (address(minePool) != address(0)){
             minePool.changePPTStake(account);

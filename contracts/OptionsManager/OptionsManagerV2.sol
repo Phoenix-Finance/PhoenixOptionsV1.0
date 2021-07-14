@@ -20,6 +20,9 @@ contract OptionsManagerV2 is CollateralCal {
     } 
     function update() external versionUpdate {
     }
+    function getCollateralWhiteList() external view returns(address[] memory){
+        return whiteList;
+    }
     function setOptionsPoolAddress(address _optionsPool)external onlyOwner{
         optionsPool = IOptionsPool(_optionsPool);
     }

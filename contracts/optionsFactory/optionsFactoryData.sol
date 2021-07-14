@@ -38,4 +38,5 @@ contract optionsFactoryData is versionUpdater,proxyOperator{
     address public impliedVolatility;
     address public optionsPrice;
     address public vestingPool;
+    event CreateOptionsManager(address indexed optionsManager,address collateralPool,address optionsPool,address pptCoin);
 }

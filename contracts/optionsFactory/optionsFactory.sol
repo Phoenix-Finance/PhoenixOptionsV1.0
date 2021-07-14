@@ -63,6 +63,7 @@ contract optionsFactory is optionsFactoryData{
         IOptionsManager(optionsManager).initAddresses(collateral,rate,phxOracle,optionsPrice,
             optionsPool,collateralPool,pptCoin);
         optionsManagerInfo.push(managerInfo(optionsManager,collateralPool,optionsPool,pptCoin));
+        emit CreateOptionsManager(optionsManager,collateralPool,optionsPool,pptCoin);
     }
     function getOptionsMangerLength()external view returns (uint256){
         return optionsManagerInfo.length;

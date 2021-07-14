@@ -5,7 +5,8 @@ import "../PhoenixModules/proxyModules/ImputRange.sol";
 import "../PhoenixModules/interface/IPHXOracle.sol";
 import "../interfaces/IVolatility.sol";
 import "../interfaces/IOptionsPrice.sol";
-contract OptionsData is versionUpdater,ImputRange,ImportOracle{
+import "../PhoenixModules/proxyModules/proxyOperator.sol";
+contract OptionsData is versionUpdater,proxyOperator,ImputRange,ImportOracle{
         struct OptionsInfo {
         address     owner;      // option's owner
         uint8   	optType;    //0 for call, 1 for put
