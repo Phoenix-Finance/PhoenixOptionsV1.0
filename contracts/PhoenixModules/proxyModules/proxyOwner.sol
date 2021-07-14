@@ -85,7 +85,7 @@ contract proxyOwner is multiSignatureClient{
         _;
     }
     function isOwner() public view returns (bool) {
-        return msg.sender == owner() && isContract(msg.sender) && ownerExpiredTime()>now;
+        return msg.sender == owner() && isContract(msg.sender);
     }
 
     /**

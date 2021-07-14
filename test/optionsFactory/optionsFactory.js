@@ -27,7 +27,7 @@ module.exports = {
         let vestingPool =  await PHXVestingPool.new(multiSign.address,{from:account});
         let vestingPoolProxy = await phxProxy.new(vestingPool.address,multiSign.address,{from:account});
         vestingPool = await PHXVestingPool.at(vestingPoolProxy.address);
-        await vestingPool.initMineLockedInfo(1622995200,86400*30,36,86400*15,{from:account});
+        await vestingPool.initMineLockedInfo(1622995200,86400*30,36,{from:account});
         let minePool =await acceleratedMinePool.new(multiSign.address,{from:account});
         let lFactory = await testOptionsFactory.new(multiSign.address,{from:account});
         proxy = await phxProxy.new(lFactory.address,multiSign.address,{from:account});
@@ -53,7 +53,7 @@ module.exports = {
         let vestingPool =  await PHXVestingPool.new(multiSign.address,{from:account});
         let vestingPoolProxy = await phxProxy.new(vestingPool.address,multiSign.address,{from:account});
         vestingPool = await PHXVestingPool.at(vestingPoolProxy.address);
-        await vestingPool.initMineLockedInfo(1622995200,86400*30,36,86400*15,{from:account});
+        await vestingPool.initMineLockedInfo(1622995200,86400*30,36,{from:account});
         let minePool =await acceleratedMinePool.new(multiSign.address,{from:account});
         let lFactory = await optionsFactory.new(multiSign.address,{from:account});
         proxy = await phxProxy.new(lFactory.address,multiSign.address,{from:account});

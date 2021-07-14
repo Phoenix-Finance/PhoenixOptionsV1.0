@@ -12,7 +12,7 @@ contract versionUpdater is proxyOwner,initializable {
 
     }
     modifier versionUpdate(){
-        require(implementationVersion() > version(),"New version implementation is already updated!");
+        require(implementationVersion() > version() &&  ownerExpiredTime()>now,"New version implementation is already updated!");
         _;
     }
 }

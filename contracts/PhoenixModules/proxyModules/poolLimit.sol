@@ -17,8 +17,8 @@ contract poolLimit is proxyOwner {
         require(allInput<=totalLimit, "Input amount is exceeded pool total limit!");
         _;
     }
-    modifier belowUserLimit(uint256 allInput){
-        require(allInput<=userLimit, "Input amount is exceeded user limit!");
+    modifier belowUserLimit(uint256 userInput){
+        require(userInput<=userLimit, "Input amount is exceeded user limit!");
         _;
     }
 }
