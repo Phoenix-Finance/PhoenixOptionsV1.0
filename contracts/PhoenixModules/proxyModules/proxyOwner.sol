@@ -87,7 +87,6 @@ contract proxyOwner is multiSignatureClient{
     function isOwner() public view returns (bool) {
         return msg.sender == owner() && isContract(msg.sender);
     }
-
     /**
     * @dev Throws if called by any account other than the owner.
     */

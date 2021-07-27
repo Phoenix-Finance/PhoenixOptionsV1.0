@@ -19,7 +19,7 @@ contract CollateralPool is TransactionFee{
     function () external payable {
 
     }
-    function update() onlyOwner public{
+    function update() versionUpdate public{
     }
     function setOptionsPoolAddress(address _optionsPool)external onlyOwner{
         optionsPool = IOptionsPool(_optionsPool);

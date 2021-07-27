@@ -22,8 +22,15 @@ contract CollateralCal is ManagerData {
         collateralRate[collateral] = colRate;
         addressPermission[collateral] = allPermission;
 //        collateralRate = colRate;
-
     }
+/*  Deprecated.
+    Because User would not redeem their collaterals if this collateral has been removed.
+    function removeCollateral(address collateral) public onlyOrigin {
+        whiteList.removeWhiteListAddress(collateral);
+        collateralRate[collateral] = 0;
+        addressPermission[collateral] = 0;
+    }
+    */
     /**
      * @dev Get the minimum collateral occupation rate.
      */
@@ -257,9 +264,9 @@ contract CollateralCal is ManagerData {
         for (uint256 i=0;i<whiteListLen;i++){
             address addr = whiteList[i];
             int256 price = int256(oraclePrice(addr));
-            int256 netWorth = collateralPool.getRealBalance(addr);
-            if (netWorth != 0){
-                totalNum = totalNum.add(price.mul(netWorth));
+            int256 balance = collateralPool.getRealBalance(addr);
+            if (balance != 0){
+                totalNum = balance.add(price.mul(balance));
             }
         }
         return totalNum>=0 ? uint256(totalNum) : 0;  

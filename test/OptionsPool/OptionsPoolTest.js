@@ -15,6 +15,14 @@ contract('OptionsPool', function (accounts){
         await factory.optionsFactory.testCreateOptionsPool([1,2]);
         let pool = await factory.optionsFactory.latestAddress();
         let options = await OptionsPool.at(pool);
+        let underlying = await options.getUnderlyingAssets();
+        console.log("underlying assets : ",underlying)
+        await createFactory.multiSignatureAndSend(factory.multiSignature,options,"setUnderlyingAsset",accounts[0],owners,[1,2,3,4,5]); 
+        underlying = await options.getUnderlyingAssets();
+        console.log("underlying assets : ",underlying)
+        await createFactory.multiSignatureAndSend(factory.multiSignature,options,"setUnderlyingAsset",accounts[0],owners,[1,2]); 
+        underlying = await options.getUnderlyingAssets();
+        console.log("underlying assets : ",underlying)
         let result = await options.limitation();
         assert.equal(result.toString(10),"3600","getBurnTimeLimit Error");
         result = await options.getUserOptionsID(accounts[0]);
@@ -42,6 +50,7 @@ contract('OptionsPool', function (accounts){
         await options.setCollateralPhase([10000,10000],[10000,10000],0,[10000,10000],[10000,10000],{from : accounts[0]});
         await options.setSharedState(0,[10000],whiteList);
     });
+    return;
     it('OptionsPool create Options test functions', async function (){
         let owners = [accounts[1],accounts[2],accounts[3],accounts[4],accounts[5]] 
         let factory = await createFactory.createTestFactory(accounts[0],owners)

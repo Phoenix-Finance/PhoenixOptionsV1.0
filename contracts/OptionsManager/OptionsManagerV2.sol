@@ -29,7 +29,7 @@ contract OptionsManagerV2 is CollateralCal {
     function setOptionsPriceAddress(address _optionsPrice)external onlyOwner{
         optionsPrice = IOptionsPrice(_optionsPrice);
     }
-        function setCollateralPoolAddress(address _collateralPool)external onlyOwner{
+    function setCollateralPoolAddress(address _collateralPool)external onlyOwner{
         collateralPool = ICollateralPool(_collateralPool);
     }
         /**

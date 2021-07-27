@@ -33,8 +33,11 @@ contract PHXVestingPool is PHXVestingPoolData{
         vestTokens.removeWhiteListAddress(token);
         vestingTokenRate[token] = 0;
     }
-    function getVestingTokenBalance(address account)external view returns(uint256,uint64){
+    function getVestingBalance(address account)external view returns(uint256,uint64){
          return (userInfoMap[account].vestingTokenBalance,userInfoMap[account].maxPeriodID);
+    }
+    function getVestingTokenBalance(address account,address token)external view returns(uint256){
+         return userInfoMap[account].tokenBalance[token];
     }
     function getAcceleratedBalance(address account,address minePool)external view returns(uint256,uint64){
         return (userInfoMap[account].acceleratedBalance[minePool],userInfoMap[account].maxPeriodID);
@@ -42,23 +45,34 @@ contract PHXVestingPool is PHXVestingPoolData{
     function getAcceleratorPeriodInfo()external view returns (uint256,uint256){
         return (startTime,period);
     }
-    function stake(address token,uint256 amount,uint64 maxLockedPeriod,address toMinePool) tokenPermission(token) validPeriod(maxLockedPeriod) nonReentrant notHalted public {
+    function airdrop(address token,address[] calldata toAccounts,uint256[] calldata amounts,uint64[] calldata maxLockedPeriods,address toMinePool) 
+        nonReentrant notHalted onlyOrigin external{
+        require(toAccounts.length == amounts.length && toAccounts.length == maxLockedPeriods.length,"input argments list length is not equal!");
+        for (uint256 i=0;i<toAccounts.length;i++){
+            _stake(toAccounts[i],token,amounts[i],maxLockedPeriods[i],toMinePool);
+        }
+    }
+    function stake(address token,uint256 amount,uint64 maxLockedPeriod,address toMinePool) nonReentrant notHalted public {
+        _stake(msg.sender,token,amount,maxLockedPeriod,toMinePool);
+    }
+    function _stake(address account,address token,uint256 amount,uint64 maxLockedPeriod,address toMinePool)
+         tokenPermission(token) validPeriod(maxLockedPeriod) internal {
         amount = getPayableAmount(token,amount);
         require(amount>0, "Stake amount is zero!");
-        uint64 oldPeriod = userInfoMap[msg.sender].maxPeriodID;
+        uint64 oldPeriod = userInfoMap[account].maxPeriodID;
         uint256 balance = amount.mul(vestingTokenRate[token]);
-        userInfoMap[msg.sender].vestingTokenBalance  =  userInfoMap[msg.sender].vestingTokenBalance.add(balance);
-        setUserLockedPeriod(msg.sender,maxLockedPeriod);
+        userInfoMap[account].vestingTokenBalance  =  userInfoMap[account].vestingTokenBalance.add(balance);
+        setUserLockedPeriod(account,maxLockedPeriod);
         _accelerateMinePool(toMinePool,balance,oldPeriod);
-        if (oldPeriod != userInfoMap[msg.sender].maxPeriodID){
+        if (oldPeriod != userInfoMap[account].maxPeriodID){
             uint256 poolLen = minePoolList.length;
             for(uint256 i=0;i<poolLen;i++){
                 if (minePoolList[i] != toMinePool){
-                    changeAcceleratedInfo(minePoolList[i],userInfoMap[msg.sender].acceleratedBalance[minePoolList[i]],oldPeriod);
+                    changeAcceleratedInfo(minePoolList[i],userInfoMap[account].acceleratedBalance[minePoolList[i]],oldPeriod);
                 }
             }
         }        
-        emit Stake(msg.sender,token,amount,maxLockedPeriod);
+        emit Stake(account,token,amount,maxLockedPeriod);
     }
     /**
      * @dev Add PHX locked period.
