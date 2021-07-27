@@ -135,11 +135,11 @@ contract OptionsPool is OptionsBase {
     }
     /**
      * @dev calculate collateral occupied value.
-     * @param lastOption last option's position.
-     * @param beginOption begin option's poisiton.
-     * @param endOption end option's poisiton.
+     * param lastOption last option's position.
+     * param beginOption begin option's poisiton.
+     * param endOption end option's poisiton.
      */  
-    function calculatePhaseOccupiedCollateral(uint256 lastOption,uint256 beginOption,uint256 endOption) public view returns(uint256[] memory,uint256[] memory,uint256,bool){
+    function calculatePhaseOccupiedCollateral(uint256 /*lastOption*/,uint256 /*beginOption*/,uint256 /*endOption*/) public view returns(uint256[] memory,uint256[] memory,uint256,bool){
         delegateToViewAndReturn();
     }
     function setOccupiedCollateral() public{
