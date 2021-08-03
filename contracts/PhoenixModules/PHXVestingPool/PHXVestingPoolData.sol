@@ -15,6 +15,7 @@ contract PHXVestingPoolData is Halt,timeLimitation,ReentrancyGuard,versionUpdate
     {
         return currentVersion;
     }
+    uint256 constant internal mineBoostingAmount = 500e18; 
     uint256 constant internal rateDecimals = 1e8;
     address[] public vestTokens;
     mapping(address=>uint256) public vestingTokenRate;
@@ -33,7 +34,10 @@ contract PHXVestingPoolData is Halt,timeLimitation,ReentrancyGuard,versionUpdate
     uint256 public maxPeriodLimit;
     uint256 public period;
     uint256 public startTime;
-    event Stake(address indexed sender,address indexed token,uint256 amount,uint256 maxPeriod);
+    event Stake(address indexed sender,address indexed token,address indexed toMinePool,uint256 amount,uint256 maxPeriod);
     event Unstake(address indexed sender,address indexed token,uint256 amount);
     event ChangePeriod(address indexed sender,uint256 maxPeriod);
+    event TransferStake(address indexed sender,address indexed fromMinePool,address indexed toMinePool,uint256 maxPeriod);
+    event BoostingMinePool(address indexed sender,address indexed toMinePool,uint256 amount,uint256 maxPeriod);
+    event WithdrawMinePool(address indexed sender,address indexed fromMinePool,uint256 amount,uint256 maxPeriod);
 }
