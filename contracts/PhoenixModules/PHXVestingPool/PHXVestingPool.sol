@@ -62,6 +62,7 @@ contract PHXVestingPool is PHXVestingPoolData{
         uint64 oldPeriod = userInfoMap[account].maxPeriodID;
         uint256 balance = amount.mul(vestingTokenRate[token])/1000;
         userInfoMap[account].vestingTokenBalance  =  userInfoMap[account].vestingTokenBalance.add(balance);
+        userInfoMap[account].tokenBalance[token] = userInfoMap[account].tokenBalance[token].add(amount);
         setUserLockedPeriod(account,maxLockedPeriod);
         _accelerateMinePool(account,toMinePool,balance,oldPeriod);
         if (oldPeriod != userInfoMap[account].maxPeriodID){

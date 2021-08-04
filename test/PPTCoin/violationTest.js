@@ -39,7 +39,20 @@ contract('WETH', function (accounts){
             await pptCoin.approve(accounts[5],10000000000,{from:accounts[4]});
             await pptCoin.transferFrom(accounts[4],accounts[3],100000000000,{from:accounts[5]});  
         });
+        await createFactory.multiSignatureAndSend(factory.multiSignature,pptCoin,"modifyLimitation",accounts[0],owners,10000000000,
+        100000000000); 
+        await factory.optionsFactory.testSetProxyManager(pptCoin.address,accounts[0]);
+        await testViolation("mint beyond total Limit",async function(){
+            await pptCoin.mint(accounts[0],100000000000);
+        });
+        await createFactory.multiSignatureAndSend(factory.multiSignature,pptCoin,"modifyLimitation",accounts[0],owners,100000000000,
+        10000000000); 
+        await factory.optionsFactory.testSetProxyManager(pptCoin.address,accounts[0]);
+        await testViolation("mint beyond user Limit",async function(){
+            await pptCoin.mint(accounts[0],100000000000);
+        });
     });
+    return;
     it('PPTCoin burn time violation test functions', async function (){
         let owners = [accounts[1],accounts[2],accounts[3],accounts[4],accounts[5]] 
         let factory = await createFactory.createTestFactory(accounts[0],owners)

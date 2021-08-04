@@ -10,7 +10,7 @@ import "../proxyModules/Halt.sol";
 import "../modules/safeTransfer.sol";
 import "../modules/ReentrancyGuard.sol";
 contract PHXVestingPoolData is Halt,timeLimitation,ReentrancyGuard,versionUpdater,safeTransfer{
-    uint256 constant internal currentVersion = 1;
+    uint256 constant internal currentVersion = 3;
     function implementationVersion() public pure returns (uint256) 
     {
         return currentVersion;
