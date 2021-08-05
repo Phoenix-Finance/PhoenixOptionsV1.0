@@ -78,7 +78,7 @@ contract optionsFactory is optionsFactoryData{
         address payable collateralPool = createPhxProxy(collateralPoolID);
         ICollateralPool(collateralPool).setOptionsPoolAddress(optionsPool);
         proxyOperator(optionsPool).setOperator(99, collateralPool);
-        proxyOperator(optionsPool).setOperator(1,operator);
+        proxyOperator(collateralPool).setOperator(1,operator);
         return collateralPool;        
     }
     function createOptionsPool(uint32[] memory underlyings)internal returns(address payable){
