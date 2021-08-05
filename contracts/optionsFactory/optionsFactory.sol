@@ -37,10 +37,11 @@ contract optionsFactory is optionsFactoryData{
     function update() public versionUpdate {
     }
 
-    function setImplementAddress(string memory _baseCoinName,
+    function setImplementAddress(string memory _baseCoinName,address _operatorAddr,
         address _optionsCalImpl,address _optionsPoolImpl,address _collateralPoolImpl,address _optionsManagerImpl,address _PPTCoinImpl,
         address acceleratedMinePool,address phxVestingPool,address _phxOracle,address _volatility,address _optionsPrice)public originOnce{
         baseCoinName = _baseCoinName;
+        operator = _operatorAddr;
         proxyinfoMap[optionsPoolID].implementation = _optionsPoolImpl;
         proxyinfoMap[collateralPoolID].implementation = _collateralPoolImpl;
         proxyinfoMap[optionsManagerID].implementation = _optionsManagerImpl;
@@ -77,11 +78,13 @@ contract optionsFactory is optionsFactoryData{
         address payable collateralPool = createPhxProxy(collateralPoolID);
         ICollateralPool(collateralPool).setOptionsPoolAddress(optionsPool);
         proxyOperator(optionsPool).setOperator(99, collateralPool);
+        proxyOperator(optionsPool).setOperator(1,operator);
         return collateralPool;        
     }
     function createOptionsPool(uint32[] memory underlyings)internal returns(address payable){
         address payable optionsPool = createPhxProxy(optionsPoolID);
         IOptionsPool(optionsPool).initAddresses(optionsCal,phxOracle,optionsPrice,impliedVolatility,underlyings);
+        proxyOperator(optionsPool).setOperator(1,operator);
         return optionsPool;
     }
     function createPPTCoin()internal returns(address){
