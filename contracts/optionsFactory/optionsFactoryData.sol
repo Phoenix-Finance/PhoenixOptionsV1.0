@@ -8,7 +8,7 @@ import "../PhoenixModules/proxyModules/versionUpdater.sol";
 import "../PhoenixModules/proxyModules/proxyOperator.sol";
 contract optionsFactoryData is versionUpdater,proxyOperator{
 
-    uint256 constant internal currentVersion = 1;
+    uint256 constant internal currentVersion = 2;
     function implementationVersion() public pure returns (uint256) 
     {
         return currentVersion;
