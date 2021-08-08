@@ -128,7 +128,7 @@ contract CollateralCal is ManagerData {
      * @param leftAmount the left amount of FPTCoin want to redeem.
      * @param leftCollateral The left collateral which can be redeemed, priced in USD.
      */
-    function _redeemCollateral(uint256 leftAmount,uint256 leftCollateral)internal returns (uint256,uint256){
+    function _redeemCollateral(uint256 leftAmount,uint256 leftCollateral)internal view returns (uint256,uint256){
         uint256 tokenNetWorth = getTokenNetworth();
         uint256 leftWorth = leftAmount*tokenNetWorth;        
         if (leftWorth > leftCollateral){
