@@ -98,29 +98,29 @@ contract CollateralCal is ManagerData {
      */
     function redeemCollateral(uint256 tokenAmount,address collateral) nonReentrant notHalted
         addressPermissionAllowed(collateral,allowRedeemCollateral) InRange(tokenAmount) public {
-        uint256 lockedAmount = pptCoin.lockedBalanceOf(msg.sender);
-        require(pptCoin.balanceOf(msg.sender)+lockedAmount>=tokenAmount,"PPT Coin balance is insufficient!");
+//        uint256 lockedAmount = pptCoin.lockedBalanceOf(msg.sender);
+        require(pptCoin.balanceOf(msg.sender)>=tokenAmount,"PPT Coin balance is insufficient!");
         uint256 userTotalWorth = getUserTotalWorth(msg.sender);
         uint256 leftCollateral = getLeftCollateral();
-        (uint256 burnAmount,uint256 redeemWorth) = pptCoin.redeemLockedCollateral(msg.sender,tokenAmount,leftCollateral);
+//        (uint256 burnAmount,uint256 redeemWorth) = pptCoin.redeemLockedCollateral(msg.sender,tokenAmount,leftCollateral);
         //tokenAmount -= burnAmount;
-        if (tokenAmount > burnAmount){
-            leftCollateral -= redeemWorth;
+//        if (tokenAmount > burnAmount){
+//            leftCollateral -= redeemWorth;
             
-            if (lockedAmount > 0){
-                tokenAmount = tokenAmount > lockedAmount ? tokenAmount - lockedAmount : 0;
-            }
+//            if (lockedAmount > 0){
+//                tokenAmount = tokenAmount > lockedAmount ? tokenAmount - lockedAmount : 0;
+//            }
             (uint256 newRedeem,uint256 newWorth) = _redeemCollateral(tokenAmount,leftCollateral);
-            if(newRedeem>0){
-                burnAmount = newRedeem;
-                redeemWorth += newWorth;
-            }
-        }else{
-            burnAmount = 0;
-        }
-        _redeemCollateralWorth(collateral,redeemWorth,userTotalWorth);
-        if (burnAmount>0){
-            pptCoin.burn(msg.sender, burnAmount);
+//            if(newRedeem>0){
+//                burnAmount = newRedeem;
+//                redeemWorth += newWorth;
+//            }
+//       }else{
+//            burnAmount = 0;
+//        }
+        _redeemCollateralWorth(collateral,newWorth,userTotalWorth);
+        if (newRedeem>0){
+            pptCoin.burn(msg.sender, newRedeem);
         }
     }
     /**
@@ -134,8 +134,8 @@ contract CollateralCal is ManagerData {
         if (leftWorth > leftCollateral){
             uint256 newRedeem = leftCollateral/tokenNetWorth;
             uint256 newWorth = newRedeem*tokenNetWorth;
-            uint256 locked = leftAmount - newRedeem;
-            pptCoin.addlockBalance(msg.sender,locked,locked*tokenNetWorth);
+            //uint256 locked = leftAmount - newRedeem;
+            //pptCoin.addlockBalance(msg.sender,locked,locked*tokenNetWorth);
             return (newRedeem,newWorth);
         }
         return (leftAmount,leftWorth);
