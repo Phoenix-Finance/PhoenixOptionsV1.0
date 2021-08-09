@@ -266,7 +266,7 @@ contract CollateralCal is ManagerData {
             int256 price = int256(oraclePrice(addr));
             int256 balance = collateralPool.getRealBalance(addr);
             if (balance != 0){
-                totalNum = balance.add(price.mul(balance));
+                totalNum = totalNum.add(price.mul(balance));
             }
         }
         return totalNum>=0 ? uint256(totalNum) : 0;  
