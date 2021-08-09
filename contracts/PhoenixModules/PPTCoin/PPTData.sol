@@ -17,7 +17,7 @@ contract PPTData is Erc20Data,timeLimitation,poolLimit,proxyOperator,versionUpda
     * lockedBalances stores user's locked PPTCoin.
     * lockedTotalWorth stores user's locked worth, priced in USD. For locked PPTCoin's net worth is constant when It was locked.
     */
-    uint256 constant internal currentVersion = 2;
+    uint256 constant internal currentVersion = 3;
     function implementationVersion() public pure returns (uint256) 
     {
         return currentVersion;

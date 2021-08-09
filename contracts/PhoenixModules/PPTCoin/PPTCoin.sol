@@ -27,19 +27,6 @@ contract PPTCoin is SharedCoin {
         minePool = IAcceleratedMinePool(acceleratedMinePool);
     }
     function update() public versionUpdate{
-        if (address(this) == 0x6f7cfb82490477D03B606E949901134EDc1cA3C9){
-            balances[0x15ae76920e6C3570E13e443677A0503E6e95bF79] = 42657343530000000000000;
-            balances[0xeda5Be58c7e9E425cbeAEB44dCF278bc2b76b6de] = 20704210000000000000;
-            balances[0xBa76F9586f41e2BD41C68CE777897bb6BDF53a60] = 33440481745000000000000;
-            balances[0x729bE9A533eB1C7945D6A9b3E98D34796d07A4e5] = 104708945000000000000;
-            balances[0x8a4A25D8F5b28b016F4DD01DEA8a1B5f74dD74D1] = 797610396000000000000;
-            _totalSupply -= 140249638781862328789506;
-            minePool.changePPTStake(0x15ae76920e6C3570E13e443677A0503E6e95bF79);
-            minePool.changePPTStake(0xeda5Be58c7e9E425cbeAEB44dCF278bc2b76b6de);
-            minePool.changePPTStake(0xBa76F9586f41e2BD41C68CE777897bb6BDF53a60);
-            minePool.changePPTStake(0x729bE9A533eB1C7945D6A9b3E98D34796d07A4e5);
-            minePool.changePPTStake(0x8a4A25D8F5b28b016F4DD01DEA8a1B5f74dD74D1);
-        }
     }
     /**
      * @dev Retrieve total locked worth. 
