@@ -45,9 +45,4 @@ contract TokenConverterData is versionUpdater,Halt {
      */
     event Claimphx(address indexed owner, uint256 indexed amount,uint256 indexed worth);
 
-    struct userItem {
-        uint256 startTime;
-        uint256 timeSpan;
-        uint256[] alloc;
-    }
 }
