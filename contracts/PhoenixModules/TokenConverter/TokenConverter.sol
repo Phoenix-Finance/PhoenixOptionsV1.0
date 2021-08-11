@@ -218,7 +218,44 @@ contract TokenConverter is TokenConverterData {
         
         return totalRet;
     }
-    
-  
+
+    function getUserConvertRecords(address _user) public view returns (uint256[] memory,uint256[] memory) {
+        require(phxAddress!=address(0),"phx token should be set");
+        uint256 txcnt = 0;
+        uint256 idx = lockedIndexs[_user].beginIdx;
+
+        uint256 endIdx = userTxIdxs[_user].length;
+        uint256 pretxid = 0;
+
+        uint256 len = (endIdx - idx);
+        uint256[] memory amountArr = new uint256[](len);
+        uint256[] memory timeArr =  new uint256[](len);
+        uint256 retidx = 0;
+
+        for(;idx<endIdx && txcnt<txNum;idx++) {
+            uint256 i = userTxIdxs[_user][idx];
+
+            if(i!=pretxid){
+                pretxid = i;
+            } else {
+                continue;
+            }
+
+            amountArr[retidx] = lockedAllRewards[_user][i].alloc[0];
+            timeArr[retidx] = lockedAllRewards[_user][i].startTime;
+
+            retidx++;
+        }
+
+        uint256[] memory retamountArr = new uint256[](retidx);
+        uint256[] memory rettimeArr =  new uint256[](retidx);
+
+        for(idx=0;idx<retidx;idx++) {
+            retamountArr[idx] = amountArr[idx];
+            rettimeArr[idx] = timeArr[idx];
+        }
+
+        return (retamountArr,rettimeArr);
+    }
     
 }
