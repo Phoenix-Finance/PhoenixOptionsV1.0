@@ -232,7 +232,7 @@ contract TokenConverter is TokenConverterData {
         uint256[] memory timeArr =  new uint256[](len);
         uint256 retidx = 0;
 
-        for(;idx<endIdx && txcnt<txNum;idx++) {
+        for(;idx<endIdx;idx++) {
             uint256 i = userTxIdxs[_user][idx];
 
             if(i!=pretxid){
