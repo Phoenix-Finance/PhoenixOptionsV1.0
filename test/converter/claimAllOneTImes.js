@@ -99,8 +99,21 @@ contract('TokenConverter', function (accounts) {
 
         let useRecords = await CvntProxyInst.getUserConvertRecords(accounts[1]);
 
-        for(var i=0;i<useRecords[0].length;i++) {
-            console.log(web3.utils.fromWei(useRecords[0][i]),useRecords[1][i].toString(10));
+        console.log(useRecords);
+        let dimLen = useRecords[0];
+        for(var i=0;i<useRecords[1].length;i++) {
+            if(i%dimLen==0) {
+                console.log("\nthe convert idx:" + (i/dimLen));
+                if(web3.utils.fromWei(useRecords[2][i])==0) {
+                    console.log("all of this convert idx is claimed")
+                } else {
+                    console.log("total locked amount of this convert:"+ web3.utils.fromWei(useRecords[2][i]));
+                }
+
+                continue;
+            }
+            console.log("expiredTime:"+useRecords[1][i].toString(10),
+                        "   amount:"+ web3.utils.fromWei(useRecords[2][i]));
         }
 
     })

@@ -3,7 +3,6 @@ import "./TokenConverterData.sol";
 import "../modules/SafeMath.sol";
 import "../ERC20/IERC20.sol";
 
-
 /**
  * @title FPTCoin is finnexus collateral Pool token, implement ERC20 interface.
  * @dev ERC20 token. Its inside value is collatral pool net worth.
@@ -72,7 +71,10 @@ contract TokenConverter is TokenConverterData {
         IERC20(cphxAddress).transferFrom(msg.sender,address(this),amount);
         uint256 idx = now.div(24*3600);//lockedIndexs[msg.sender].totalIdx;
 
-        userTxIdxs[msg.sender].push(idx);
+        uint256 latest = userTxIdxs[msg.sender].length;
+        if(latest == 0 || userTxIdxs[msg.sender][latest-1]!=idx){
+            userTxIdxs[msg.sender].push(idx);
+        }
 
         uint256 divAmount = amount.div(dispatchTimes);
 
@@ -87,7 +89,7 @@ contract TokenConverter is TokenConverterData {
         lockedAllRewards[msg.sender][idx].alloc[0] = lockedAllRewards[msg.sender][idx].alloc[0].add(amount.sub(divAmount));
         uint256 i=2;
         //idx = 1, the reward give user immediately
-        for(;i<dispatchTimes;i++){
+        for(;i<=dispatchTimes;i++){
             lockedAllRewards[msg.sender][idx].alloc[i] = lockedAllRewards[msg.sender][idx].alloc[i].add(divAmount);
         }
         lockedAllRewards[msg.sender][idx].alloc[i] = lockedAllRewards[msg.sender][idx].alloc[i].add(amount.sub(divAmount.mul(dispatchTimes-1)));
@@ -219,42 +221,36 @@ contract TokenConverter is TokenConverterData {
         return totalRet;
     }
 
-    function getUserConvertRecords(address _user) public view returns (uint256[] memory,uint256[] memory) {
-        require(phxAddress!=address(0),"phx token should be set");
 
+    function getUserConvertRecords(address _user)
+            public
+            view
+            returns
+    (uint256,uint256[] memory,uint256[] memory) {
         uint256 idx = lockedIndexs[_user].beginIdx;
-        uint256 endIdx = userTxIdxs[_user].length;
-        uint256 pretxid = 0;
+        //uint256 endIdx = userTxIdxs[_user].length;
+        uint256 len = (userTxIdxs[_user].length - idx);
 
-        uint256 len = (endIdx - idx);
-        uint256[] memory amountArr = new uint256[](len);
-        uint256[] memory timeArr =  new uint256[](len);
         uint256 retidx = 0;
 
-        for(;idx<endIdx;idx++) {
+        uint256[] memory retStArr = new uint256[]((dispatchTimes+1)*len);
+        uint256[] memory retAllocArr = new uint256[]((dispatchTimes+1)*len);
+
+        for(;idx<userTxIdxs[_user].length;idx++) {
             uint256 i = userTxIdxs[_user][idx];
-
-            if(i!=pretxid){
-                pretxid = i;
-            } else {
-                continue;
+            for(uint256 j=0;j<=dispatchTimes;j++) {
+                retAllocArr[retidx*(dispatchTimes+1)+j] = lockedAllRewards[_user][i].alloc[j];
+                if(j==0) {
+                    retStArr[retidx*(dispatchTimes+1)+j] = 0;
+                } else {
+                    retStArr[retidx*(dispatchTimes+1)+j] = lockedAllRewards[_user][i].startTime.add(timeSpan*(j-1));
+                }
             }
-
-            amountArr[retidx] = lockedAllRewards[_user][i].alloc[0];
-            timeArr[retidx] = lockedAllRewards[_user][i].startTime;
 
             retidx++;
         }
 
-        uint256[] memory retamountArr = new uint256[](retidx);
-        uint256[] memory rettimeArr =  new uint256[](retidx);
-
-        for(idx=0;idx<retidx;idx++) {
-            retamountArr[idx] = amountArr[idx];
-            rettimeArr[idx] = timeArr[idx];
-        }
-
-        return (retamountArr,rettimeArr);
+        return (dispatchTimes+1,retStArr,retAllocArr);
     }
     
 }
