@@ -221,9 +221,8 @@ contract TokenConverter is TokenConverterData {
 
     function getUserConvertRecords(address _user) public view returns (uint256[] memory,uint256[] memory) {
         require(phxAddress!=address(0),"phx token should be set");
-        uint256 txcnt = 0;
-        uint256 idx = lockedIndexs[_user].beginIdx;
 
+        uint256 idx = lockedIndexs[_user].beginIdx;
         uint256 endIdx = userTxIdxs[_user].length;
         uint256 pretxid = 0;
 
