@@ -89,7 +89,7 @@ contract TokenConverter is TokenConverterData {
         lockedAllRewards[msg.sender][idx].alloc[0] = lockedAllRewards[msg.sender][idx].alloc[0].add(amount.sub(divAmount));
         uint256 i=2;
         //idx = 1, the reward give user immediately
-        for(;i<=dispatchTimes;i++){
+        for(;i<dispatchTimes;i++){
             lockedAllRewards[msg.sender][idx].alloc[i] = lockedAllRewards[msg.sender][idx].alloc[i].add(divAmount);
         }
         lockedAllRewards[msg.sender][idx].alloc[i] = lockedAllRewards[msg.sender][idx].alloc[i].add(amount.sub(divAmount.mul(dispatchTimes-1)));
@@ -231,6 +231,7 @@ contract TokenConverter is TokenConverterData {
         //uint256 endIdx = userTxIdxs[_user].length;
         uint256 len = (userTxIdxs[_user].length - idx);
         uint256 retidx = 0;
+        //uint256 pretxid = 0;
 
         uint256[] memory retStArr = new uint256[]((dispatchTimes+1)*len);
         uint256[] memory retAllocArr = new uint256[]((dispatchTimes+1)*len);
