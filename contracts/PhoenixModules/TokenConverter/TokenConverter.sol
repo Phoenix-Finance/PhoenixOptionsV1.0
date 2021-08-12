@@ -231,7 +231,7 @@ contract TokenConverter is TokenConverterData {
         //uint256 endIdx = userTxIdxs[_user].length;
         uint256 len = (userTxIdxs[_user].length - idx);
         uint256 retidx = 0;
-        //uint256 pretxid = 0;
+        uint256 pretxid = 0;
 
         uint256[] memory retStArr = new uint256[]((dispatchTimes+1)*len);
         uint256[] memory retAllocArr = new uint256[]((dispatchTimes+1)*len);
