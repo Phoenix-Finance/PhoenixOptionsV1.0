@@ -230,7 +230,6 @@ contract TokenConverter is TokenConverterData {
         uint256 idx = lockedIndexs[_user].beginIdx;
         //uint256 endIdx = userTxIdxs[_user].length;
         uint256 len = (userTxIdxs[_user].length - idx);
-
         uint256 retidx = 0;
 
         uint256[] memory retStArr = new uint256[]((dispatchTimes+1)*len);
@@ -238,6 +237,13 @@ contract TokenConverter is TokenConverterData {
 
         for(;idx<userTxIdxs[_user].length;idx++) {
             uint256 i = userTxIdxs[_user][idx];
+
+            if(i!=pretxid){
+                pretxid = i;
+            } else {
+                continue;
+            }
+
             for(uint256 j=0;j<=dispatchTimes;j++) {
                 retAllocArr[retidx*(dispatchTimes+1)+j] = lockedAllRewards[_user][i].alloc[j];
                 if(j==0) {
@@ -246,7 +252,6 @@ contract TokenConverter is TokenConverterData {
                     retStArr[retidx*(dispatchTimes+1)+j] = lockedAllRewards[_user][i].startTime.add(timeSpan*(j-1));
                 }
             }
-
             retidx++;
         }
 
