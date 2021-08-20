@@ -20,7 +20,7 @@ import "../interfaces/IOptionsPrice.sol";
 contract ManagerData is versionUpdater,Halt,ReentrancyGuard,ImputRange,AddressPermission,
                 ImportOracle {
     using whiteListAddress for address[];
-    uint256 constant internal currentVersion = 3;
+    uint256 constant internal currentVersion = 4;
     function implementationVersion() public pure returns (uint256) 
     {
         return currentVersion;

@@ -149,15 +149,16 @@ contract OptionsManagerV2 is CollateralCal {
         (uint256 callCollateral,uint256 putCollateral,uint256 totalOccupied) = optionsPool.getUnderlyingTotalOccupiedCollateral(underlying);
         totalOccupied = (totalOccupied + buyOccupied)*rate/1000;
         buyOccupied = ((optType == 0 ? callCollateral : putCollateral) + buyOccupied)*rate/1000;
+        callCollateral = (callCollateral+putCollateral+buyOccupied)*rate/1000;
         require(totalCollateral>=totalOccupied,"collateral is insufficient!");
-        return calOptionsPriceRatio(buyOccupied,totalOccupied,totalCollateral);
+        return calOptionsPriceRatio(buyOccupied,callCollateral,totalOccupied,totalCollateral);
     }
-    function calOptionsPriceRatio(uint256 selfOccupied,uint256 totalOccupied,uint256 totalCollateral) internal pure returns (uint256){
+    function calOptionsPriceRatio(uint256 selfOccupied,uint256 underlyingOccupied,uint256 totalOccupied,uint256 totalCollateral) internal pure returns (uint256){
         //r1 + 0.5
-        if (selfOccupied*2<=totalOccupied){
+        if (selfOccupied*2<=underlyingOccupied){
             return 4294967296;
         }
-        uint256 r1 = (selfOccupied<<32)/totalOccupied-2147483648;
+        uint256 r1 = (selfOccupied<<32)/underlyingOccupied-2147483648;
         uint256 r2 = (totalOccupied<<32)/totalCollateral*2;
         //r1*r2*1.5
         r1 = (r1*r2)>>32;
