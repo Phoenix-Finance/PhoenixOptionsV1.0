@@ -11,8 +11,6 @@ let USDCoin = artifacts.require("USDCoin");
 let WBTC = artifacts.require("WBTC");
 let WETH = artifacts.require("WETH");
 module.exports = async function(deployer, network,accounts) {
-    await deployer.deploy(PHXCoin);
-    return;
     //0x982c1E6bd1550c1702fEc0C7cf8E4eb358BD39ef
     await deployer.deploy(PHXCoin);
     //0x62f364c7127A16CE91dD68acB8476992044F5b39

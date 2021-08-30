@@ -32,7 +32,7 @@ module.exports = {
         let lFactory = await testOptionsFactory.new(multiSign.address,{from:account});
         proxy = await phxProxy.new(lFactory.address,multiSign.address,{from:account});
         lFactory = await testOptionsFactory.at(proxy.address);
-        await lFactory.setImplementAddress("ETH",
+        await lFactory.setImplementAddress("ETH",account,
         OptionsCalImpl.address,OptionsPoolImpl.address,CollateralPoolImpl.address,optionsManagerImpl.address,pptCoinImpl.address,
         minePool.address,vestingPool.address,phxOracle.address,volatility.address,optionsPrice.address)
         return {multiSignature : multiSign,
@@ -58,7 +58,7 @@ module.exports = {
         let lFactory = await optionsFactory.new(multiSign.address,{from:account});
         proxy = await phxProxy.new(lFactory.address,multiSign.address,{from:account});
         lFactory = await optionsFactory.at(proxy.address);
-        await lFactory.setImplementAddress("ETH",
+        await lFactory.setImplementAddress("ETH",account,
         OptionsCalImpl.address,OptionsPoolImpl.address,CollateralPoolImpl.address,optionsManagerImpl.address,pptCoinImpl.address,
         minePool.address,vestingPool.address,phxOracle.address,volatility.address,optionsPrice.address)
         return {multiSignature : multiSign,

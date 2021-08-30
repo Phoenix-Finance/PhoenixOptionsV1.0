@@ -49,7 +49,6 @@ contract ManagerData is versionUpdater,Halt,ReentrancyGuard,ImputRange,AddressPe
      * @dev Emitted when `from` redeemed `allRedeem` collateral.
      */
     event RedeemCollateral(address indexed from,address collateral,uint256 allRedeem);
-    event DebugEvent(uint256 id,uint256 value1,uint256 value2);
         /**
     * @dev input price valid range rate, thousandths.
     * the input price must greater than current price * minPriceRate /1000

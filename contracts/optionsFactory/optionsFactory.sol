@@ -116,6 +116,9 @@ contract optionsFactory is optionsFactoryData{
             Address.functionCall(curInfo.proxyList[i],data,"setContractsInfo error");
         }
     }
+    function setBoostingNFTAddress(address _nftAddress)public onlyOrigin{
+        setContractsInfo(MinePoolID,abi.encodeWithSignature("setBoostingNFTAddress(address)",_nftAddress));
+    }
     function setPHXVestingPool(address _PHXVestingPool) public onlyOrigin{
         vestingPool = _PHXVestingPool;
         setContractsInfo(MinePoolID,abi.encodeWithSignature("setPHXVestingPool(address)",_PHXVestingPool));
