@@ -2,7 +2,7 @@ let Web3 = require("Web3");
 var utils = require('web3-utils');
 const fs = require('fs');
 //let web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/f977681c79004fad87aa00da8f003597"));
-let web3 = new Web3(new Web3.providers.HttpProvider("https://demodex.wandevs.org:48545"));
+let web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.ninicoin.io/"));
 let contract = require("./contract/Contract.js")
 let contractfunc = require("./contract/ContractFunc.js")
 let OptionsPool = require("../build/contracts/OptionsPool.json");
@@ -12,6 +12,7 @@ let FNXOracle = require("../build/contracts/FNXOracle.json");
 let FPTCoin = require("../build/contracts/FPTCoin.json");
 let ImpliedVol = require("../build/contracts/ImpliedVolatility.json");
 async function rinkebyQuery(){
+    debug_traceTransaction
     let value  = "0x08c379a000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000021736574746c656d656e7420617373657420697320696e73756666696369656e742100000000000000000000000000000000000000000000000000000000000000";
     let error = web3.eth.abi.decodeParameter('string',value)
     console.log('revert result: ',error);
