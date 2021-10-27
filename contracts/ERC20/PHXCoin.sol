@@ -138,12 +138,13 @@ contract PHXCoin is Erc20Data {
         _burn(msg.sender, amount);
         return true;
     }
-    */
-    function mint(address account,uint256 amount) public returns (bool){
+
+    function mint(address account,uint256 amount) public onlyOnwer returns (bool){
         require(amount<=1e23,"out of mint limitation");
         _mint(account,amount);
         return true;
     }
+        */
     /**
      * @dev add `recipient`'s balance to iterable mapping balances.
      */

@@ -66,6 +66,9 @@ contract phxAutoMinePool is MinePoolData {
         }
         return totalBalance;
     }
+    function getTotalStake() public view returns(uint256){
+        return totalSupply().mul(getNetWorth(stakeCoin))/rayDecimals;
+    }
     function getStakeBalance(address account) public view returns(uint256){
         return balanceOf(account).mul(getNetWorth(stakeCoin))/rayDecimals;
     }
@@ -123,10 +126,10 @@ contract phxAutoMinePool is MinePoolData {
         emit ChangeUserbalance(account,amount);
     }
     function _changeBalance(address account,int256 amount)internal{
-        if (amount >= 0){
+        if (amount > 0){
             distributeBalance[account] = distributeBalance[account].add(uint256(amount)); 
             _totalsupply = _totalsupply.add(uint256(amount)); 
-        }else{
+        }else if(amount < 0){
             distributeBalance[account] = distributeBalance[account].sub(uint256(-amount)); 
             _totalsupply = _totalsupply.sub(uint256(-amount));
         }
